@@ -238,6 +238,7 @@ footer{border-top:1px solid var(--rule);padding-top:18px;font-size:.84rem;color:
           <tr><td class="id">D10</td><td>Astra × Fable research governance adopted (CBR-GOV-001)</td><td>Roles, frozen experiment registry, Phase 17 and 24 reviews, single-use holdout</td></tr>
           <tr><td class="id">D11</td><td>AC-11 split: AC-11A (16-day stratified proof) + AC-11B (full spot history, deferred)</td><td>Failures classified, not auto-FAIL; baseline feed (OQ-24) frozen before Phase 14, never chosen by profitability</td></tr>
           <tr><td class="id">D12</td><td>Phase 9 rulings</td><td>DXY 2020-03-09 20h DATA_ERROR and 2019-03-11 00h UNEXPLAINED are both handled as MISSING, flagged by detector <code>DXY_CFD_MISSING_WHILE_DX_ACTIVE</code>; new class REFERENCE_UNAVAILABLE; <code>cause_status</code>; candle-file high/low is a hard safeguard before Phase 14; 1m/5s DXY structure not validated</td></tr>
+          <tr><td class="id">D13</td><td>Backtesting.py integrated in Phase 14B as a secondary layer</td><td>Execution cross-check, standard metrics, interactive charts and parity only. The custom simulator (14A) is authoritative for execution and the CBR engine for signals; signal contract immutable; parity thresholds pre-registered; no <code>optimize()</code> in Phases 14-16. Plan: <code>docs/architecture/phase14-execution-architecture.md</code></td></tr>
         </tbody>
       </table></div>
     </section>
@@ -298,7 +299,9 @@ footer{border-top:1px solid var(--rule);padding-top:18px;font-size:.84rem;color:
           <tr><td class="id">FR-05</td><td>Market data pipeline: ticks → 5s/1m mid bars with spread, UTC, gap-explicit</td><td>Manifest with hashes; validation checks pass; decoder parity verified</td></tr>
           <tr><td class="id">FR-06</td><td>Python reference engine implementing the primitives and state machines</td><td>Unit test per rule id; lookahead test (future mutation → identical signals)</td></tr>
           <tr><td class="id">FR-07</td><td>Signal ledger recording every ARMED / FILLED / EXPIRED / BLOCKED event with diagnostics</td><td>Every no-trade has a reason code and rule outcomes</td></tr>
-          <tr><td class="id">FR-08</td><td>Execution simulator on 5s bars with bid/ask, slippage, stop-first same-bar rule</td><td>Results reported before and after costs</td></tr>
+          <tr><td class="id">FR-08</td><td>Authoritative execution simulator (14A) on 5s bid/ask bars: long in at ask / out at bid, short mirrored; spread, slippage, costs, rollover, missing data, stop-first same-bar rule</td><td>Deterministic; gross and net R; every candidate signal in the ledger</td></tr>
+          <tr><td class="id">FR-08b</td><td>Backtesting.py adapter (14B) on the same frozen signals</td><td>Stats, trade table, equity, HTML chart, manifest; parity vs 14A with every mismatch classified</td></tr>
+          <tr><td class="id">FR-08c</td><td>Signal contract <code>cbr-signal.v1</code> between engine and every execution backend</td><td>Immutable during execution; schema test</td></tr>
           <tr><td class="id">FR-09</td><td>Signal parity against course examples</td><td><code>reports/signal-parity.md</code> classifies each mismatch</td></tr>
           <tr><td class="id">FR-10</td><td>Baseline metrics, temporal validation, ablations, walk-forward, Monte Carlo</td><td>Reports per phase; hypothesis log entry before each test</td></tr>
           <tr><td class="id">FR-11</td><td>Pine strategies + shared library; indicator and alerts after validation</td><td>Parity with Python engine; no repainting checklist passes</td></tr>
@@ -356,8 +359,9 @@ footer{border-top:1px solid var(--rule);padding-top:18px;font-size:.84rem;color:
           <tr><td class="id">13</td><td>Tom ↔ Python parity gate</td><td>Signal parity report; every mismatch classified</td><td><span class="chip todo">Gate G2</span></td></tr>
           <tr class="stage"><td colspan="4">C · Untouched baselines</td></tr>
           <tr><td class="id">pre-14</td><td>Canonical extremes source (OQ-25) · DXY availability diagnostic (OQ-27) · baseline feed frozen (OQ-24)</td><td>Gates G2b, G2c, G2d; never chosen by profitability</td><td><span class="chip block">Hard preconditions</span></td></tr>
-          <tr><td class="id">14</td><td>Backtest runner and execution simulator</td><td>Bid/ask fills, costs, holdout lock</td><td><span class="chip todo">Pending</span></td></tr>
-          <tr><td class="id">15-16</td><td>Untouched CBR1H and CBR15 baselines</td><td>Frozen, hashed baselines; no optimization before this</td><td><span class="chip todo">Pending</span></td></tr>
+          <tr><td class="id">14A</td><td>Authoritative custom execution simulator</td><td>Frozen signals in; bid/ask fills, spread, slippage, costs, rollover, missing data, same-bar and gap rules; gross/net R; ledger; holdout lock</td><td><span class="chip todo">Pending · G14A</span></td></tr>
+          <tr><td class="id">14B</td><td>Backtesting.py adapter, parity and visualization</td><td>Same frozen signals; thin strategy; standard stats, trade table, equity, interactive HTML; pre-registered parity vs 14A</td><td><span class="chip todo">Pending · G14B</span></td></tr>
+          <tr><td class="id">15-16</td><td>Untouched CBR1H and CBR15 baselines</td><td>Frozen, hashed baselines; no optimization before this; <code>Backtest.optimize()</code> prohibited in 14-16</td><td><span class="chip todo">Pending</span></td></tr>
           <tr class="stage"><td colspan="4">D · Governed research</td></tr>
           <tr><td class="id">17</td><td>Astra × Fable pre-experiment review (4 rounds, then STOP)</td><td>Owner-approval report</td><td><span class="chip todo">After 15-16</span></td></tr>
           <tr><td class="id">18-19</td><td>Register and run owner-approved experiments (dev + validation only)</td><td>Frozen registry entries; D8/D9 enter here</td><td><span class="chip todo">Pending</span></td></tr>
@@ -399,6 +403,8 @@ footer{border-top:1px solid var(--rule);padding-top:18px;font-size:.84rem;color:
           <tr><td class="id">G2b Cross-feed agreement</td><td>13/14</td><td>Spot vs GC/DX signal agreement over the 16 sample days at a rate declared before measurement; required before futures support any baseline claim</td><td><span class="chip todo">Pending</span></td></tr>
           <tr><td class="id">G2d Canonical extremes</td><td>pre-14</td><td>OQ-25 decided: tick-built or other validated extremes, or candle-file highs/lows shown not to change signal membership or material execution results</td><td><span class="chip block">Hard precondition</span></td></tr>
           <tr><td class="id">G2c Feed frozen</td><td>pre-14</td><td>OQ-24 decided on non-profitability criteria and recorded</td><td><span class="chip todo">Pending</span></td></tr>
+          <tr><td class="id">G14A Simulator</td><td>14A</td><td>Fill-rule unit tests, same-bar and gap fixtures, determinism hash, holdout lock, hand-verified execution on parity examples</td><td><span class="chip todo">Pending</span></td></tr>
+          <tr><td class="id">G14B Backtesting.py</td><td>14B</td><td>Pinned version; adapter tests; membership, direction, entry-time and stop/target-spec parity 100%; every execution mismatch classified; deterministic reports; no rule changes; same signal set as 14A</td><td><span class="chip todo">Pending</span></td></tr>
           <tr><td class="id">G3 Baselines frozen</td><td>16</td><td>Untouched baselines recorded with hashes; no tuning</td><td><span class="chip todo">Pending</span></td></tr>
           <tr><td class="id">G4 Experiments approved</td><td>17</td><td>Astra final rulings + owner approval per experiment</td><td><span class="chip todo">Pending</span></td></tr>
           <tr><td class="id">G5 Candidate frozen</td><td>24</td><td>Only Astra-approved evidence promoted; spec hashed</td><td><span class="chip todo">Pending</span></td></tr>
@@ -415,8 +421,8 @@ footer{border-top:1px solid var(--rule);padding-top:18px;font-size:.84rem;color:
       <div class="facts">
         <div><b>73</b><span>course videos ingested</span></div>
         <div><b>151</b><span>core evidence records</span></div>
-        <div><b>416</b><span>tests passing</span></div>
-        <div><b>27</b><span>open questions tracked</span></div>
+        <div><b>419</b><span>tests passing</span></div>
+        <div><b>30</b><span>open questions tracked</span></div>
         <div><b>51 / 0</b><span>Phase 9 failures classified / blocking</span></div>
         <div><b>$66.44</b><span>data spend (Databento)</span></div>
       </div>
@@ -436,7 +442,7 @@ footer{border-top:1px solid var(--rule);padding-top:18px;font-size:.84rem;color:
         <li><strong>DXY missing data:</strong> <code>DXY_CFD_MISSING_WHILE_DX_ACTIVE</code> flags 7 periods on the checked days: both ruled hours, EST Monday 00h blocks, Thanksgiving 2022 from 17:59 to 21:57 UTC, and the Sunday 2025-11-09 reopen.</li>
         <li><strong>DXY timeframes:</strong> 15m/1h direction supported; 1m/5s structure not validated (OQ-26).</li>
         <li><strong>Candle extremes:</strong> up to 28 artificial minutes per XAUUSD window and 67 per DXY window; largest errors $0.425 and 0.3185. The candle-only flag misses most of them. Hard precondition before Phase 14.</li>
-        <li><strong>Phase 10 authorized:</strong> DXY context module only. Not authorized: baseline profitability testing, OQ-24 by performance, holdout P&amp;L, Phase 17.</li>
+        <li><strong>Active phase: Phase 10 (authorized), unchanged by D13.</strong> Phase 14A/14B are planned only. DXY context module only. Not authorized: baseline profitability testing, OQ-24 by performance, holdout P&amp;L, Phase 17.</li>
         <li><strong>Blocked:</strong> Trader.dev MCP returns 502 on every path. Commits are local only, not pushed.</li>
       </ul>
     </section>
@@ -456,6 +462,8 @@ footer{border-top:1px solid var(--rule);padding-top:18px;font-size:.84rem;color:
           <tr><td>Vendor data holes (DXY CFD hour empty while DX trades)</td><td>False DXY structure if filled</td><td>Detector <code>DXY_CFD_MISSING_WHILE_DX_ACTIVE</code>; MISSING, never filled; reason code and lower confidence</td></tr>
           <tr><td>Synthetic candle-file extremes</td><td>Wrong swings, sweeps and stops</td><td><code>hl_method</code> tag on every bar file; tick-built extremes for parity; canonical source before Phase 14 (G2d)</td></tr>
           <tr><td>Fine-grained DXY structure unvalidated</td><td>Unfaithful DXY timing rules</td><td>15m/1h context only until an independent reference exists (OQ-26)</td></tr>
+          <tr><td>Backtesting.py execution semantics differ from the custom simulator</td><td>Silent execution drift</td><td>Custom simulator authoritative; labelled, quantified approximations; every mismatch classified (CBR-ARCH-014 §6-7)</td></tr>
+          <tr><td>A visualization/optimizer library invites parameter search</td><td>Overfit baselines</td><td><code>optimize()</code> prohibited in Phases 14-16; test guard; shared frozen signal set</td></tr>
           <tr><td>Publishing copyrighted or licensed material</td><td>Legal exposure</td><td>Gitignore enforced and checked before every commit</td></tr>
         </tbody>
       </table></div>
@@ -473,6 +481,9 @@ footer{border-top:1px solid var(--rule);padding-top:18px;font-size:.84rem;color:
           <tr><td class="id">OQ-11 / 12</td><td>Stop buffer size; 50% target vs 1:1 vs next level</td><td>Buffer range declared; target variants as ablations</td></tr>
           <tr><td class="id">OQ-13</td><td>DXY as confluence, veto or timing trigger?</td><td>Not in baseline; each tested separately</td></tr>
           <tr><td class="id">OQ-21</td><td>Trend: hard no-trade or quality downgrade?</td><td>Hard filter in V1; downgrade as ablation</td></tr>
+          <tr><td class="id">OQ-28</td><td>Stop resolved at fill (current spec) or frozen at decision?</td><td>Decide in Phase 11, before Phase 13</td></tr>
+          <tr><td class="id">OQ-29</td><td>CBR1H execution clock: 5s (spec) or 1m?</td><td>5s unless Phase 13 evidence plus an owner spec revision</td></tr>
+          <tr><td class="id">OQ-30</td><td>Backtesting.py is AGPL-3.0 and the repo is public</td><td>Owner licence review before Phase 14B; 14A unaffected</td></tr>
           <tr><td class="id">OQ-24</td><td>Baseline feed: spot, GC/DX futures or hybrid?</td><td>Open until parity and cross-feed agreement exist; frozen before Phase 14; never chosen by profitability</td></tr>
           <tr><td class="id">OQ-25</td><td>Canonical OHLC source for extremes (swings, ranges, extensions, stops, sweeps)?</td><td>Hard precondition before Phase 14 (G2d); candle-file highs/lows not authoritative meanwhile</td></tr>
           <tr><td class="id">OQ-26</td><td>Independent reference for 1m/5s DXY structure?</td><td>Open data dependency; 15m/1h DXY context only meanwhile</td></tr>

@@ -3,6 +3,11 @@
 Status: **proposal for approval**. No backtest code exists yet, by design (first milestone stops before
 implementation).
 
+> **Superseded in part (2026-09-14, D13).** Execution (the `backtest/` layer in §2 and §4) is now planned in
+> `phase14-execution-architecture.md`: Phase 14A is the authoritative custom simulator and Phase 14B the Backtesting.py
+> adapter, parity and visualization. The Pine/PineTS runner (§6) moves downstream of validation (Phases 26-27,
+> CBR-GOV-001 §8). Layout names below (`strategy/`, `ledger/`) are indicative; the Phase 14 doc gives the current layout.
+
 ## 1. Principles carried into code
 
 - **One source of truth for signals.** A Python reference engine computes every setup. Pine and any external

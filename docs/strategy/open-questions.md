@@ -267,6 +267,29 @@ recordings, or the Notion journal) · `RESEARCH PARAMETER` (legitimately ambiguo
 - **Status.** Approved, not required for Phase 9. **Must be complete before historical DXY availability assumptions
   are frozen for baseline testing.**
 
+### OQ-28 · Stop resolved at fill or frozen at decision? (signal contract, D13)
+- **Problem.** M1H-SL-01 and primitives §8 compute the stop at fill: `oe_extreme (at fill) ± buffer_atr × ATR(1m,14) ±
+  spread`. An immutable signal contract (CBR-ARCH-014 §3) needs a stop specification at decision time.
+- **Options.** (a) `ADD_SPREAD_AT_FILL`: the contract carries anchor + buffer; the simulator adds the fill-time spread
+  (keeps the current spec) · (b) `FROZEN_AT_DECISION`: the whole stop is fixed when the signal is emitted (spec revision).
+- **Constraint.** Decided on spec fidelity and testability, **before Phase 13**; never after baselines exist.
+- **Status.** `NEEDS USER DECISION` (Phase 11).
+
+### OQ-29 · CBR1H execution clock: 5s or 1m? (D13)
+- **Problem.** The owner allows CBR1H on 1m bars if Phases 11-13 prove it sufficient, but primitives §8 fills both
+  models' stop entries on 5s bars.
+- **Handling.** 5s stays the spec. Moving to 1m needs parity evidence that fills and signal membership don't change
+  materially, plus an owner-approved spec revision before Phase 14A.
+- **Status.** `OPEN`, decided after Phase 13.
+
+### OQ-30 · Backtesting.py licence (AGPL-3.0) in a public repository (D13)
+- **Problem.** `backtesting` 0.6.6 is AGPL-3.0; the repository is public. Adding it as a dependency may carry copyleft
+  obligations for the project code that uses it.
+- **Handling.** Not added until Phase 14B. Owner reviews the licence implications (no legal conclusion is made here).
+  Fallback if rejected: keep 14B visual/metrics outputs in a separate, isolated tool or choose another library,
+  with no change to 14A.
+- **Status.** `NEEDS USER DECISION` before Phase 14B.
+
 ### OQ-17 · Stop placement on the 15m model: tight vs breathing room
 - **Problem.** Course: no tight stops (E15-040). One journal trade uses a tight stop; another journal loss is
   blamed on a stop that was too tight (Level 2).
@@ -387,6 +410,7 @@ said to hold ~350 trades (P2G-37). The spoken and slide DXY figures disagree.
 | D10 | Astra × Fable research governance adopted (CBR-GOV-001) | Governance |
 | D11 | AC-11 split into AC-11A (required: 16-day stratified pipeline proof) and AC-11B (deferred full spot history); failures classified, not auto-FAIL; baseline feed (OQ-24) stays open until parity and cross-feed agreement, frozen before Phase 14, never chosen by profitability | OQ-24, Phase 9 |
 | D12 | Phase 9 rulings: 2020-03-09 DXY hour = DATA_ERROR → MISSING, with detector `DXY_CFD_MISSING_WHILE_DX_ACTIVE`; 2019-03-11 DXY hour stays UNEXPLAINED → MISSING; new class REFERENCE_UNAVAILABLE; `cause_status` field; candle high/low construction is a hard safeguard before Phase 14; 1m/5s DXY structure not validated. Phase 9 PASS WITH CONCERNS, G1 approved with conditions | OQ-25, OQ-26, OQ-27, G1 |
+| D13 | Backtesting.py integrated in Phase 14B as a secondary execution, metrics, visualization and parity layer; Phase 14A custom simulator is authoritative; signal contract immutable; parity thresholds pre-registered (CBR-ARCH-014 §7); no `optimize()` or parameter search in Phases 14-16 | OQ-28, OQ-29, OQ-30, Phase 14 |
 
 ## Batched questions for the user (historical; answered above)
 

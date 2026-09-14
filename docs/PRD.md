@@ -78,6 +78,7 @@ A trustworthy "no edge" answer counts as success. The TradingView indicator is b
 | D10 | Astra × Fable research governance adopted (CBR-GOV-001) |
 | D11 | AC-11 split: AC-11A (16-day stratified spot-pipeline proof, required for Phase 9) + AC-11B (full spot history, deferred); failures classified; baseline feed (OQ-24) open until parity and cross-feed agreement, frozen before Phase 14, never chosen by profitability |
 | D12 | Phase 9 rulings: DXY 2020-03-09 20h = DATA_ERROR → MISSING, flagged by detector `DXY_CFD_MISSING_WHILE_DX_ACTIVE`; DXY 2019-03-11 00h stays UNEXPLAINED → MISSING; new class REFERENCE_UNAVAILABLE; `cause_status` (unproven causes never used as evidence); candle-file high/low = hard safeguard before Phase 14; 1m/5s DXY structure not validated. Record: `docs/governance/g1-approval.md` |
+| D13 | Backtesting.py enters in **Phase 14B** as a secondary execution, standard-metrics, visualization and parity layer. The Phase 14A custom simulator is authoritative for execution; the CBR reference engine is authoritative for signals. Signal contract is immutable; parity thresholds pre-registered; no `optimize()` or parameter search in Phases 14-16. Plan: `docs/architecture/phase14-execution-architecture.md` |
 
 ---
 
@@ -108,7 +109,9 @@ Both CBR models: **stop** beyond the extension extreme, **target** 50% of the ex
 | FR-05 | Tick → 5s / 1m bar pipeline (UTC, gaps explicit) |
 | FR-06 | Python reference engine with unit and lookahead tests |
 | FR-07 | Signal ledger with a reason code for every no-trade |
-| FR-08 | Execution simulator with bid/ask, slippage, costs |
+| FR-08 | Authoritative execution simulator (14A): frozen signals only; bid/ask fills (long: ask in, bid out; short: bid in, ask out); spread, slippage, costs; rollover; missing data; same-bar and gap rules; gross and net R; deterministic |
+| FR-08b | Backtesting.py adapter (14B): same frozen signals; thin strategy; standard stats, trade table, equity, interactive HTML; parity report vs 14A with every mismatch classified; run manifest |
+| FR-08c | Signal contract `cbr-signal.v1` between the engine and every execution backend; immutable during execution |
 | FR-09 | Signal parity report against course examples |
 | FR-10 | Baseline metrics, temporal validation, ablations, walk-forward, Monte Carlo |
 | FR-11 | Pine strategies + library; indicator and alerts after validation |
@@ -168,9 +171,10 @@ Research-derived variables carry `classification: RESEARCH-DERIVED`.
 
 ### C. Untouched baselines: phases 14-16
 - **Before 14:** define the canonical historical OHLC source for swings, range extremes, extension extremes, stops and sweeps (OQ-25, hard precondition, D12-5); complete the DXY DST/reopen availability diagnostic (OQ-27); freeze the baseline data feed (OQ-24: spot / futures / hybrid) on fidelity, signal agreement, structure agreement, availability, execution realism, 5s feasibility, reproducibility and known distortions, **never profitability**. If futures are chosen, the cross-feed signal-agreement requirement (G2b) must pass; if spot, AC-11B must be complete.
-- 14 Backtest runner and execution simulator
+- **14A Authoritative custom execution simulator:** consumes frozen signals; bid/ask fills; spread, slippage, costs; rollover; missing data; same-bar and gap rules; ledger with reason codes; gross/net R; holdout lock. Gate G14A
+- **14B Backtesting.py adapter, parity and visualization:** same frozen signal set; thin strategy (no CBR logic); standard stats, trade table, equity, interactive HTML; pre-registered parity vs 14A (membership, direction, timestamps, stop/target spec = 100%; every execution mismatch classified); pinned version; licence review (OQ-30). Gate G14B (PASS / PASS WITH CONCERNS / FAIL). **Not built before Phases 10-13 are complete**
 - 15 Untouched CBR1H baseline
-- 16 Untouched CBR15 baseline (**frozen; no optimization before this**)
+- 16 Untouched CBR15 baseline (**frozen; no optimization before this**; `Backtest.optimize()` prohibited in Phases 14-16)
 
 ### D. Governed research: phases 17-19
 - **17 Astra × Fable pre-experiment review** (only after 15-16):
@@ -211,6 +215,8 @@ The Python reference engine is authoritative. LuxAlgo Quant may assist with Pine
 | G2b Cross-feed signal agreement | 13/14 | Engine run on spot and GC/DX over the 16 AC-11A sample days yields the same setups (direction, hour, entry window) at a rate pre-declared before measurement. Required before futures data can support any baseline performance claim | Owner |
 | G2d Canonical extremes source | pre-14 | OQ-25 decided: extreme-sensitive logic uses tick-built bars or another validated source, or candle-file highs/lows are shown quantitatively not to change signal membership or material execution results | Owner |
 | G2c Baseline feed frozen | pre-14 | OQ-24 decided on the owner's non-profitability criteria and recorded | Owner |
+| G14A Authoritative simulator | 14A | Fill-rule unit tests, same-bar and gap fixtures, determinism hash, holdout lock, hand-verified execution on the parity examples (no performance statistics) | Owner |
+| G14B Backtesting.py adapter | 14B | CBR-ARCH-014 §9: pinned version; adapter tests; signal membership, direction, entry-time and stop/target-spec parity 100%; every execution mismatch classified; deterministic reports; no rule changes; same frozen signal set as 14A | Owner |
 | G3 Baselines frozen | 16 | Untouched baselines recorded with hashes; no tuning | Owner |
 | G4 Experiments approved | 17 | Astra final rulings + owner approval per experiment | Astra → Owner |
 | G5 Candidate frozen | 24 | Only Astra-approved evidence promoted; spec hashed | Astra → Owner |
@@ -236,8 +242,8 @@ _As of 2026-09-14, after owner ruling D12 and the Phase 9 acceptance rerun (`rep
 | Course videos ingested | 73 (~15.2 h) |
 | Core evidence records | 151 |
 | Candidate records | 258 |
-| Tests passing | 416 |
-| Open questions tracked | 27 |
+| Tests passing | 419 |
+| Open questions tracked | 30 |
 | Data spend | $66.44 (Databento) |
 
 ### Phase 9: **PASS WITH CONCERNS** · G1 approved with conditions
@@ -262,7 +268,7 @@ _As of 2026-09-14, after owner ruling D12 and the Phase 9 acceptance rerun (`rep
 - **2020-06-17 gold.** 1m corr 0.920 with ~$3.7 basis drift; cause HYPOTHESIZED.
 - **OQ-27.** The DST-Monday DXY diagnostic is still pending (required before DXY availability assumptions are frozen).
 
-**Phase 10 (authorized):** DXY context module only. Not authorized: baseline profitability testing, OQ-24 via
+**Active phase: Phase 10 (authorized), unchanged by D13.** Phase 14 is planned only (`docs/architecture/phase14-execution-architecture.md`). DXY context module only. Not authorized: baseline profitability testing, OQ-24 via
 performance, holdout P&L, Phase 17.
 
 - **Commits:** local only, not pushed
@@ -279,6 +285,8 @@ performance, holdout P&L, Phase 17.
 | Overfitting from many variants | Pre-declared ranges, hypothesis log, chronological splits, single-use holdout |
 | Feed differences (FOREX.com vs Dukascopy; TVC:DXY vs DXY CFD) | Measure on test-case days; optional TradingView export |
 | Pine can't do 5-second entries | Declared simplification; quantify the difference |
+| Backtesting.py semantics differ (single price series, relative constant spread, no slippage, entry-bar SL/TP deferred, missing rows invisible, chart resampling above 10,000 bars) | Custom simulator authoritative; approximations labelled and quantified; every mismatch classified (CBR-ARCH-014 §6-7) |
+| Visualization layer tempts parameter search | `optimize()` prohibited in Phases 14-16; test guard; frozen signal set shared with 14A |
 | Small gold targets make costs decisive | Bid/ask fills, real spreads, rollover exclusion, results after costs |
 | Vendor outages (Dukascopy, Trader.dev) | Cached, resumable downloads; local runners |
 | Vendor data holes (e.g. DXY CFD hour empty while DX trades) | Detector `DXY_CFD_MISSING_WHILE_DX_ACTIVE`; MISSING, never filled; reason code and lower confidence on affected setups |
@@ -301,6 +309,9 @@ performance, holdout P&L, Phase 17.
 | OQ-25 | Canonical OHLC source for extremes (swings, ranges, extensions, stops, sweeps)? | Hard precondition before Phase 14 (G2d); candle-file highs/lows not authoritative meanwhile |
 | OQ-26 | Independent reference for 1m/5s DXY structure? | Open data dependency; only 15m/1h DXY context used meanwhile |
 | OQ-27 | DXY CFD availability at DST-transition Mondays / weekly reopen | Diagnostic approved; required before DXY availability assumptions are frozen |
+| OQ-28 | Stop resolved at fill (current spec) or frozen at decision? | Decide in Phase 11, before Phase 13 |
+| OQ-29 | CBR1H execution clock: 5s (spec) or 1m? | 5s unless Phase 13 evidence + owner spec revision |
+| OQ-30 | Backtesting.py is AGPL-3.0; the repo is public | Owner licence review before Phase 14B; 14A unaffected |
 | OQ-24 | Baseline feed: Dukascopy spot, GC/DX futures, or hybrid? | Open until Phase 9 validation, engines, Phase 13 parity and cross-feed agreement exist; frozen before Phase 14; never chosen by profitability |
 
 Full register: `docs/strategy/open-questions.md`
