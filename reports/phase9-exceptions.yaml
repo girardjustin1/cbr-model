@@ -1,7 +1,309 @@
-# Phase 9 exceptions register (CBR-ACC-009 §4).
-# One entry per failed check id from reports/phase9-data-acceptance.json, added only after investigation.
-# class: PIPELINE_ERROR | DATA_ERROR | EXPECTED_MARKET_BEHAVIOR | EXPECTED_FEED_DIFFERENCE | UNEXPLAINED_FEED_DIFFERENCE
-# resolved: true only for PIPELINE_ERROR / DATA_ERROR fixed and re-verified (then the check should pass and the
-#           entry becomes stale), or for a documented resolution approved by the owner.
-# Failing days are never dropped or replaced.
-exceptions: []
+investigations:
+  DXY-GAPS-2026-09-14:
+    finding: 'DXY CFD (Dukascopy DOLLARIDXUSD) minutes with no quotes outside the 17:00-18:00 New York break. On the Oct 20-24 and Nov 11 fixture
+      days, 88-97% of those minutes are also absent from DX futures (no trades), with DX median volume 1-2 contracts in the few minutes where
+      DX did trade. The 60-minute blocks at 23:00-00:59 UTC on 2025-11-09/10/11 match the CFD''s daily quoting start at 20:00 New York: on 2025-11-11
+      DX futures also started 01:00 UTC (20:00 EST); in October (EDT) 20:00 New York = 00:00 UTC, so no block appears. On the weekly reopen (Sun
+      2025-11-09 → Mon 11-10) DX futures open at 18:00 New York (23:00 UTC) while the CFD waits until 20:00 New York, which explains the 68 minutes
+      on 2025-11-10 when DX traded and the CFD did not.
+
+      '
+    evidence: investigation run 2026-09-14 (DX session first/last bars; CFD-missing vs DX-missing counts per day)
+    downstream_limitation: 'DXY CFD has no bars in thin minutes and none between 18:00 and 20:00 New York on Sunday reopen. DXY context features
+      must treat these as missing (lower confidence), never forward-filled, and the DXY module (Phase 10) must not require DXY bars in the first
+      two hours after the weekly reopen.
+
+      '
+  DXY-1M-CORR-2026-09-14:
+    finding: 'DXY CFD vs DX front-month 1m return correlation 0.745-0.900 (pre-declared threshold 0.90) on 7 fixture days, with best lag 0 on
+      every day, basis mean -0.0003 to -0.0005 (std ~0.004) and price-scale deviation 0.003%. Correlation rises with horizon: 5m 0.891-0.966,
+      15m 0.963-0.983. Restricting to minutes with >=3 or >=5 CFD ticks does not raise it (0.66-0.86), so CFD staleness is not the cause. DX futures
+      itself has 23-30% exactly-zero 1m returns (0.005 tick size is comparable to a typical 1m move) vs 3% for the CFD: the disagreement is 1m
+      quantization and thin trading in the futures reference, not a timestamp or scaling error in the pipeline.
+
+      '
+    evidence: investigation run 2026-09-14 (multi-horizon correlation, zero-return shares, tick-count-filtered correlation)
+    downstream_limitation: 'DXY direction on 15m and 1h candles is well supported (15m correlation >= 0.96). DXY structure at 1m and 5s (Tom''s
+      5-second DXY shifts, EP2-026) cannot be validated against DX futures; before any DXY feature at 1m/5s scale is used, it needs an independent
+      reference (e.g. TradingView TVC:DXY export for fixture windows). Recorded for Phase 10 and OQ-24 (futures DX is a weak 1m substitute for
+      the DXY index).
+
+      '
+  GOLD-1M-QUANT-2026-09-14:
+    finding: On quiet sample days, XAUUSD vs GC 1m correlation < 0.95 while 5m 0.972-0.978 and 15m 0.989-0.991, lag 0. GC has 21-29% exactly-zero
+      1m returns vs 0.5-3% for spot; in 2019 the mean |GC 1m move| ($0.12) is about one GC tick ($0.10). 1m quantization in the futures reference.
+    downstream_limitation: Gold structure at 15m/1h agrees across feeds; 1m-scale agreement is limited by GC tick quantization in low-volatility
+      regimes. Relevant to G2b (cross-feed signal agreement) and OQ-24.
+  GOLD-QUIET-MINUTES-2026-09-14:
+    finding: 'Dukascopy XAUUSD has no bar in a few extremely quiet minutes (16 minutes across 3 sample days: 9, 6 and 1) in which GC traded 1-31
+      contracts with a $0.00-0.20 range (day median 71-97 contracts).'
+    downstream_limitation: Such minutes are missing, not flat; engines must not forward-fill. The 1m swing/extension logic sees a gap of one minute
+      at most.
+  GOLD-BASIS-2020-06-17:
+    finding: Intraday basis drift of ~$3.7 in London hours without spikes or lag. Attributed to 2020 EFP/basis volatility (contextual).
+    downstream_limitation: Futures-based gold structure can diverge from spot by several dollars intraday in dislocated regimes; this is exactly
+      what G2b must measure before futures data supports baselines.
+  DXY-VENDOR-GAP-2020-03-09:
+    finding: Dukascopy DOLLARIDXUSD has no ticks for 2020-03-09 20:00-20:59 UTC (empty source file) during active DX trading.
+    downstream_limitation: 'DATA_ERROR. Proposed resolution for owner approval: treat as missing data under the existing rule (no forward-fill;
+      DXY context unavailable → lower confidence), and add a pipeline flag marking any hour where the reference futures traded but the CFD has
+      no ticks as VENDOR_GAP so it is excluded from DXY features by rule rather than by inspection.'
+  CANDLE-MID-EXTREMES-2026-09-14:
+    finding: 'Daily candle files give mid high/low as (bid_high+ask_high)/2 and (bid_low+ask_low)/2. The side extremes can come from different
+      ticks, and a single wide-spread quote inflates them. Example: DOLLARIDXUSD 2018-01-17 02:10 UTC, one tick bid 88.735 / ask 90.496 (spread
+      1.761) gives candle mid high 89.934 / low 89.097, while the tick-derived mid high/low is 89.616 / 89.416 (diff 0.3185). Open and close always
+      match exactly (0.0 on all 10 tick windows). High/low within 0.05: XAUUSD 94-100% of minutes (max diff $0.425), DXY 98-100% (max 0.3185,
+      2018 only).'
+    evidence: tick-window vs candle reconciliation in reports/phase9-data-acceptance.md; raw ticks 2018-01-17 02:00-02:12 UTC
+    classification_note: No acceptance criterion fails (AC-06 checks open/close), so there is no failure id. It is recorded as a pipeline-semantics
+      concern, not reclassified after the fact and with no threshold changed.
+    downstream_limitation: Candle mid high/low are an outer bound on true mid extremes. Swing/extreme detection and stop placement (Phase 10+)
+      must either use tick-derived bars where they exist or treat candle mid extremes as bounds, and a spread-spike tick filter must be specified
+      (pre-declared) before full history is built. Proposed for owner decision; not implemented.
+exceptions:
+- id: AC-07/unexpected_gaps/dollaridxusd/2025-10-20
+  class: EXPECTED_MARKET_BEHAVIOR
+  resolved: false
+  explanation: 'Thin minutes: 143 of 150 CFD-missing minutes also have no DX futures trades. See DXY-GAPS-2026-09-14.'
+- id: AC-07/unexpected_gaps/dollaridxusd/2025-10-21
+  class: EXPECTED_MARKET_BEHAVIOR
+  resolved: false
+  explanation: 'Thin minutes: 134 of 139 CFD-missing minutes also have no DX futures trades. See DXY-GAPS-2026-09-14.'
+- id: AC-07/unexpected_gaps/dollaridxusd/2025-10-22
+  class: EXPECTED_MARKET_BEHAVIOR
+  resolved: false
+  explanation: 'Thin minutes: 152 of 159 CFD-missing minutes also have no DX futures trades. See DXY-GAPS-2026-09-14.'
+- id: AC-07/unexpected_gaps/dollaridxusd/2025-10-23
+  class: EXPECTED_MARKET_BEHAVIOR
+  resolved: false
+  explanation: 'Thin minutes: 147 of 157 CFD-missing minutes also have no DX futures trades. See DXY-GAPS-2026-09-14.'
+- id: AC-07/unexpected_gaps/dollaridxusd/2025-10-24
+  class: EXPECTED_MARKET_BEHAVIOR
+  resolved: false
+  explanation: 'Thin minutes: 157 of 173 CFD-missing minutes also have no DX futures trades (Friday). See DXY-GAPS-2026-09-14.'
+- id: AC-07/unexpected_gaps/dollaridxusd/2025-11-09
+  class: EXPECTED_FEED_DIFFERENCE
+  resolved: false
+  explanation: 'Sunday reopen: DX futures quote from 18:00 New York (23:00 UTC); the CFD starts quoting at 20:00 New York (01:00 UTC Monday).
+    See DXY-GAPS-2026-09-14.'
+- id: AC-07/unexpected_gaps/dollaridxusd/2025-11-10
+  class: EXPECTED_FEED_DIFFERENCE
+  resolved: false
+  explanation: 00:00-00:59 UTC block = CFD not yet quoting after the weekly reopen (starts 20:00 New York = 01:00 UTC in EST); remaining single
+    minutes are thin trading (103 also absent in DX). See DXY-GAPS-2026-09-14.
+- id: AC-07/unexpected_gaps/dollaridxusd/2025-11-11
+  class: EXPECTED_MARKET_BEHAVIOR
+  resolved: false
+  explanation: '00:00-00:59 UTC block = daily session start 20:00 New York (01:00 UTC in EST); DX futures also first traded at 01:00 UTC. Other
+    minutes: 143 of 155 also absent in DX. See DXY-GAPS-2026-09-14.'
+- id: AC-09/return_corr/2025-10-20/DXY CFD vs DX
+  class: EXPECTED_FEED_DIFFERENCE
+  resolved: false
+  explanation: 1m corr 0.790; 5m 0.891; 15m 0.963; lag 0; basis ~0. DX futures 1m quantization/thin trading. See DXY-1M-CORR-2026-09-14.
+- id: AC-09/return_corr/2025-10-21/DXY CFD vs DX
+  class: EXPECTED_FEED_DIFFERENCE
+  resolved: false
+  explanation: 1m corr 0.802; 5m 0.926; 15m 0.965; lag 0; basis ~0. See DXY-1M-CORR-2026-09-14.
+- id: AC-09/return_corr/2025-10-22/DXY CFD vs DX
+  class: EXPECTED_FEED_DIFFERENCE
+  resolved: false
+  explanation: 1m corr 0.745; 5m 0.903; 15m 0.964; lag 0; basis ~0. See DXY-1M-CORR-2026-09-14.
+- id: AC-09/return_corr/2025-10-23/DXY CFD vs DX
+  class: EXPECTED_FEED_DIFFERENCE
+  resolved: false
+  explanation: 1m corr 0.777; 5m 0.897; 15m 0.965; lag 0; basis ~0. See DXY-1M-CORR-2026-09-14.
+- id: AC-09/return_corr/2025-10-24/DXY CFD vs DX
+  class: EXPECTED_FEED_DIFFERENCE
+  resolved: false
+  explanation: 1m corr 0.8995 (just under 0.90); 5m 0.966; 15m 0.983; lag 0; basis ~0. See DXY-1M-CORR-2026-09-14.
+- id: AC-09/return_corr/2025-11-10/DXY CFD vs DX
+  class: EXPECTED_FEED_DIFFERENCE
+  resolved: false
+  explanation: 1m corr 0.793; 5m 0.937; 15m 0.974; lag 0; basis ~0. See DXY-1M-CORR-2026-09-14.
+- id: AC-09/return_corr/2025-11-11/DXY CFD vs DX
+  class: EXPECTED_FEED_DIFFERENCE
+  resolved: false
+  explanation: 1m corr 0.818; 5m 0.936; 15m 0.980; lag 0; basis ~0. See DXY-1M-CORR-2026-09-14.
+- id: AC-07/unexpected_gaps/dollaridxusd/2018-02-21
+  class: EXPECTED_MARKET_BEHAVIOR
+  resolved: false
+  explanation: 'EST session close pattern (23:00-00:59 UTC) and thin minutes, identical in shape to later EST days. NOTE: no DX futures exist
+    for 2018, so this classification rests on the pattern, not a same-day futures check.'
+- id: AC-07/unexpected_gaps/xauusd/2019-04-17
+  class: EXPECTED_FEED_DIFFERENCE
+  resolved: false
+  explanation: 'Quiet minutes: in every gap minute GC traded only 1-31 contracts (day median 71-97) with a $0.00-0.20 range; Dukascopy records
+    ticks only on quote change, so no spot bar exists. See GOLD-QUIET-MINUTES-2026-09-14.'
+- id: AC-07/unexpected_gaps/dollaridxusd/2019-04-17
+  class: EXPECTED_MARKET_BEHAVIOR
+  resolved: false
+  explanation: 22:00-23:59 UTC block = DX session closed 18:00-20:00 EDT (DX futures 0 bars); remaining single minutes are thin trading, the large
+    majority also without DX trades. See DXY-GAPS-2026-09-14.
+- id: AC-07/unexpected_gaps/dollaridxusd/2020-06-17
+  class: EXPECTED_MARKET_BEHAVIOR
+  resolved: false
+  explanation: Session close 18:00-20:00 EDT (22:00-23:59 UTC, DX futures 0 bars) plus thin minutes, nearly all also without DX trades. See DXY-GAPS-2026-09-14.
+- id: AC-07/unexpected_gaps/dollaridxusd/2021-08-18
+  class: EXPECTED_MARKET_BEHAVIOR
+  resolved: false
+  explanation: 22:00-23:59 UTC block = DX session closed 18:00-20:00 EDT (DX futures 0 bars); remaining single minutes are thin trading, the large
+    majority also without DX trades. See DXY-GAPS-2026-09-14.
+- id: AC-07/unexpected_gaps/xauusd/2022-10-19
+  class: EXPECTED_FEED_DIFFERENCE
+  resolved: false
+  explanation: 'Quiet minutes: in every gap minute GC traded only 1-31 contracts (day median 71-97) with a $0.00-0.20 range; Dukascopy records
+    ticks only on quote change, so no spot bar exists. See GOLD-QUIET-MINUTES-2026-09-14.'
+- id: AC-07/unexpected_gaps/dollaridxusd/2022-10-19
+  class: EXPECTED_MARKET_BEHAVIOR
+  resolved: false
+  explanation: Session close 18:00-20:00 EDT (22:00-23:59 UTC, DX futures 0 bars) plus thin minutes, nearly all also without DX trades. See DXY-GAPS-2026-09-14.
+- id: AC-07/unexpected_gaps/dollaridxusd/2023-12-20
+  class: EXPECTED_MARKET_BEHAVIOR
+  resolved: false
+  explanation: EST session close 18:00-20:00 New York (23:00-00:59 UTC, DX futures 0 bars) plus thin minutes, nearly all also without DX trades.
+    See DXY-GAPS-2026-09-14.
+- id: AC-07/unexpected_gaps/dollaridxusd/2024-03-20
+  class: EXPECTED_MARKET_BEHAVIOR
+  resolved: false
+  explanation: 22:00-23:59 UTC block = DX session closed 18:00-20:00 EDT (DX futures 0 bars); remaining single minutes are thin trading, the large
+    majority also without DX trades. See DXY-GAPS-2026-09-14.
+- id: AC-07/unexpected_gaps/xauusd/2019-03-11
+  class: EXPECTED_FEED_DIFFERENCE
+  resolved: false
+  explanation: 'Quiet minutes: in every gap minute GC traded only 1-31 contracts (day median 71-97) with a $0.00-0.20 range; Dukascopy records
+    ticks only on quote change, so no spot bar exists. See GOLD-QUIET-MINUTES-2026-09-14.'
+- id: AC-07/unexpected_gaps/dollaridxusd/2019-03-11
+  class: UNEXPLAINED_FEED_DIFFERENCE
+  resolved: false
+  explanation: '00:00-00:59 UTC (20:00 EDT Monday after the US clock change): CFD tick file empty while DX traded 31 minutes (190 contracts).
+    The CFD''s 20:00 New York start explains every other Monday checked (winter Mondays 2021-02-01, 2023-11-06, 2025-11-10: no CFD ticks at 19:00
+    EST; summer Monday 2020-03-09: 795 ticks at 20:00 EDT), but not this one. Vendor schedule lag after the DST change vs vendor outage cannot
+    be distinguished. Other gaps that day (22:00-23:59 session close, thin minutes) are expected.'
+- id: AC-07/unexpected_gaps/dollaridxusd/2023-11-06
+  class: EXPECTED_FEED_DIFFERENCE
+  resolved: false
+  explanation: 'Monday 00:00-00:59 UTC (19:00 EST): CFD tick file empty, consistent with its 20:00 New York start, while DX futures trade from
+    the 18:00 New York weekly reopen. 23:00-23:59 block and thin minutes as other EST days. See DXY-GAPS-2026-09-14.'
+- id: AC-07/unexpected_gaps/xauusd/2022-11-24
+  class: EXPECTED_MARKET_BEHAVIOR
+  resolved: false
+  explanation: 'Thanksgiving early close: spot quotes stop after 19:28 UTC and resume 22:00 UTC; GC trades to 19:29 UTC, pauses, and resumes 23:00
+    UTC (CME holiday schedule). The 18:20 single minute is a quiet minute.'
+- id: AC-07/unexpected_gaps/dollaridxusd/2022-11-24
+  class: EXPECTED_FEED_DIFFERENCE
+  resolved: false
+  explanation: 'Thanksgiving: CFD stopped quoting at 17:58 UTC (vendor holiday early close, tick files for 18-20h empty) while DX futures traded
+    thinly (18h-21h UTC: 30/24/27/16 bars, 84/41/83/109 contracts) to 21:56 UTC. 00:00-00:59 and 23:00-23:59 blocks: EST session close, DX also
+    closed.'
+- id: AC-07/unexpected_gaps/dollaridxusd/2021-02-01
+  class: EXPECTED_FEED_DIFFERENCE
+  resolved: false
+  explanation: 'Monday 00:00-00:59 UTC (19:00 EST): CFD tick file empty, consistent with its 20:00 New York start, while DX futures trade from
+    the 18:00 New York weekly reopen. 23:00-23:59 block and thin minutes as other EST days. See DXY-GAPS-2026-09-14.'
+- id: AC-07/unexpected_gaps/dollaridxusd/2018-01-17
+  class: EXPECTED_MARKET_BEHAVIOR
+  resolved: false
+  explanation: 'EST session close pattern (23:00-00:59 UTC) and thin minutes, identical in shape to later EST days. NOTE: no DX futures exist
+    for 2018, so this classification rests on the pattern, not a same-day futures check.'
+- id: AC-07/unexpected_gaps/dollaridxusd/2020-03-09
+  class: DATA_ERROR
+  resolved: false
+  explanation: 'Vendor gap: Dukascopy DOLLARIDXUSD tick file for 2020-03-09 20:00 UTC is empty (0 bytes) while DX futures traded 56 of 60 minutes
+    (1,139 contracts, 94.90-95.085). Remaining gaps that day: 22:00-23:59 UTC session close (DX also closed) and thin minutes. See DXY-VENDOR-GAP-2020-03-09.'
+- id: AC-07/unexpected_gaps/dollaridxusd/2020-03-16
+  class: EXPECTED_MARKET_BEHAVIOR
+  resolved: false
+  explanation: Session close 18:00-20:00 EDT (22:00-23:59 UTC, DX futures 0 bars) plus thin minutes, nearly all also without DX trades. See DXY-GAPS-2026-09-14.
+- id: AC-07/unexpected_gaps/dollaridxusd/2022-03-08
+  class: EXPECTED_MARKET_BEHAVIOR
+  resolved: false
+  explanation: EST session close 18:00-20:00 New York (23:00-00:59 UTC, DX futures 0 bars) plus thin minutes, nearly all also without DX trades.
+    See DXY-GAPS-2026-09-14.
+- id: AC-07/unexpected_gaps/dollaridxusd/2024-04-12
+  class: EXPECTED_MARKET_BEHAVIOR
+  resolved: false
+  explanation: Session close 18:00-20:00 EDT (22:00-23:59 UTC, DX futures 0 bars) plus thin minutes, nearly all also without DX trades. See DXY-GAPS-2026-09-14.
+- id: AC-11A/feed_overlap/2018-02-21/DXY CFD vs DX
+  class: EXPECTED_FEED_DIFFERENCE
+  resolved: false
+  explanation: 'Reference unavailable: Databento IFUS DX history begins 2018-12-26 01:00 UTC, so the DXY CFD cannot be cross-checked on 2018 sample
+    days. CLASSIFICATION NOTE: none of the five classes fits exactly (no disagreement was observed; the comparison was impossible). The CFD''s
+    own integrity checks (AC-04/AC-07) still ran. Downstream: DXY CFD data before 2018-12-26 is not cross-feed validated. Owner ruling requested.'
+- id: AC-11A/return_corr/2019-04-17/XAUUSD vs GC
+  class: EXPECTED_FEED_DIFFERENCE
+  resolved: false
+  explanation: '1m 0.923; 5m 0.978; 15m 0.989; lag 0. GC 27.6% zero 1m returns vs spot 3%; mean |GC 1m move| $0.12 ≈ one GC tick ($0.10): 1m quantization.
+    See GOLD-1M-QUANT-2026-09-14.'
+- id: AC-11A/return_corr/2019-04-17/DXY CFD vs DX
+  class: EXPECTED_FEED_DIFFERENCE
+  resolved: false
+  explanation: 'DXY CFD vs DX 1m corr 0.8282; 5m 0.943-0.981 and 15m 0.978-0.993 on all sample days; lag 0; basis ~0. DX futures 18-35% zero 1m
+    returns (0.005 tick, thin). See DXY-1M-CORR-2026-09-14. NOTE: in 2019 the CFD itself has 16-20% zero 1m returns (vs ~2% from 2020 on), so
+    early DXY CFD 1m data is also coarser.'
+- id: AC-11A/return_corr/2020-06-17/XAUUSD vs GC
+  class: EXPECTED_FEED_DIFFERENCE
+  resolved: false
+  explanation: 1m 0.920; 5m 0.946; 15m 0.929; lag 0; no basis jumps; within-hour basis std <= $1.02, but hourly mean basis drifts $9.07 (06h)
+    → $5.38 (09h) → $8.81 (20h). Consistent with 2020 spot-futures (EFP) basis volatility. ATTRIBUTION IS CONTEXTUAL (not provable from these
+    data alone); owner may reclassify. See GOLD-BASIS-2020-06-17.
+- id: AC-11A/return_corr/2020-06-17/DXY CFD vs DX
+  class: EXPECTED_FEED_DIFFERENCE
+  resolved: false
+  explanation: DXY CFD vs DX 1m corr 0.8595; 5m 0.943-0.981 and 15m 0.978-0.993 on all sample days; lag 0; basis ~0. DX futures 18-35% zero 1m
+    returns (0.005 tick, thin). See DXY-1M-CORR-2026-09-14.
+- id: AC-11A/return_corr/2021-08-18/DXY CFD vs DX
+  class: EXPECTED_FEED_DIFFERENCE
+  resolved: false
+  explanation: DXY CFD vs DX 1m corr 0.8442; 5m 0.943-0.981 and 15m 0.978-0.993 on all sample days; lag 0; basis ~0. DX futures 18-35% zero 1m
+    returns (0.005 tick, thin). See DXY-1M-CORR-2026-09-14.
+- id: AC-11A/return_corr/2023-12-20/DXY CFD vs DX
+  class: EXPECTED_FEED_DIFFERENCE
+  resolved: false
+  explanation: DXY CFD vs DX 1m corr 0.7933; 5m 0.943-0.981 and 15m 0.978-0.993 on all sample days; lag 0; basis ~0. DX futures 18-35% zero 1m
+    returns (0.005 tick, thin). See DXY-1M-CORR-2026-09-14.
+- id: AC-11A/return_corr/2024-03-20/DXY CFD vs DX
+  class: EXPECTED_FEED_DIFFERENCE
+  resolved: false
+  explanation: DXY CFD vs DX 1m corr 0.8994; 5m 0.943-0.981 and 15m 0.978-0.993 on all sample days; lag 0; basis ~0. DX futures 18-35% zero 1m
+    returns (0.005 tick, thin). See DXY-1M-CORR-2026-09-14.
+- id: AC-11A/return_corr/2019-03-11/XAUUSD vs GC
+  class: EXPECTED_FEED_DIFFERENCE
+  resolved: false
+  explanation: '1m 0.921; 5m 0.976; 15m 0.991; lag 0. GC 29% zero 1m returns; mean |GC 1m move| $0.12 ≈ one GC tick ($0.10): 1m quantization.
+    See GOLD-1M-QUANT-2026-09-14.'
+- id: AC-11A/return_corr/2019-03-11/DXY CFD vs DX
+  class: EXPECTED_FEED_DIFFERENCE
+  resolved: false
+  explanation: 'DXY CFD vs DX 1m corr 0.7958; 5m 0.943-0.981 and 15m 0.978-0.993 on all sample days; lag 0; basis ~0. DX futures 18-35% zero 1m
+    returns (0.005 tick, thin). See DXY-1M-CORR-2026-09-14. NOTE: in 2019 the CFD itself has 16-20% zero 1m returns (vs ~2% from 2020 on), so
+    early DXY CFD 1m data is also coarser.'
+- id: AC-11A/return_corr/2023-11-06/DXY CFD vs DX
+  class: EXPECTED_FEED_DIFFERENCE
+  resolved: false
+  explanation: DXY CFD vs DX 1m corr 0.7968; 5m 0.943-0.981 and 15m 0.978-0.993 on all sample days; lag 0; basis ~0. DX futures 18-35% zero 1m
+    returns (0.005 tick, thin). See DXY-1M-CORR-2026-09-14.
+- id: AC-11A/return_corr/2022-11-24/XAUUSD vs GC
+  class: EXPECTED_FEED_DIFFERENCE
+  resolved: false
+  explanation: Thanksgiving thin session. 1m 0.932; 5m 0.972; 15m 0.989; lag 0; GC 21% zero 1m returns. See GOLD-1M-QUANT-2026-09-14.
+- id: AC-11A/return_corr/2022-11-24/DXY CFD vs DX
+  class: EXPECTED_FEED_DIFFERENCE
+  resolved: false
+  explanation: DXY CFD vs DX 1m corr 0.8739; 5m 0.943-0.981 and 15m 0.978-0.993 on all sample days; lag 0; basis ~0. DX futures 18-35% zero 1m
+    returns (0.005 tick, thin). See DXY-1M-CORR-2026-09-14.
+- id: AC-11A/return_corr/2021-02-01/DXY CFD vs DX
+  class: EXPECTED_FEED_DIFFERENCE
+  resolved: false
+  explanation: DXY CFD vs DX 1m corr 0.8461; 5m 0.943-0.981 and 15m 0.978-0.993 on all sample days; lag 0; basis ~0. DX futures 18-35% zero 1m
+    returns (0.005 tick, thin). See DXY-1M-CORR-2026-09-14.
+- id: AC-11A/feed_overlap/2018-01-17/DXY CFD vs DX
+  class: EXPECTED_FEED_DIFFERENCE
+  resolved: false
+  explanation: 'Reference unavailable: Databento IFUS DX history begins 2018-12-26 01:00 UTC, so the DXY CFD cannot be cross-checked on 2018 sample
+    days. CLASSIFICATION NOTE: none of the five classes fits exactly (no disagreement was observed; the comparison was impossible). The CFD''s
+    own integrity checks (AC-04/AC-07) still ran. Downstream: DXY CFD data before 2018-12-26 is not cross-feed validated. Owner ruling requested.'
+- id: AC-11A/return_corr/2024-04-12/DXY CFD vs DX
+  class: EXPECTED_FEED_DIFFERENCE
+  resolved: false
+  explanation: DXY CFD vs DX 1m corr 0.7974; 5m 0.943-0.981 and 15m 0.978-0.993 on all sample days; lag 0; basis ~0. DX futures 18-35% zero 1m
+    returns (0.005 tick, thin). See DXY-1M-CORR-2026-09-14.

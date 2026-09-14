@@ -159,7 +159,7 @@ Research-derived variables carry `classification: RESEARCH-DERIVED`.
 - 8 Machine specs: **done, awaiting owner review**
 
 ### B. Data & reference engines: phases 9-13 🟡
-- **9 Historical data pipeline:** **in progress**
+- **9 Historical data pipeline:** **acceptance run complete; verdict FAIL pending owner rulings on 2 blocking items** (see Current status). Phase 10 not started.
 - 10 DXY context / data module
 - 11 CBR15 Python reference engine
 - 12 CBR1H Python reference engine
@@ -227,20 +227,39 @@ The Python reference engine is authoritative. LuxAlgo Quant may assist with Pine
 
 ## Current status
 
+_As of 2026-09-14, after the Phase 9 acceptance run (`reports/phase9-data-acceptance.md`, CBR-ACC-009 v2)._
+
 | Metric | Value |
 |---|---|
 | Course videos ingested | 73 (~15.2 h) |
 | Core evidence records | 151 |
 | Candidate records | 258 |
-| Tests passing | 373 |
-| Open questions tracked | 21 |
+| Tests passing | 408 |
+| Open questions tracked | 24 |
 | Data spend | $66.44 (Databento) |
 
-- **Commits:** `95b4794` knowledge base · `ff9fa1b` machine specs (local, not pushed)
-- **Databento:** GC 3,036,783 and DX 2,122,629 one-minute bars; issues logged (GC roll jumps median $16.30, DX off-market publisher, 2 zero-price bars)
-- **Dukascopy:** decoder verified exactly (285,935 ticks); Oct 20-22 gold saved with 0 duplicate or bad-spread ticks; resuming after server errors
+### Phase 9 verdict: **FAIL** (2 blocking, 49 documented concerns, 0 unclassified)
+
+| Criterion | Status |
+|---|---|
+| AC-01…AC-06, AC-08, AC-10 | MET |
+| AC-07 gaps | FAIL: 1 DATA_ERROR + 1 UNEXPLAINED_FEED_DIFFERENCE (below); all other gaps classified |
+| AC-09 fixture feed comparison | MET WITH CONCERNS (DXY CFD vs DX 1m corr 0.745-0.900, lag 0) |
+| AC-11A 16-day sample | MET WITH CONCERNS (every failure classified; no day dropped or replaced) |
+| AC-11B full spot history | DEFERRED: 16 / 2,192 weekdays (2018-2024) per instrument |
+
+**Blocking items (owner ruling needed):**
+1. `AC-07/unexpected_gaps/dollaridxusd/2020-03-09`: **DATA_ERROR.** Dukascopy DXY tick file for 20:00-20:59 UTC is empty while DX futures traded 56 minutes (1,139 contracts). Proposed: rule-based VENDOR_GAP flag, treated as missing (no forward-fill, lower confidence).
+2. `AC-07/unexpected_gaps/dollaridxusd/2019-03-11`: **UNEXPLAINED_FEED_DIFFERENCE.** No CFD ticks 00:00-00:59 UTC (Monday after US DST start) while DX traded 31 minutes. Every other Monday checked fits the CFD's 20:00 New York start; this one doesn't.
+
+**Owner review requested (non-blocking):** 2018 DXY days have no DX reference (DX starts 2018-12-26), so they're provisionally EXPECTED_FEED_DIFFERENCE. 2020-06-17 gold 1m corr 0.920 with a $3.7 intraday basis drift is attributed contextually to 2020 EFP volatility. Candle mid high/low are an outer bound on true mid extremes (spread-spike quotes inflate wicks; CANDLE-MID-EXTREMES-2026-09-14).
+
+**Feed findings:** XAUUSD vs GC agrees at lag 0 on every day (1m 0.920-0.995; 15m 0.929-0.991 on the four days under 0.95). DXY CFD vs DX 1m 0.745-0.974, 15m 0.963-0.993 on the days under 0.90: direction at 15m/1h is supported, but **1m/5s DXY structure can't be validated against DX** and needs an independent reference. DXY CFD doesn't quote from the weekly reopen to 20:00 New York, and it stopped at 17:58 UTC on Thanksgiving 2022.
+
+- **Commits:** local only, not pushed
+- **Dukascopy:** decoder verified exactly (285,935 ticks); 10 tick windows clean (open/close match candles exactly)
 - **Blocked:** Trader.dev MCP server returns 502 on every path
-- **Next:** finish test-case data → compare spot vs futures → engine building blocks → parity check
+- **Next:** owner rulings on blocking items → re-issue verdict → Phase 10 (only after G1)
 
 ---
 

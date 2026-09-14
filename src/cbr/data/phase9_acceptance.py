@@ -191,7 +191,8 @@ def feed_comparison(day: date, label: str, col: Collector) -> dict:
             out[pair] = {"available": False, "reason": "spot candles missing"}
             continue
         fut = fut[(fut["publisher_id"] == fut["publisher_id"].mode().iloc[0]) & (fut["close"] > 0)]
-        fut = fut.loc[str(day)]
+        start = pd.Timestamp(day, tz="UTC")
+        fut = fut[(fut.index >= start) & (fut.index < start + pd.Timedelta(days=1))]   # empty if no futures that day
         fut = fut[~fut.index.duplicated()]
         spot = pd.read_parquet(spot_path)["close"]
         j = pd.concat({"spot": spot, "fut": fut["close"], "iid": fut["instrument_id"]}, axis=1, join="inner").dropna()
