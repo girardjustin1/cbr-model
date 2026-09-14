@@ -1,6 +1,6 @@
 # CBR Shared Primitives: Machine Specification
 
-**Version:** `CBR_PRIMITIVES_V1` · **Status:** draft for review (Phase 8) · **Date:** 2026-09-14
+**Version:** `CBR_PRIMITIVES_V1` (spec rev 1.1: type 3 pairing fix F-0) · **Status:** draft for review · **Date:** 2026-09-14
 
 Deterministic definitions used by `CBR1H_BASELINE_V1` and `CBR15_BASELINE_V1`. Every numeric value lives in
 `config/strategy.yaml`; this document refers to parameters by name (`param.*`). Each definition cites its
@@ -118,17 +118,17 @@ oe_size     = |oe_extreme − C.open|
 
 On tier `τ` with confirmed swings (Section 1), evaluated on bars of that tier.
 
-**Bearish type 3 at bar `b`** (sell), CANON EP1-008, EP1-009:
-1. Let `SH` = most recent confirmed swing high and `SL` = the most recent confirmed swing low **before** `SH`.
-2. Price takes out `SH`: some bar `a` has `a.high > SH.price` (`a` after `SH.confirmed_at`).
-3. Then price takes out `SL`: bar `b` (after `a`) has `b.low < SL.price`, with no new confirmed swing low in
-   between (the reversal is immediate) and `b.open_time − a.open_time ≤ param.t3.max_reversal_minutes.<τ>` (`ASSUMPTION`
-   for "immediately").
-4. `t3.trigger_price = SL.price − tick`, `t3.trigger_time` = the time inside `b` when the level traded (on the next
-   finer tier: `B5s` inside `B1m`; for `S5`, the bar itself).
-5. `t3.sweep_extreme` = highest high between `a` and `b` (the swing taken out; stop anchor, EP1-012).
-6. Quality (diagnostic in V1): `t3.close_beyond` = any bar between `a` and `b` closed above `SH` and bar `b`
-   (or a later bar before entry) closed below `SL` (EP1-009 "ideally close beyond"); `t3.break_size_atr`.
+**Bearish type 3 at bar `b`** (sell), CANON EP1-008, EP1-009 (pairing corrected in v1.1 after parity finding F-0):
+1. Let the last two confirmed swings be `SH` then `SL`, where `SL` is the swing low that formed **after** `SH`
+   (higher high → higher low). The pattern is armed once `SL` is confirmed.
+2. Price takes out `SH`: some bar `a` has `a.high > SH.price`.
+3. Then price breaks `SL`: bar `b` (after `a`) has `b.low < SL.price`, with no new swing low confirmed after the sweep
+   (the reversal is immediate) and `b.open_time − a.open_time ≤ param.t3.max_reversal_minutes.<τ>` (`ASSUMPTION`).
+   New swing highs confirmed after the sweep (the sweep extreme itself) do not disarm the pattern.
+4. `t3.trigger_price = SL.price − tick`, `t3.trigger_time` = the bar where the level traded (sequenced on the next
+   finer tier where available).
+5. `t3.sweep_extreme` = highest high between `a` and `b` (the stop anchor, EP1-012).
+6. Quality (diagnostic in V1): `t3.close_beyond`, `t3.break_size_atr`.
 
 Bullish type 3 mirrors. **CHoCH** (EP1-010) is recorded when step 3 happens without step 2; not an entry in V1.
 

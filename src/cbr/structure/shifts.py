@@ -28,48 +28,48 @@ class Type3:
 
 def find_type3(bars: pd.DataFrame, swings: pd.DataFrame, *, max_reversal: pd.Timedelta, tick: float,
                bar_length: pd.Timedelta) -> list[Type3]:
-    """All type 3 events on one tier, scanning bars in time order and using only swings confirmed
-    before each bar opens. The break must occur on a later bar than the sweep (IMPL: no intrabar order)."""
+    """All type 3 events on one tier (EP1-008): with the last two confirmed swings X then Y,
+      X = swing high, Y = the higher/lower low after it  -> SELL: take out X, then break Y
+      X = swing low,  Y = the high after it              -> BUY:  take out X, then break Y
+    The swing to break is the one formed AFTER the swept swing. A pattern is armed once Y is confirmed, stays
+    armed through later confirmations of X's kind (the sweep itself confirms a new extreme), and ends on the
+    break, on timeout after the sweep, or when a new swing of Y's kind is confirmed after the sweep.
+    Uses only swings confirmed at or before each bar's open; the break must be on a later bar than the sweep
+    (IMPL: OHLC has no intrabar order)."""
     events: list[Type3] = []
-    pending: dict[str, dict] = {}
+    armed: dict[tuple, dict] = {}
+    seen_pairs: set[tuple] = set()
     for t, high, low in zip(bars.index, bars["high"], bars["low"], strict=True):
-        known = usable(swings, t)            # confirmed at or before this bar's open
-        if len(known) < 2:
-            continue
-        for side, swept_kind, broken_kind in (("SELL", "H", "L"), ("BUY", "L", "H")):
-            swept_rows = known[known["kind"] == swept_kind]
-            if swept_rows.empty:
+        known = usable(swings, t)
+        if len(known) >= 2:
+            x, y = known.iloc[-2], known.iloc[-1]
+            if x["kind"] != y["kind"]:
+                key = (x["time"], y["time"])
+                if key not in seen_pairs:
+                    seen_pairs.add(key)
+                    side = "SELL" if x["kind"] == "H" else "BUY"
+                    armed[key] = {"side": side, "swept": x, "broken": y, "sweep_time": None, "extreme": None}
+        for key, st in list(armed.items()):
+            side, swept, broken = st["side"], st["swept"], st["broken"]
+            if st["sweep_time"] is None:
+                if (high > swept["price"]) if side == "SELL" else (low < swept["price"]):
+                    st["sweep_time"], st["extreme"] = t, (high if side == "SELL" else low)
                 continue
-            swept = swept_rows.iloc[-1]
-            prior = known[(known["kind"] == broken_kind) & (known["time"] < swept["time"])]
-            if prior.empty:
+            if t - st["sweep_time"] > max_reversal:
+                del armed[key]
                 continue
-            broken = prior.iloc[-1]
-            key = (swept["time"], broken["time"])
-            state = pending.get(side)
-            if state is None or state["key"] != key:
-                state = pending[side] = {"key": key, "sweep_time": None, "extreme": None, "done": False}
-            if state["done"]:
+            new_same_as_broken = known[(known["kind"] == broken["kind"]) & (known["time"] > broken["time"])
+                                       & (known["confirmed_at"] > st["sweep_time"])]
+            if not new_same_as_broken.empty:     # structure moved on before the break: not an immediate reversal
+                del armed[key]
                 continue
-            takes_swept = high > swept["price"] if side == "SELL" else low < swept["price"]
-            if state["sweep_time"] is None:
-                if takes_swept:
-                    state["sweep_time"], state["extreme"] = t, (high if side == "SELL" else low)
-                continue
-            state["extreme"] = max(state["extreme"], high) if side == "SELL" else min(state["extreme"], low)
-            if t - state["sweep_time"] > max_reversal:
-                state["done"] = True
-                continue
-            new_opposite = known[(known["kind"] == broken_kind) & (known["confirmed_at"] > state["sweep_time"])]
-            if not new_opposite.empty:            # a new swing formed first: not an immediate reversal
-                state["done"] = True
-                continue
-            breaks = low < broken["price"] if side == "SELL" else high > broken["price"]
-            if breaks:
+            if (low < broken["price"]) if side == "SELL" else (high > broken["price"]):
                 trigger = broken["price"] - tick if side == "SELL" else broken["price"] + tick
                 events.append(Type3(side, swept["time"], float(swept["price"]), float(broken["price"]),
-                                    state["sweep_time"], t, float(state["extreme"]), float(trigger)))
-                state["done"] = True
+                                    st["sweep_time"], t, float(st["extreme"]), float(trigger)))
+                del armed[key]
+                continue
+            st["extreme"] = max(st["extreme"], high) if side == "SELL" else min(st["extreme"], low)
     return events
 
 

@@ -143,14 +143,32 @@ def test_oe_uses_only_closed_bars():
 # ---------- type 3 ----------
 
 def t3_setup():
-    # swing low 100 (t=01:00), swing high 110 (t=01:10), both confirmed by 01:15
-    sw = pd.DataFrame([("L", 100.0, T0, T0 + pd.Timedelta(minutes=5)),
-                       ("H", 110.0, T0 + pd.Timedelta(minutes=10), T0 + pd.Timedelta(minutes=15))],
+    # bullish structure: swing high 110 (01:00), then higher low 100 (01:10), both confirmed by 01:15.
+    # SELL type 3 (EP1-008): take out the high 110, then break the low 100 that formed after it.
+    sw = pd.DataFrame([("H", 110.0, T0, T0 + pd.Timedelta(minutes=5)),
+                       ("L", 100.0, T0 + pd.Timedelta(minutes=10), T0 + pd.Timedelta(minutes=15))],
                       columns=["kind", "price", "time", "confirmed_at"])
     start = T0 + pd.Timedelta(minutes=15)
     rows = [(108, 109, 107, 108), (108, 111, 107, 110),          # sweep of 110 at 01:16
             (110, 110, 104, 105), (105, 106, 99.5, 100)]         # break of 100 at 01:18
     return sw, bars(rows, start=start)
+
+
+def test_type3_buy_matches_course_example_structure():
+    # CX-LT1-1 shape (5s swings, 2025-10-21): low 4335.21, lower high 4340.18, sweep to 4332.95, break 4340.18.
+    s5 = pd.Timedelta(seconds=5)
+    t = T0
+    sw = pd.DataFrame([("L", 4335.21, t, t + 7 * s5), ("H", 4340.18, t + 7 * s5, t + 11 * s5),
+                       ("L", 4332.95, t + 14 * s5, t + 17 * s5)],        # the sweep low gets confirmed first
+                      columns=["kind", "price", "time", "confirmed_at"])
+    rows = ([(4338, 4338.5, 4337.5, 4338)] * 12 + [(4338, 4338, 4334, 4334.5), (4334.5, 4335, 4332.95, 4334)]
+            + [(4334, 4336, 4333.8, 4336)] * 3 + [(4336, 4340.5, 4336, 4340.3)])
+    b = bars(rows, start=t, step=s5)
+    ev = [e for e in find_type3(b, sw, max_reversal=pd.Timedelta(minutes=3), tick=0.01, bar_length=s5)
+          if e.direction == "BUY"]
+    assert len(ev) == 1
+    assert ev[0].swept_price == 4335.21 and ev[0].broken_price == 4340.18
+    assert ev[0].trigger_price == pytest.approx(4340.19) and ev[0].sweep_extreme == pytest.approx(4332.95)
 
 
 def test_type3_sell_detected():
@@ -171,7 +189,8 @@ def test_type3_rejects_slow_reversal():
 
 def test_type3_rejects_when_new_swing_low_forms_first():
     sw, b = t3_setup()
-    sw = pd.concat([sw, pd.DataFrame([("L", 104.0, b.index[2], b.index[2] + M1)], columns=sw.columns)],
+    sw = pd.concat([sw, pd.DataFrame([("H", 111.0, b.index[1], b.index[1] + M1),
+                                      ("L", 104.0, b.index[2], b.index[2] + M1)], columns=sw.columns)],
                    ignore_index=True)
     ev = find_type3(b, sw, max_reversal=pd.Timedelta(minutes=15), tick=0.01, bar_length=M1)
     assert not [e for e in ev if e.direction == "SELL" and e.broken_price == 100.0]
