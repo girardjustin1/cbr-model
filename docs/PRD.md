@@ -73,6 +73,9 @@ A trustworthy "no edge" answer counts as success. The TradingView indicator is b
 | D5 | TRR Forever becomes a third model, after the CBR baselines |
 | D6 | No Notion journal for now |
 | D7 | XAUUSD + DXY only |
+| D8 | Overextension origin (hour open vs last reset): pre-registered ablation candidate → Phase 17 |
+| D9 | Early-shift guard (final push / 15m alignment): pre-registered ablation candidate → Phase 17 |
+| D10 | Astra × Fable research governance adopted (CBR-GOV-001) |
 
 ---
 
@@ -130,42 +133,91 @@ Course example days (Oct-Nov 2025) sit in the holdout and are used **only for pa
 
 ---
 
-## Roadmap (30 phases, 5 stages)
+## Research governance: Astra × Fable (CBR-GOV-001)
 
-### A. Knowledge base (phases 0-8): ✅ done
-- 0 Discovery · 1 Video ingestion · 2-5 Extraction, glossary, rule matrix, ambiguity register: **done**
-- 6-7 Journal research & trade database: **draft**
-- 8 Machine specs: **done, awaiting review**
+Full framework: `docs/governance/research-governance.md`. It adds to all existing controls and replaces none.
 
-### B. Data & engine (9-13): 🟡 in progress
-- 9 Historical data pipeline: **in progress**
-- 10 DXY context module
-- 11-12 Python reference engine (CBR15, CBR1H)
-- 13 **Parity check against Tom's 3 course examples** (gate)
+| Role | Does | May NOT |
+|---|---|---|
+| **Fable: Research Director** | Interprets results, proposes market mechanisms, weaknesses, testable hypotheses, ablations, regime dependencies, alternative explanations; may *propose* research-derived features | Change CANON rules · implement · optimize on the holdout · add unexplained parameters · promote features |
+| **Astra: Independent Quant Auditor** | Challenges hypotheses; audits hindsight, overfitting, multiple testing, leakage, sample size, statistical validity, parameter selection; rules **APPROVE / APPROVE WITH CONSTRAINTS / REJECT** | Try to make CBR profitable |
+| **Claude Code: Research Engineer** | Implements frozen specs, runs approved experiments, keeps tests, ledger and reports reproducible | Invent rules because they improve history · run unregistered experiments · edit an experiment after it starts |
+| **Owner** | Final approval: experiment execution, methodology changes, feature promotion, holdout evaluation, indicator composition | none |
 
-### C. Baseline evidence (14-19)
-- 14 Backtest runner (Trader.dev down → PineTS planned)
-- 15-16 Baseline backtests + temporal validation
-- 17-19 Regime analysis, confluence ablations, 15m × 1h interaction
-
-### D. Robustness (20-25)
-- 20-23 Limited parameter research, walk-forward, Monte Carlo, overfitting log
-- 24-25 Journal-derived features, quality score (only if validated)
-
-### E. Product (26-30): only if the edge holds
-- 26-28 Indicator, alerts, signal ledger
-- 29-30 Screenshot journal workflow, performance reports
+**Frozen experiment registry:** `research/experiments/registry.yaml`, schema in `SCHEMA.md`, enforced by a test.
+Experiments are registered **before** execution, locked by `spec_hash` once running, and any change needs a new ID.
+Research-derived variables carry `classification: RESEARCH-DERIVED`.
 
 ---
 
-## Validation gates (proposed, need owner sign-off)
+## Roadmap (revised 2026-09-14)
 
-1. **Faithful implementation:** the engine reproduces Tom's taught setups; every mismatch is classified.
-2. **Baseline shows something:** positive expectancy after costs in development, with the same sign in validation.
-3. **Robust edge:** walk-forward stays positive, the bootstrap confidence interval excludes zero, no single year carries the result, and drawdowns are survivable. The holdout confirms once.
-4. **Indicator worth building:** only rules that proved themselves out-of-sample go in.
+### A. Knowledge base: phases 0-8 ✅
+- 0 Discovery · 1 Video ingestion · 2-5 Extraction, glossary, rule matrix, ambiguity register: **done**
+- 6-7 Journal research & trade database: **draft**
+- 8 Machine specs: **done, awaiting owner review**
+
+### B. Data & reference engines: phases 9-13 🟡
+- **9 Historical data pipeline:** **in progress**
+- 10 DXY context / data module
+- 11 CBR15 Python reference engine
+- 12 CBR1H Python reference engine
+- **13 Tom ↔ Python parity gate:** the engine must reproduce the taught examples before any performance research
+
+### C. Untouched baselines: phases 14-16
+- 14 Backtest runner and execution simulator
+- 15 Untouched CBR1H baseline
+- 16 Untouched CBR15 baseline (**frozen; no optimization before this**)
+
+### D. Governed research: phases 17-19
+- **17 Astra × Fable pre-experiment review** (only after 15-16):
+  - Round 1: independent Fable diagnosis (≤ 10 experiments) and independent Astra audit
+  - Round 2: Astra rules on each proposal
+  - Round 3: Fable defends, modifies, narrows or withdraws
+  - Round 4: Astra final ruling → **STOP** → owner-approval report
+- 18 Register owner-approved experiments in the frozen registry
+- 19 Run approved experiments (development + validation only). Pre-registered candidates D8 / D9 enter here via Phase 17.
+
+### E. Robustness: phases 20-23
+- 20 Chronological validation and parameter sensitivity
+- 21 Walk-forward analysis
+- 22 Bootstrap confidence intervals and Monte Carlo
+- 23 Regime stability, year-by-year, concentration, execution-cost sensitivity
+
+### F. Final review & holdout: phases 24-25
+- **24 Astra × Fable post-experiment review:** every finding classified PROMOTE / RESEARCH ONLY / INSUFFICIENT EVIDENCE / REJECT; promotion needs Astra's evidence approval and owner approval; final candidate spec **frozen (hashed)**
+- **25 Single-use holdout evaluation** (owner-approved): run once, record whatever happens
+
+### G. TradingView (only after validation): phases 26-30
+- 26 Pine strategy parity implementation and Python ↔ Pine parity
+- 27 Validated TradingView indicator
+- 28 Alerts and forward signal ledger
+- 29 Journal / screenshot workflow
+- 30 Performance feedback
+
+The Python reference engine is authoritative. LuxAlgo Quant may assist with Pine later, but is never the research source of truth. TRR Forever (D5) is a separate model track after the CBR baselines.
+
+---
+
+## Gates
+
+| Gate | After phase | Pass condition | Decided by |
+|---|---|---|---|
+| G1 Data | 9 | Historical-data acceptance criteria met (`reports/phase9-data-acceptance.md`) | Owner |
+| G2 Faithful implementation | 13 | Engine reproduces taught examples; every mismatch classified | Owner |
+| G3 Baselines frozen | 16 | Untouched baselines recorded with hashes; no tuning | Owner |
+| G4 Experiments approved | 17 | Astra final rulings + owner approval per experiment | Astra → Owner |
+| G5 Candidate frozen | 24 | Only Astra-approved evidence promoted; spec hashed | Astra → Owner |
+| G6 Holdout | 25 | One run, result recorded regardless of outcome | Owner |
+| G7 Indicator | 26-27 | Python ↔ Pine parity on the frozen candidate | Owner |
 
 > A "no edge" result at any gate is a valid end, not a cue to keep tweaking.
+
+## Holdout policy
+
+- 2025-01-01 → 2026-08-31 is **single-use**. No role or process may see holdout performance while choosing features, filters, thresholds, parameters, models or scores.
+- Course-example days inside it are for **implementation parity only**. Every holdout-period data access is logged in `research/holdout-access-log.md`.
+- Evaluation runs once, after the candidate is frozen and the owner approves. No retuned model is ever presented as validated.
 
 ---
 

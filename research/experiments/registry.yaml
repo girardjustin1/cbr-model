@@ -1,0 +1,4 @@
+# Frozen experiment registry. See SCHEMA.md and docs/governance/research-governance.md.
+# Empty until Phase 17 (Astra x Fable pre-experiment review) and owner approval.
+# Pre-registered ablation CANDIDATES awaiting that review (not experiments yet): D8/OQ-22, D9/OQ-23.
+experiments: []

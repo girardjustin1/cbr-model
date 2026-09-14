@@ -1,0 +1,348 @@
+{
+  "generated_utc": "2026-09-14T19:39:58.902284+00:00",
+  "fixture_days": [
+    "2025-10-20",
+    "2025-10-21",
+    "2025-10-22",
+    "2025-10-23",
+    "2025-10-24",
+    "2025-10-25",
+    "2025-11-09",
+    "2025-11-10",
+    "2025-11-11"
+  ],
+  "decoder_parity": {
+    "xauusd/2025-11-10": {
+      "reference_cli_ticks": 285935,
+      "decoded_ticks": 285935,
+      "match": true
+    }
+  },
+  "per_day": [
+    {
+      "key": "xauusd/2025-10-20",
+      "present": true,
+      "status": "OK",
+      "ticks": 450625,
+      "monotonic": true,
+      "duplicate_ts": 0,
+      "non_positive_spread": 0,
+      "non_positive_price": 0,
+      "tz_utc": true,
+      "within_day": true,
+      "manifest_hash_mismatch": [],
+      "deterministic_5s": true,
+      "deterministic_1m": true,
+      "tick_count_reconciles": true,
+      "rollup_5s_to_1m_equal": true,
+      "bar_alignment_ok": true,
+      "missing_1m_total": 60,
+      "missing_1m_expected": 60,
+      "missing_1m_unexpected": 0,
+      "unexpected_gap_runs": [],
+      "spike_bars": [],
+      "median_spread": 0.7047,
+      "wide_spread_bars": 1,
+      "wide_spread_hours_utc": [
+        22
+      ],
+      "thin_minutes_lt5_ticks": 0
+    },
+    {
+      "key": "xauusd/2025-10-21",
+      "present": true,
+      "status": "OK",
+      "ticks": 548926,
+      "monotonic": true,
+      "duplicate_ts": 0,
+      "non_positive_spread": 0,
+      "non_positive_price": 0,
+      "tz_utc": true,
+      "within_day": true,
+      "manifest_hash_mismatch": [],
+      "deterministic_5s": true,
+      "deterministic_1m": true,
+      "tick_count_reconciles": true,
+      "rollup_5s_to_1m_equal": true,
+      "bar_alignment_ok": true,
+      "missing_1m_total": 60,
+      "missing_1m_expected": 60,
+      "missing_1m_unexpected": 0,
+      "unexpected_gap_runs": [],
+      "spike_bars": [],
+      "median_spread": 0.6306,
+      "wide_spread_bars": 10,
+      "wide_spread_hours_utc": [
+        8,
+        12,
+        14,
+        22
+      ],
+      "thin_minutes_lt5_ticks": 0
+    },
+    {
+      "key": "xauusd/2025-10-22",
+      "present": true,
+      "status": "OK",
+      "ticks": 566221,
+      "monotonic": true,
+      "duplicate_ts": 0,
+      "non_positive_spread": 0,
+      "non_positive_price": 0,
+      "tz_utc": true,
+      "within_day": true,
+      "manifest_hash_mismatch": [],
+      "deterministic_5s": true,
+      "deterministic_1m": true,
+      "tick_count_reconciles": true,
+      "rollup_5s_to_1m_equal": true,
+      "bar_alignment_ok": true,
+      "missing_1m_total": 60,
+      "missing_1m_expected": 60,
+      "missing_1m_unexpected": 0,
+      "unexpected_gap_runs": [],
+      "spike_bars": [],
+      "median_spread": 0.8562,
+      "wide_spread_bars": 22,
+      "wide_spread_hours_utc": [
+        0,
+        8,
+        9,
+        11,
+        12,
+        22
+      ],
+      "thin_minutes_lt5_ticks": 0
+    },
+    {
+      "key": "xauusd/2025-10-23",
+      "present": true,
+      "status": "OK",
+      "ticks": 389447,
+      "monotonic": true,
+      "duplicate_ts": 0,
+      "non_positive_spread": 0,
+      "non_positive_price": 0,
+      "tz_utc": true,
+      "within_day": true,
+      "manifest_hash_mismatch": [],
+      "deterministic_5s": true,
+      "deterministic_1m": true,
+      "tick_count_reconciles": true,
+      "rollup_5s_to_1m_equal": true,
+      "bar_alignment_ok": true,
+      "missing_1m_total": 60,
+      "missing_1m_expected": 60,
+      "missing_1m_unexpected": 0,
+      "unexpected_gap_runs": [],
+      "spike_bars": [],
+      "median_spread": 0.7067,
+      "wide_spread_bars": 1,
+      "wide_spread_hours_utc": [
+        0
+      ],
+      "thin_minutes_lt5_ticks": 0
+    },
+    {
+      "key": "xauusd/2025-10-24",
+      "present": false,
+      "status": null
+    },
+    {
+      "key": "xauusd/2025-10-25",
+      "present": false,
+      "status": null
+    },
+    {
+      "key": "xauusd/2025-11-09",
+      "present": false,
+      "status": null
+    },
+    {
+      "key": "xauusd/2025-11-10",
+      "present": false,
+      "status": null
+    },
+    {
+      "key": "xauusd/2025-11-11",
+      "present": false,
+      "status": null
+    },
+    {
+      "key": "dollaridxusd/2025-10-20",
+      "present": false,
+      "status": null
+    },
+    {
+      "key": "dollaridxusd/2025-10-21",
+      "present": false,
+      "status": null
+    },
+    {
+      "key": "dollaridxusd/2025-10-22",
+      "present": false,
+      "status": null
+    },
+    {
+      "key": "dollaridxusd/2025-10-23",
+      "present": false,
+      "status": null
+    },
+    {
+      "key": "dollaridxusd/2025-10-24",
+      "present": false,
+      "status": null
+    },
+    {
+      "key": "dollaridxusd/2025-10-25",
+      "present": false,
+      "status": null
+    },
+    {
+      "key": "dollaridxusd/2025-11-09",
+      "present": false,
+      "status": null
+    },
+    {
+      "key": "dollaridxusd/2025-11-10",
+      "present": false,
+      "status": null
+    },
+    {
+      "key": "dollaridxusd/2025-11-11",
+      "present": false,
+      "status": null
+    }
+  ],
+  "feed_comparison": {
+    "2025-10-20": {
+      "XAUUSD vs GC": {
+        "available": true,
+        "common_minutes": 1380,
+        "spot_minutes": 1380,
+        "fut_minutes": 1380,
+        "basis_mean": 14.8735,
+        "basis_std": 2.3222,
+        "basis_min": 9.5,
+        "basis_max": 18.5335,
+        "return_corr_lag0": 0.99,
+        "best_lag_min": 0,
+        "best_lag_corr": 0.99,
+        "abs_return_ratio_fut_over_spot": 1.0249
+      },
+      "DXY CFD vs DX": {
+        "available": false
+      }
+    },
+    "2025-10-21": {
+      "XAUUSD vs GC": {
+        "available": true,
+        "common_minutes": 1380,
+        "spot_minutes": 1380,
+        "fut_minutes": 1380,
+        "basis_mean": 14.0823,
+        "basis_std": 1.6043,
+        "basis_min": 11.1785,
+        "basis_max": 17.69,
+        "return_corr_lag0": 0.994,
+        "best_lag_min": 0,
+        "best_lag_corr": 0.994,
+        "abs_return_ratio_fut_over_spot": 1.0266
+      },
+      "DXY CFD vs DX": {
+        "available": false
+      }
+    },
+    "2025-10-22": {
+      "XAUUSD vs GC": {
+        "available": true,
+        "common_minutes": 1380,
+        "spot_minutes": 1380,
+        "fut_minutes": 1380,
+        "basis_mean": 15.0454,
+        "basis_std": 1.5382,
+        "basis_min": 11.8165,
+        "basis_max": 18.3685,
+        "return_corr_lag0": 0.9928,
+        "best_lag_min": 0,
+        "best_lag_corr": 0.9928,
+        "abs_return_ratio_fut_over_spot": 1.0195
+      },
+      "DXY CFD vs DX": {
+        "available": false
+      }
+    },
+    "2025-10-23": {
+      "XAUUSD vs GC": {
+        "available": true,
+        "common_minutes": 1380,
+        "spot_minutes": 1380,
+        "fut_minutes": 1380,
+        "basis_mean": 15.4737,
+        "basis_std": 0.8453,
+        "basis_min": 13.335,
+        "basis_max": 17.22,
+        "return_corr_lag0": 0.9878,
+        "best_lag_min": 0,
+        "best_lag_corr": 0.9878,
+        "abs_return_ratio_fut_over_spot": 1.0295
+      },
+      "DXY CFD vs DX": {
+        "available": false
+      }
+    },
+    "2025-10-24": {
+      "XAUUSD vs GC": {
+        "available": false
+      },
+      "DXY CFD vs DX": {
+        "available": false
+      }
+    },
+    "2025-11-10": {
+      "XAUUSD vs GC": {
+        "available": false
+      },
+      "DXY CFD vs DX": {
+        "available": false
+      }
+    },
+    "2025-11-11": {
+      "XAUUSD vs GC": {
+        "available": false
+      },
+      "DXY CFD vs DX": {
+        "available": false
+      }
+    }
+  },
+  "tom_chart_points": [
+    {
+      "example": "CX-LT3-2",
+      "utc": "2025-11-10 01:53",
+      "tom_price": 4046.1,
+      "source": "V1H-live_trade_3 frame 00:28:58",
+      "dukascopy": null
+    },
+    {
+      "example": "CX-LT1-1",
+      "utc": "2025-10-21 01:38",
+      "tom_price": 4332.96,
+      "source": "stop placed at extension low (course_examples.jsonl)",
+      "dukascopy": 4332.955,
+      "diff": -0.005
+    }
+  ],
+  "full_history": {
+    "xauusd": {
+      "dev_validation_days_required": 2557,
+      "days_present": 0,
+      "hour_files_required": 61368
+    },
+    "dollaridxusd": {
+      "dev_validation_days_required": 2557,
+      "days_present": 0,
+      "hour_files_required": 61368
+    }
+  }
+}

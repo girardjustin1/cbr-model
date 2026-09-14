@@ -23,6 +23,19 @@ data pipelines or parity fixtures for them.
 3. **Level 3, research-derived:** anything learned from backtests. Always labelled
    `RESEARCH-DERIVED`, never `ORIGINAL CBR RULE`.
 
+## Research governance (CBR-GOV-001, `docs/governance/research-governance.md`)
+
+- **Claude Code is the Research Engineer.** Implement frozen specs, run only **owner-approved, registered**
+  experiments (`research/experiments/registry.yaml`), keep tests, the signal ledger and reports reproducible.
+- **Never invent trading rules** because they improve historical results. Never modify a registered experiment
+  after it starts; a change is a new experiment ID.
+- **Fable** (Research Director) proposes; **Astra** (Independent Quant Auditor) rules; the **owner** approves.
+  Phase 17 review only after the untouched baselines (Phases 15-16) exist; it stops at an owner-approval report.
+- **Holdout 2025-01-01 → 2026-08-31 is single-use.** No holdout performance may inform any selection. Course-example
+  days in it are for implementation parity only. Log every holdout-period data access in
+  `research/holdout-access-log.md`.
+- TradingView work stays downstream of validation. The Python reference engine is authoritative.
+
 ## Rules
 
 - **Do not invent the strategy.** Every rule in a spec cites video id + timestamp. No citation,
