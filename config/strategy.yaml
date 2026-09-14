@@ -48,6 +48,14 @@ primitives:
     rollover_post_min: {value: 60, label: ASSUMPTION, source: [OQ-16], research_range: [30, 60, 90]}
     rollover_flat_before_min: {value: 5, label: ASSUMPTION, source: [OQ-16], research_range: [5, 15]}
 
+# Pre-declared single-rule ablations (owner decisions D8, D9). The value is the V1 baseline setting; each other
+# option in research_range is tested ALONE against the baseline, never combined into a grid.
+ablations:
+  oe_origin:
+    {value: HOUR_OPEN, label: ASSUMPTION, source: [OQ-22], research_range: [HOUR_OPEN, LAST_RESET]}
+  early_shift_guard:
+    {value: NONE, label: ASSUMPTION, source: [OQ-23], research_range: [NONE, FINAL_PUSH, ALIGN_15M]}
+
 models:
   CBR1H_BASELINE_V1:
     spec: docs/strategy/1h-cbr-machine-spec.md

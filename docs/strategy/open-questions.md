@@ -204,6 +204,25 @@ recordings, or the Notion journal) · `RESEARCH PARAMETER` (legitimately ambiguo
   records condition as a feature. Outcomes of those two trades are **not** used to decide.
 - **Status.** `RESEARCH PARAMETER`.
 
+### OQ-22 · Overextension origin: hour open or last reset? (parity F-1)
+- **Problem.** CX-LT1-1: the hour retraced 85% around minute 10, then pushed cleanly ~26 min. Tom calls it a clean
+  overextension; V1 measures the no-pullback test from the hour open and rejects it.
+- **Evidence.** E1H-025 (delayed push → later reversal), LR-41 (Level 2: "a big pullback restarts the count").
+- **Options.** `HOUR_OPEN` (V1 as written) · `LAST_RESET` (duration and no-pullback from the start of the push after
+  the most recent ≥ 50% pullback; stop and target still from the hour open).
+- **Decision D8.** Test both: V1 baseline keeps `HOUR_OPEN`; `LAST_RESET` is a pre-declared single-rule ablation.
+- **Status.** `RESEARCH PARAMETER`.
+
+### OQ-23 · An earlier valid shift fires before the taught entry (parity F-2)
+- **Problem.** CX-LT1-1: a valid 5s type 3 BUY at 01:29 (inside :22-:52), ~12 points above Tom's entry at 01:39, while
+  the push was still extending. V1 takes the first valid signal.
+- **Evidence.** E1H-021 (the :30 15m candle continues against, takes the previous 15m low, then reverses ~:37),
+  E1H-022.
+- **Options.** `NONE` (V1) · `FINAL_PUSH` (the entry's type 3 sweep must set the hour's extension extreme at entry) ·
+  `ALIGN_15M` (the 15m candle containing the entry must first take out the previous 15m candle's high/low).
+- **Decision D9.** Test both as pre-declared single-rule ablations against V1.
+- **Status.** `RESEARCH PARAMETER`.
+
 ### OQ-17 · Stop placement on the 15m model: tight vs breathing room
 - **Problem.** Course: no tight stops (E15-040). One journal trade uses a tight stop; another journal loss is
   blamed on a stop that was too tight (Level 2).
@@ -319,6 +338,8 @@ said to hold ~350 trades (P2G-37). The spoken and slide DXY figures disagree.
 | D5 | **TRR Forever** becomes a third model, specified and built **after** the CBR baselines | Section E |
 | D6 | Tom's Notion journal: **no access for now**; proceed with course examples and journal videos | OQ-20 |
 | D7 | Scope XAUUSD + DXY only (earlier decision) | OQ-13, OQ-19 |
+| D8 | Overextension origin: V1 keeps hour open; "last reset" tested as a single-rule ablation | OQ-22 |
+| D9 | Early-shift handling: V1 unchanged; "final push" and "15m alignment" each tested as single-rule ablations | OQ-23 |
 
 ## Batched questions for the user (historical; answered above)
 

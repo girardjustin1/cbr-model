@@ -41,7 +41,8 @@ into 4332.95. Tom calls it a clean overextension.
 - **Level 1:** "if the hourly candle opens and kind of … for a bit and then pushes. Sometimes you can have the reversal
   happen a little bit later on" (E1H-025).
 - **Level 2:** "a big pullback restarts the count" (LR-41).
-- **Proposed:** the no-pullback test and the minimum-duration test run from the **last reset point** (the start of
+- **Decision D8 (owner):** test both. V1 keeps the hour open; `LAST_RESET` is a single-rule ablation (OQ-22).
+- **Proposed rule for the ablation:** the no-pullback test and the minimum-duration test run from the **last reset point** (the start of
   the push after the most recent ≥ 50% pullback). Direction, stop anchor and the 50%-of-extension target still use
   the hour open. Needs owner decision; would become `oe_origin: LAST_RESET` in a new primitives version.
 
@@ -53,4 +54,5 @@ candle (:30) to continue against the trade and take the previous 15m low, then r
 15m-alignment rule E1H-021 ("my best setups"), classified OPTIONAL and recorded only as a diagnostic in V1.
 - **Proposed options:** (a) make E1H-021 a required filter for hourly entries after :30; (b) require the entry's type
   3 sweep to set the hour's extension extreme (the shift must reverse the *final* push, not an intermediate one);
-  (c) keep V1 as is and test (a)/(b) as ablations. Needs owner decision.
+  (c) keep V1 as is and test (a)/(b) as ablations.
+- **Decision D9 (owner):** test both as single-rule ablations (`FINAL_PUSH`, `ALIGN_15M`) against V1 (OQ-23).
