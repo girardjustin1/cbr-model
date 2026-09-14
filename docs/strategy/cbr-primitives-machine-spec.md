@@ -80,7 +80,7 @@ n_legs      = len(legs)
 | `condition = TRENDING_RANGE` | `param.condition.trend_max (0.50) ≤ c_med < 0.75` | same |
 | `condition = TREND` | `c_med < 0.50` | E1H-007, E1H-046 |
 | `condition = UNDEFINED` | `n_legs < model.cond.min_legs` | E1H-010 ("none identifiable → no trade") |
-| `direction` (TR only) | `UP` if last two MTF swing highs and lows are both higher; `DOWN` if both lower; else `NONE` | E1H-007 (HH/HL), EP2-017 |
+| `direction` (TR only) | `UP` if the last two swing highs and lows **of the classifier tier** (MTF for CBR1H, LTF for CBR15) are both higher; `DOWN` if both lower; else `NONE` | E1H-007 (HH/HL), EP2-017 |
 | `range_high`, `range_low` | max high / min low of `B1m` in window | E15-012 |
 | `pos(price)` | `(price − range_low) / (range_high − range_low)` | E15-012, E15-015 |
 
