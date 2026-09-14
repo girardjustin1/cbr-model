@@ -1,0 +1,22 @@
+[project]
+name = "cbr"
+version = "0.1.0"
+description = "Research implementation of the CBR (15m / 1h) XAUUSD methodology"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "mlx-whisper>=0.4.3",
+    "pyyaml>=6",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ruff>=0.6"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/cbr"]
+
+[tool.ruff]
+line-length = 100

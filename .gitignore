@@ -1,0 +1,23 @@
+# Source course videos: copyrighted, multi-GB. Never commit.
+references/
+
+# Derived from course material. Kept local while the GitHub repo is public.
+research/transcripts/
+research/frames/
+research/slides/
+
+# Caches and market data
+.cache/
+/data/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+
+# Secrets
+.mcp.json
+.env
+*.key
+
+.DS_Store

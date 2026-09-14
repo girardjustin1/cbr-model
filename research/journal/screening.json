@@ -1,0 +1,448 @@
+[
+  {
+    "journal_video_id": "J-nBp6PZzje3o",
+    "title": "How I Lost $7,203 Day Trading (RIP WINSTREAK)",
+    "upload_date": "20260911",
+    "relevance": "OTHER_STRATEGY",
+    "models_mentioned": [
+      "market structure shift / 50% pullback",
+      "lower timeframe shift",
+      "candle behavior (as missing confluence)"
+    ],
+    "instruments": [
+      "unstated"
+    ],
+    "dxy_mentioned": false,
+    "summary": "Live short taken on a market-structure shift with a pullback into 50% and a break of a 1-minute candle low; stopped out. He attributes the loss to missing candle behavior and entering at the start of a new hour.",
+    "rationale": "Entry rationale is a shift + 50% pullback without candle-behavior timing (00:00:37 'type uh market structure shifts here. Came back into 50%'); candle behavior is named only as the missing element (00:01:10, 00:04:33). Classed OTHER_STRATEGY but kept in trades_draft because it is a direct counterexample for the CBR candle-behavior requirement."
+  },
+  {
+    "journal_video_id": "J-nS3gIznybcI",
+    "title": "How I Made $10,234 Day Trading in 20 Minutes",
+    "upload_date": "20260910",
+    "relevance": "CBR_TRADE",
+    "models_mentioned": [
+      "fractal shift",
+      "1h CBR",
+      "15m candle behavior",
+      "30m CBR (hindsight)",
+      "change of character"
+    ],
+    "instruments": [
+      "unstated"
+    ],
+    "dxy_mentioned": false,
+    "summary": "Live short: fractal shift at HTF range high with a lower-timeframe change of character, confluence from the hourly candle (prior hour closed bearish, current hour top wick) and a 15m close in favor. Take profit hit.",
+    "rationale": "Explicit hourly candle behavior in the entry rationale: 00:01:05 'previous hourly candle closed bearish ... create that top wick first'; 00:01:27 'A bit of a CBR, nice hourly candle behavior'; 15m confluence 00:01:56. HTF/MTF/LTF alignment recap 00:04:27."
+  },
+  {
+    "journal_video_id": "J-CA2_DCcLxBI",
+    "title": "How I Made $5,505 Day Trading (EXPOSING MY FRACTAL STRATEGY)",
+    "upload_date": "20260903",
+    "relevance": "OTHER_STRATEGY",
+    "models_mentioned": [
+      "fractal shift",
+      "5-second shift breakout"
+    ],
+    "instruments": [
+      "unstated"
+    ],
+    "dxy_mentioned": false,
+    "summary": "Two shorts on a high-timeframe bearish fractal shift: the first stopped out (~6K loss), the re-entry off a smaller, cleaner shift in the upper half of the prior bearish move took profit.",
+    "rationale": "No candle-behavior or timing criteria cited; model is a fractal shift (00:00:09 'bit of a fractal shift again', 00:00:32 'three shifts in this fractal sort of entry'). Useful for entry execution: 00:04:39 'I like to enter off breakouts of like 5-second shifts'."
+  },
+  {
+    "journal_video_id": "J-hJrK3HQc36o",
+    "title": "How I Made $10,428 Day Trading in 16 Minutes (WINSTREAK CONTINUES)",
+    "upload_date": "20260902",
+    "relevance": "CBR_TRADE",
+    "models_mentioned": [
+      "inverse/HTF shift to 50% of extension",
+      "1h candle behavior"
+    ],
+    "instruments": [
+      "unstated"
+    ],
+    "dxy_mentioned": false,
+    "summary": "Live London-session short targeting 50% of an extension after a bullish shift within an overall bearish direction, with the prior hourly candle closed bearish and a top wick. Took profit early (~10K); he says it is the same trade he took Monday and Tuesday.",
+    "rationale": "Hourly candle behavior cited at entry: 00:01:33 'previous hour candle closed bearish. Created a top week first.' Session stated 00:00:03. Cross-references to Monday/Tuesday trades at 00:05:17 and 00:05:34 let PXleXsFFm-8 and -yI4UyiwwHQ be dated."
+  },
+  {
+    "journal_video_id": "J--yI4UyiwwHQ",
+    "title": "How I Made $7,555 Day Trading in 16 Minutes (HOLY WINSTREAK)",
+    "upload_date": "20260901",
+    "relevance": "CBR_TRADE",
+    "models_mentioned": [
+      "IFS (inverse fractal shift)",
+      "5-second shift",
+      "entry relativity",
+      "30m candle behavior"
+    ],
+    "instruments": [
+      "XAUUSD"
+    ],
+    "dxy_mentioned": true,
+    "summary": "Live gold short in a bearish trading range after a 75% correction of the prior bearish leg, entered on a 5-second shift and targeting 50% of the extension; manually exited near target (1.6R). Includes Q&A defining entry relativity and ranking correlation below market condition.",
+    "rationale": "Instrument 00:00:07 'short here on gold'. Model 00:01:33 'lower time frame IFS'. Entry relativity defined 00:01:49-00:02:20. DXY discussed generally 00:03:43 ('gold and DXY, but it's less important'). 30m candle 00:04:01. Candle behavior is secondary here; kept as CBR_TRADE because timing/candle criteria are part of his evaluation."
+  },
+  {
+    "journal_video_id": "J-PXleXsFFm-8",
+    "title": "How I Made $27,572.40 Day Trading (My Fractal Model)",
+    "upload_date": "20260831",
+    "relevance": "CBR_TRADE",
+    "models_mentioned": [
+      "IFS (inverse fractal shift)",
+      "1h candle behavior",
+      "15m candle close",
+      "type 3 shift",
+      "15m CBR (indicator)",
+      "30m candle behavior"
+    ],
+    "instruments": [
+      "unstated"
+    ],
+    "dxy_mentioned": false,
+    "summary": "Live short (IFS back to 50% of extension) with hourly candle behavior, a 15m close in favor and a bearish type 3 shift; exited at a previous low. Two more trades are recapped (a continuation and a low-risk bullish scalp), plus talk about journal MFE statistics and an alerting indicator.",
+    "rationale": "Entry confluence 00:01:05-00:01:19 (hourly top wick, 15m close, type 3 shift). IFS defined 00:05:06 'IFS actually stands for an inverse fractal shift'. Optimal RR from his journal 00:03:47 '1.5 to 1.75R'. Indicator 'average extension duration' 00:07:23."
+  },
+  {
+    "journal_video_id": "J-o78T2DVgI3c",
+    "title": "Live Day Trading Losing $6,754 (I GOT EDGED)",
+    "upload_date": "20260402",
+    "relevance": "CBR_TRADE",
+    "models_mentioned": [
+      "15m candle behavior",
+      "5m candle behavior",
+      "seconds shift",
+      "1m structure shift",
+      "IFS",
+      "4h AOI",
+      "weekly candle behavior"
+    ],
+    "instruments": [
+      "XAUUSD"
+    ],
+    "dxy_mentioned": true,
+    "summary": "Live gold session in the second hour of Asia (Thursday). He plans 15m-CBR buy entry models after a high-volume drop, declines early low-quality entries, then takes a short IFS into 50% of a bullish shift and closes it at a small loss when a 5m candle breaks above a high.",
+    "rationale": "15m CBR entry models 00:01:52-00:02:24; DXY 00:01:50 and 00:02:44; weekly candle behavior 00:01:15; IFS sell 00:07:23; exit 00:14:47; target size admitted too large 00:15:04."
+  },
+  {
+    "journal_video_id": "J-gjM_Am5-YfI",
+    "title": "Live Day Trading Losing $16,786 in 7 minutes",
+    "upload_date": "20260331",
+    "relevance": "CBR_TRADE",
+    "models_mentioned": [
+      "1h candle behavior",
+      "30m candle open",
+      "5m/15m candle behavior",
+      "seconds shift within 1m shift"
+    ],
+    "instruments": [
+      "XAUUSD"
+    ],
+    "dxy_mentioned": true,
+    "summary": "Live counter-direction gold short after a large extension above a prior high, with DXY moving opposite; entered on a seconds shift after a pullback into 50%. It went in favor, rejected a low and stopped out (down 16K on the day); he admits breaking his small-take-profit rule for counter-trend trades.",
+    "rationale": "Candle behavior 00:00:15 'pretty nice alley kind of behavior'; timing 00:00:30 '20 seconds to the 30-minute open'; entry 00:04:51; counter-direction external rule 00:07:01; admitted rule break 00:11:08."
+  },
+  {
+    "journal_video_id": "J-myuK3dFUdxk",
+    "title": "Live Day Trading Making $11,430 in 10 minutes",
+    "upload_date": "20260303",
+    "relevance": "CBR_TRADE",
+    "models_mentioned": [
+      "15m CBR",
+      "5-second shift",
+      "5m candle behavior",
+      "1h CBR (comparison)",
+      "what/where/how/when framework"
+    ],
+    "instruments": [
+      "XAUUSD"
+    ],
+    "dxy_mentioned": true,
+    "summary": "Explicit live 15-minute CBR on gold: a 15m candle over-extends ~6 minutes above highs in a bullish trending range, a 5-second shift in the second half gives a breakout short, target 1:1, DXY inverse. The recap maps the hourly process onto the 15m timeframe.",
+    "rationale": "00:00:05 'looking for a 15minute candle behavior reversal instead of an hourly candle behavior reversal'; 00:02:28 'with 15-inute CBRS, I mean, just target a one to one'; recap 00:08:26-00:12:19. The most direct Level-2 evidence for the 15m model."
+  },
+  {
+    "journal_video_id": "J-DZIgu4mXhDU",
+    "title": "How I Lost $8,375 Trading Gold in 30 mins (I GOT EDGED)",
+    "upload_date": "20260216",
+    "relevance": "CBR_TRADE",
+    "models_mentioned": [
+      "1h CBR (20-min extension)",
+      "internal type 3 shift",
+      "DXY type 3 shift",
+      "fractal shift on gold spread"
+    ],
+    "instruments": [
+      "XAUUSD"
+    ],
+    "dxy_mentioned": true,
+    "summary": "Recap of an ~8K gold short loss in the second hour of Asia: a 20-minute extension, an internal type 3 shift, entry about 38 minutes into the hour. He admits entering without a proper shift on gold (prompted by a DXY shift) and with a stop too tight. Most of the remainder is trading psychology.",
+    "rationale": "Entry 00:02:48-00:03:03; admissions 00:03:06 and 00:05:27 'I shouldn't be taking a trade um if there's no clean entry model on the main pair'; DXY as 'cherry on top' 00:05:50. Psychology from 00:07:15 on (not strategy)."
+  },
+  {
+    "journal_video_id": "J-xmNJrE9BJ84",
+    "title": "How I Made $31,740 Trading Gold in 15 mins (BEST TRADE THIS YEAR)",
+    "upload_date": "20260213",
+    "relevance": "CBR_TRADE",
+    "models_mentioned": [
+      "fractal shift",
+      "1h candle behavior",
+      "1h CBR (skipped)",
+      "second shift",
+      "USDJPY CBR example"
+    ],
+    "instruments": [
+      "XAUUSD",
+      "USDJPY (example)"
+    ],
+    "dxy_mentioned": true,
+    "summary": "Recap of a 1:4 gold short in Asia on a fractal shift (prior hour closed bearish, top wick into 50%, seconds shift, stop order at the low). He also explains skipping an earlier second-hour-of-Asia CBR because DXY was extending in the same direction as gold.",
+    "rationale": "Fractal shift vs CBR 00:00:07-00:00:16; skipped CBR due to DXY 00:00:57-00:01:36; fractal-shift requirements 00:02:20-00:02:37; 'correlation is more important for CBRS' 00:07:35."
+  },
+  {
+    "journal_video_id": "J-6mytsUbeEo4",
+    "title": "How I Made $15,080 Trading Gold in 1 minute (FASTEST TRADE)",
+    "upload_date": "20260209",
+    "relevance": "CBR_TRADE",
+    "models_mentioned": [
+      "1h CBR",
+      "hourly level (bull close + bear close)",
+      "AOI",
+      "DXY type 3 shift / inverse CBR",
+      "15m candle timing"
+    ],
+    "instruments": [
+      "XAUUSD"
+    ],
+    "dxy_mentioned": true,
+    "summary": "Recap of a 1:1 gold short: MTF range high, an hourly level, a 20-30 minute extension in the second half of the hour, a break of a 1-minute candle low after a rejection, and a DXY shift. He admits the entry was later in the candle than he normally takes; the rest is a win-rate vs RR prop-firm argument.",
+    "rationale": "Condition/AOI checklist 00:00:15-00:00:59; entry 00:01:40; DXY 00:02:15-00:03:25; timing admission 00:03:51-00:04:12; RR/win-rate discussion 00:04:44 on."
+  },
+  {
+    "journal_video_id": "J-7dUKwc0DNsI",
+    "title": "How I Made $17,611 Trading Gold (85% WR ENTRY MODEL)",
+    "upload_date": "20260206",
+    "relevance": "CBR_TRADE",
+    "models_mentioned": [
+      "1h CBR (20-min extension)",
+      "1m type 3 shift",
+      "5-second shift",
+      "1-second shift",
+      "15m candle behavior (exit)",
+      "type 2 shift"
+    ],
+    "instruments": [
+      "XAUUSD",
+      "USDJPY (mention)"
+    ],
+    "dxy_mentioned": true,
+    "summary": "Recap of a gold short in the third hour of Asia: bearish MTF/HTF, a 20-minute extension, a 1m type 3 shift then a 5s and 1s shift, a tight stop above the 50% area, and exit at 1.7R as volume faded. Also mentions a missed first-hour buy.",
+    "rationale": "Checklist 00:00:14-00:01:58; stop 00:02:04; DXY 00:02:25; exit logic 00:03:21-00:04:26; missed buy 00:05:13."
+  },
+  {
+    "journal_video_id": "J-tZhVk4opFOM",
+    "title": "Live Day Trading Making $15,268 (WINSTREAK CONTINUES)",
+    "upload_date": "20260203",
+    "relevance": "CBR_TRADE",
+    "models_mentioned": [
+      "1h CBR",
+      "4h CBR",
+      "15m / 5m candle behavior",
+      "seconds break of structure"
+    ],
+    "instruments": [
+      "XAUUSD"
+    ],
+    "dxy_mentioned": true,
+    "summary": "Live counter-direction gold short scalp above highs after a high-volume move; entered late on a seconds break of structure, using 5m candle behavior because the 15m candle behavior was poor, and exited intuitively for a win. The recap frames it as an hourly CBR inside a 4h CBR, taken in the third 15m candle.",
+    "rationale": "Entry 00:09:24; recap 00:12:36-00:16:14; 5m fallback 00:13:25; 'basic sort of hourly CBR' 00:14:35; '4hour CBR' 00:16:02."
+  },
+  {
+    "journal_video_id": "J-m6rbu3S8iw0",
+    "title": "Live Trading Making $5,051 (HOW TO SCALP THE SECONDS CHART)",
+    "upload_date": "20260128",
+    "relevance": "CBR_TRADE",
+    "models_mentioned": [
+      "1h CBR",
+      "5-second shift",
+      "type 2 shift",
+      "15m/5m candle behavior (exit timing)"
+    ],
+    "instruments": [
+      "USDJPY"
+    ],
+    "dxy_mentioned": true,
+    "summary": "Live USDJPY CBR short with DXY and yen correlation, entered around 37.5 minutes into the hour on a 5-second shift with a wide stop and reduced size because the condition was not a clean range; took profit at 1:2.",
+    "rationale": "00:00:10 'potential CBR sell on UJ'; 00:00:18 'This isn't the nicest condition'; timing 00:07:09; entry 00:07:45; TP 00:14:36; reduced size 00:16:29."
+  },
+  {
+    "journal_video_id": "J-KgdGtvR43EE",
+    "title": "How I Made $36,190 Trading Gold (ACCIDENTAL FULLPORT)",
+    "upload_date": "20260127",
+    "relevance": "CBR_TRADE",
+    "models_mentioned": [
+      "1h CBR",
+      "15m candle close + next 15m top wick",
+      "fractal shift scale-in",
+      "5m candle behavior (exit)"
+    ],
+    "instruments": [
+      "XAUUSD"
+    ],
+    "dxy_mentioned": true,
+    "summary": "Recap of a gold short in the second hour of Asia (accidentally oversized: a 75-pip stop). He lays out a step-by-step CBR: MTF range with prior CBRs in the last 4-5 hours, an extension into range highs, a 15m bearish close then a top wick, a stop-order entry, a scale-in on a fractal shift, and exit timed with 5m candle behavior.",
+    "rationale": "Condition test 00:01:25-00:02:30 and 00:08:10-00:08:28 ('If you haven't seen your setup in the past four to five hours ... you shouldn't be looking for a trade'); entry 00:03:25-00:04:07; scale-in 00:04:49; 5m exit 00:05:54."
+  },
+  {
+    "journal_video_id": "J-K0RoJELAfQs",
+    "title": "How I Made $12,323 Day Trading (EXPOSING MY REVERSAL STRATEGY)",
+    "upload_date": "20260121",
+    "relevance": "CBR_TRADE",
+    "models_mentioned": [
+      "1h CBR (3-step)",
+      "15m candle behavior",
+      "4h/daily level",
+      "fractal shift scale-in",
+      "correlation invalidation"
+    ],
+    "instruments": [
+      "USDJPY"
+    ],
+    "dxy_mentioned": true,
+    "summary": "Recap of two USDJPY hourly-CBR setups (three trades: a buy, a sell and a scale-in) with an explicit 3-step process (MTF range, 20+ minute extension, shift at 30-45/52 minutes). Includes a seemingly valid CBR he rejects because dollar and yen were both pushing the same way with high volume.",
+    "rationale": "Steps 00:00:39-00:01:58; extension definition 00:01:23; trade 2 00:03:41-00:05:14; invalidation example 00:06:45-00:08:35."
+  },
+  {
+    "journal_video_id": "J-VI_zwtf53pc",
+    "title": "Live Trading Making $17,622 (81% WR Strategy)",
+    "upload_date": "20251219",
+    "relevance": "CBR_TRADE",
+    "models_mentioned": [
+      "1h CBR",
+      "30m candle open",
+      "5m/15m candle behavior",
+      "4h/1h/30m AOI",
+      "type 3 shift"
+    ],
+    "instruments": [
+      "XAUUSD"
+    ],
+    "dxy_mentioned": true,
+    "summary": "~34-minute live gold hourly CBR buy: an hourly candle extends bearish into the lower half of a bullish trending range at AOIs, then a shift is taken 33 minutes in, with scale-ins and a long drawdown. TP at 1-minute highs hit (~1:2). He says he should have waited for DXY to align.",
+    "rationale": "Plan 00:00:12-00:02:44 (timing '30 to 37 minutes'); entry 00:08:00; gold spread over DXY 00:17:15; TP 00:30:31; recap 00:31:47-00:33:24."
+  },
+  {
+    "journal_video_id": "J-JuvmTSvghFI",
+    "title": "Live Day Trading Making $6,030 (I AM UP 30K THIS MONTH)",
+    "upload_date": "20251110",
+    "relevance": "NO_TRANSCRIPT",
+    "models_mentioned": [],
+    "instruments": [
+      "unknown"
+    ],
+    "dxy_mentioned": false,
+    "summary": "No captions were available. Metadata only: 'Live Day Trading Making $6,030 (I AM UP 30K THIS MONTH)', uploaded 2025-11-10, 1772 s long.",
+    "rationale": "transcript_path is null in index.json. Relevance cannot be judged from content. Duration 1772 s matches the local course file Live_Trade_3_-_Gold_Win.mp4 (duration_sec 1771.85 in research/video_index/hourly.json); that is circumstantial only."
+  },
+  {
+    "journal_video_id": "J-TMbXf_seF_s",
+    "title": "How I Made $20,732 in 30 mins Trading (I AM UP 184K THIS MONTH)",
+    "upload_date": "20251016",
+    "relevance": "CBR_TRADE",
+    "models_mentioned": [
+      "1h CBR",
+      "15m candle behavior",
+      "30m candle behavior",
+      "yen/DXY/gold spread correlation"
+    ],
+    "instruments": [
+      "XAUUSD",
+      "USDJPY"
+    ],
+    "dxy_mentioned": true,
+    "summary": "Recap of a USDJPY reversal in the first half of Asia (entered earlier than he normally would) and two gold sells at all-time highs using hourly/15m/30m candle behavior around 37 minutes into the hour. States a 30-45 minute reversal window.",
+    "rationale": "UJ 00:00:12-00:03:03 (early-entry admission 00:01:25); gold sell 1 00:03:09-00:04:24 ('Normally don't trade this time'); gold sell 2 00:04:28; window 00:05:04; process 00:06:32."
+  },
+  {
+    "journal_video_id": "J-zScdfOmUMOE",
+    "title": "How I Made $13,867 in 6 mins Trading (I AM UP 164K THIS MONTH)",
+    "upload_date": "20251015",
+    "relevance": "CBR_TRADE",
+    "models_mentioned": [
+      "1h CBR",
+      "15m candle behavior",
+      "5m candle behavior",
+      "type 3 shift inversion (IFS-like)",
+      "5-second shift"
+    ],
+    "instruments": [
+      "USDJPY",
+      "XAUUSD"
+    ],
+    "dxy_mentioned": true,
+    "summary": "Recap of USDJPY buys 22 minutes into the second hour of Asia, combining hourly and 15m candle behavior (admittedly an 'experiment' in a condition he would not usually trade), and a gold short at all-time highs about 27 minutes in, timed with 5m candle behavior. States a 22-52 minute general window.",
+    "rationale": "Timing window 00:03:05-00:03:16; condition admission 00:05:09-00:05:30; gold sell rationale 00:07:12-00:08:12; 5m timing 00:12:21-00:13:27."
+  },
+  {
+    "journal_video_id": "J-Yt3fYnXuY5k",
+    "title": "How I Made $95,014 In One Week Trading Time Based Market Structure",
+    "upload_date": "20251014",
+    "relevance": "CBR_EDUCATIONAL",
+    "models_mentioned": [
+      "1h CBR",
+      "15m candle behavior",
+      "daily candle behavior",
+      "weekly candle behavior",
+      "15-second shift",
+      "1m type 3 shift"
+    ],
+    "instruments": [
+      "USDJPY",
+      "XAUUSD"
+    ],
+    "dxy_mentioned": false,
+    "summary": "Weekly recap on time-based market structure: layering daily and weekly candle behavior (London 2nd-3rd hour; Wednesday/Thursday corrections) over hourly/15m CBR timing. Walks through a Monday London UJ sell and a Tuesday Asia UJ sell (both 37 minutes in) and references a Wednesday gold sell.",
+    "rationale": "Mostly educational framework (00:01:58-00:08:48, 00:11:45-00:15:40), with real trades recapped at 00:00:51, 00:09:12 and 00:15:01. MTF defined as 'past 5 to 12 plus hours' 00:11:15. No DXY discussion."
+  },
+  {
+    "journal_video_id": "J-IBHlgXL7bx8",
+    "title": "Live Day Trading Making $8,870 (I AM UP 41K THIS MONTH)",
+    "upload_date": "20250923",
+    "relevance": "CBR_TRADE",
+    "models_mentioned": [
+      "1h CBR",
+      "15m candle behavior",
+      "30m bottom wick",
+      "type 3 shift",
+      "high volume counter sequence into high-low (seconds)"
+    ],
+    "instruments": [
+      "USDJPY",
+      "XAUUSD (declined)"
+    ],
+    "dxy_mentioned": true,
+    "summary": "50-minute live session: he plans USDJPY buys into a 4h level in the second hour of Asia, declines an early 15-minute shift and a gold reversal (trending, all-time highs), then buys at the 45-minute interval on a seconds counter sequence; TP hit at 1:2 (quoted as 1.7R) after a long drawdown.",
+    "rationale": "Plan 00:00:05-00:00:42 ('I only trade reversals in rangebound conditions'); declined entries 00:09:14-00:10:53; entry 00:26:52-00:33:05; TP 00:47:06; recap 00:47:25-00:49:44."
+  },
+  {
+    "journal_video_id": "J-cJbeIgr6jrA",
+    "title": "How I Made $5,090 Day Trading with a 20% Winrate",
+    "upload_date": "20250916",
+    "relevance": "CBR_TRADE",
+    "models_mentioned": [
+      "1h CBR (candle behavior range reversal)",
+      "inverse fractal shift",
+      "type 3 shift inversion",
+      "5-second shift within 1m shift"
+    ],
+    "instruments": [
+      "XAUUSD",
+      "USDJPY (missed)"
+    ],
+    "dxy_mentioned": true,
+    "summary": "Recap of a gold day in the second hour of Asia: five trades, four losses (re-entries and trailed stops), then a buy at the 45-minute interval that ran 3.5R for +5K net. Also a missed USDJPY 30-minute reversal. Early statement of the model with a '20 to 30 minutes' prime-time window.",
+    "rationale": "Model 00:02:43-00:03:20; timing 00:04:02-00:04:16; losses and re-entries 00:04:27-00:05:10; winning setup 00:05:10-00:06:32; missed UJ 00:07:38; 'two 15-minute intervals' extension 00:09:23; AOIs lower priority 00:11:35."
+  }
+]

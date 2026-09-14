@@ -1,0 +1,39 @@
+# Video ingestion settings. Changing model or decoding options invalidates transcripts:
+# the transcriber records these values in each transcript and re-runs on mismatch.
+
+libraries:
+  15min: "references/15min cbr"
+  hourly: "references/hourly cbr"
+  # Prerequisite "Phase 2" course (Academy): defines shifts, HILO, MS alignment, correlation.
+  phase2: "references/phase 2"
+  # Foundations course: market structure, shift types 1/2/3, candle behaviour, AOIs, sessions.
+  phase1: "references/phase 1"
+
+# video_id prefix per library
+id_prefix:
+  15min: "V15"
+  hourly: "V1H"
+  phase2: "VP2"
+  phase1: "VP1"
+
+# Recorded live community calls. User classified them Level 2 (2026-09-14): they may clarify,
+# never redefine, course rules. (Key name kept for compatibility with existing records.)
+provenance_unconfirmed:
+  - "in_depth_backtesting_strategies_for_trading_success___.mp4"
+  - "mastering_entry_timing_and_market_structure_for_trading_success___.mp4"
+  - "mastering_market_structure_and_timing_in_trading.mp4"
+
+audio_cache: ".cache/audio"
+transcripts_dir: "research/transcripts"
+index_dir: "research/video_index"
+
+whisper:
+  model: "mlx-community/whisper-large-v3-mlx"
+  language: "en"
+  word_timestamps: true
+  # Off: avoids repetition loops on long recordings at a small cost in cross-segment context.
+  condition_on_previous_text: false
+  hallucination_silence_threshold: 2.0
+  # Vocabulary taken ONLY from the reference filenames, to help spelling of jargon.
+  # Do not add guessed terms here; it would bias the transcript.
+  initial_prompt: "CBR, CB, CBOE, AOI, ER, OE, MTF, LTF, HILO, HVCS, DXY, XAUUSD, gold, fractal shift, extension, entry relativity."
