@@ -118,3 +118,19 @@ Python reference model → Pine strategy parity implementation → Python ↔ Pi
 indicator → alerts → forward signal ledger. The polished indicator is **not** built before statistical validation.
 LuxAlgo Quant may later assist with Pine implementation, but it is never the source of truth for strategy research.
 **The Python reference engine is authoritative.**
+
+## 9. Data-feed decisions (owner decision D11)
+
+- The baseline data feed for Phases 15-16 (OQ-24: Dukascopy spot, GC/DX futures, or hybrid) stays **open** until Phase 9
+  feed validation is complete, the CBR15 and CBR1H reference engines exist, Phase 13 parity is complete, and cross-feed
+  signal agreement has been measured. It is **frozen before Phase 14** and recorded with its rationale.
+- **Selection criteria:** fidelity to Tom's taught model · signal agreement · timestamp/structure agreement ·
+  historical availability · execution realism · 5-second entry feasibility · reproducibility · known feed
+  distortions (e.g. futures contract rolls).
+- **Historical profitability must not be used to choose a feed.** Neither Fable nor Astra may compare strategy
+  performance across feeds as input to this decision.
+- Futures data may support baseline performance claims only after the **cross-feed signal-agreement** requirement
+  (PRD gate G2b) passes, with its agreement threshold declared before measurement.
+- Phase 9 data acceptance follows CBR-ACC-009: failures are classified (PIPELINE_ERROR, DATA_ERROR,
+  EXPECTED_MARKET_BEHAVIOR, EXPECTED_FEED_DIFFERENCE, UNEXPLAINED_FEED_DIFFERENCE), failing days are never dropped
+  or replaced, and complete spot history (AC-11B) is a deferred dependency, not a Phase 9 requirement.

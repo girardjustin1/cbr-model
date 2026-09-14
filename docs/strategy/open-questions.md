@@ -223,6 +223,21 @@ recordings, or the Notion journal) · `RESEARCH PARAMETER` (legitimately ambiguo
 - **Decision D9.** Test both as pre-declared single-rule ablations against V1.
 - **Status.** `RESEARCH PARAMETER`.
 
+### OQ-24 · Baseline data feed for Phases 15-16: spot, futures or hybrid?
+- **Problem.** Complete 2018-2024 Dukascopy spot history is costly to acquire (AC-11B deferred). Databento GC/DX
+  futures 2018-2026 are already owned. CBR15 needs 5-second entries, which neither 1m source provides historically.
+- **Options.** (a) Dukascopy spot · (b) GC/DX futures, spot for parity · (c) hybrid (1m structure on futures,
+  entry ticks from spot for armed-signal hours).
+- **Owner ruling (D11).** Do **not** choose yet. The decision stays open until: (1) Phase 9 feed validation is complete,
+  (2) CBR15 and CBR1H reference engines exist, (3) Phase 13 parity is complete, (4) cross-feed signal agreement can be
+  measured. It **must be frozen before Phase 14 begins**.
+- **Selection criteria (owner).** Fidelity to Tom's taught model · signal agreement · timestamp/structure agreement ·
+  historical availability · execution realism · 5-second entry feasibility · reproducibility · known feed distortions
+  (e.g. futures contract rolls). **Historical profitability must not be used to choose the feed.**
+- **Safeguard.** Futures data may support baseline performance claims only after passing the cross-feed
+  signal-agreement acceptance requirement (Phase 13/14; see PRD gate G2b).
+- **Status.** `NEEDS USER DECISION`, deferred to pre-Phase 14.
+
 ### OQ-17 · Stop placement on the 15m model: tight vs breathing room
 - **Problem.** Course: no tight stops (E15-040). One journal trade uses a tight stop; another journal loss is
   blamed on a stop that was too tight (Level 2).
@@ -340,6 +355,8 @@ said to hold ~350 trades (P2G-37). The spoken and slide DXY figures disagree.
 | D7 | Scope XAUUSD + DXY only (earlier decision) | OQ-13, OQ-19 |
 | D8 | Overextension origin: V1 keeps hour open; "last reset" tested as a single-rule ablation | OQ-22 |
 | D9 | Early-shift handling: V1 unchanged; "final push" and "15m alignment" each tested as single-rule ablations | OQ-23 |
+| D10 | Astra × Fable research governance adopted (CBR-GOV-001) | Governance |
+| D11 | AC-11 split into AC-11A (required: 16-day stratified pipeline proof) and AC-11B (deferred full spot history); failures classified, not auto-FAIL; baseline feed (OQ-24) stays open until parity and cross-feed agreement, frozen before Phase 14, never chosen by profitability | OQ-24, Phase 9 |
 
 ## Batched questions for the user (historical; answered above)
 

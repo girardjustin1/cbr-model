@@ -1,0 +1,7 @@
+# Phase 9 exceptions register (CBR-ACC-009 §4).
+# One entry per failed check id from reports/phase9-data-acceptance.json, added only after investigation.
+# class: PIPELINE_ERROR | DATA_ERROR | EXPECTED_MARKET_BEHAVIOR | EXPECTED_FEED_DIFFERENCE | UNEXPLAINED_FEED_DIFFERENCE
+# resolved: true only for PIPELINE_ERROR / DATA_ERROR fixed and re-verified (then the check should pass and the
+#           entry becomes stale), or for a documented resolution approved by the owner.
+# Failing days are never dropped or replaced.
+exceptions: []

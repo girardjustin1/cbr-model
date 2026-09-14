@@ -76,6 +76,7 @@ A trustworthy "no edge" answer counts as success. The TradingView indicator is b
 | D8 | Overextension origin (hour open vs last reset): pre-registered ablation candidate → Phase 17 |
 | D9 | Early-shift guard (final push / 15m alignment): pre-registered ablation candidate → Phase 17 |
 | D10 | Astra × Fable research governance adopted (CBR-GOV-001) |
+| D11 | AC-11 split: AC-11A (16-day stratified spot-pipeline proof, required for Phase 9) + AC-11B (full spot history, deferred); failures classified; baseline feed (OQ-24) open until parity and cross-feed agreement, frozen before Phase 14, never chosen by profitability |
 
 ---
 
@@ -165,6 +166,7 @@ Research-derived variables carry `classification: RESEARCH-DERIVED`.
 - **13 Tom ↔ Python parity gate:** the engine must reproduce the taught examples before any performance research
 
 ### C. Untouched baselines: phases 14-16
+- **Before 14:** freeze the baseline data feed (OQ-24: spot / futures / hybrid) on fidelity, signal agreement, structure agreement, availability, execution realism, 5s feasibility, reproducibility and known distortions, **never profitability**. If futures are chosen, the cross-feed signal-agreement requirement (G2b) must pass; if spot, AC-11B must be complete.
 - 14 Backtest runner and execution simulator
 - 15 Untouched CBR1H baseline
 - 16 Untouched CBR15 baseline (**frozen; no optimization before this**)
@@ -203,8 +205,10 @@ The Python reference engine is authoritative. LuxAlgo Quant may assist with Pine
 
 | Gate | After phase | Pass condition | Decided by |
 |---|---|---|---|
-| G1 Data | 9 | Historical-data acceptance criteria met (`reports/phase9-data-acceptance.md`) | Owner |
-| G2 Faithful implementation | 13 | Engine reproduces taught examples; every mismatch classified | Owner |
+| G1 Data | 9 | CBR-ACC-009 (`docs/acceptance/phase9-acceptance-criteria.md`): AC-01…AC-10 + AC-11A; every failure classified; AC-11B may remain a concern | Owner |
+| G2 Faithful implementation | 13 | Engine reproduces taught examples on spot; every mismatch classified | Owner |
+| G2b Cross-feed signal agreement | 13/14 | Engine run on spot and GC/DX over the 16 AC-11A sample days yields the same setups (direction, hour, entry window) at a rate pre-declared before measurement. Required before futures data can support any baseline performance claim | Owner |
+| G2c Baseline feed frozen | pre-14 | OQ-24 decided on the owner's non-profitability criteria and recorded | Owner |
 | G3 Baselines frozen | 16 | Untouched baselines recorded with hashes; no tuning | Owner |
 | G4 Experiments approved | 17 | Astra final rulings + owner approval per experiment | Astra → Owner |
 | G5 Candidate frozen | 24 | Only Astra-approved evidence promoted; spec hashed | Astra → Owner |
@@ -265,5 +269,6 @@ The Python reference engine is authoritative. LuxAlgo Quant may assist with Pine
 | OQ-11 / 12 | Stop buffer; 50% target vs 1:1 vs next level | Buffer range declared; target variants tested separately |
 | OQ-13 | DXY as confluence, veto or timing trigger? | Not in baseline; each tested separately |
 | OQ-21 | Trend: hard no-trade or quality downgrade? | Hard filter in V1; downgrade tested separately |
+| OQ-24 | Baseline feed: Dukascopy spot, GC/DX futures, or hybrid? | Open until Phase 9 validation, engines, Phase 13 parity and cross-feed agreement exist; frozen before Phase 14; never chosen by profitability |
 
 Full register: `docs/strategy/open-questions.md`

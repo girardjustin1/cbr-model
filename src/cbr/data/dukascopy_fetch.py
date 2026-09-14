@@ -2,6 +2,7 @@
 
 Usage:
     .venv/bin/python -m cbr.data.dukascopy_fetch --fixtures                          # candles + entry tick windows
+    .venv/bin/python -m cbr.data.dukascopy_fetch --samples                           # AC-11A stratified sample
     .venv/bin/python -m cbr.data.dukascopy_fetch --candles --from 2018-01-01 --to 2024-12-31   # 1m history
     .venv/bin/python -m cbr.data.dukascopy_fetch --tick-days --from 2025-11-09 --to 2025-11-10  # full-day ticks
 
@@ -54,6 +55,21 @@ FIXTURE_TICK_WINDOWS = {
     "CX-LT1-1": (datetime(2025, 10, 20, 23, tzinfo=UTC), datetime(2025, 10, 21, 4, tzinfo=UTC)),
     "CX-TE1-1": (datetime(2025, 10, 24, 2, tzinfo=UTC), datetime(2025, 10, 24, 7, tzinfo=UTC)),
     "CX-LT3-2": (datetime(2025, 11, 9, 23, tzinfo=UTC), datetime(2025, 11, 10, 4, tzinfo=UTC)),
+}
+# AC-11A stratified sample (CBR-ACC-009 §2), declared before download. Development/validation periods only.
+SAMPLE_DAYS = {
+    "MID-2018": date(2018, 2, 21), "MID-2019": date(2019, 4, 17), "MID-2020": date(2020, 6, 17),
+    "MID-2021": date(2021, 8, 18), "MID-2022": date(2022, 10, 19), "MID-2023": date(2023, 12, 20),
+    "MID-2024": date(2024, 3, 20), "DST-SPRING-2019": date(2019, 3, 11), "DST-AUTUMN-2023": date(2023, 11, 6),
+    "US-HOLIDAY-2022-THANKSGIVING": date(2022, 11, 24), "MONDAY-REOPEN-2021": date(2021, 2, 1),
+    "DXY-CFD-FIRST-MONTH-2018": date(2018, 1, 17), "HIGHVOL-2020-03-09": date(2020, 3, 9),
+    "HIGHVOL-2020-03-16": date(2020, 3, 16), "HIGHVOL-2022-03-08": date(2022, 3, 8),
+    "HIGHVOL-2024-04-12": date(2024, 4, 12),
+}
+SAMPLE_TICK_WINDOWS = {                      # 00:00-03:00 UTC (Asia hours 1-3) on 4 of the 16 days
+    f"S-{sid}": (datetime(d.year, d.month, d.day, 0, tzinfo=UTC), datetime(d.year, d.month, d.day, 3, tzinfo=UTC))
+    for sid, d in SAMPLE_DAYS.items()
+    if sid in ("DXY-CFD-FIRST-MONTH-2018", "HIGHVOL-2020-03-16", "US-HOLIDAY-2022-THANKSGIVING", "MID-2024")
 }
 # Daily 1m candle file record (verified 2026-09-14 against tick-built bars: open/close identical on 1,380 minutes).
 CANDLE_DTYPE = np.dtype([("sec", ">i4"), ("open", ">i4"), ("close", ">i4"), ("low", ">i4"), ("high", ">i4"),
@@ -278,6 +294,7 @@ def fetch_tick_windows(windows: dict[str, tuple[datetime, datetime]], instrument
 def main() -> None:
     p = argparse.ArgumentParser()
     p.add_argument("--fixtures", action="store_true", help="1m candles for fixture days + tick windows around entries")
+    p.add_argument("--samples", action="store_true", help="AC-11A: 1m candles for the 16 sample days + 4 tick windows")
     p.add_argument("--candles", action="store_true", help="1m candles for --from/--to (history)")
     p.add_argument("--tick-days", action="store_true", help="full-day ticks for --from/--to (slow)")
     p.add_argument("--from", dest="start")
@@ -289,6 +306,10 @@ def main() -> None:
         days = sorted({d + timedelta(days=o) for d in FIXTURE_DAYS.values() for o in (-1, 0, 1)})
         fetch_candles(days, instruments)
         fetch_tick_windows(FIXTURE_TICK_WINDOWS, instruments)
+        return
+    if a.samples:
+        fetch_candles(sorted(SAMPLE_DAYS.values()), instruments)
+        fetch_tick_windows(SAMPLE_TICK_WINDOWS, instruments)
         return
     start, end = date.fromisoformat(a.start), date.fromisoformat(a.end)
     days = [start + timedelta(days=i) for i in range((end - start).days + 1)]
