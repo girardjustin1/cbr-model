@@ -94,6 +94,7 @@ tr.stage td{background:var(--ground);font:500 .78rem/1.2 var(--mono);letter-spac
 .block{color:var(--stop);background:var(--stop-soft)}
 .todo{color:var(--idle);background:var(--idle-soft)}
 .partial{color:var(--dxy);background:var(--dxy-soft)}
+.concern{color:var(--warn);background:var(--warn-soft)}
 
 /* Hierarchy */
 .levels{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
@@ -134,7 +135,8 @@ footer{border-top:1px solid var(--rule);padding-top:18px;font-size:.84rem;color:
       <li><a href="#requirements">Requirements</a></li>
       <li><a href="#architecture">Architecture &amp; data</a></li>
       <li><a href="#roadmap">Roadmap</a></li>
-      <li><a href="#validation">Validation &amp; success</a></li>
+      <li><a href="#governance">Governance</a></li>
+      <li><a href="#validation">Gates &amp; holdout</a></li>
       <li><a href="#status">Current status</a></li>
       <li><a href="#risks">Risks</a></li>
       <li><a href="#open">Open questions</a></li>
@@ -148,8 +150,8 @@ footer{border-top:1px solid var(--rule);padding-top:18px;font-size:.84rem;color:
       <p class="lede">Turn a discretionary, video-taught gold-trading method into a deterministic, evidence-traced system. Then find out, with out-of-sample data, whether it has a real edge and which conditions create it.</p>
       <div class="meta">
         <div><span class="eyebrow">Doc</span><b>CBR-PRD-001</b></div>
-        <div><span class="eyebrow">Version</span><b>v1.0 · 2026-09-14</b></div>
-        <div><span class="eyebrow">Status</span><b>Active: Phase 9</b></div>
+        <div><span class="eyebrow">Version</span><b>v1.1 · 2026-09-14</b></div>
+        <div><span class="eyebrow">Status</span><b>Phase 9 ✓ with concerns · Phase 10</b></div>
         <div><span class="eyebrow">Instruments</span><b class="ticker"><span class="x">XAUUSD</span>+<span class="d">DXY</span></b></div>
         <div><span class="eyebrow">Repo</span><b>cbr-work-091426-10am</b></div>
       </div>
@@ -231,6 +233,11 @@ footer{border-top:1px solid var(--rule);padding-top:18px;font-size:.84rem;color:
           <tr><td class="id">D5</td><td>TRR Forever becomes a third model after the CBR baselines</td><td>Spec later; no parallel build</td></tr>
           <tr><td class="id">D6</td><td>No access to Tom's Notion journal (for now)</td><td>Parity relies on course examples and journal videos</td></tr>
           <tr><td class="id">D7</td><td>XAUUSD + DXY only</td><td>USDJPY, silver and gold spread catalogued, not implemented</td></tr>
+          <tr><td class="id">D8</td><td>Overextension origin: hour open vs last reset</td><td>V1 keeps hour open; "last reset" is a pre-registered ablation candidate for Phase 17</td></tr>
+          <tr><td class="id">D9</td><td>Early-shift guard: final push / 15m alignment</td><td>V1 unchanged; both are pre-registered ablation candidates for Phase 17</td></tr>
+          <tr><td class="id">D10</td><td>Astra × Fable research governance adopted (CBR-GOV-001)</td><td>Roles, frozen experiment registry, Phase 17 and 24 reviews, single-use holdout</td></tr>
+          <tr><td class="id">D11</td><td>AC-11 split: AC-11A (16-day stratified proof) + AC-11B (full spot history, deferred)</td><td>Failures classified, not auto-FAIL; baseline feed (OQ-24) frozen before Phase 14, never chosen by profitability</td></tr>
+          <tr><td class="id">D12</td><td>Phase 9 rulings</td><td>DXY 2020-03-09 20h DATA_ERROR and 2019-03-11 00h UNEXPLAINED are both handled as MISSING, flagged by detector <code>DXY_CFD_MISSING_WHILE_DX_ACTIVE</code>; new class REFERENCE_UNAVAILABLE; <code>cause_status</code>; candle-file high/low is a hard safeguard before Phase 14; 1m/5s DXY structure not validated</td></tr>
         </tbody>
       </table></div>
     </section>
@@ -324,9 +331,9 @@ footer{border-top:1px solid var(--rule);padding-top:18px;font-size:.84rem;color:
       <div class="tbl"><table>
         <thead><tr><th>Source</th><th>Instrument</th><th>Coverage</th><th>Role</th><th>State</th></tr></thead>
         <tbody>
-          <tr><td>Dukascopy (free)</td><td class="mono">XAUUSD · DOLLARIDXUSD</td><td>ticks since 2003 · 2017-12</td><td>Primary spot data, 5s bars</td><td><span class="chip prog">Fixtures downloading</span></td></tr>
-          <tr><td>Databento ($66.44)</td><td class="mono">GC.v.0 · DX.v.0</td><td>1m, 2018 → 2026-09</td><td>Futures cross-check with real volume</td><td><span class="chip done">Downloaded</span></td></tr>
-          <tr><td>TradingView export</td><td class="mono">FOREXCOM:XAUUSD · TVC:DXY</td><td>specific days</td><td>Exact match to Tom's charts for parity</td><td><span class="chip todo">Optional</span></td></tr>
+          <tr><td>Dukascopy (free)</td><td class="mono">XAUUSD · DOLLARIDXUSD</td><td>ticks + 1m bid/ask candles; 2003 · 2017-12</td><td>Primary spot data, 5s bars. Candle high/low (<code>SIDE_EXTREME_MEAN</code>) not authoritative for extremes</td><td><span class="chip concern">Fixtures + 16 sample days validated; history deferred</span></td></tr>
+          <tr><td>Databento ($66.44)</td><td class="mono">GC.v.0 · DX.v.0</td><td>1m; GC 2018 → 2026-09; DX from 2018-12-26</td><td>Futures cross-check with real volume; no DX reference before 2018-12-26</td><td><span class="chip done">Downloaded</span></td></tr>
+          <tr><td>TradingView export</td><td class="mono">FOREXCOM:XAUUSD · TVC:DXY</td><td>specific days</td><td>Exact match to Tom's charts; independent reference for 1m/5s DXY structure (OQ-26)</td><td><span class="chip todo">Optional</span></td></tr>
         </tbody>
       </table></div>
       <p class="note">Splits (fixed before any backtest): development 2018-2022 · validation 2023-2024 · holdout 2025-01 → 2026-08. Course example days (Oct-Nov 2025) sit in the holdout and are used only for parity, never for performance or tuning.</p>
@@ -334,43 +341,73 @@ footer{border-top:1px solid var(--rule);padding-top:18px;font-size:.84rem;color:
 
     <section id="roadmap">
       <h2>Roadmap</h2>
-      <p>Thirty phases in five stages. Order matters: later stages depend on earlier gates.</p>
+      <p>Revised 2026-09-14 under the research governance framework. Order matters: later stages depend on earlier gates.</p>
       <div class="tbl"><table>
         <thead><tr><th>Phase</th><th>Work</th><th>Output</th><th>Status</th></tr></thead>
         <tbody>
-          <tr class="stage"><td colspan="4">Stage A · Knowledge base</td></tr>
-          <tr><td class="id">0</td><td>Repository &amp; environment discovery</td><td>Inventory, tooling report</td><td><span class="chip done">Done</span></td></tr>
-          <tr><td class="id">1</td><td>Video ingestion (73 videos, ~15.2 h)</td><td>Transcripts, slide OCR, index</td><td><span class="chip done">Done</span></td></tr>
-          <tr><td class="id">2-5</td><td>Extraction, glossary, rule matrix, ambiguity register</td><td>Specs, 151 core evidence records</td><td><span class="chip done">Done</span></td></tr>
+          <tr class="stage"><td colspan="4">A · Knowledge base</td></tr>
+          <tr><td class="id">0-5</td><td>Discovery, video ingestion (73 videos), extraction, glossary, rule matrix, ambiguity register</td><td>Specs, 151 core evidence records</td><td><span class="chip done">Done</span></td></tr>
           <tr><td class="id">6-7</td><td>Journal research &amp; trade database</td><td>24-video catalog, 44 draft trades</td><td><span class="chip partial">Draft</span></td></tr>
           <tr><td class="id">8</td><td>Machine specifications</td><td>Primitives, CBR1H/CBR15 specs, strategy.yaml</td><td><span class="chip done">Done (review)</span></td></tr>
-          <tr class="stage"><td colspan="4">Stage B · Data &amp; engine</td></tr>
-          <tr><td class="id">9</td><td>Historical data pipeline</td><td>Fixture days → full 2018-2026 history</td><td><span class="chip prog">In progress</span></td></tr>
-          <tr><td class="id">10</td><td>DXY context module (independent)</td><td>Inverse extension, veto, lead/lag features</td><td><span class="chip todo">Next</span></td></tr>
-          <tr><td class="id">11-12</td><td>Reference engine: CBR15 and CBR1H baselines</td><td>Python engine, ledger, unit + lookahead tests</td><td><span class="chip todo">Next</span></td></tr>
-          <tr><td class="id">13</td><td>Signal parity vs course examples</td><td>signal-parity report</td><td><span class="chip todo">Gate</span></td></tr>
-          <tr class="stage"><td colspan="4">Stage C · Baseline evidence</td></tr>
-          <tr><td class="id">14</td><td>Backtest runner (PineTS / Trader.dev)</td><td>Pine parity with Python</td><td><span class="chip block">Trader.dev down</span></td></tr>
-          <tr><td class="id">15-16</td><td>Baseline backtest + temporal validation</td><td>Metrics on dev and validation splits</td><td><span class="chip todo">Pending</span></td></tr>
-          <tr><td class="id">17-19</td><td>Regime analysis, confluence ablations, 15m × 1h interaction</td><td>Which rules add information</td><td><span class="chip todo">Pending</span></td></tr>
-          <tr class="stage"><td colspan="4">Stage D · Robustness</td></tr>
-          <tr><td class="id">20-23</td><td>Limited parameter research, walk-forward, Monte Carlo, overfitting log</td><td>Out-of-sample verdict</td><td><span class="chip todo">Pending</span></td></tr>
-          <tr><td class="id">24-25</td><td>Journal-derived features, validated quality score</td><td>Score tested out-of-sample</td><td><span class="chip todo">Pending</span></td></tr>
-          <tr class="stage"><td colspan="4">Stage E · Product (only if edge is validated)</td></tr>
-          <tr><td class="id">26-28</td><td>TradingView indicator, alerts, signal ledger</td><td>cbr_signals.pine</td><td><span class="chip todo">Gated</span></td></tr>
-          <tr><td class="id">29-30</td><td>Screenshot journal workflow, performance feedback</td><td>Weekly/monthly reports</td><td><span class="chip todo">Gated</span></td></tr>
+          <tr class="stage"><td colspan="4">B · Data &amp; reference engines</td></tr>
+          <tr><td class="id">9</td><td>Historical data pipeline</td><td>CBR-ACC-009 v2.1 acceptance; exception register; data-quality detectors</td><td><span class="chip concern">Pass with concerns</span></td></tr>
+          <tr><td class="id">10</td><td>DXY context module</td><td>Availability and confidence explicit; missing stays missing; 15m/1h context favored; no filter optimized</td><td><span class="chip prog">Authorized</span></td></tr>
+          <tr><td class="id">11-12</td><td>CBR15 and CBR1H Python reference engines</td><td>Engine, signal ledger, unit + lookahead tests</td><td><span class="chip todo">Next</span></td></tr>
+          <tr><td class="id">13</td><td>Tom ↔ Python parity gate</td><td>Signal parity report; every mismatch classified</td><td><span class="chip todo">Gate G2</span></td></tr>
+          <tr class="stage"><td colspan="4">C · Untouched baselines</td></tr>
+          <tr><td class="id">pre-14</td><td>Canonical extremes source (OQ-25) · DXY availability diagnostic (OQ-27) · baseline feed frozen (OQ-24)</td><td>Gates G2b, G2c, G2d; never chosen by profitability</td><td><span class="chip block">Hard preconditions</span></td></tr>
+          <tr><td class="id">14</td><td>Backtest runner and execution simulator</td><td>Bid/ask fills, costs, holdout lock</td><td><span class="chip todo">Pending</span></td></tr>
+          <tr><td class="id">15-16</td><td>Untouched CBR1H and CBR15 baselines</td><td>Frozen, hashed baselines; no optimization before this</td><td><span class="chip todo">Pending</span></td></tr>
+          <tr class="stage"><td colspan="4">D · Governed research</td></tr>
+          <tr><td class="id">17</td><td>Astra × Fable pre-experiment review (4 rounds, then STOP)</td><td>Owner-approval report</td><td><span class="chip todo">After 15-16</span></td></tr>
+          <tr><td class="id">18-19</td><td>Register and run owner-approved experiments (dev + validation only)</td><td>Frozen registry entries; D8/D9 enter here</td><td><span class="chip todo">Pending</span></td></tr>
+          <tr class="stage"><td colspan="4">E · Robustness</td></tr>
+          <tr><td class="id">20-23</td><td>Chronological validation, sensitivity, walk-forward, bootstrap, Monte Carlo, regime and cost sensitivity</td><td>Out-of-sample robustness verdicts</td><td><span class="chip todo">Pending</span></td></tr>
+          <tr class="stage"><td colspan="4">F · Final review &amp; holdout</td></tr>
+          <tr><td class="id">24</td><td>Astra × Fable post-experiment review</td><td>PROMOTE / RESEARCH ONLY / INSUFFICIENT EVIDENCE / REJECT; candidate spec hashed</td><td><span class="chip todo">Pending</span></td></tr>
+          <tr><td class="id">25</td><td>Single-use holdout evaluation</td><td>One run, recorded whatever happens</td><td><span class="chip todo">Owner-approved</span></td></tr>
+          <tr class="stage"><td colspan="4">G · TradingView (only after validation)</td></tr>
+          <tr><td class="id">26-27</td><td>Pine parity implementation; validated indicator</td><td>Python ↔ Pine parity on the frozen candidate</td><td><span class="chip todo">Gated</span></td></tr>
+          <tr><td class="id">28-30</td><td>Alerts, forward signal ledger, journal workflow, performance feedback</td><td>Forward ledger and reports</td><td><span class="chip todo">Gated</span></td></tr>
         </tbody>
       </table></div>
+      <p class="note">The Python reference engine is authoritative. LuxAlgo Quant may help with Pine later but is never the research source of truth. TRR Forever (D5) is a separate track after the CBR baselines.</p>
+    </section>
+
+    <section id="governance">
+      <h2>Research governance: Astra × Fable</h2>
+      <p>Framework <code>docs/governance/research-governance.md</code> (CBR-GOV-001). It adds to every existing control and replaces none.</p>
+      <div class="tbl"><table>
+        <thead><tr><th>Role</th><th>Does</th><th>May not</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Fable</strong>: Research Director</td><td>Interprets results; proposes mechanisms, weaknesses, testable hypotheses, ablations, regime dependencies, alternative explanations</td><td>Change CANON rules · implement · optimize on the holdout · add unexplained parameters · promote features</td></tr>
+          <tr><td><strong>Astra</strong>: Independent Quant Auditor</td><td>Audits hindsight, overfitting, multiple testing, leakage, sample size and statistical validity; rules APPROVE / APPROVE WITH CONSTRAINTS / REJECT</td><td>Try to make CBR profitable</td></tr>
+          <tr><td><strong>Claude Code</strong>: Research Engineer</td><td>Implements frozen specs; runs approved, registered experiments; keeps tests, ledger and reports reproducible</td><td>Invent rules because they improve history · run unregistered experiments · edit a running experiment</td></tr>
+          <tr><td><strong>Owner</strong></td><td>Final approval: experiments, methodology, feature promotion, holdout evaluation, indicator composition</td><td>none</td></tr>
+        </tbody>
+      </table></div>
+      <p class="note">Experiments are registered in <code>research/experiments/registry.yaml</code> before execution and locked by <code>spec_hash</code> once running; any change needs a new ID. Research-derived variables carry <code>RESEARCH-DERIVED</code>.</p>
     </section>
 
     <section id="validation">
-      <h2>Validation &amp; success criteria</h2>
-      <p>Performance is judged on expectancy in R and its stability, not win rate. The gates below are <strong>proposed</strong> and need owner sign-off before Phase 15.</p>
-      <div class="gate"><h3>Gate 1: faithful implementation (Phase 13)</h3><p class="muted">The engine reproduces the taught course setups. Every mismatch is classified as code bug, data difference, declared simplification or source ambiguity.</p></div>
-      <div class="gate"><h3>Gate 2: baseline has something (Phases 15-16)</h3><p class="muted">Positive expectancy after costs on the development split with a sample large enough to judge (minimum trade count to be fixed in the hypothesis log beforehand), and the same sign on the validation split.</p></div>
-      <div class="gate"><h3>Gate 3: robust edge (Phases 20-22)</h3><p class="muted">Walk-forward out-of-sample expectancy stays positive, the bootstrap confidence interval for expectancy excludes zero, no single year carries the result, and drawdown and losing-streak distributions are survivable. The holdout confirms once.</p></div>
-      <div class="gate"><h3>Gate 4: indicator worth building (Phase 26)</h3><p class="muted">Only rules and confluences that passed ablation on out-of-sample data go into the production indicator. A quality score ships only if higher scores outperform lower scores out-of-sample.</p></div>
-      <p class="note">A "no edge" result at any gate is a valid outcome and ends or redirects the project. It does not trigger rule-tweaking until something looks profitable.</p>
+      <h2>Gates &amp; holdout</h2>
+      <div class="tbl"><table>
+        <thead><tr><th>Gate</th><th>After</th><th>Pass condition</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td class="id">G1 Data</td><td>9</td><td>CBR-ACC-009 v2.1: AC-01…AC-10 + AC-11A; every failure classified; AC-11B may remain a concern</td><td><span class="chip concern">Approved with conditions</span></td></tr>
+          <tr><td class="id">G2 Faithful implementation</td><td>13</td><td>Engine reproduces taught examples on spot; every mismatch classified</td><td><span class="chip todo">Pending</span></td></tr>
+          <tr><td class="id">G2b Cross-feed agreement</td><td>13/14</td><td>Spot vs GC/DX signal agreement over the 16 sample days at a rate declared before measurement; required before futures support any baseline claim</td><td><span class="chip todo">Pending</span></td></tr>
+          <tr><td class="id">G2d Canonical extremes</td><td>pre-14</td><td>OQ-25 decided: tick-built or other validated extremes, or candle-file highs/lows shown not to change signal membership or material execution results</td><td><span class="chip block">Hard precondition</span></td></tr>
+          <tr><td class="id">G2c Feed frozen</td><td>pre-14</td><td>OQ-24 decided on non-profitability criteria and recorded</td><td><span class="chip todo">Pending</span></td></tr>
+          <tr><td class="id">G3 Baselines frozen</td><td>16</td><td>Untouched baselines recorded with hashes; no tuning</td><td><span class="chip todo">Pending</span></td></tr>
+          <tr><td class="id">G4 Experiments approved</td><td>17</td><td>Astra final rulings + owner approval per experiment</td><td><span class="chip todo">Pending</span></td></tr>
+          <tr><td class="id">G5 Candidate frozen</td><td>24</td><td>Only Astra-approved evidence promoted; spec hashed</td><td><span class="chip todo">Pending</span></td></tr>
+          <tr><td class="id">G6 Holdout</td><td>25</td><td>One run, result recorded regardless of outcome</td><td><span class="chip todo">Pending</span></td></tr>
+          <tr><td class="id">G7 Indicator</td><td>26-27</td><td>Python ↔ Pine parity on the frozen candidate</td><td><span class="chip todo">Pending</span></td></tr>
+        </tbody>
+      </table></div>
+      <div class="gate"><h3>Holdout policy: 2025-01-01 → 2026-08-31, single use</h3><p class="muted">No role or process sees holdout performance while choosing features, filters, thresholds, parameters, models or scores. Course-example days inside it are for implementation parity only, and every access is logged in <code>research/holdout-access-log.md</code>. Evaluation runs once, after the candidate is frozen and the owner approves. A retuned model is never presented as validated.</p></div>
+      <p class="note">A "no edge" result at any gate is a valid end, not a cue to keep tweaking.</p>
     </section>
 
     <section id="status">
@@ -378,17 +415,29 @@ footer{border-top:1px solid var(--rule);padding-top:18px;font-size:.84rem;color:
       <div class="facts">
         <div><b>73</b><span>course videos ingested</span></div>
         <div><b>151</b><span>core evidence records</span></div>
-        <div><b>258</b><span>candidate records</span></div>
-        <div><b>373</b><span>tests passing</span></div>
-        <div><b>21</b><span>open questions tracked</span></div>
+        <div><b>416</b><span>tests passing</span></div>
+        <div><b>27</b><span>open questions tracked</span></div>
+        <div><b>51 / 0</b><span>Phase 9 failures classified / blocking</span></div>
         <div><b>$66.44</b><span>data spend (Databento)</span></div>
       </div>
+      <div class="gate"><h3>Phase 9: pass with concerns · G1 approved with conditions</h3><p class="muted">2026-09-14, after owner ruling D12 and a full acceptance rerun (<code>reports/phase9-data-acceptance.md</code>). Record: <code>docs/governance/g1-approval.md</code>.</p></div>
+      <div class="tbl"><table>
+        <thead><tr><th>Criterion</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr><td class="id">AC-01…06, 08, 10</td><td><span class="chip done">Met</span> AC-06 now also checks the candle high/low error bound on every tick-window minute</td></tr>
+          <tr><td class="id">AC-07 gaps</td><td><span class="chip concern">Met with concerns</span> Only classified or detector-flagged missing source data; 0 pipeline errors</td></tr>
+          <tr><td class="id">AC-09 fixture feeds</td><td><span class="chip concern">Met with concerns</span> DXY CFD vs DX 1m corr 0.745-0.900, lag 0</td></tr>
+          <tr><td class="id">AC-11A sample</td><td><span class="chip concern">Met with concerns</span> 16 days; no day dropped or replaced</td></tr>
+          <tr><td class="id">AC-11B history</td><td><span class="chip todo">Deferred</span> 16 / 2,192 weekdays per instrument</td></tr>
+        </tbody>
+      </table></div>
       <ul class="plain">
-        <li><strong>Committed:</strong> <code>95b4794</code> knowledge base · <code>ff9fa1b</code> machine specs (local branch, not pushed).</li>
-        <li><strong>Data:</strong> Databento GC 3,036,783 and DX 2,122,629 one-minute bars stored locally, with known issues logged (GC roll jumps median $16.30; DX off-market publisher; 2 zero-price bars).</li>
-        <li><strong>In progress:</strong> Dukascopy tick fixtures. The decoder matches the reference tool exactly (285,935 ticks); Oct 20-22 gold saved with 0 duplicate or bad-spread ticks. Dukascopy's feed is returning intermittent 503s and timeouts, so the run resumes from cache after failures.</li>
-        <li><strong>Blocked:</strong> Trader.dev MCP returns 502 on every path (server-side). PineTS is the planned local alternative.</li>
-        <li><strong>Next:</strong> finish fixture data → spot vs futures comparison → reference engine for the primitives with unit and lookahead tests → parity on the three course examples.</li>
+        <li><strong>Classes:</strong> 29 expected feed difference · 18 expected market behavior · 2 reference unavailable · 1 data error and 1 unexplained, both ruled MISSING. Cause status: 18 established · 31 hypothesized · 2 unknown.</li>
+        <li><strong>DXY missing data:</strong> <code>DXY_CFD_MISSING_WHILE_DX_ACTIVE</code> flags 7 periods on the checked days: both ruled hours, EST Monday 00h blocks, Thanksgiving 2022 from 17:59 to 21:57 UTC, and the Sunday 2025-11-09 reopen.</li>
+        <li><strong>DXY timeframes:</strong> 15m/1h direction supported; 1m/5s structure not validated (OQ-26).</li>
+        <li><strong>Candle extremes:</strong> up to 28 artificial minutes per XAUUSD window and 67 per DXY window; largest errors $0.425 and 0.3185. The candle-only flag misses most of them. Hard precondition before Phase 14.</li>
+        <li><strong>Phase 10 authorized:</strong> DXY context module only. Not authorized: baseline profitability testing, OQ-24 by performance, holdout P&amp;L, Phase 17.</li>
+        <li><strong>Blocked:</strong> Trader.dev MCP returns 502 on every path. Commits are local only, not pushed.</li>
       </ul>
     </section>
 
@@ -404,6 +453,9 @@ footer{border-top:1px solid var(--rule);padding-top:18px;font-size:.84rem;color:
           <tr><td>Seconds-level entries unavailable in Pine</td><td>Indicator ≠ engine</td><td>Declared SIMPLIFIED-ENTRY; quantify signal differences</td></tr>
           <tr><td>Small gold targets make costs decisive</td><td>Edge vanishes after spread</td><td>Bid/ask fills, spread from ticks, rollover exclusion, results after costs</td></tr>
           <tr><td>Data vendor instability (Dukascopy 429/503, Trader.dev outage)</td><td>Delays</td><td>Cached, resumable downloads; local runners; no single vendor dependency</td></tr>
+          <tr><td>Vendor data holes (DXY CFD hour empty while DX trades)</td><td>False DXY structure if filled</td><td>Detector <code>DXY_CFD_MISSING_WHILE_DX_ACTIVE</code>; MISSING, never filled; reason code and lower confidence</td></tr>
+          <tr><td>Synthetic candle-file extremes</td><td>Wrong swings, sweeps and stops</td><td><code>hl_method</code> tag on every bar file; tick-built extremes for parity; canonical source before Phase 14 (G2d)</td></tr>
+          <tr><td>Fine-grained DXY structure unvalidated</td><td>Unfaithful DXY timing rules</td><td>15m/1h context only until an independent reference exists (OQ-26)</td></tr>
           <tr><td>Publishing copyrighted or licensed material</td><td>Legal exposure</td><td>Gitignore enforced and checked before every commit</td></tr>
         </tbody>
       </table></div>
@@ -421,9 +473,13 @@ footer{border-top:1px solid var(--rule);padding-top:18px;font-size:.84rem;color:
           <tr><td class="id">OQ-11 / 12</td><td>Stop buffer size; 50% target vs 1:1 vs next level</td><td>Buffer range declared; target variants as ablations</td></tr>
           <tr><td class="id">OQ-13</td><td>DXY as confluence, veto or timing trigger?</td><td>Not in baseline; each tested separately</td></tr>
           <tr><td class="id">OQ-21</td><td>Trend: hard no-trade or quality downgrade?</td><td>Hard filter in V1; downgrade as ablation</td></tr>
+          <tr><td class="id">OQ-24</td><td>Baseline feed: spot, GC/DX futures or hybrid?</td><td>Open until parity and cross-feed agreement exist; frozen before Phase 14; never chosen by profitability</td></tr>
+          <tr><td class="id">OQ-25</td><td>Canonical OHLC source for extremes (swings, ranges, extensions, stops, sweeps)?</td><td>Hard precondition before Phase 14 (G2d); candle-file highs/lows not authoritative meanwhile</td></tr>
+          <tr><td class="id">OQ-26</td><td>Independent reference for 1m/5s DXY structure?</td><td>Open data dependency; 15m/1h DXY context only meanwhile</td></tr>
+          <tr><td class="id">OQ-27</td><td>DXY CFD availability at DST-transition Mondays and the weekly reopen</td><td>Diagnostic approved; required before DXY availability assumptions are frozen</td></tr>
         </tbody>
       </table></div>
-      <p class="note">Full register with evidence: <code>docs/strategy/open-questions.md</code>. Pending owner sign-off: validation gates (above) and review of the Phase 8 machine specs.</p>
+      <p class="note">Full register with evidence: <code>docs/strategy/open-questions.md</code>. Pending owner review: Phase 8 machine specs.</p>
     </section>
 
     <footer>CBR Model · CBR-PRD-001 · Source of truth for rules is the repository evidence base; this document summarises it.</footer>

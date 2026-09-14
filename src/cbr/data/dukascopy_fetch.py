@@ -5,6 +5,7 @@ Usage:
     .venv/bin/python -m cbr.data.dukascopy_fetch --samples                           # AC-11A stratified sample
     .venv/bin/python -m cbr.data.dukascopy_fetch --candles --from 2018-01-01 --to 2024-12-31   # 1m history
     .venv/bin/python -m cbr.data.dukascopy_fetch --tick-days --from 2025-11-09 --to 2025-11-10  # full-day ticks
+    .venv/bin/python -m cbr.data.dukascopy_fetch --rebuild-normalized   # re-derive stored bars from cached raw data
 
 Reads Dukascopy's public hourly bi5 tick files directly (decoded here; dukascopy-node was rate-limited).
 Output under data/ (gitignored):
@@ -13,6 +14,9 @@ Output under data/ (gitignored):
     data/normalized/<instrument>/bars_1m/YYYY-MM-DD.parquet
     data/raw/dukascopy/manifest.json
 Bars: open-time UTC, OHLC from mid=(bid+ask)/2, spread stats, tick_count. Empty intervals produce no bar.
+Every bar file carries `hl_method`: TICK_MID for tick-built bars; SIDE_EXTREME_MEAN for candle files, whose mid
+high/low average per-side extremes that may come from different ticks (not authoritative extremes; see
+cbr.data.quality and OQ-25).
 """
 
 from __future__ import annotations
@@ -29,6 +33,8 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+
+from cbr.data.quality import HL_CANDLE_FILE, HL_TICK_BARS
 
 ROOT = Path(__file__).resolve().parents[3]
 RAW = ROOT / "data" / "raw" / "dukascopy"
@@ -147,7 +153,8 @@ def _bars(ticks: pd.DataFrame, freq: str) -> pd.DataFrame:
     bars["tick_count"] = grouped.count()
     bars["spread_mean"] = spread.resample(freq, label="left", closed="left").mean()
     bars["spread_max"] = spread.resample(freq, label="left", closed="left").max()
-    bars = bars[bars["tick_count"] > 0]                     # no bar for empty intervals; gaps stay explicit
+    bars = bars[bars["tick_count"] > 0].copy()              # no bar for empty intervals; gaps stay explicit
+    bars["hl_method"] = HL_TICK_BARS
     bars.index.name = "open_time"
     return bars
 
@@ -217,6 +224,43 @@ def _decode_candles(instrument: str, day: date, raw: bytes) -> pd.DataFrame:
     return df
 
 
+def _candle_frame(inst: str, day: date, raw_bid: bytes, raw_ask: bytes) -> pd.DataFrame:
+    bid, ask = _decode_candles(inst, day, raw_bid), _decode_candles(inst, day, raw_ask)
+    df = pd.concat({"bid": bid, "ask": ask}, axis=1)
+    df.columns = [f"{side}_{col}" for side, col in df.columns]
+    for col in ("open", "high", "low", "close"):
+        df[col] = (df[f"bid_{col}"] + df[f"ask_{col}"]) / 2
+    df["hl_method"] = HL_CANDLE_FILE
+    df.index.name = "open_time"
+    return df
+
+
+def rebuild_normalized() -> None:
+    """Re-derive every stored candle file and tick-window bar file from cached raw data (no network) and refresh
+    manifest hashes. Raw inputs are unchanged."""
+    manifest = json.loads(MANIFEST.read_text())
+    for key, entry in manifest.get("candles", {}).items():
+        if entry.get("status") != "OK":
+            continue
+        inst, day = key.split("/")[0], date.fromisoformat(entry["day"])
+        cached = [CACHE / inst / "candles" / f"{day.isoformat()}_{side}.bi5" for side in ("BID", "ASK")]
+        df = _candle_frame(inst, day, cached[0].read_bytes(), cached[1].read_bytes())
+        live = df[(df["bid_vol"] > 0) | (df["ask_vol"] > 0)]
+        out = NORM / inst / "candles_1m" / f"{day.isoformat()}.parquet"
+        live.to_parquet(out)
+        entry["files"] = {str(out.relative_to(ROOT)): _sha256(out)}
+    for key, entry in manifest.get("tick_windows", {}).items():
+        if entry.get("status") != "OK":
+            continue
+        inst, wid = key.split("/")
+        ticks = pd.read_parquet(RAW / inst / "tick_windows" / f"{wid}.parquet")
+        for freq, name in (("5s", "window_bars_5s"), ("1min", "window_bars_1m")):
+            out = NORM / inst / name / f"{wid}.parquet"
+            _bars(ticks, freq).to_parquet(out)
+            entry["files"][str(out.relative_to(ROOT))] = _sha256(out)
+    MANIFEST.write_text(json.dumps(manifest, indent=2) + "\n")
+
+
 def fetch_candles(days: list[date], instruments: list[str]) -> None:
     """1m bid/ask candles per UTC day -> data/normalized/<inst>/candles_1m/YYYY-MM-DD.parquet.
     Columns: bid_*/ask_* OHLC, mid OHLC = mean of bid and ask OHLC, volume. Zero-volume (flat, no trading)
@@ -236,13 +280,8 @@ def fetch_candles(days: list[date], instruments: list[str]) -> None:
                 manifest["candles"][key] = entry
                 MANIFEST.write_text(json.dumps(manifest, indent=2) + "\n")
                 continue
-            bid, ask = _decode_candles(inst, day, raw_bid), _decode_candles(inst, day, raw_ask)
-            df = pd.concat({"bid": bid, "ask": ask}, axis=1)
-            df.columns = [f"{side}_{col}" for side, col in df.columns]
-            for col in ("open", "high", "low", "close"):
-                df[col] = (df[f"bid_{col}"] + df[f"ask_{col}"]) / 2
+            df = _candle_frame(inst, day, raw_bid, raw_ask)
             live = df[(df["bid_vol"] > 0) | (df["ask_vol"] > 0)]
-            live.index.name = "open_time"
             out.parent.mkdir(parents=True, exist_ok=True)
             live.to_parquet(out)
             entry.update(status="OK", rows_total=len(df), rows_with_volume=len(live),
@@ -297,11 +336,15 @@ def main() -> None:
     p.add_argument("--samples", action="store_true", help="AC-11A: 1m candles for the 16 sample days + 4 tick windows")
     p.add_argument("--candles", action="store_true", help="1m candles for --from/--to (history)")
     p.add_argument("--tick-days", action="store_true", help="full-day ticks for --from/--to (slow)")
+    p.add_argument("--rebuild-normalized", action="store_true", help="re-derive stored bars from cached raw data")
     p.add_argument("--from", dest="start")
     p.add_argument("--to", dest="end")
     p.add_argument("--instrument", action="append", choices=list(INSTRUMENTS))
     a = p.parse_args()
     instruments = a.instrument or list(INSTRUMENTS)
+    if a.rebuild_normalized:
+        rebuild_normalized()
+        return
     if a.fixtures:
         days = sorted({d + timedelta(days=o) for d in FIXTURE_DAYS.values() for o in (-1, 0, 1)})
         fetch_candles(days, instruments)

@@ -1,6 +1,6 @@
 # CBR Model: PRD Summary
 
-**Doc:** CBR-PRD-001 · **Version:** v1.0 · 2026-09-14 · **Status:** Active (Phase 9) · **Instruments:** XAUUSD + DXY
+**Doc:** CBR-PRD-001 · **Version:** v1.0 · 2026-09-14 · **Status:** Active (Phase 9 PASS WITH CONCERNS · G1 approved with conditions · Phase 10 authorized) · **Instruments:** XAUUSD + DXY
 **Branch:** `cbr-work-091426-10am` · Full version: `docs/PRD.html`
 
 ---
@@ -77,6 +77,7 @@ A trustworthy "no edge" answer counts as success. The TradingView indicator is b
 | D9 | Early-shift guard (final push / 15m alignment): pre-registered ablation candidate → Phase 17 |
 | D10 | Astra × Fable research governance adopted (CBR-GOV-001) |
 | D11 | AC-11 split: AC-11A (16-day stratified spot-pipeline proof, required for Phase 9) + AC-11B (full spot history, deferred); failures classified; baseline feed (OQ-24) open until parity and cross-feed agreement, frozen before Phase 14, never chosen by profitability |
+| D12 | Phase 9 rulings: DXY 2020-03-09 20h = DATA_ERROR → MISSING, flagged by detector `DXY_CFD_MISSING_WHILE_DX_ACTIVE`; DXY 2019-03-11 00h stays UNEXPLAINED → MISSING; new class REFERENCE_UNAVAILABLE; `cause_status` (unproven causes never used as evidence); candle-file high/low = hard safeguard before Phase 14; 1m/5s DXY structure not validated. Record: `docs/governance/g1-approval.md` |
 
 ---
 
@@ -126,9 +127,9 @@ Both CBR models: **stop** beyond the extension extreme, **target** 50% of the ex
 
 | Source | What | Role | State |
 |---|---|---|---|
-| Dukascopy (free) | Spot gold + dollar index ticks | Primary data, 5-second bars | Test-case days downloading |
-| Databento ($66.44) | GC + DX futures, 1-min, 2018-2026 | Cross-check with real volume | Downloaded |
-| TradingView export | FOREXCOM:XAUUSD, TVC:DXY | Exact match to Tom's charts | Optional |
+| Dukascopy (free) | Spot gold + dollar index ticks and 1m bid/ask candles | Primary data, 5-second bars | Fixtures + 16 sample days validated (Phase 9); full history deferred (AC-11B). Candle high/low `SIDE_EXTREME_MEAN` is not authoritative for extremes (OQ-25) |
+| Databento ($66.44) | GC + DX futures, 1-min (GC 2018-2026; DX from 2018-12-26) | Cross-check with real volume | Downloaded. No DX reference before 2018-12-26 (REFERENCE_UNAVAILABLE) |
+| TradingView export | FOREXCOM:XAUUSD, TVC:DXY | Exact match to Tom's charts; independent reference for 1m/5s DXY structure | Optional; needed if fine DXY structure is ever used (OQ-26) |
 
 Course example days (Oct-Nov 2025) sit in the holdout and are used **only for parity**, never for performance or tuning.
 
@@ -158,15 +159,15 @@ Research-derived variables carry `classification: RESEARCH-DERIVED`.
 - 6-7 Journal research & trade database: **draft**
 - 8 Machine specs: **done, awaiting owner review**
 
-### B. Data & reference engines: phases 9-13 🟡
-- **9 Historical data pipeline:** **acceptance run complete; verdict FAIL pending owner rulings on 2 blocking items** (see Current status). Phase 10 not started.
-- 10 DXY context / data module
+### B. Data & reference engines: phases 9-13 🟡 (9 ✅ with concerns)
+- **9 Historical data pipeline:** **PASS WITH CONCERNS** (2026-09-14, after owner ruling D12); **G1 approved with conditions**
+- **10 DXY context module: authorized.** Missing stays missing, availability/confidence explicit with reason codes, 15m/1h context favored over 1m/5s structure, no DXY filter optimized
 - 11 CBR15 Python reference engine
 - 12 CBR1H Python reference engine
 - **13 Tom ↔ Python parity gate:** the engine must reproduce the taught examples before any performance research
 
 ### C. Untouched baselines: phases 14-16
-- **Before 14:** freeze the baseline data feed (OQ-24: spot / futures / hybrid) on fidelity, signal agreement, structure agreement, availability, execution realism, 5s feasibility, reproducibility and known distortions, **never profitability**. If futures are chosen, the cross-feed signal-agreement requirement (G2b) must pass; if spot, AC-11B must be complete.
+- **Before 14:** define the canonical historical OHLC source for swings, range extremes, extension extremes, stops and sweeps (OQ-25, hard precondition, D12-5); complete the DXY DST/reopen availability diagnostic (OQ-27); freeze the baseline data feed (OQ-24: spot / futures / hybrid) on fidelity, signal agreement, structure agreement, availability, execution realism, 5s feasibility, reproducibility and known distortions, **never profitability**. If futures are chosen, the cross-feed signal-agreement requirement (G2b) must pass; if spot, AC-11B must be complete.
 - 14 Backtest runner and execution simulator
 - 15 Untouched CBR1H baseline
 - 16 Untouched CBR15 baseline (**frozen; no optimization before this**)
@@ -205,9 +206,10 @@ The Python reference engine is authoritative. LuxAlgo Quant may assist with Pine
 
 | Gate | After phase | Pass condition | Decided by |
 |---|---|---|---|
-| G1 Data | 9 | CBR-ACC-009 (`docs/acceptance/phase9-acceptance-criteria.md`): AC-01…AC-10 + AC-11A; every failure classified; AC-11B may remain a concern | Owner |
+| G1 Data ✅ | 9 | CBR-ACC-009 v2.1: AC-01…AC-10 + AC-11A; every failure classified; AC-11B may remain a concern. **Approved with conditions 2026-09-14** (`docs/governance/g1-approval.md`) | Owner |
 | G2 Faithful implementation | 13 | Engine reproduces taught examples on spot; every mismatch classified | Owner |
 | G2b Cross-feed signal agreement | 13/14 | Engine run on spot and GC/DX over the 16 AC-11A sample days yields the same setups (direction, hour, entry window) at a rate pre-declared before measurement. Required before futures data can support any baseline performance claim | Owner |
+| G2d Canonical extremes source | pre-14 | OQ-25 decided: extreme-sensitive logic uses tick-built bars or another validated source, or candle-file highs/lows are shown quantitatively not to change signal membership or material execution results | Owner |
 | G2c Baseline feed frozen | pre-14 | OQ-24 decided on the owner's non-profitability criteria and recorded | Owner |
 | G3 Baselines frozen | 16 | Untouched baselines recorded with hashes; no tuning | Owner |
 | G4 Experiments approved | 17 | Astra final rulings + owner approval per experiment | Astra → Owner |
@@ -227,39 +229,44 @@ The Python reference engine is authoritative. LuxAlgo Quant may assist with Pine
 
 ## Current status
 
-_As of 2026-09-14, after the Phase 9 acceptance run (`reports/phase9-data-acceptance.md`, CBR-ACC-009 v2)._
+_As of 2026-09-14, after owner ruling D12 and the Phase 9 acceptance rerun (`reports/phase9-data-acceptance.md`, CBR-ACC-009 v2.1)._
 
 | Metric | Value |
 |---|---|
 | Course videos ingested | 73 (~15.2 h) |
 | Core evidence records | 151 |
 | Candidate records | 258 |
-| Tests passing | 408 |
-| Open questions tracked | 24 |
+| Tests passing | 416 |
+| Open questions tracked | 27 |
 | Data spend | $66.44 (Databento) |
 
-### Phase 9 verdict: **FAIL** (2 blocking, 49 documented concerns, 0 unclassified)
+### Phase 9: **PASS WITH CONCERNS** · G1 approved with conditions
 
 | Criterion | Status |
 |---|---|
-| AC-01…AC-06, AC-08, AC-10 | MET |
-| AC-07 gaps | FAIL: 1 DATA_ERROR + 1 UNEXPLAINED_FEED_DIFFERENCE (below); all other gaps classified |
-| AC-09 fixture feed comparison | MET WITH CONCERNS (DXY CFD vs DX 1m corr 0.745-0.900, lag 0) |
-| AC-11A 16-day sample | MET WITH CONCERNS (every failure classified; no day dropped or replaced) |
-| AC-11B full spot history | DEFERRED: 16 / 2,192 weekdays (2018-2024) per instrument |
+| AC-01…AC-06, AC-08, AC-10 | MET (AC-06 now also checks the candle high/low error bound) |
+| AC-07 gaps | MET WITH CONCERNS: only classified or detector-flagged missing source data; 0 pipeline errors |
+| AC-09 fixture feed comparison | MET WITH CONCERNS |
+| AC-11A 16-day sample | MET WITH CONCERNS |
+| AC-11B full spot history | DEFERRED: 16 / 2,192 weekdays per instrument |
 
-**Blocking items (owner ruling needed):**
-1. `AC-07/unexpected_gaps/dollaridxusd/2020-03-09`: **DATA_ERROR.** Dukascopy DXY tick file for 20:00-20:59 UTC is empty while DX futures traded 56 minutes (1,139 contracts). Proposed: rule-based VENDOR_GAP flag, treated as missing (no forward-fill, lower confidence).
-2. `AC-07/unexpected_gaps/dollaridxusd/2019-03-11`: **UNEXPLAINED_FEED_DIFFERENCE.** No CFD ticks 00:00-00:59 UTC (Monday after US DST start) while DX traded 31 minutes. Every other Monday checked fits the CFD's 20:00 New York start; this one doesn't.
+51 failures, all classified and preserved: 29 EXPECTED_FEED_DIFFERENCE, 18 EXPECTED_MARKET_BEHAVIOR, 2 REFERENCE_UNAVAILABLE,
+1 DATA_ERROR (ruled MISSING), 1 UNEXPLAINED_FEED_DIFFERENCE (ruled MISSING). Cause status: 18 established, 31 hypothesized,
+2 unknown.
 
-**Owner review requested (non-blocking):** 2018 DXY days have no DX reference (DX starts 2018-12-26), so they're provisionally EXPECTED_FEED_DIFFERENCE. 2020-06-17 gold 1m corr 0.920 with a $3.7 intraday basis drift is attributed contextually to 2020 EFP volatility. Candle mid high/low are an outer bound on true mid extremes (spread-spike quotes inflate wicks; CANDLE-MID-EXTREMES-2026-09-14).
+**Concerns carried forward:**
+- **DXY missing data.** The detector `DXY_CFD_MISSING_WHILE_DX_ACTIVE` flags 7 periods on the checked days: both ruled hours, the Monday 00h UTC blocks in EST (2021-02-01, 2023-11-06, 2025-11-10), Thanksgiving 2022 from 17:59 to 21:57 UTC, and Sunday 2025-11-09 from 23:00 UTC. All are MISSING.
+- **DXY timeframes.** 15m/1h direction is supported. 1m/5s DXY structure is not validated (OQ-26).
+- **No DX reference before 2018-12-26** (REFERENCE_UNAVAILABLE).
+- **Candle-file highs/lows are not authoritative extremes.** Per tick window: up to 28 artificial minutes (XAUUSD) and 67 (DXY 2018); largest errors $0.425 and 0.3185. The candle-only flag misses most of them. Hard precondition before Phase 14 (OQ-25, G2d).
+- **2020-06-17 gold.** 1m corr 0.920 with ~$3.7 basis drift; cause HYPOTHESIZED.
+- **OQ-27.** The DST-Monday DXY diagnostic is still pending (required before DXY availability assumptions are frozen).
 
-**Feed findings:** XAUUSD vs GC agrees at lag 0 on every day (1m 0.920-0.995; 15m 0.929-0.991 on the four days under 0.95). DXY CFD vs DX 1m 0.745-0.974, 15m 0.963-0.993 on the days under 0.90: direction at 15m/1h is supported, but **1m/5s DXY structure can't be validated against DX** and needs an independent reference. DXY CFD doesn't quote from the weekly reopen to 20:00 New York, and it stopped at 17:58 UTC on Thanksgiving 2022.
+**Phase 10 (authorized):** DXY context module only. Not authorized: baseline profitability testing, OQ-24 via
+performance, holdout P&L, Phase 17.
 
 - **Commits:** local only, not pushed
-- **Dukascopy:** decoder verified exactly (285,935 ticks); 10 tick windows clean (open/close match candles exactly)
 - **Blocked:** Trader.dev MCP server returns 502 on every path
-- **Next:** owner rulings on blocking items → re-issue verdict → Phase 10 (only after G1)
 
 ---
 
@@ -274,6 +281,9 @@ _As of 2026-09-14, after the Phase 9 acceptance run (`reports/phase9-data-accept
 | Pine can't do 5-second entries | Declared simplification; quantify the difference |
 | Small gold targets make costs decisive | Bid/ask fills, real spreads, rollover exclusion, results after costs |
 | Vendor outages (Dukascopy, Trader.dev) | Cached, resumable downloads; local runners |
+| Vendor data holes (e.g. DXY CFD hour empty while DX trades) | Detector `DXY_CFD_MISSING_WHILE_DX_ACTIVE`; MISSING, never filled; reason code and lower confidence on affected setups |
+| Synthetic candle-file extremes distort swings, sweeps and stops | `hl_method` tag on every bar file; tick-built extremes for parity; canonical source decided before Phase 14 (OQ-25, G2d) |
+| Fine-grained DXY structure unvalidated | Use 15m/1h DXY context only until an independent reference exists (OQ-26) |
 
 ---
 
@@ -288,6 +298,9 @@ _As of 2026-09-14, after the Phase 9 acceptance run (`reports/phase9-data-accept
 | OQ-11 / 12 | Stop buffer; 50% target vs 1:1 vs next level | Buffer range declared; target variants tested separately |
 | OQ-13 | DXY as confluence, veto or timing trigger? | Not in baseline; each tested separately |
 | OQ-21 | Trend: hard no-trade or quality downgrade? | Hard filter in V1; downgrade tested separately |
+| OQ-25 | Canonical OHLC source for extremes (swings, ranges, extensions, stops, sweeps)? | Hard precondition before Phase 14 (G2d); candle-file highs/lows not authoritative meanwhile |
+| OQ-26 | Independent reference for 1m/5s DXY structure? | Open data dependency; only 15m/1h DXY context used meanwhile |
+| OQ-27 | DXY CFD availability at DST-transition Mondays / weekly reopen | Diagnostic approved; required before DXY availability assumptions are frozen |
 | OQ-24 | Baseline feed: Dukascopy spot, GC/DX futures, or hybrid? | Open until Phase 9 validation, engines, Phase 13 parity and cross-feed agreement exist; frozen before Phase 14; never chosen by profitability |
 
 Full register: `docs/strategy/open-questions.md`

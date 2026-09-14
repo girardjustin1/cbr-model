@@ -134,3 +134,8 @@ LuxAlgo Quant may later assist with Pine implementation, but it is never the sou
 - Phase 9 data acceptance follows CBR-ACC-009: failures are classified (PIPELINE_ERROR, DATA_ERROR,
   EXPECTED_MARKET_BEHAVIOR, EXPECTED_FEED_DIFFERENCE, UNEXPLAINED_FEED_DIFFERENCE), failing days are never dropped
   or replaced, and complete spot history (AC-11B) is a deferred dependency, not a Phase 9 requirement.
+- **Owner ruling D12 (Phase 9 close, `docs/governance/g1-approval.md`):** a DATA_ERROR or UNEXPLAINED_FEED_DIFFERENCE
+  becomes non-blocking only as MISSING data flagged by an automated detector, never as resolved. A missing reference is
+  `REFERENCE_UNAVAILABLE`, not a feed difference. Unproven causes are `HYPOTHESIZED` and never used as evidence.
+  Candle-file highs/lows are not authoritative for extreme-sensitive logic until OQ-25 is decided (before Phase 14).
+  1m/5s DXY structure is not validated (OQ-26).

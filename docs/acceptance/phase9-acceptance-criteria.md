@@ -1,6 +1,6 @@
 # Phase 9: Historical Data Pipeline Acceptance Criteria
 
-**Doc:** CBR-ACC-009 · **Version:** v2.0 · **Approved:** 2026-09-14 (owner: "APPROVED WITH MINOR CHANGES", decision D11)
+**Doc:** CBR-ACC-009 · **Version:** v2.1 · **Approved:** 2026-09-14 (v2.0: owner "APPROVED WITH MINOR CHANGES", D11; v2.1: owner Phase 9 ruling, D12)
 **Supersedes:** AC-11 v1 (complete 2018-2024 Dukascopy history as a Phase 9 requirement)
 **Implementation:** `src/cbr/data/phase9_acceptance.py` → `reports/phase9-data-acceptance.{json,md}`
 **Exceptions register:** `reports/phase9-exceptions.yaml`
@@ -19,7 +19,7 @@ sample days are never dropped or replaced.
 | AC-03 | Decoder parity: ticks identical to the reference CLI (285,935 ticks, 2025-11-10); candle open/close identical to tick-built bars | Fixtures |
 | AC-04 | Integrity: no duplicate or out-of-order timestamps, UTC, minute/5s alignment, no non-positive prices, no crossed quotes, consistent OHLC, manifest hashes match | Fixtures + samples |
 | AC-05 | Determinism: 5s and 1m bars rebuilt from stored ticks equal the stored bars | Fixtures + sample tick windows |
-| AC-06 | Reconciliation: tick counts; 5s → 1m roll-up exact; tick-window 1m vs candle files | Fixtures + sample tick windows |
+| AC-06 | Reconciliation: tick counts; 5s → 1m roll-up exact; tick-window 1m vs candle files; candle high/low overstatement within the SIDE_EXTREME_MEAN error bound on every tick-window minute (v2.1) | Fixtures + sample tick windows |
 | AC-07 | Every missing minute classified (weekend, daily 17:00-18:00 New York break, or unexpected); unexpected gaps listed | Fixtures + samples |
 | AC-08 | Spikes and wide spreads flagged and reported (never removed) | Fixtures + samples |
 | AC-09 | Cross-feed comparison documented: XAUUSD vs GC **and** DXY CFD vs DX | Fixtures + samples |
@@ -85,9 +85,31 @@ an explanation backed by evidence:
 | `EXPECTED_MARKET_BEHAVIOR` | Real market conditions explain it (holiday session, extreme volatility, limit moves) | Concern; not a failure, if it doesn't invalidate the intended downstream use |
 | `EXPECTED_FEED_DIFFERENCE` | A known structural difference between feeds explains it (contract roll, CFD vs futures session hours, basis carry, thinner DXY CFD) | Concern; not a failure, if it doesn't invalidate the intended downstream use |
 | `UNEXPLAINED_FEED_DIFFERENCE` | Feeds disagree and no evidence-backed explanation exists | **FAIL until resolved** |
+| `REFERENCE_UNAVAILABLE` (v2.1, D12-3) | The reference needed for a comparison does not exist for the period (e.g. DX futures before 2018-12-26). No comparison happened, so no agreement is claimed | Concern; not a failure, if the source's own integrity checks pass independently and the limitation stays visible downstream |
 | `UNCLASSIFIED` | Not yet investigated | **FAIL** (verdict can't be issued) |
 
 Failing days are **never dropped or replaced**.
+
+### 4.1 Cause status (v2.1, D12-4)
+
+Every exception also carries `cause_status`:
+
+| Value | Meaning |
+|---|---|
+| `ESTABLISHED` | The cause is directly observed in the data (e.g. the reference feed is also absent; documented data start) |
+| `HYPOTHESIZED` | Plausible, not proven. Recorded separately from the observations and **never used as evidence** |
+| `UNKNOWN` | No cause asserted |
+
+### 4.2 Owner rulings on blocking classes (v2.1, D12-1, D12-2)
+
+A `DATA_ERROR` or `UNEXPLAINED_FEED_DIFFERENCE` stops blocking **only** when all of these hold:
+
+1. An owner ruling is recorded (`owner_ruling`).
+2. `handling: MISSING` applies: no forward-fill, no interpolation, no prices synthesized from another feed, and no structure inferred across the interval.
+3. The ruled interval (`ruled_interval_utc`) intersects a flag raised by the named automated detector (`detector`, e.g. `DXY_CFD_MISSING_WHILE_DX_ACTIVE`) in the same run.
+
+Such a failure is still reported as a concern and is never marked resolved. The class and cause status are not changed.
+If the detector does not flag the interval, the failure blocks again.
 
 ## 5. AC-11B: deferred historical spot acquisition
 
@@ -100,10 +122,14 @@ Failing days are **never dropped or replaced**.
 | Verdict | Condition |
 |---|---|
 | **PASS** | AC-01…AC-10, AC-11A and AC-11B met; no failures, or only EXPECTED_* concerns |
-| **PASS WITH CONCERNS** | AC-01…AC-10 and AC-11A met; every failure classified, none of them PIPELINE_ERROR / DATA_ERROR / UNEXPLAINED_FEED_DIFFERENCE unresolved; AC-11B outstanding and/or documented EXPECTED_* concerns |
-| **FAIL** | Any unresolved PIPELINE_ERROR, DATA_ERROR or UNEXPLAINED_FEED_DIFFERENCE; any UNCLASSIFIED failure; or any of AC-01…AC-10 / AC-11A not met |
+| **PASS WITH CONCERNS** | AC-01…AC-10 and AC-11A met; every failure classified; no PIPELINE_ERROR; DATA_ERROR / UNEXPLAINED_FEED_DIFFERENCE only under §4.2; AC-11B outstanding and/or documented EXPECTED_* / REFERENCE_UNAVAILABLE / ruled concerns |
+| **FAIL** | Any PIPELINE_ERROR; any DATA_ERROR or UNEXPLAINED_FEED_DIFFERENCE not covered by §4.2; any UNCLASSIFIED failure; any exception-register error (unknown class, missing cause status, incomplete ruling); or any of AC-01…AC-10 / AC-11A not met |
 
 ## 7. Phase 10 entry conditions
 
 Phase 10 does not begin until: AC-01…AC-10 are resolved, AC-11A is complete, every failure is classified, a Phase 9
 verdict is issued, and the owner accepts it.
+
+## 8. Result (2026-09-14)
+
+**PASS WITH CONCERNS**, after owner ruling D12. G1 was approved with conditions: see `docs/governance/g1-approval.md`.

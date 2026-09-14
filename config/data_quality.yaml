@@ -1,0 +1,34 @@
+# Data-quality detectors and safeguards (owner ruling D12, 2026-09-14).
+# Detectors mark data as MISSING or SUSPECT; they never repair, fill, interpolate or synthesize prices.
+# Labels: CANON (course rule) / ASSUMPTION (interpretation) / IMPL (engineering choice, revisable with a record).
+
+reason_codes:
+  DXY_CFD_MISSING_WHILE_DX_ACTIVE: >-
+    Dukascopy DXY CFD has no usable 1m observations while DX futures show meaningful trading. The period is MISSING:
+    no forward-fill, no interpolation, no prices synthesized from DX, no DXY structure inferred across it. Setups whose
+    required DXY context intersects it carry this code and reduced confidence (or are unavailable under the engine's
+    missing-data policy).
+  CANDLE_HL_SYNTHETIC_EXTREME_SUSPECT: >-
+    Candle-file mid high/low is the mean of per-side extremes that may come from different ticks. The minute's
+    possible overstatement bound is large relative to its synchronous (open/close) spread, so its mid high/low must
+    not be used as an authoritative extreme.
+
+dxy_cfd_missing_while_dx_active:
+  # IMPL. Set on 2026-09-14 AFTER the two known cases (2020-03-09 20h, 2019-03-11 00h) were seen; revalidate on
+  # AC-11B history before DXY availability assumptions are frozen (OQ-27).
+  min_missing_run_minutes: 30      # consecutive UTC minutes with no CFD candle row
+  min_dx_active_minutes: 15        # DX 1m bars with volume > 0 inside that run
+
+candle_extrema:
+  hl_method:
+    candle_file: SIDE_EXTREME_MEAN   # mid high = (bid_high + ask_high)/2; mid low = (bid_low + ask_low)/2
+    tick_bars: TICK_MID              # extremes of per-tick mid = (bid + ask)/2
+  # Bound (exact, given positive spreads): candle mid high − true mid high < (ask_high − bid_high)/2, and
+  # true mid low − candle mid low < (ask_low − bid_low)/2.
+  # IMPL, declared before measurement on the tick windows: flag SUSPECT when a bound exceeds
+  # suspect_ratio × the minute's synchronous half-spread, min(open spread, close spread)/2.
+  suspect_ratio: 3.0
+  # Tolerance for calling a candle extreme "artificial" against tick-built bars (reporting).
+  tick_parity_tolerance:
+    xauusd: 0.05
+    dollaridxusd: 0.005

@@ -238,6 +238,35 @@ recordings, or the Notion journal) · `RESEARCH PARAMETER` (legitimately ambiguo
   signal-agreement acceptance requirement (Phase 13/14; see PRD gate G2b).
 - **Status.** `NEEDS USER DECISION`, deferred to pre-Phase 14.
 
+### OQ-25 · Canonical historical OHLC source for price extremes (owner ruling D12-5)
+- **Problem.** Dukascopy candle files build mid high/low as the mean of per-side extremes (`SIDE_EXTREME_MEAN`), which
+  may come from different ticks. On 10 tick-window pairs: 0-28 artificial XAUUSD minutes and 0-67 DXY minutes per
+  window; largest errors $0.425 and 0.3185. The candle-only warning flag misses most of them.
+- **Affects.** Swing detection · range highs/lows · extension extremes · stop placement · liquidity sweep/take
+  detection · possibly structure-shift detection.
+- **Options.** (a) Tick-built `TICK_MID` bars for all extreme-sensitive logic (needs ticks for history) · (b) candle
+  files, only if shown quantitatively not to change signal membership or material execution results · (c) a hybrid:
+  candle files for coarse structure, ticks for armed-signal hours · (d) another validated source.
+- **Constraint.** Never chosen by profitability. Decided together with OQ-24.
+- **Status.** `HARD PRECONDITION` for Phase 14 (gate G2d). Open.
+
+### OQ-26 · Independent reference for fine-grained DXY structure (owner ruling D12-6)
+- **Problem.** DXY CFD vs DX futures agree at 15m/1h (15m corr 0.963-0.993 on the days under the 1m threshold) but not
+  at 1m (0.745-0.974). DX is too quantized/thin to validate 1m or 5s DXY structure (e.g. Tom's 5-second DXY shifts,
+  EP2-026).
+- **Handling.** Dukascopy DXY may be used for 15m/1h direction and broader inverse context. 1m/5s DXY structure is not
+  promoted into the canonical strategy unless validated against an independent reference (e.g. a TradingView TVC:DXY
+  export for fixture windows).
+- **Status.** `OPEN DATA DEPENDENCY`.
+
+### OQ-27 · DXY CFD availability around DST transitions and the weekly reopen (owner ruling D12-2)
+- **Problem.** No CFD ticks at 00:00-00:59 UTC on 2019-03-11 (Monday after US DST start), while DX traded. Every other
+  Monday checked fits a 20:00 New York CFD start; this one doesn't. The cause is unknown.
+- **Task.** Diagnostic across other DST-transition Mondays (spring and autumn, 2018-2024). Report the pattern only; do not
+  reclassify 2019-03-11 without evidence.
+- **Status.** Approved, not required for Phase 9. **Must be complete before historical DXY availability assumptions
+  are frozen for baseline testing.**
+
 ### OQ-17 · Stop placement on the 15m model: tight vs breathing room
 - **Problem.** Course: no tight stops (E15-040). One journal trade uses a tight stop; another journal loss is
   blamed on a stop that was too tight (Level 2).
@@ -357,6 +386,7 @@ said to hold ~350 trades (P2G-37). The spoken and slide DXY figures disagree.
 | D9 | Early-shift handling: V1 unchanged; "final push" and "15m alignment" each tested as single-rule ablations | OQ-23 |
 | D10 | Astra × Fable research governance adopted (CBR-GOV-001) | Governance |
 | D11 | AC-11 split into AC-11A (required: 16-day stratified pipeline proof) and AC-11B (deferred full spot history); failures classified, not auto-FAIL; baseline feed (OQ-24) stays open until parity and cross-feed agreement, frozen before Phase 14, never chosen by profitability | OQ-24, Phase 9 |
+| D12 | Phase 9 rulings: 2020-03-09 DXY hour = DATA_ERROR → MISSING, with detector `DXY_CFD_MISSING_WHILE_DX_ACTIVE`; 2019-03-11 DXY hour stays UNEXPLAINED → MISSING; new class REFERENCE_UNAVAILABLE; `cause_status` field; candle high/low construction is a hard safeguard before Phase 14; 1m/5s DXY structure not validated. Phase 9 PASS WITH CONCERNS, G1 approved with conditions | OQ-25, OQ-26, OQ-27, G1 |
 
 ## Batched questions for the user (historical; answered above)
 

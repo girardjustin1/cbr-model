@@ -1,10 +1,12 @@
-"""Phase 9 historical-data acceptance (CBR-ACC-009 v2) -> reports/phase9-data-acceptance.{json,md}.
+"""Phase 9 historical-data acceptance (CBR-ACC-009 v2.1) -> reports/phase9-data-acceptance.{json,md}.
 
 Usage:
     .venv/bin/python -m cbr.data.phase9_acceptance
 
 Every figure is recomputed from stored files. Every failed check becomes an itemized failure with a stable id; its
 classification comes only from reports/phase9-exceptions.yaml (human-investigated). Unclassified failures force FAIL.
+A DATA_ERROR / UNEXPLAINED_FEED_DIFFERENCE stops blocking only under an owner ruling with handling MISSING whose ruled
+interval is independently flagged by an automated detector (D12); it stays in the report as a concern.
 Holdout-period fixture days are examined for integrity and feed differences only; no trades or performance.
 """
 
@@ -22,6 +24,7 @@ import pandas as pd
 import yaml
 
 from cbr.data import dukascopy_fetch as dk
+from cbr.data import quality as q
 
 ROOT = Path(__file__).resolve().parents[3]
 REPORT_JSON = ROOT / "reports" / "phase9-data-acceptance.json"
@@ -42,8 +45,16 @@ REFERENCE_CLI_TICKS = ("xauusd", "2025-11-10", 285935)
 TOM_PRICE_TOLERANCE = 3.0
 
 CLASSES_FAIL = {"PIPELINE_ERROR", "DATA_ERROR", "UNEXPLAINED_FEED_DIFFERENCE"}
-CLASSES_CONCERN = {"EXPECTED_MARKET_BEHAVIOR", "EXPECTED_FEED_DIFFERENCE"}
+CLASSES_CONCERN = {"EXPECTED_MARKET_BEHAVIOR", "EXPECTED_FEED_DIFFERENCE", "REFERENCE_UNAVAILABLE"}
+CAUSE_STATUS = {"ESTABLISHED", "HYPOTHESIZED", "UNKNOWN"}
+RULED_HANDLING = "MISSING"
 PAIRS = (("xauusd", "gc_front_ohlcv1m", "XAUUSD vs GC"), ("dollaridxusd", "dx_front_ohlcv1m", "DXY CFD vs DX"))
+
+
+def _dx_front() -> pd.DataFrame:
+    dx = pd.read_parquet(ROOT / "data" / "raw" / "databento" / "dx_front_ohlcv1m.parquet")
+    dx = dx[(dx["publisher_id"] == dx["publisher_id"].mode().iloc[0]) & (dx["close"] > 0)]
+    return dx[~dx.index.duplicated()]
 
 
 def fixture_days() -> list[date]:
@@ -127,6 +138,12 @@ def check_candles(inst: str, day: date, label: str, manifest: dict, col: Collect
     crossed = int((c["ask_close"] < c["bid_close"]).sum())
     col.check(f"AC-04/crossed_quotes/{f}", "AC-04", crossed == 0, crossed, 0)
     col.check(f"AC-07/unexpected_gaps/{f}", "AC-07", not unexpected, out["unexpected_gap_runs"], "no unexpected gaps")
+    if inst == "dollaridxusd":
+        start = pd.Timestamp(day, tz="UTC")
+        out["dxy_missing_while_dx_active"] = [
+            {k: (str(v) if isinstance(v, pd.Timestamp) else v) for k, v in r.items()}
+            for r in q.dxy_cfd_missing_while_dx_active(c.index, _dx_front(), start, start + pd.Timedelta(days=1))]
+    out["candle_hl_suspect_minutes"] = int(q.suspect_candle_extrema(c).sum())
     return out
 
 
@@ -173,6 +190,18 @@ def check_tick_window(inst: str, wid: str, label: str, manifest: dict, col: Coll
                                      for c in OHLC},
                **{f"{c}_within_0.05": round(float(((j[c] - j[f"{c}_c"]).abs() <= 0.05).mean()), 4) for c in OHLC}}
         out["candle_reconciliation"] = rec
+        tol = q.load_config()["candle_extrema"]["tick_parity_tolerance"][inst]
+        cs = pd.concat(candles)
+        art = q.artificial_extrema_vs_ticks(cs, m1, tol)
+        suspect = q.suspect_candle_extrema(cs.loc[art.index])
+        out["candle_extrema"] = {
+            "hl_method_candle": sorted(cs["hl_method"].unique()), "hl_method_ticks": sorted(m1["hl_method"].unique()),
+            "tolerance": tol, "minutes": len(art), "artificial_minutes": int(art["artificial"].sum()),
+            "max_high_overstatement": round(float(art["high_overstatement"].max()), 4),
+            "max_low_overstatement": round(float(art["low_overstatement"].max()), 4),
+            "suspect_flagged": int(suspect.sum()), "artificial_and_suspect": int((suspect & art["artificial"]).sum())}
+        col.check(f"AC-06/candle_hl_bound/{key}", "AC-06", bool(art["within_bound"].all()),
+                  int((~art["within_bound"]).sum()), "0 minutes outside the SIDE_EXTREME_MEAN error bound")
         col.check(f"AC-03/candle_open_close_parity/{key}", "AC-03",
                   rec["open_max_abs_diff"] == 0 and rec["close_max_abs_diff"] == 0,
                   {k: rec[k] for k in ("open_max_abs_diff", "close_max_abs_diff")}, "0 difference")
@@ -266,36 +295,68 @@ def history_status(manifest: dict) -> dict:
 
 # ---------------- verdict ----------------
 
-def classify(failures: list[dict]) -> tuple[list[dict], dict]:
-    reg = yaml.safe_load(EXCEPTIONS.read_text()) if EXCEPTIONS.exists() else {}
-    known = {e["id"]: e for e in (reg or {}).get("exceptions", [])}
+def _register() -> dict:
+    return (yaml.safe_load(EXCEPTIONS.read_text()) if EXCEPTIONS.exists() else None) or {}
+
+
+def register_errors(reg: dict) -> list[str]:
+    allowed = CLASSES_FAIL | CLASSES_CONCERN
+    errs = []
+    for e in reg.get("exceptions", []):
+        if e.get("class") not in allowed:
+            errs.append(f"{e.get('id')}: class {e.get('class')!r} not allowed")
+        if e.get("cause_status") not in CAUSE_STATUS:
+            errs.append(f"{e.get('id')}: cause_status {e.get('cause_status')!r} not in {sorted(CAUSE_STATUS)}")
+        if e.get("owner_ruling") and not (e.get("handling") == RULED_HANDLING and e.get("detector")
+                                          and len(e.get("ruled_interval_utc") or []) == 2):
+            errs.append(f"{e.get('id')}: owner ruling needs handling MISSING, detector and ruled_interval_utc")
+    return errs
+
+
+def _detected(f: dict, e: dict, detections: dict) -> bool:
+    """The ruled interval intersects a detector flag with the ruling's reason code, on the failure's instrument/day."""
+    parts = f["id"].split("/")
+    flags = detections.get(f"{parts[2]}/{parts[3]}", []) if len(parts) >= 4 else []
+    lo, hi = (pd.Timestamp(x) for x in e["ruled_interval_utc"])
+    return any(r["reason_code"] == e["detector"] and pd.Timestamp(r["start"]) < hi and pd.Timestamp(r["end"]) > lo
+               for r in flags)
+
+
+def classify(failures: list[dict], detections: dict) -> tuple[list[dict], dict]:
+    reg = _register()
+    known = {e["id"]: e for e in reg.get("exceptions", [])}
     for f in failures:
         e = known.get(f["id"])
         f["class"] = e["class"] if e else "UNCLASSIFIED"
-        f["resolved"] = bool(e and e.get("resolved", False))
+        f["cause_status"] = e.get("cause_status") if e else None
         f["explanation"] = e.get("explanation") if e else None
+        f["owner_ruling"] = e.get("owner_ruling") if e else None
+        f["handling"] = e.get("handling") if e else None
+        f["detected"] = bool(e and e.get("owner_ruling") and _detected(f, e, detections))
+        f["ruled_non_blocking"] = bool(f["class"] in CLASSES_FAIL and f["owner_ruling"]
+                                       and f["handling"] == RULED_HANDLING and f["detected"])
     stale = sorted(set(known) - {f["id"] for f in failures})
-    return failures, {"stale_exception_ids": stale}
+    return failures, {"stale_exception_ids": stale, "register_errors": register_errors(reg)}
 
 
-def verdict(failures: list[dict], criteria: list[str], history: dict) -> dict:
+def verdict(failures: list[dict], criteria: list[str], history: dict, register_errs: list[str]) -> dict:
     blocking = [f for f in failures if f["class"] == "UNCLASSIFIED"
-                or (f["class"] in CLASSES_FAIL and not f["resolved"])]
-    concerns = [f for f in failures if f["class"] in CLASSES_CONCERN]
+                or (f["class"] in CLASSES_FAIL and not f["ruled_non_blocking"])]
+    concerns = [f for f in failures if f not in blocking]
     status = {}
     for c in criteria:
         fs = [f for f in failures if f["criterion"] == c]
         status[c] = ("FAIL" if any(f in blocking for f in fs) else "MET WITH CONCERNS" if fs else "MET")
     ac11b_done = all(h["days_present"] == h["trading_days_required"] for h in history.values())
     status["AC-11B"] = "MET" if ac11b_done else "DEFERRED (outstanding)"
-    if blocking:
+    if blocking or register_errs:
         v = "FAIL"
     elif concerns or not ac11b_done:
         v = "PASS WITH CONCERNS"
     else:
         v = "PASS"
     return {"verdict": v, "criteria_status": status, "blocking": [f["id"] for f in blocking],
-            "concerns": [f["id"] for f in concerns]}
+            "concerns": [f["id"] for f in concerns], "register_errors": register_errs}
 
 
 def evaluate() -> dict:
@@ -314,26 +375,51 @@ def evaluate() -> dict:
                          for sid, d in dk.SAMPLE_DAYS.items()}}
     tom = tom_chart_points(col)
     history = history_status(manifest)
-    failures, meta = classify(col.failures)
+    detections = {c["key"]: c.get("dxy_missing_while_dx_active", [])
+                  for c in fixtures["candles"] + samples["candles"]}
+    failures, meta = classify(col.failures, detections)
     criteria = [f"AC-{i:02d}" for i in range(1, 11)] + ["AC-11A"]
     return {"generated_utc": datetime.now(UTC).isoformat(), "decoder_parity": parity, "fixtures": fixtures,
             "samples": samples, "tom_chart_points": tom, "history_ac11b": history, "failures": failures,
-            **meta, "result": verdict(failures, criteria, history)}
+            **meta, "result": verdict(failures, criteria, history, meta["register_errors"])}
 
 
 def render_md(r: dict) -> str:
     res = r["result"]
     lines = [
         "# Phase 9 Data Acceptance Report", "",
-        f"Generated {r['generated_utc']} by `src/cbr/data/phase9_acceptance.py` against CBR-ACC-009 v2.", "",
+        f"Generated {r['generated_utc']} by `src/cbr/data/phase9_acceptance.py` against CBR-ACC-009 v2.1.", "",
         f"## Verdict: **{res['verdict']}**", "",
         "| Criterion | Status |", "|---|---|",
         *[f"| {k} | {v} |" for k, v in res["criteria_status"].items()], "",
-        f"Blocking failures: {len(res['blocking'])} · Documented concerns: {len(res['concerns'])}", "",
+        (f"Blocking failures: {len(res['blocking'])} · Documented concerns (all preserved): {len(res['concerns'])} · "
+         f"Register errors: {len(res['register_errors'])}"), "",
+        *[f"- register error: {e}" for e in res["register_errors"]],
+        "Concerns stay concerns: classification and owner rulings make a failure non-blocking, never resolved.", "",
         "## Failures and classifications", "",
-        "| Id | Criterion | Observed | Expected | Class | Resolved | Explanation |", "|---|---|---|---|---|---|---|",
-        *[f"| `{f['id']}` | {f['criterion']} | {f['observed']} | {f['expected']} | {f['class']} | {f['resolved']} | "
+        "| Id | Criterion | Observed | Expected | Class | Cause status | Owner ruling / handling / detected | Explanation |",
+        "|---|---|---|---|---|---|---|---|",
+        *[f"| `{f['id']}` | {f['criterion']} | {f['observed']} | {f['expected']} | {f['class']} | {f['cause_status']} | "
+          f"{(f['owner_ruling'] + ' / ' + str(f['handling']) + ' / ' + str(f['detected'])) if f['owner_ruling'] else '—'} | "
           f"{(f['explanation'] or '').replace(chr(10), ' ')} |" for f in r["failures"]], "",
+        "## Detector: DXY_CFD_MISSING_WHILE_DX_ACTIVE (handling MISSING)", "",
+        "| Day | Flagged (DX active span, UTC) | CFD gap (UTC) | Gap min | DX active min | DX volume |",
+        "|---|---|---|---|---|---|",
+        *[f"| {c['key'].split('/')[1]} | {d['start'][11:16]}→{d['end'][11:16]} | {d['cfd_gap_start'][11:16]}→"
+          f"{d['cfd_gap_end'][11:16]} | {d['cfd_gap_minutes']} | {d['dx_active_minutes']} | {d['dx_volume']:.0f} |"
+          for c in r["fixtures"]["candles"] + r["samples"]["candles"] for d in c.get("dxy_missing_while_dx_active", [])],
+        "",
+        "## Candle high/low construction (hard safeguard before Phase 14; OQ-25)", "",
+        ("Candle files: `hl_method = SIDE_EXTREME_MEAN`. Tick-built bars: `TICK_MID`. Artificial = candle extreme beyond "
+         "the tick-mid extreme by more than the tolerance. The error bound is checked on every tick-window minute (AC-06)."),
+        "",
+        "| Tick window | Minutes | Artificial | Max high over | Max low under | Suspect flagged | Artificial & suspect |",
+        "|---|---|---|---|---|---|---|",
+        *[f"| {w['key']} | {w['candle_extrema']['minutes']} | {w['candle_extrema']['artificial_minutes']} | "
+          f"{w['candle_extrema']['max_high_overstatement']} | {w['candle_extrema']['max_low_overstatement']} | "
+          f"{w['candle_extrema']['suspect_flagged']} | {w['candle_extrema']['artificial_and_suspect']} |"
+          for w in r["fixtures"]["tick_windows"] + r["samples"]["tick_windows"] if "candle_extrema" in w],
+        "",
         "## Decoder parity", "", f"{r['decoder_parity']}", "",
         "## Sample days (AC-11A): coverage and feed agreement", "",
         "| Sample | Date | Instrument | Bars | Unexpected gap min | XAU-GC corr | lag | basis jump | DXY-DX corr | lag |",
