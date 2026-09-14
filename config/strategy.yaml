@@ -1,0 +1,108 @@
+# Strategy parameters. The ONLY place numbers live.
+#
+# Every parameter: value, label, source.
+#   label CANON      -> source must list evidence ids present in research/evidence/strategy_evidence.jsonl
+#   label ASSUMPTION -> source must list an open-question id (OQ-xx); research_range required
+#   label IMPL       -> engineering necessity with no trading content; reason required
+# A model version is frozen once backtested. Changing any value = new version id. Never edit in place.
+# Research ranges are declared here BEFORE any backtest; testing outside them requires a hypothesis-log entry.
+
+primitives:
+  version: CBR_PRIMITIVES_V1
+  tick:            {value: 0.01, label: IMPL, reason: "XAUUSD quote increment"}
+  atr_length:      {value: 14,   label: IMPL, reason: "standard Wilder ATR length used only for normalisation"}
+  swing:
+    S5:  {k: {value: 3.0, label: ASSUMPTION, source: [OQ-01], research_range: [2.0, 3.0, 4.0]}, bars: 5s}
+    LTF: {k: {value: 3.0, label: ASSUMPTION, source: [OQ-01], research_range: [2.0, 3.0, 4.0]}, bars: 1m}
+    MTF: {k: {value: 3.0, label: ASSUMPTION, source: [OQ-01], research_range: [2.0, 3.0, 4.0]}, bars: 5m}
+  condition:
+    range_min:        {value: 0.75, label: CANON, source: [E1H-007, E1H-008, E15-014]}
+    trend_max:        {value: 0.50, label: CANON, source: [E1H-007, E1H-046]}
+    correction_cap:   {value: 2.0,  label: IMPL,  reason: "one breakout leg must not dominate the median"}
+    aggregate:        {value: median, label: ASSUMPTION, source: [OQ-02], research_range: [median, mean]}
+  oe:
+    pullback_frac:    {value: 0.50, label: CANON, source: [E1H-018]}
+    activation_atr:   {value: 0.5,  label: ASSUMPTION, source: [OQ-08], research_range: [0.25, 0.5, 1.0],
+                       note: "running extension (x ATR 1m) before the no-pullback check applies"}
+    two_sided_frac:   {value: 0.5,  label: ASSUMPTION, source: [OQ-08], research_range: [0.35, 0.5, 0.65]}
+  t3:
+    max_reversal_minutes:
+      S5:  {value: 3,  label: ASSUMPTION, source: [OQ-09], research_range: [2, 3, 5]}
+      LTF: {value: 15, label: ASSUMPTION, source: [OQ-09], research_range: [10, 15, 30]}
+  hvcs:
+    min_minutes:      {value: 4,   label: CANON, source: [E1H-034, E1H-003]}
+    max_violations:   {value: 1,   label: ASSUMPTION, source: [OQ-08], research_range: [0, 1, 2]}
+    lvcs_body_atr:    {value: 0.3, label: ASSUMPTION, source: [OQ-08], research_range: [0.2, 0.3, 0.5]}
+  aoi:
+    level_timeframes: {value: [30m, 1h], label: CANON, source: [EP2-023, EP2-022]}
+    zone_atr:         {value: 0.5, label: ASSUMPTION, source: [OQ-07], research_range: [0.25, 0.5, 1.0]}
+    lookback_hours:   {value: 24,  label: ASSUMPTION, source: [OQ-07], research_range: [12, 24, 48]}
+  stop:
+    buffer_atr:       {value: 0.1, label: ASSUMPTION, source: [OQ-11], research_range: [0.0, 0.1, 0.25]}
+  min_rr:             {value: 0.0, label: IMPL, reason: "only rejects orders with non-positive reward"}
+  no_trade:
+    sydney_until_utc: {value: "00:00", label: CANON, source: [EP1-017, EP1-015, EP1-016]}
+    rollover_rule:    {value: no_entries_no_holds, label: CANON, source: [EP1-018]}
+    rollover_ny_time: {value: "17:00", label: IMPL, reason: "standard FX/metals daily rollover time, America/New_York; source gives the rule, not the clock time"}
+    rollover_pre_min: {value: 15, label: ASSUMPTION, source: [OQ-16], research_range: [15, 30]}
+    rollover_post_min: {value: 60, label: ASSUMPTION, source: [OQ-16], research_range: [30, 60, 90]}
+    rollover_flat_before_min: {value: 5, label: ASSUMPTION, source: [OQ-16], research_range: [5, 15]}
+
+models:
+  CBR1H_BASELINE_V1:
+    spec: docs/strategy/1h-cbr-machine-spec.md
+    variants:
+      A:     {entry_model: HVCS_HILO,  aoi_required: false}
+      B:     {entry_model: FRACTAL_1M, aoi_required: false}
+      A-AOI: {entry_model: HVCS_HILO,  aoi_required: true}
+      B-AOI: {entry_model: FRACTAL_1M, aoi_required: true}
+    cond:
+      tier: MTF
+      window_hours:   {value: 8,  label: ASSUMPTION, source: [OQ-03], research_range: [5, 8, 12],
+                       note: "canonical window is 5-12+ h (E1H-005); a point value inside it is an assumption"}
+      min_legs:       {value: 3,  label: ASSUMPTION, source: [OQ-02], research_range: [3, 4]}
+    prior:
+      min_count:      {value: 1,  label: ASSUMPTION, source: [OQ-05], research_range: [1, 2]}
+      lookback_hours: {value: 10, label: ASSUMPTION, source: [OQ-05], research_range: [5, 10]}
+    loc:
+      range_extreme:  {value: 0.75, label: CANON, source: [E15-015, E1H-002]}
+      pro_er_min:     {value: 0.50, label: CANON, source: [E1H-012, E1H-015, E15-015]}
+      pro_er_max:     {value: 0.75, label: CANON, source: [E1H-012, E15-015]}
+    oe:
+      min_minutes:    {value: 20,  label: CANON, source: [E1H-018, E1H-002]}
+      min_size_atr:   {value: 0.5, label: ASSUMPTION, source: [OQ-08], research_range: [0.3, 0.5, 0.8],
+                       note: "x ATR(1h,14); operationalises 'sideways hour' invalid"}
+    timing:
+      start_min:      {value: 22, label: CANON, source: [E1H-024]}
+      end_min:        {value: 52, label: CANON, source: [E1H-024]}
+      q30_push_atr:   {value: 0.25, label: ASSUMPTION, source: [OQ-08], research_range: [0.1, 0.25, 0.5]}
+    fractal:
+      pullback_min:   {value: 0.50, label: CANON, source: [E1H-031]}
+
+  CBR15_BASELINE_V1:
+    spec: docs/strategy/15min-cbr-machine-spec.md
+    variants:
+      base: {entry_model: S5_TYPE3, aoi_required: false}
+      AOI:  {entry_model: S5_TYPE3, aoi_required: true}
+    cond:
+      tier: LTF
+      window_hours:   {value: 2.0, label: ASSUMPTION, source: [OQ-03], research_range: [1.5, 2.0, 2.5],
+                       note: "canonical window is 1.5-2.5 h (E15-003, E15-004)"}
+      min_legs:       {value: 3, label: CANON, source: [E15-048]}
+      max_legs:       {value: 6, label: CANON, source: [E15-048]}
+      min_leg_index:  {value: 3, label: CANON, source: [E15-050]}
+    prior:
+      hard_lookback_min: {value: 60,  label: CANON, source: [E15-049]}
+      hard_min_count:    {value: 1,   label: CANON, source: [E15-049]}
+      soft_lookback_min: {value: 120, label: CANON, source: [E15-049]}
+    loc:
+      range_extreme:  {value: 0.75, label: CANON, source: [E15-015]}
+      pro_er_min:     {value: 0.50, label: CANON, source: [E15-015]}
+      pro_er_max:     {value: 0.75, label: CANON, source: [E15-015]}
+    oe:
+      min_minutes:    {value: 4,   label: CANON, source: [E15-021, E15-022]}
+      min_size_atr:   {value: 0.5, label: ASSUMPTION, source: [OQ-08], research_range: [0.3, 0.5, 0.8],
+                       note: "x ATR(15m,14)"}
+    timing:
+      start_mic:      {value: 7.5, label: CANON, source: [E15-027]}
+
