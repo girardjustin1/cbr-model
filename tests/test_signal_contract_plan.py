@@ -22,7 +22,8 @@ def test_signal_schema_is_valid_json_and_covers_owner_minimum():
 
 def test_backtesting_py_not_added_before_phase_14b():
     deps = tomllib.loads((ROOT / "pyproject.toml").read_text())["project"]
-    names = [d.lower() for d in deps["dependencies"] + sum(deps.get("optional-dependencies", {}).values(), [])]
+    extras = [d for group in deps.get("optional-dependencies", {}).values() for d in group]
+    names = [d.lower() for d in deps["dependencies"] + extras]
     assert not any(n.startswith(("backtesting", "bokeh")) for n in names)
 
 
