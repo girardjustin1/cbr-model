@@ -1,5 +1,8 @@
 """Recent feed comparison and higher-timeframe fidelity helpers (CBR-PROT-013B §7, D25) on synthetic data only."""
 
+from datetime import UTC
+from zoneinfo import ZoneInfo
+
 import numpy as np
 import pandas as pd
 import pytest
@@ -150,3 +153,20 @@ def test_criterion_9_thresholds():
     assert c9["status"] == "FAIL_EVIDENCE" and c9["fail_evidence"] == ["condition_at_hour_open"]
     assert c9["concerns"] == ["mtf_swing_membership"]
     assert fc.criterion_9(study, ["ltf_swing_membership", "mtf_swing_membership"], 0.5, 0.8)["status"] == "CONCERN"
+
+
+def test_mixed_timestamp_units_are_normalized(synthetic):
+    """Regression (CBR-RUN-013B-1 incident): FOREXCOM exports load with second-unit, timezone.utc indexes and stored bars with
+    ms, ZoneInfo("UTC");
+    the study must not lose the DatetimeIndex when joining them."""
+    _, s1 = synthetic
+    minutes = fc.comparison_minutes(DAYS, T("2030-01-08 01:00"))
+    dk1m = fc.restrict(s1, minutes)
+    dk_ms = dk1m.drop(dk1m.index[100:103])
+    dk_ms.index = dk_ms.index.tz_convert(ZoneInfo("UTC")).as_unit("ms")
+    fx_s = (dk1m + 0.1).drop(dk1m.index[500:502])
+    fx_s.index = fx_s.index.tz_convert(UTC).as_unit("s")
+    raw = fx_s[["close"]].join(dk_ms[["close"]], how="inner", lsuffix="_fx", rsuffix="_dk")
+    assert not isinstance(raw.index, pd.DatetimeIndex)                     # the failure mode, reproduced
+    study = _study(fx_s, dk_ms, minutes)
+    assert study["alignment"]["matched_minutes"] == len(dk1m) - 5

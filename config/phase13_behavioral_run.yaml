@@ -1,10 +1,19 @@
-# CBR-RUN-013B-1: frozen execution specification of the Phase 13 behavioral-parity run.
+# CBR-RUN-013B-2 (supersedes -1, see incident 1): frozen execution specification of the Phase 13 behavioral-parity run.
 # Protocol CBR-PROT-013B (approved, owner ruling D25). Frozen by `python -m cbr.engine.phase13_behavioral freeze`
 # (hash in reports/phase13-freeze-manifest.json) BEFORE Dukascopy data for the recent days is fetched and BEFORE any
 # Phase 13 engine run. Never edited after the freeze: a change is a new run id and a new freeze.
 # Nothing here is a strategy rule; PC2 parameters are read from the pinned spec files, never from this file.
 
-run_id: CBR-RUN-013B-1
+run_id: CBR-RUN-013B-2
+supersedes:
+  run_id: CBR-RUN-013B-1
+  manifest: reports/phase13-freeze-manifest-CBR-RUN-013B-1.json
+  incident: docs/governance/phase13-run-incident-1.md          # stopped before any result; code fix only
+recent_data_fetched_under_superseded_freeze:                      # tick SHA-256 printed by the run-1 fetch
+  "2026-09-09": cecfb0bb925e3664ddbe4cbe5d7e52c8c746d1f2f1792aff38299d5a2955c2c3
+  "2026-09-10": b1e09a8e87442a496513238ce72ae0817c7dcaa4e83a2176ba6d528e2ce15ac5
+  "2026-09-11": 8c2edcf5188f331659deca1db9de6d2aee370753d8adba236f58fa5349c557a2
+  "2026-09-14": fa654a0b8cda75e4d955ecddfbba0be6b3dd17a5c727fc249621f009a9b4d0c6
 protocol: docs/governance/phase13-behavioral-parity-protocol.md
 ruling: docs/governance/d25-phase13-run-approval.md
 acceptance_criteria: docs/acceptance/phase13-acceptance-criteria.md

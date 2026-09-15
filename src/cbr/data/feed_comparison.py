@@ -55,8 +55,16 @@ def comparison_minutes(days: list[str], start: pd.Timestamp) -> pd.DatetimeIndex
     return out[out >= start]
 
 
+def ns(frame: pd.DataFrame) -> pd.DataFrame:
+    """Same frame with a nanosecond index in one UTC tz object. Exports load in seconds with `datetime.timezone.utc`,
+    stored bars in milliseconds with `ZoneInfo("UTC")`; joining the two gives a plain Index."""
+    out = frame.copy()
+    out.index = pd.DatetimeIndex(out.index).tz_convert("UTC").as_unit("ns")
+    return out
+
+
 def restrict(bars: pd.DataFrame, minutes: pd.DatetimeIndex) -> pd.DataFrame:
-    return bars[bars.index.isin(minutes)][OHLC].astype(float)
+    return ns(bars[bars.index.isin(minutes)][OHLC].astype(float))
 
 
 def rollup(bars_1m: pd.DataFrame, freq: str) -> pd.DataFrame:
@@ -232,6 +240,8 @@ def compare_recent(fx1m: pd.DataFrame, dk1m: pd.DataFrame, minutes: pd.DatetimeI
                    exports: dict[str, pd.DataFrame], band: dict, hour_minutes: list[int], count_margin: pd.Timedelta,
                    lag_range: int = 3, report_percentile: int = 99) -> dict:
     """All §7.1 measurements. `fx1m` / `dk1m` are already restricted to `minutes`."""
+    fx1m, dk1m, minutes = ns(fx1m), ns(dk1m), pd.DatetimeIndex(minutes).tz_convert("UTC").as_unit("ns")
+    exports = {k: ns(v) for k, v in exports.items()}
     out: dict = {}
     # --- alignment, offsets, feed band (D25-P4 via parity.calibrate, the pinned D19-11 implementation)
     cal = parity.calibrate(fx1m, dk1m, floor=band["floor_usd"], percentile=band["residual_percentile"],

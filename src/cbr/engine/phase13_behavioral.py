@@ -56,6 +56,7 @@ FROZEN_FILES = [
     "src/cbr/data/feed_comparison.py", "src/cbr/data/dukascopy_fetch.py", "src/cbr/data/canonical_bars.py",
     "src/cbr/data/v1_dukascopy_readiness.py", "src/cbr/dxy/context.py", "config/dxy_context.yaml",
     "config/data_quality.yaml", "tests/engine/test_phase13_behavioral.py", "tests/test_feed_comparison.py",
+    "docs/governance/phase13-run-incident-1.md",
 ]
 T = lambda s: pd.Timestamp(s).tz_convert("UTC")
 
@@ -117,9 +118,19 @@ def freeze(pytest_summary: str | None = None) -> dict:
     pc2 = yaml.safe_load((ROOT / spec["spec_under_test"]["record"]).read_text())
     if not (pc2["spec_hash"] == spec_hash() == spec["spec_under_test"]["spec_hash"]):
         raise SystemExit("PC2 spec hash mismatch: pinned files changed")
-    present = [str(p.relative_to(ROOT)) for p in recent_tick_paths(spec) if p.exists()]
+    present = [p for p in recent_tick_paths(spec) if p.exists()]
+    prior = spec.get("recent_data_fetched_under_superseded_freeze") or {}
+    data_note = {"recent_dukascopy_absent_at_freeze": not present}
     if present:
-        raise SystemExit(f"recent Dukascopy data already present before the freeze: {present}")
+        # Only a documented superseded freeze may have fetched them (incident record), with unchanged hashes and no
+        # run output from any run.
+        sup = spec.get("supersedes") or {}
+        bad = [p.name for p in present if prior.get(p.stem) != sha(p)]
+        if not prior or bad or len(present) != len(prior) or not (ROOT / sup.get("manifest", "missing")).exists():
+            raise SystemExit(f"recent Dukascopy data present without a matching superseded-freeze record: {bad or present}")
+        if RUN_DIR.exists() and any(RUN_DIR.glob("run-*.json")):
+            raise SystemExit("run output exists: results were produced, a re-freeze isn't allowed")
+        data_note.update({"recent_dukascopy_fetched_under": sup["run_id"], "recent_tick_hashes_verified": True})
     if pytest_summary is None:
         res = subprocess.run([sys.executable, "-m", "pytest", "-q"], cwd=ROOT, capture_output=True, text=True, check=False)
         pytest_summary = res.stdout.strip().splitlines()[-1] if res.stdout.strip() else res.stderr[-400:]
@@ -139,7 +150,7 @@ def freeze(pytest_summary: str | None = None) -> dict:
             "candidate_selection": spec["candidate_selection"], "mismatch_taxonomy": spec["classification"]["order"],
             "structural_event_match": spec["structural_event_match"], "feed_band": spec["feed_band"],
             "acceptance": {"criterion_9": spec["criterion_9"], "verdict": spec["verdict"]}},
-        "recent_dukascopy_absent_at_freeze": True,
+        **data_note, "supersedes": spec.get("supersedes"),
         "pre_execution_tests": pytest_summary, "lint": lint.stdout.strip().splitlines()[-1] if lint.stdout.strip() else "",
         "forexcom_exports": {f: sha(f) for f in sorted({*spec["recent_feed_comparison"]["forexcom_files"].values(),
                                                          *spec["higher_timeframe"]["forexcom_files"].values(),

@@ -195,8 +195,12 @@ def test_end_to_end_pipeline_on_synthetic_data(monkeypatch):
     from cbr.engine import phase13_report as rep
     from tests.test_feed_comparison import _walk
 
+    from zoneinfo import ZoneInfo
+
     s5 = _walk("2030-01-08 00:00", 2 * 24 * 720, seed=5)
     s1 = ps.rollup_structure(s5, "1min")[["open", "high", "low", "close", "tick_count", "hl_method", "price_role"]]
+    for frame in (s5, s1):                                           # stored parquet bars: ms unit, ZoneInfo("UTC")
+        frame.index = frame.index.tz_convert(ZoneInfo("UTC")).as_unit("ms")
     monkeypatch.setattr(pb.cb, "load_structure", lambda a, b, bar: (s1 if bar == "1m" else s5)[
         lambda d: (d.index >= a) & (d.index < b)])
     course = {"example_id": "SYN-1", "mtf_model": {"value": "range", "timestamp": "0"}, "overextension": {"value": "x"},
