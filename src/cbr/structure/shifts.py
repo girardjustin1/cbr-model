@@ -11,8 +11,6 @@ from dataclasses import dataclass
 import numpy as np
 import pandas as pd
 
-from cbr.structure.swings import usable
-
 
 @dataclass(frozen=True)
 class Type3:
@@ -26,51 +24,101 @@ class Type3:
     trigger_price: float
 
 
-def find_type3(bars: pd.DataFrame, swings: pd.DataFrame, *, max_reversal: pd.Timedelta, tick: float,
-               bar_length: pd.Timedelta) -> list[Type3]:
-    """All type 3 events on one tier (EP1-008): with the last two confirmed swings X then Y,
-      X = swing high, Y = the higher/lower low after it  -> SELL: take out X, then break Y
-      X = swing low,  Y = the high after it              -> BUY:  take out X, then break Y
-    The swing to break is the one formed AFTER the swept swing. A pattern is armed once Y is confirmed, stays
-    armed through later confirmations of X's kind (the sweep itself confirms a new extreme), and ends on the
-    break, on timeout after the sweep, or when a new swing of Y's kind is confirmed after the sweep.
-    Uses only swings confirmed at or before each bar's open; the break must be on a later bar than the sweep
-    (IMPL: OHLC has no intrabar order)."""
-    events: list[Type3] = []
-    armed: dict[tuple, dict] = {}
-    seen_pairs: set[tuple] = set()
-    for t, high, low in zip(bars.index, bars["high"], bars["low"], strict=True):
-        known = usable(swings, t)
-        if len(known) >= 2:
-            x, y = known.iloc[-2], known.iloc[-1]
-            if x["kind"] != y["kind"]:
-                key = (x["time"], y["time"])
-                if key not in seen_pairs:
-                    seen_pairs.add(key)
-                    side = "SELL" if x["kind"] == "H" else "BUY"
-                    armed[key] = {"side": side, "swept": x, "broken": y, "sweep_time": None, "extreme": None}
+@dataclass(frozen=True)
+class Type3Arm:
+    """One swept pattern (the moment a type 3 becomes possible), with how it ended."""
+    direction: str
+    swept_swing_time: pd.Timestamp
+    swept_price: float
+    broken_swing_time: pd.Timestamp
+    broken_price: float
+    sweep_time: pd.Timestamp            # open time of the sweeping bar; the arm is known at its close
+    sweep_bar_extreme: float            # high (SELL) / low (BUY) of the sweeping bar
+    trigger_price: float
+    end: str                            # BREAK / TIMEOUT / NEW_SWING / DATA_END
+    end_time: pd.Timestamp | None       # open time of the bar where the end happened
+    extreme_before_end: float           # most extreme price from the sweep up to (not incl.) the break bar
+    pair_was_latest: bool               # the swept/broken pair were the last two confirmed swings at the sweep
+
+
+def track_type3(bars: pd.DataFrame, swings: pd.DataFrame, *, max_reversal: pd.Timedelta, tick: float,
+                latest_pair_only: bool = False) -> list[Type3Arm]:
+    """Every type 3 sweep on one tier and how it ended (EP1-008, EP1-009; spec §4.1).
+
+    With the last two confirmed swings X then Y (Y formed after X): X high → SELL (take out X, then break Y);
+    X low → BUY. A pair is armed once Y is confirmed (swings usable at the bar's open). Ends: BREAK (a later bar breaks
+    Y), TIMEOUT (bar more than `max_reversal` after the sweep), NEW_SWING (a new swing of Y's kind confirmed after the
+    sweep), DATA_END. Swings of X's kind confirmed after the sweep don't disarm.
+
+    `latest_pair_only=False` reproduces `find_type3`'s historical behaviour: an unswept pair stays armed after newer
+    swings confirm. `latest_pair_only=True` applies spec §4.1 literally: an unswept pair is disarmed as soon as a newer
+    swing is confirmed (finding F-3). `pair_was_latest` is recorded either way.
+    """
+    kinds = swings["kind"].to_numpy()
+    prices = swings["price"].to_numpy(dtype=float)
+    stimes = list(swings["time"])                # Timestamps with the swings' own timezone
+    confirmed = pd.DatetimeIndex(swings["confirmed_at"]).as_unit("ns").asi8     # epoch ns (UTC when tz-aware)
+    n_sw, ptr = len(swings), 0
+    arms: list[Type3Arm] = []
+    armed: dict[int, dict] = {}                 # keyed by the index of Y (the swing to break)
+    seen: set[int] = set()
+    bar_ns = bars.index.as_unit("ns").asi8
+    for t, t64, high, low in zip(bars.index, bar_ns, bars["high"].to_numpy(), bars["low"].to_numpy(), strict=True):
+        grew = False
+        while ptr < n_sw and confirmed[ptr] <= t64:
+            ptr, grew = ptr + 1, True
+        if grew and latest_pair_only:
+            for key in [k for k, st in armed.items() if st["sweep_time"] is None and k != ptr - 1]:
+                del armed[key]
+        y = ptr - 1
+        if ptr >= 2 and kinds[y - 1] != kinds[y] and y not in seen:
+            seen.add(y)
+            armed[y] = {"side": "SELL" if kinds[y - 1] == "H" else "BUY", "x": y - 1, "y": y, "sweep_time": None,
+                        "extreme": None, "sweep_bar_extreme": None, "latest": False}
         for key, st in list(armed.items()):
-            side, swept, broken = st["side"], st["swept"], st["broken"]
+            side, x, yy = st["side"], st["x"], st["y"]
             if st["sweep_time"] is None:
-                if (high > swept["price"]) if side == "SELL" else (low < swept["price"]):
-                    st["sweep_time"], st["extreme"] = t, (high if side == "SELL" else low)
+                if (high > prices[x]) if side == "SELL" else (low < prices[x]):
+                    st["sweep_time"], st["sweep_ns"] = t, t64
+                    st["extreme"] = st["sweep_bar_extreme"] = float(high if side == "SELL" else low)
+                    st["latest"] = yy == ptr - 1
                 continue
+            end = None
             if t - st["sweep_time"] > max_reversal:
-                del armed[key]
-                continue
-            new_same_as_broken = known[(known["kind"] == broken["kind"]) & (known["time"] > broken["time"])
-                                       & (known["confirmed_at"] > st["sweep_time"])]
-            if not new_same_as_broken.empty:     # structure moved on before the break: not an immediate reversal
-                del armed[key]
-                continue
-            if (low < broken["price"]) if side == "SELL" else (high > broken["price"]):
-                trigger = broken["price"] - tick if side == "SELL" else broken["price"] + tick
-                events.append(Type3(side, swept["time"], float(swept["price"]), float(broken["price"]),
-                                    st["sweep_time"], t, float(st["extreme"]), float(trigger)))
+                end = "TIMEOUT"
+            else:
+                later = np.arange(yy + 1, ptr)
+                if len(later) and np.any((kinds[later] == kinds[yy])
+                                         & (confirmed[later] > st["sweep_ns"])):
+                    end = "NEW_SWING"
+                elif (low < prices[yy]) if side == "SELL" else (high > prices[yy]):
+                    end = "BREAK"
+            if end:
+                arms.append(_arm(st, prices, stimes, tick, end, t))
                 del armed[key]
                 continue
             st["extreme"] = max(st["extreme"], high) if side == "SELL" else min(st["extreme"], low)
-    return events
+    arms += [_arm(st, prices, stimes, tick, "DATA_END", None) for st in armed.values() if st["sweep_time"] is not None]
+    arms.sort(key=lambda a: (a.sweep_time, a.broken_swing_time))
+    return arms
+
+
+def _arm(st: dict, prices, stimes, tick: float, end: str, end_time) -> Type3Arm:
+    side, x, y = st["side"], st["x"], st["y"]
+    trigger = prices[y] - tick if side == "SELL" else prices[y] + tick
+    return Type3Arm(side, stimes[x], float(prices[x]), stimes[y], float(prices[y]), st["sweep_time"],
+                    st["sweep_bar_extreme"], float(trigger), end, end_time, float(st["extreme"]), bool(st["latest"]))
+
+
+def find_type3(bars: pd.DataFrame, swings: pd.DataFrame, *, max_reversal: pd.Timedelta, tick: float,
+               bar_length: pd.Timedelta, latest_pair_only: bool = False) -> list[Type3]:
+    """Completed type 3 shifts (BREAK) on one tier; see `track_type3`. The break must be on a later bar than the sweep
+    (IMPL: OHLC has no intrabar order)."""
+    return [Type3(a.direction, a.swept_swing_time, a.swept_price, a.broken_price, a.sweep_time, a.end_time,
+                  a.extreme_before_end, a.trigger_price)
+            for a in sorted((x for x in track_type3(bars, swings, max_reversal=max_reversal, tick=tick,
+                                                    latest_pair_only=latest_pair_only) if x.end == "BREAK"),
+                            key=lambda x: (x.end_time, x.broken_swing_time))]
 
 
 def hilo(bars: pd.DataFrame, *, tick: float) -> pd.DataFrame:

@@ -65,6 +65,12 @@ def test_rollup_keeps_role_and_equals_direct_resample():
     assert set(rolled["price_role"]) == {"STRUCTURE"}
 
 
+def test_guard_scan_catches_column_access():
+    pattern = r"""\[\s*["'](bid|ask|spread)\w*["']\s*\]|\.(bid|ask|spread)\w*\b|execution_bars|require_execution"""
+    assert re.search(pattern, 'x = bars["bid_high"]') and re.search(pattern, "y = ticks.ask")
+    assert not re.search(pattern, '{"spread_policy": "ADD_SPREAD_AT_FILL"}')
+
+
 def test_engine_code_never_reads_execution_fields():
     """Signal/structure packages must not reference bid/ask/spread columns (execution belongs to Phase 14A)."""
     offenders = []
@@ -72,7 +78,9 @@ def test_engine_code_never_reads_execution_fields():
         for f in (ROOT / "src" / "cbr" / pkg).rglob("*.py"):
             for n, line in enumerate(f.read_text().splitlines(), 1):
                 code = line.split("#", 1)[0]
-                if re.search(r"""["'](bid|ask)(_\w+)?["']|["']spread\w*["']|execution_bars""", code):
+                # column access or execution builders; contract keys such as "spread_policy": ... are labels, not reads
+                if re.search(r"""\[\s*["'](bid|ask|spread)\w*["']\s*\]|\.(bid|ask|spread)\w*\b|execution_bars|require_execution""",
+                             code):
                     offenders.append(f"{f.relative_to(ROOT)}:{n}")
     assert offenders == []
 

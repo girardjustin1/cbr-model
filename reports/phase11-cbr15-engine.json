@@ -1,0 +1,1290 @@
+{
+  "generated_utc": "2026-09-15T04:40:38.733549+00:00",
+  "windows": [
+    {
+      "window": "CX-LT1-1",
+      "span_utc": [
+        "2025-10-20 18:00",
+        "2025-10-21 06:00",
+        "2025-10-21 01:00",
+        "2025-10-21 02:00"
+      ],
+      "tom": {
+        "direction": "BUY",
+        "entry_utc": "2025-10-21 01:39",
+        "entry": 4340.13,
+        "stop": 4332.96,
+        "target": 4351.59,
+        "model": "CBR1H"
+      },
+      "spec_hash": "acb1ae2df03f415c6a4d6778c2a0cca6695997ae0788f24616067d7c8387a1c4",
+      "result_hash": "551fdba7c6c0097571f02b45bd224d2157bd8dc9af9d10f5e73ee0c9a128fd1d",
+      "deterministic": true,
+      "causality_truncation": [
+        {
+          "cut": "2025-10-21T01:10:00+00:00",
+          "decisions": 1,
+          "identical": true
+        },
+        {
+          "cut": "2025-10-21T01:30:00+00:00",
+          "decisions": 3,
+          "identical": true
+        },
+        {
+          "cut": "2025-10-21T01:50:00+00:00",
+          "decisions": 6,
+          "identical": true
+        }
+      ],
+      "candles": [
+        {
+          "candle_open_utc": "2025-10-21T01:00:00.000Z",
+          "condition": "TRENDING_RANGE",
+          "c_med": 0.7413903183,
+          "n_legs": 5,
+          "cond_direction": "UP",
+          "range_high": 4371.775,
+          "range_low": 4356.3835,
+          "q_open": 4368.7265,
+          "prev_missing_minutes": 0,
+          "cond_02_reason": null,
+          "candidates": 1,
+          "rules_failed": []
+        },
+        {
+          "candle_open_utc": "2025-10-21T01:15:00.000Z",
+          "condition": "RANGE",
+          "c_med": 1.0843136671,
+          "n_legs": 5,
+          "cond_direction": "UP",
+          "range_high": 4372.3365,
+          "range_low": 4356.3835,
+          "q_open": 4359.01,
+          "prev_missing_minutes": 0,
+          "cond_02_reason": null,
+          "candidates": 2,
+          "rules_failed": []
+        },
+        {
+          "candle_open_utc": "2025-10-21T01:30:00.000Z",
+          "condition": "RANGE",
+          "c_med": 1.0843136671,
+          "n_legs": 5,
+          "cond_direction": "UP",
+          "range_high": 4372.3365,
+          "range_low": 4349.47,
+          "q_open": 4350.3885,
+          "prev_missing_minutes": 0,
+          "cond_02_reason": null,
+          "candidates": 2,
+          "rules_failed": []
+        },
+        {
+          "candle_open_utc": "2025-10-21T01:45:00.000Z",
+          "condition": "RANGE",
+          "c_med": 1.1772218073,
+          "n_legs": 6,
+          "cond_direction": "NONE",
+          "range_high": 4372.3365,
+          "range_low": 4332.955,
+          "q_open": 4346.215,
+          "prev_missing_minutes": 0,
+          "cond_02_reason": null,
+          "candidates": 3,
+          "rules_failed": []
+        }
+      ],
+      "candidates": [
+        {
+          "signal_id": "CBR15_BASELINE_V1/base/20251021T0100/BUY/0",
+          "timestamp": "2025-10-21T01:07:00.000Z",
+          "direction": "BUY",
+          "event": "REJECTED",
+          "rules_failed": [
+            "IMPL-REWARD",
+            "M15-COND-03",
+            "M15-OE-02",
+            "M15-OE-03a"
+          ],
+          "rules_not_evaluated": [
+            "M15-HTF-01"
+          ],
+          "condition": "TRENDING_RANGE",
+          "n_legs": 5,
+          "c_med": 0.7413903183,
+          "oe_duration_min": 6.0,
+          "oe_size": 7.1015,
+          "oe_extreme": 4361.625,
+          "sweep_bar_extreme": 4361.625,
+          "sweep_beyond_oe_extreme": false,
+          "t3_extreme_before_end": 4358.37,
+          "entry_reference_price": 4366.815,
+          "target_price": 4365.17575,
+          "prior_played_out_60m": 0,
+          "cancel_reason": "OE_PULLBACK",
+          "structure_trigger_touch_time": null
+        },
+        {
+          "signal_id": "CBR15_BASELINE_V1/base/20251021T0115/BUY/0",
+          "timestamp": "2025-10-21T01:24:20.000Z",
+          "direction": "BUY",
+          "event": "REJECTED",
+          "rules_failed": [
+            "IMPL-REWARD",
+            "M15-COND-03",
+            "M15-OE-01",
+            "M15-OE-02",
+            "M15-OE-03b"
+          ],
+          "rules_not_evaluated": [
+            "M15-HTF-01"
+          ],
+          "condition": "RANGE",
+          "n_legs": 5,
+          "c_med": 1.0843136671,
+          "oe_duration_min": 2.0,
+          "oe_size": 4.735,
+          "oe_extreme": 4354.275,
+          "sweep_bar_extreme": 4355.375,
+          "sweep_beyond_oe_extreme": false,
+          "t3_extreme_before_end": 4349.47,
+          "entry_reference_price": 4358.455,
+          "target_price": 4356.6425,
+          "prior_played_out_60m": 0,
+          "cancel_reason": "OE_PULLBACK",
+          "structure_trigger_touch_time": null
+        },
+        {
+          "signal_id": "CBR15_BASELINE_V1/base/20251021T0115/BUY/1",
+          "timestamp": "2025-10-21T01:28:55.000Z",
+          "direction": "BUY",
+          "event": "REJECTED",
+          "rules_failed": [
+            "M15-COND-03",
+            "M15-OE-02"
+          ],
+          "rules_not_evaluated": [
+            "M15-HTF-01"
+          ],
+          "condition": "RANGE",
+          "n_legs": 5,
+          "c_med": 1.0843136671,
+          "oe_duration_min": 11.0,
+          "oe_size": 9.54,
+          "oe_extreme": 4349.47,
+          "sweep_bar_extreme": 4350.09,
+          "sweep_beyond_oe_extreme": false,
+          "t3_extreme_before_end": 4350.025,
+          "entry_reference_price": 4352.61,
+          "target_price": 4354.24,
+          "prior_played_out_60m": 0,
+          "cancel_reason": "OE_PULLBACK",
+          "structure_trigger_touch_time": "2025-10-21T01:29:05.000Z"
+        },
+        {
+          "signal_id": "CBR15_BASELINE_V1/base/20251021T0130/BUY/0",
+          "timestamp": "2025-10-21T01:35:40.000Z",
+          "direction": "BUY",
+          "event": "REJECTED",
+          "rules_failed": [
+            "IMPL-REWARD",
+            "M15-COND-03",
+            "M15-OE-01"
+          ],
+          "rules_not_evaluated": [
+            "M15-HTF-01"
+          ],
+          "condition": "RANGE",
+          "n_legs": 5,
+          "c_med": 1.0843136671,
+          "oe_duration_min": 0.0,
+          "oe_size": 8.7685,
+          "oe_extreme": 4341.62,
+          "sweep_bar_extreme": 4344.1785,
+          "sweep_beyond_oe_extreme": false,
+          "t3_extreme_before_end": 4335.2115,
+          "entry_reference_price": 4347.43,
+          "target_price": 4346.00425,
+          "prior_played_out_60m": 0,
+          "cancel_reason": "OE_PULLBACK",
+          "structure_trigger_touch_time": null
+        },
+        {
+          "signal_id": "CBR15_BASELINE_V1/base/20251021T0130/BUY/1",
+          "timestamp": "2025-10-21T01:38:40.000Z",
+          "direction": "BUY",
+          "event": "REJECTED",
+          "rules_failed": [
+            "M15-COND-03",
+            "M15-OE-02"
+          ],
+          "rules_not_evaluated": [
+            "M15-HTF-01"
+          ],
+          "condition": "RANGE",
+          "n_legs": 5,
+          "c_med": 1.0843136671,
+          "oe_duration_min": 7.0,
+          "oe_size": 15.177,
+          "oe_extreme": 4335.2115,
+          "sweep_bar_extreme": 4334.7815,
+          "sweep_beyond_oe_extreme": true,
+          "t3_extreme_before_end": 4332.955,
+          "entry_reference_price": 4340.185,
+          "target_price": 4342.8,
+          "prior_played_out_60m": 0,
+          "cancel_reason": "OE_PULLBACK",
+          "structure_trigger_touch_time": "2025-10-21T01:39:35.000Z"
+        },
+        {
+          "signal_id": "CBR15_BASELINE_V1/base/20251021T0145/BUY/0",
+          "timestamp": "2025-10-21T01:49:00.000Z",
+          "direction": "BUY",
+          "event": "REJECTED",
+          "rules_failed": [
+            "IMPL-REWARD",
+            "M15-COND-03",
+            "M15-LOC-01",
+            "M15-LOC-04",
+            "M15-OE-01",
+            "M15-OE-02",
+            "M15-OE-03a",
+            "M15-OE-03b"
+          ],
+          "rules_not_evaluated": [
+            "M15-HTF-01"
+          ],
+          "condition": "RANGE",
+          "n_legs": 6,
+          "c_med": 1.1772218073,
+          "oe_duration_min": 3.0,
+          "oe_size": 3.405,
+          "oe_extreme": 4342.81,
+          "sweep_bar_extreme": 4342.81,
+          "sweep_beyond_oe_extreme": false,
+          "t3_extreme_before_end": 4339.165,
+          "entry_reference_price": 4347.04,
+          "target_price": 4344.5125,
+          "prior_played_out_60m": 0,
+          "cancel_reason": "OE_PULLBACK",
+          "structure_trigger_touch_time": "2025-10-21T01:51:35.000Z"
+        },
+        {
+          "signal_id": "CBR15_BASELINE_V1/base/20251021T0145/BUY/1",
+          "timestamp": "2025-10-21T01:56:10.000Z",
+          "direction": "BUY",
+          "event": "REJECTED",
+          "rules_failed": [
+            "IMPL-REWARD",
+            "M15-COND-03",
+            "M15-LOC-04",
+            "M15-OE-02"
+          ],
+          "rules_not_evaluated": [
+            "M15-HTF-01"
+          ],
+          "condition": "RANGE",
+          "n_legs": 6,
+          "c_med": 1.1772218073,
+          "oe_duration_min": 5.0,
+          "oe_size": 7.05,
+          "oe_extreme": 4339.165,
+          "sweep_bar_extreme": 4344.87,
+          "sweep_beyond_oe_extreme": false,
+          "t3_extreme_before_end": 4344.425,
+          "entry_reference_price": 4348.195,
+          "target_price": 4342.69,
+          "prior_played_out_60m": 0,
+          "cancel_reason": "OE_PULLBACK",
+          "structure_trigger_touch_time": null
+        },
+        {
+          "signal_id": "CBR15_BASELINE_V1/base/20251021T0145/BUY/2",
+          "timestamp": "2025-10-21T01:58:05.000Z",
+          "direction": "BUY",
+          "event": "REJECTED",
+          "rules_failed": [
+            "IMPL-REWARD",
+            "M15-COND-03",
+            "M15-LOC-04",
+            "M15-OE-02"
+          ],
+          "rules_not_evaluated": [
+            "M15-HTF-01"
+          ],
+          "condition": "RANGE",
+          "n_legs": 6,
+          "c_med": 1.1772218073,
+          "oe_duration_min": 5.0,
+          "oe_size": 7.05,
+          "oe_extreme": 4339.165,
+          "sweep_bar_extreme": 4344.1,
+          "sweep_beyond_oe_extreme": false,
+          "t3_extreme_before_end": 4344.1,
+          "entry_reference_price": 4347.185,
+          "target_price": 4342.69,
+          "prior_played_out_60m": 0,
+          "cancel_reason": "WINDOW_END",
+          "structure_trigger_touch_time": "2025-10-21T01:58:30.000Z"
+        }
+      ],
+      "rule_failures": [
+        [
+          "M15-COND-03",
+          8
+        ],
+        [
+          "M15-OE-02",
+          7
+        ],
+        [
+          "IMPL-REWARD",
+          6
+        ],
+        [
+          "M15-OE-01",
+          3
+        ],
+        [
+          "M15-LOC-04",
+          3
+        ],
+        [
+          "M15-OE-03a",
+          2
+        ],
+        [
+          "M15-OE-03b",
+          2
+        ],
+        [
+          "M15-LOC-01",
+          1
+        ]
+      ],
+      "armed_signals": []
+    },
+    {
+      "window": "CX-TE1-1",
+      "span_utc": [
+        "2025-10-23 20:00",
+        "2025-10-24 06:00",
+        "2025-10-24 04:00",
+        "2025-10-24 05:00"
+      ],
+      "tom": {
+        "direction": "BUY",
+        "entry_utc": "2025-10-24 04:37",
+        "model": "CBR1H"
+      },
+      "spec_hash": "acb1ae2df03f415c6a4d6778c2a0cca6695997ae0788f24616067d7c8387a1c4",
+      "result_hash": "0884ef8f30a4f3bbf64b74848134211e3d0b0f4e2cdc0a14bd1eca5598047754",
+      "deterministic": true,
+      "causality_truncation": [
+        {
+          "cut": "2025-10-24T04:10:00+00:00",
+          "decisions": 1,
+          "identical": true
+        },
+        {
+          "cut": "2025-10-24T04:30:00+00:00",
+          "decisions": 9,
+          "identical": true
+        },
+        {
+          "cut": "2025-10-24T04:50:00+00:00",
+          "decisions": 12,
+          "identical": true
+        }
+      ],
+      "candles": [
+        {
+          "candle_open_utc": "2025-10-24T04:00:00.000Z",
+          "condition": "RANGE",
+          "c_med": 1.2421319797,
+          "n_legs": 4,
+          "cond_direction": "UP",
+          "range_high": 4123.62,
+          "range_low": 4107.61,
+          "q_open": 4122.44,
+          "prev_missing_minutes": 0,
+          "cond_02_reason": null,
+          "candidates": 3,
+          "rules_failed": []
+        },
+        {
+          "candle_open_utc": "2025-10-24T04:15:00.000Z",
+          "condition": "RANGE",
+          "c_med": 1.2504589611,
+          "n_legs": 5,
+          "cond_direction": "UP",
+          "range_high": 4123.62,
+          "range_low": 4107.61,
+          "q_open": 4116.58,
+          "prev_missing_minutes": 0,
+          "cond_02_reason": null,
+          "candidates": 6,
+          "rules_failed": []
+        },
+        {
+          "candle_open_utc": "2025-10-24T04:30:00.000Z",
+          "condition": "RANGE",
+          "c_med": 1.2421319797,
+          "n_legs": 4,
+          "cond_direction": "UP",
+          "range_high": 4123.62,
+          "range_low": 4105.2335,
+          "q_open": 4107.025,
+          "prev_missing_minutes": 0,
+          "cond_02_reason": null,
+          "candidates": 2,
+          "rules_failed": []
+        },
+        {
+          "candle_open_utc": "2025-10-24T04:45:00.000Z",
+          "condition": "RANGE",
+          "c_med": 1.0654798341,
+          "n_legs": 3,
+          "cond_direction": "UP",
+          "range_high": 4123.62,
+          "range_low": 4102.8815,
+          "q_open": 4106.72,
+          "prev_missing_minutes": 0,
+          "cond_02_reason": null,
+          "candidates": 3,
+          "rules_failed": []
+        }
+      ],
+      "candidates": [
+        {
+          "signal_id": "CBR15_BASELINE_V1/base/20251024T0400/BUY/0",
+          "timestamp": "2025-10-24T04:07:20.000Z",
+          "direction": "BUY",
+          "event": "REJECTED",
+          "rules_failed": [
+            "IMPL-REWARD",
+            "M15-COND-03",
+            "M15-LOC-01",
+            "M15-LOC-04",
+            "M15-OE-02"
+          ],
+          "rules_not_evaluated": [
+            "M15-HTF-01"
+          ],
+          "condition": "RANGE",
+          "n_legs": 4,
+          "c_med": 1.2421319797,
+          "oe_duration_min": 4.0,
+          "oe_size": 6.05,
+          "oe_extreme": 4116.39,
+          "sweep_bar_extreme": 4116.3,
+          "sweep_beyond_oe_extreme": true,
+          "t3_extreme_before_end": 4115.96,
+          "entry_reference_price": 4119.4535,
+          "target_price": 4119.415,
+          "prior_played_out_60m": 0,
+          "cancel_reason": "OE_PULLBACK",
+          "structure_trigger_touch_time": null
+        },
+        {
+          "signal_id": "CBR15_BASELINE_V1/base/20251024T0400/BUY/1",
+          "timestamp": "2025-10-24T04:12:20.000Z",
+          "direction": "BUY",
+          "event": "REJECTED",
+          "rules_failed": [
+            "M15-COND-03",
+            "M15-LOC-01",
+            "M15-OE-02"
+          ],
+          "rules_not_evaluated": [
+            "M15-HTF-01"
+          ],
+          "condition": "RANGE",
+          "n_legs": 4,
+          "c_med": 1.2421319797,
+          "oe_duration_min": 8.0,
+          "oe_size": 6.48,
+          "oe_extreme": 4115.96,
+          "sweep_bar_extreme": 4116.81,
+          "sweep_beyond_oe_extreme": false,
+          "t3_extreme_before_end": 4116.245,
+          "entry_reference_price": 4119.1915,
+          "target_price": 4119.2,
+          "prior_played_out_60m": 0,
+          "cancel_reason": "OE_PULLBACK",
+          "structure_trigger_touch_time": null
+        },
+        {
+          "signal_id": "CBR15_BASELINE_V1/base/20251024T0400/BUY/2",
+          "timestamp": "2025-10-24T04:14:10.000Z",
+          "direction": "BUY",
+          "event": "REJECTED",
+          "rules_failed": [
+            "M15-COND-03",
+            "M15-LOC-01",
+            "M15-OE-02"
+          ],
+          "rules_not_evaluated": [
+            "M15-HTF-01"
+          ],
+          "condition": "RANGE",
+          "n_legs": 4,
+          "c_med": 1.2421319797,
+          "oe_duration_min": 8.0,
+          "oe_size": 6.48,
+          "oe_extreme": 4115.96,
+          "sweep_bar_extreme": 4115.71,
+          "sweep_beyond_oe_extreme": true,
+          "t3_extreme_before_end": 4115.665,
+          "entry_reference_price": 4117.3135,
+          "target_price": 4119.2,
+          "prior_played_out_60m": 0,
+          "cancel_reason": "WINDOW_END",
+          "structure_trigger_touch_time": null
+        },
+        {
+          "signal_id": "CBR15_BASELINE_V1/base/20251024T0415/BUY/0",
+          "timestamp": "2025-10-24T04:18:15.000Z",
+          "direction": "BUY",
+          "event": "REJECTED",
+          "rules_failed": [
+            "IMPL-REWARD",
+            "M15-COND-03",
+            "M15-LOC-01",
+            "M15-OE-01",
+            "M15-OE-03b"
+          ],
+          "rules_not_evaluated": [
+            "M15-HTF-01"
+          ],
+          "condition": "RANGE",
+          "n_legs": 5,
+          "c_med": 1.2504589611,
+          "oe_duration_min": 1.0,
+          "oe_size": 2.435,
+          "oe_extreme": 4114.145,
+          "sweep_bar_extreme": 4113.765,
+          "sweep_beyond_oe_extreme": true,
+          "t3_extreme_before_end": 4112.7935,
+          "entry_reference_price": 4115.53,
+          "target_price": 4115.3625,
+          "prior_played_out_60m": 0,
+          "cancel_reason": "T3_NEW_SWING",
+          "structure_trigger_touch_time": null
+        },
+        {
+          "signal_id": "CBR15_BASELINE_V1/base/20251024T0415/BUY/1",
+          "timestamp": "2025-10-24T04:19:20.000Z",
+          "direction": "BUY",
+          "event": "REJECTED",
+          "rules_failed": [
+            "M15-COND-03",
+            "M15-LOC-01",
+            "M15-OE-01",
+            "M15-OE-03b"
+          ],
+          "rules_not_evaluated": [
+            "M15-HTF-01"
+          ],
+          "condition": "RANGE",
+          "n_legs": 5,
+          "c_med": 1.2504589611,
+          "oe_duration_min": 3.0,
+          "oe_size": 2.815,
+          "oe_extreme": 4113.765,
+          "sweep_bar_extreme": 4112.23,
+          "sweep_beyond_oe_extreme": true,
+          "t3_extreme_before_end": 4107.79,
+          "entry_reference_price": 4114.64,
+          "target_price": 4115.1725,
+          "prior_played_out_60m": 0,
+          "cancel_reason": "T3_TIMEOUT",
+          "structure_trigger_touch_time": null
+        },
+        {
+          "signal_id": "CBR15_BASELINE_V1/base/20251024T0415/BUY/2",
+          "timestamp": "2025-10-24T04:23:50.000Z",
+          "direction": "BUY",
+          "event": "REJECTED",
+          "rules_failed": [
+            "M15-COND-03"
+          ],
+          "rules_not_evaluated": [
+            "M15-HTF-01"
+          ],
+          "condition": "RANGE",
+          "n_legs": 5,
+          "c_med": 1.2504589611,
+          "oe_duration_min": 6.0,
+          "oe_size": 8.79,
+          "oe_extreme": 4107.79,
+          "sweep_bar_extreme": 4107.72,
+          "sweep_beyond_oe_extreme": true,
+          "t3_extreme_before_end": 4107.5,
+          "entry_reference_price": 4109.74,
+          "target_price": 4112.185,
+          "prior_played_out_60m": 0,
+          "cancel_reason": "T3_NEW_SWING",
+          "structure_trigger_touch_time": null
+        },
+        {
+          "signal_id": "CBR15_BASELINE_V1/base/20251024T0415/BUY/3",
+          "timestamp": "2025-10-24T04:24:15.000Z",
+          "direction": "BUY",
+          "event": "REJECTED",
+          "rules_failed": [
+            "M15-COND-03"
+          ],
+          "rules_not_evaluated": [
+            "M15-HTF-01"
+          ],
+          "condition": "RANGE",
+          "n_legs": 5,
+          "c_med": 1.2504589611,
+          "oe_duration_min": 8.0,
+          "oe_size": 9.08,
+          "oe_extreme": 4107.5,
+          "sweep_bar_extreme": 4107.44,
+          "sweep_beyond_oe_extreme": true,
+          "t3_extreme_before_end": 4107.0835,
+          "entry_reference_price": 4109.13,
+          "target_price": 4112.04,
+          "prior_played_out_60m": 0,
+          "cancel_reason": "WINDOW_END",
+          "structure_trigger_touch_time": "2025-10-24T04:24:45.000Z"
+        },
+        {
+          "signal_id": "CBR15_BASELINE_V1/base/20251024T0415/BUY/4",
+          "timestamp": "2025-10-24T04:25:05.000Z",
+          "direction": "BUY",
+          "event": "REJECTED",
+          "rules_failed": [
+            "M15-COND-03"
+          ],
+          "rules_not_evaluated": [
+            "M15-HTF-01"
+          ],
+          "condition": "RANGE",
+          "n_legs": 5,
+          "c_med": 1.2504589611,
+          "oe_duration_min": 9.0,
+          "oe_size": 11.3465,
+          "oe_extreme": 4105.2335,
+          "sweep_bar_extreme": 4105.61,
+          "sweep_beyond_oe_extreme": false,
+          "t3_extreme_before_end": 4105.52,
+          "entry_reference_price": 4109.27,
+          "target_price": 4110.90675,
+          "prior_played_out_60m": 0,
+          "cancel_reason": "WINDOW_END",
+          "structure_trigger_touch_time": "2025-10-24T04:26:55.000Z"
+        },
+        {
+          "signal_id": "CBR15_BASELINE_V1/base/20251024T0415/BUY/5",
+          "timestamp": "2025-10-24T04:28:35.000Z",
+          "direction": "BUY",
+          "event": "REJECTED",
+          "rules_failed": [
+            "M15-COND-03"
+          ],
+          "rules_not_evaluated": [
+            "M15-HTF-01"
+          ],
+          "condition": "RANGE",
+          "n_legs": 5,
+          "c_med": 1.2504589611,
+          "oe_duration_min": 9.0,
+          "oe_size": 11.3465,
+          "oe_extreme": 4105.2335,
+          "sweep_bar_extreme": 4107.265,
+          "sweep_beyond_oe_extreme": false,
+          "t3_extreme_before_end": 4105.4,
+          "entry_reference_price": 4109.505,
+          "target_price": 4110.90675,
+          "prior_played_out_60m": 0,
+          "cancel_reason": "WINDOW_END",
+          "structure_trigger_touch_time": null
+        },
+        {
+          "signal_id": "CBR15_BASELINE_V1/base/20251024T0430/BUY/0",
+          "timestamp": "2025-10-24T04:33:30.000Z",
+          "direction": "BUY",
+          "event": "REJECTED",
+          "rules_failed": [
+            "IMPL-REWARD",
+            "M15-COND-03",
+            "M15-OE-01",
+            "M15-OE-03b"
+          ],
+          "rules_not_evaluated": [
+            "M15-HTF-01"
+          ],
+          "condition": "RANGE",
+          "n_legs": 4,
+          "c_med": 1.2421319797,
+          "oe_duration_min": 0.0,
+          "oe_size": 3.27,
+          "oe_extreme": 4103.755,
+          "sweep_bar_extreme": 4103.875,
+          "sweep_beyond_oe_extreme": false,
+          "t3_extreme_before_end": 4103.51,
+          "entry_reference_price": 4106.565,
+          "target_price": 4105.39,
+          "prior_played_out_60m": 0,
+          "cancel_reason": "OE_PULLBACK",
+          "structure_trigger_touch_time": null
+        },
+        {
+          "signal_id": "CBR15_BASELINE_V1/base/20251024T0430/BUY/1",
+          "timestamp": "2025-10-24T04:36:40.000Z",
+          "direction": "BUY",
+          "event": "REJECTED",
+          "rules_failed": [
+            "IMPL-REWARD",
+            "M15-COND-03",
+            "M15-OE-02",
+            "M15-OE-03b"
+          ],
+          "rules_not_evaluated": [
+            "M15-HTF-01"
+          ],
+          "condition": "RANGE",
+          "n_legs": 4,
+          "c_med": 1.2421319797,
+          "oe_duration_min": 4.0,
+          "oe_size": 3.515,
+          "oe_extreme": 4103.51,
+          "sweep_bar_extreme": 4103.29,
+          "sweep_beyond_oe_extreme": true,
+          "t3_extreme_before_end": 4102.8815,
+          "entry_reference_price": 4105.565,
+          "target_price": 4105.2675,
+          "prior_played_out_60m": 0,
+          "cancel_reason": "OE_PULLBACK",
+          "structure_trigger_touch_time": "2025-10-24T04:38:55.000Z"
+        },
+        {
+          "signal_id": "CBR15_BASELINE_V1/base/20251024T0445/SELL/0",
+          "timestamp": "2025-10-24T04:47:40.000Z",
+          "direction": "SELL",
+          "event": "REJECTED",
+          "rules_failed": [
+            "IMPL-REWARD",
+            "M15-COND-03",
+            "M15-LOC-01",
+            "M15-OE-01",
+            "M15-OE-02",
+            "M15-OE-03b"
+          ],
+          "rules_not_evaluated": [
+            "M15-HTF-01"
+          ],
+          "condition": "RANGE",
+          "n_legs": 3,
+          "c_med": 1.0654798341,
+          "oe_duration_min": 1.0,
+          "oe_size": 2.335,
+          "oe_extreme": 4109.055,
+          "sweep_bar_extreme": 4109.075,
+          "sweep_beyond_oe_extreme": true,
+          "t3_extreme_before_end": 4113.8,
+          "entry_reference_price": 4107.75,
+          "target_price": 4107.8875,
+          "prior_played_out_60m": 0,
+          "cancel_reason": "OE_PULLBACK",
+          "structure_trigger_touch_time": null
+        },
+        {
+          "signal_id": "CBR15_BASELINE_V1/base/20251024T0445/SELL/1",
+          "timestamp": "2025-10-24T04:53:50.000Z",
+          "direction": "SELL",
+          "event": "REJECTED",
+          "rules_failed": [
+            "M15-COND-03",
+            "M15-LOC-01",
+            "M15-OE-02"
+          ],
+          "rules_not_evaluated": [
+            "M15-HTF-01"
+          ],
+          "condition": "RANGE",
+          "n_legs": 3,
+          "c_med": 1.0654798341,
+          "oe_duration_min": 4.0,
+          "oe_size": 7.08,
+          "oe_extreme": 4113.8,
+          "sweep_bar_extreme": 4113.415,
+          "sweep_beyond_oe_extreme": false,
+          "t3_extreme_before_end": 4113.48,
+          "entry_reference_price": 4111.845,
+          "target_price": 4110.26,
+          "prior_played_out_60m": 0,
+          "cancel_reason": "OE_PULLBACK",
+          "structure_trigger_touch_time": null
+        },
+        {
+          "signal_id": "CBR15_BASELINE_V1/base/20251024T0445/SELL/2",
+          "timestamp": "2025-10-24T04:58:25.000Z",
+          "direction": "SELL",
+          "event": "REJECTED",
+          "rules_failed": [
+            "M15-COND-03",
+            "M15-LOC-01",
+            "M15-OE-02"
+          ],
+          "rules_not_evaluated": [
+            "M15-HTF-01"
+          ],
+          "condition": "RANGE",
+          "n_legs": 3,
+          "c_med": 1.0654798341,
+          "oe_duration_min": 4.0,
+          "oe_size": 7.08,
+          "oe_extreme": 4113.8,
+          "sweep_bar_extreme": 4112.88,
+          "sweep_beyond_oe_extreme": false,
+          "t3_extreme_before_end": 4112.88,
+          "entry_reference_price": 4111.865,
+          "target_price": 4110.26,
+          "prior_played_out_60m": 0,
+          "cancel_reason": "OE_PULLBACK",
+          "structure_trigger_touch_time": "2025-10-24T04:59:00.000Z"
+        }
+      ],
+      "rule_failures": [
+        [
+          "M15-COND-03",
+          14
+        ],
+        [
+          "M15-LOC-01",
+          8
+        ],
+        [
+          "M15-OE-02",
+          7
+        ],
+        [
+          "IMPL-REWARD",
+          5
+        ],
+        [
+          "M15-OE-03b",
+          5
+        ],
+        [
+          "M15-OE-01",
+          4
+        ],
+        [
+          "M15-LOC-04",
+          1
+        ]
+      ],
+      "armed_signals": []
+    },
+    {
+      "window": "CX-LT3-2",
+      "span_utc": [
+        "2025-11-07 12:00",
+        "2025-11-10 03:00",
+        "2025-11-10 01:00",
+        "2025-11-10 02:00"
+      ],
+      "tom": {
+        "direction": "SELL",
+        "entry_utc": "2025-11-10 01:40",
+        "model": "CBR1H"
+      },
+      "spec_hash": "acb1ae2df03f415c6a4d6778c2a0cca6695997ae0788f24616067d7c8387a1c4",
+      "result_hash": "b4eee2f039bca4a4b2fbb57288a36358e50184dd643eed690b7a2dc503e4c1fc",
+      "deterministic": true,
+      "causality_truncation": [
+        {
+          "cut": "2025-11-10T01:10:00+00:00",
+          "decisions": 1,
+          "identical": true
+        },
+        {
+          "cut": "2025-11-10T01:30:00+00:00",
+          "decisions": 4,
+          "identical": true
+        },
+        {
+          "cut": "2025-11-10T01:50:00+00:00",
+          "decisions": 6,
+          "identical": true
+        }
+      ],
+      "candles": [
+        {
+          "candle_open_utc": "2025-11-10T01:00:00.000Z",
+          "condition": "RANGE",
+          "c_med": 0.886409533,
+          "n_legs": 9,
+          "cond_direction": "UP",
+          "range_high": 4023.995,
+          "range_low": 3997.95,
+          "q_open": 4020.425,
+          "prev_missing_minutes": 0,
+          "cond_02_reason": "LOWER_TF_RANGE",
+          "candidates": 2,
+          "rules_failed": [
+            "M15-COND-02"
+          ]
+        },
+        {
+          "candle_open_utc": "2025-11-10T01:15:00.000Z",
+          "condition": "RANGE",
+          "c_med": 0.8533530572,
+          "n_legs": 8,
+          "cond_direction": "UP",
+          "range_high": 4029.4265,
+          "range_low": 4004.4,
+          "q_open": 4027.24,
+          "prev_missing_minutes": 0,
+          "cond_02_reason": "LOWER_TF_RANGE",
+          "candidates": 2,
+          "rules_failed": [
+            "M15-COND-02"
+          ]
+        },
+        {
+          "candle_open_utc": "2025-11-10T01:30:00.000Z",
+          "condition": "RANGE",
+          "c_med": 0.8533530572,
+          "n_legs": 6,
+          "cond_direction": "UP",
+          "range_high": 4052.0115,
+          "range_low": 4004.4,
+          "q_open": 4047.865,
+          "prev_missing_minutes": 0,
+          "cond_02_reason": null,
+          "candidates": 1,
+          "rules_failed": []
+        },
+        {
+          "candle_open_utc": "2025-11-10T01:45:00.000Z",
+          "condition": "TREND",
+          "c_med": 0.4978079878,
+          "n_legs": 4,
+          "cond_direction": "UP",
+          "range_high": 4053.425,
+          "range_low": 4005.1435,
+          "q_open": 4050.885,
+          "prev_missing_minutes": 0,
+          "cond_02_reason": null,
+          "candidates": 4,
+          "rules_failed": [
+            "M15-COND-01"
+          ]
+        }
+      ],
+      "candidates": [
+        {
+          "signal_id": "CBR15_BASELINE_V1/base/20251110T0100/SELL/0",
+          "timestamp": "2025-11-10T01:07:55.000Z",
+          "direction": "SELL",
+          "event": "REJECTED",
+          "rules_failed": [
+            "IMPL-REWARD",
+            "M15-COND-02",
+            "M15-COND-03",
+            "M15-OE-01"
+          ],
+          "rules_not_evaluated": [
+            "M15-HTF-01"
+          ],
+          "condition": "RANGE",
+          "n_legs": 9,
+          "c_med": 0.886409533,
+          "oe_duration_min": 0.0,
+          "oe_size": 4.27,
+          "oe_extreme": 4024.695,
+          "sweep_bar_extreme": 4022.575,
+          "sweep_beyond_oe_extreme": false,
+          "t3_extreme_before_end": 4023.52,
+          "entry_reference_price": 4021.015,
+          "target_price": 4022.56,
+          "prior_played_out_60m": 0,
+          "cancel_reason": "WINDOW_END",
+          "structure_trigger_touch_time": "2025-11-10T01:09:25.000Z"
+        },
+        {
+          "signal_id": "CBR15_BASELINE_V1/base/20251110T0100/SELL/1",
+          "timestamp": "2025-11-10T01:10:30.000Z",
+          "direction": "SELL",
+          "event": "REJECTED",
+          "rules_failed": [
+            "IMPL-REWARD",
+            "M15-COND-02",
+            "M15-COND-03",
+            "M15-OE-01"
+          ],
+          "rules_not_evaluated": [
+            "M15-HTF-01"
+          ],
+          "condition": "RANGE",
+          "n_legs": 9,
+          "c_med": 0.886409533,
+          "oe_duration_min": 0.0,
+          "oe_size": 4.27,
+          "oe_extreme": 4024.695,
+          "sweep_bar_extreme": 4023.88,
+          "sweep_beyond_oe_extreme": false,
+          "t3_extreme_before_end": 4029.4265,
+          "entry_reference_price": 4020.445,
+          "target_price": 4022.56,
+          "prior_played_out_60m": 0,
+          "cancel_reason": "OE_PULLBACK",
+          "structure_trigger_touch_time": null
+        },
+        {
+          "signal_id": "CBR15_BASELINE_V1/base/20251110T0115/SELL/0",
+          "timestamp": "2025-11-10T01:18:35.000Z",
+          "direction": "SELL",
+          "event": "REJECTED",
+          "rules_failed": [
+            "IMPL-REWARD",
+            "M15-COND-02",
+            "M15-COND-03",
+            "M15-OE-01"
+          ],
+          "rules_not_evaluated": [
+            "M15-HTF-01"
+          ],
+          "condition": "RANGE",
+          "n_legs": 8,
+          "c_med": 0.8533530572,
+          "oe_duration_min": 1.0,
+          "oe_size": 4.49,
+          "oe_extreme": 4031.73,
+          "sweep_bar_extreme": 4031.825,
+          "sweep_beyond_oe_extreme": true,
+          "t3_extreme_before_end": 4040.27,
+          "entry_reference_price": 4028.54,
+          "target_price": 4029.485,
+          "prior_played_out_60m": 0,
+          "cancel_reason": "OE_PULLBACK",
+          "structure_trigger_touch_time": null
+        },
+        {
+          "signal_id": "CBR15_BASELINE_V1/base/20251110T0115/SELL/1",
+          "timestamp": "2025-11-10T01:26:05.000Z",
+          "direction": "SELL",
+          "event": "REJECTED",
+          "rules_failed": [
+            "M15-COND-02",
+            "M15-COND-03",
+            "M15-OE-02"
+          ],
+          "rules_not_evaluated": [
+            "M15-HTF-01"
+          ],
+          "condition": "RANGE",
+          "n_legs": 8,
+          "c_med": 0.8533530572,
+          "oe_duration_min": 9.0,
+          "oe_size": 19.905,
+          "oe_extreme": 4047.145,
+          "sweep_bar_extreme": 4047.17,
+          "sweep_beyond_oe_extreme": true,
+          "t3_extreme_before_end": 4052.0115,
+          "entry_reference_price": 4043.965,
+          "target_price": 4037.1925,
+          "prior_played_out_60m": 0,
+          "cancel_reason": "OE_PULLBACK",
+          "structure_trigger_touch_time": null
+        },
+        {
+          "signal_id": "CBR15_BASELINE_V1/base/20251110T0130/SELL/0",
+          "timestamp": "2025-11-10T01:43:35.000Z",
+          "direction": "SELL",
+          "event": "REJECTED",
+          "rules_failed": [
+            "IMPL-REWARD",
+            "M15-COND-03",
+            "M15-OE-02"
+          ],
+          "rules_not_evaluated": [
+            "M15-HTF-01"
+          ],
+          "condition": "RANGE",
+          "n_legs": 6,
+          "c_med": 0.8533530572,
+          "oe_duration_min": 7.0,
+          "oe_size": 5.56,
+          "oe_extreme": 4053.425,
+          "sweep_bar_extreme": 4052.74,
+          "sweep_beyond_oe_extreme": false,
+          "t3_extreme_before_end": 4052.74,
+          "entry_reference_price": 4048.53,
+          "target_price": 4050.645,
+          "prior_played_out_60m": 0,
+          "cancel_reason": "OE_PULLBACK",
+          "structure_trigger_touch_time": null
+        },
+        {
+          "signal_id": "CBR15_BASELINE_V1/base/20251110T0145/SELL/0",
+          "timestamp": "2025-11-10T01:50:00.000Z",
+          "direction": "SELL",
+          "event": "REJECTED",
+          "rules_failed": [
+            "IMPL-REWARD",
+            "M15-COND-01",
+            "M15-COND-03",
+            "M15-LOC-04",
+            "M15-OE-02",
+            "M15-OE-03a",
+            "M15-OE-03b"
+          ],
+          "rules_not_evaluated": [
+            "M15-HTF-01"
+          ],
+          "condition": "TREND",
+          "n_legs": 4,
+          "c_med": 0.4978079878,
+          "oe_duration_min": 4.0,
+          "oe_size": 1.955,
+          "oe_extreme": 4052.84,
+          "sweep_bar_extreme": 4052.84,
+          "sweep_beyond_oe_extreme": false,
+          "t3_extreme_before_end": 4052.84,
+          "entry_reference_price": 4050.96,
+          "target_price": 4051.8625,
+          "prior_played_out_60m": 0,
+          "cancel_reason": "T3_BREAK_BEFORE_WINDOW",
+          "structure_trigger_touch_time": "2025-11-10T01:50:40.000Z"
+        },
+        {
+          "signal_id": "CBR15_BASELINE_V1/base/20251110T0145/BUY/0",
+          "timestamp": "2025-11-10T01:52:50.000Z",
+          "direction": "BUY",
+          "event": "REJECTED",
+          "rules_failed": [
+            "IMPL-REWARD",
+            "M15-COND-01",
+            "M15-COND-03",
+            "M15-LOC-04",
+            "M15-OE-02",
+            "M15-OE-03a",
+            "M15-OE-03b"
+          ],
+          "rules_not_evaluated": [
+            "M15-HTF-01"
+          ],
+          "condition": "TREND",
+          "n_legs": 4,
+          "c_med": 0.4978079878,
+          "oe_duration_min": 6.0,
+          "oe_size": 3.825,
+          "oe_extreme": 4047.06,
+          "sweep_bar_extreme": 4047.03,
+          "sweep_beyond_oe_extreme": true,
+          "t3_extreme_before_end": 4042.82,
+          "entry_reference_price": 4049.935,
+          "target_price": 4048.9725,
+          "prior_played_out_60m": 0,
+          "cancel_reason": "OE_PULLBACK",
+          "structure_trigger_touch_time": null
+        },
+        {
+          "signal_id": "CBR15_BASELINE_V1/base/20251110T0145/BUY/1",
+          "timestamp": "2025-11-10T01:54:55.000Z",
+          "direction": "BUY",
+          "event": "REJECTED",
+          "rules_failed": [
+            "M15-COND-01",
+            "M15-COND-03",
+            "M15-OE-02"
+          ],
+          "rules_not_evaluated": [
+            "M15-HTF-01"
+          ],
+          "condition": "TREND",
+          "n_legs": 4,
+          "c_med": 0.4978079878,
+          "oe_duration_min": 8.0,
+          "oe_size": 7.1085,
+          "oe_extreme": 4043.7765,
+          "sweep_bar_extreme": 4042.6315,
+          "sweep_beyond_oe_extreme": true,
+          "t3_extreme_before_end": 4041.5765,
+          "entry_reference_price": 4046.15,
+          "target_price": 4047.33075,
+          "prior_played_out_60m": 0,
+          "cancel_reason": "OE_PULLBACK",
+          "structure_trigger_touch_time": null
+        },
+        {
+          "signal_id": "CBR15_BASELINE_V1/base/20251110T0145/BUY/2",
+          "timestamp": "2025-11-10T01:56:25.000Z",
+          "direction": "BUY",
+          "event": "REJECTED",
+          "rules_failed": [
+            "M15-COND-01",
+            "M15-COND-03",
+            "M15-OE-02"
+          ],
+          "rules_not_evaluated": [
+            "M15-HTF-01"
+          ],
+          "condition": "TREND",
+          "n_legs": 4,
+          "c_med": 0.4978079878,
+          "oe_duration_min": 10.0,
+          "oe_size": 9.185,
+          "oe_extreme": 4041.7,
+          "sweep_bar_extreme": 4041.4765,
+          "sweep_beyond_oe_extreme": true,
+          "t3_extreme_before_end": 4041.4665,
+          "entry_reference_price": 4044.33,
+          "target_price": 4046.2925,
+          "prior_played_out_60m": 0,
+          "cancel_reason": "OE_PULLBACK",
+          "structure_trigger_touch_time": "2025-11-10T01:57:25.000Z"
+        }
+      ],
+      "rule_failures": [
+        [
+          "M15-COND-03",
+          9
+        ],
+        [
+          "IMPL-REWARD",
+          6
+        ],
+        [
+          "M15-OE-02",
+          6
+        ],
+        [
+          "M15-COND-02",
+          4
+        ],
+        [
+          "M15-COND-01",
+          4
+        ],
+        [
+          "M15-OE-01",
+          3
+        ],
+        [
+          "M15-LOC-04",
+          2
+        ],
+        [
+          "M15-OE-03a",
+          2
+        ],
+        [
+          "M15-OE-03b",
+          2
+        ]
+      ],
+      "armed_signals": []
+    }
+  ]
+}

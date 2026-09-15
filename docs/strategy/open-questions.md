@@ -326,6 +326,55 @@ recordings, or the Notion journal) · `RESEARCH PARAMETER` (legitimately ambiguo
   so its reproducibility and structure-window needs must be shown.
 - **Status.** `DEFERRED` (owner, D16-4).
 
+### OQ-34 · CBR15 hourly veto needs the CBR1H engine (Phase 11 sequencing)
+- **Problem.** M15-HTF-01 vetoes a 15m setup against an ARMED/FILLED `CBR1H_BASELINE_V1-A` setup in the same hour. That
+  engine is Phase 12, so Phase 11 can't evaluate the veto.
+- **Handling now.** Injected dependency; default `NOT_EVALUATED`. Rule outcome `None`, signals carry
+  `data_confidence = REDUCED` with `HTF_NOT_EVALUATED`. Raw setups for COND-03 treat a not-evaluated veto as not failing.
+- **Also open.** "ARMED or FILLED": FILLED is an execution state (Phase 14A). Proposed reading: the veto uses the hourly
+  engine's ARMED signals active at `as_of` (signal logic only), with FILLED added once execution exists, never by
+  reading bid/ask in the engine.
+- **Status.** `NEEDS USER DECISION` before CBR15 signals are baseline-eligible (after Phase 12).
+
+### OQ-35 · Stop anchor instant and granularity for CBR15 (and OE extreme at 5s)
+- **Problem.** Three spec statements disagree: M15-SL-01 "stop beyond `oe_extreme`" (no instant); M1H-SL-01
+  "`oe_extreme` **(at fill)**"; primitives §4.1 "`t3.sweep_extreme` (the stop anchor, EP1-012)". The OE is computed on
+  **closed 1m bars**, so at a 5s decision the current minute's sweep is excluded.
+- **Evidence (Phase 11, CX-LT1-1 01:38:40 BUY, tick mid).** `oe_extreme` at decision (closed 1m) **4335.21**; 5s sweep
+  bar 4334.78; extreme before the structure break at 01:39:35 **4332.955**. Tom's stop: **4332.96**. Tom's stop matches
+  the extreme at fill / sweep extreme, not the literal decision-time 1m value.
+- **Options.** (a) literal: `oe_extreme` from closed 1m at decision (implemented now) · (b) structure extreme **at
+  fill** including 5s bars, provided to the simulator as a precomputed STRUCTURE anchor path (step function over the
+  order's life), so execution never reads structure bars (D16) · (c) `t3.sweep_extreme` up to the break.
+  Related: whether location (`pos`) and OE duration should use 5s-inclusive extremes.
+- **Constraint.** Decided on spec fidelity and parity evidence (Phase 13), never trade outcomes. Interacts with OQ-28.
+- **Status.** `NEEDS USER DECISION` before Phase 13 parity.
+
+### OQ-36 · Outcome basis of "raw setups that played out" (M15-COND-03; extends OQ-05)
+- **Problem.** COND-03 needs past setups that reached target before stop. Under D16 signal code can't read bid/ask, and
+  execution doesn't exist yet.
+- **Handling now.** Raw setups are resolved on STRUCTURE 5s bars: trigger touch within the order window, then target vs
+  stop touch (stop = anchor ± buffer, no spread), stop first on the same bar, forced flat at the rollover flat window. Only
+  outcomes resolved by the candle open count. No aggregate outcome statistics are produced.
+- **Options.** (a) STRUCTURE touches (implemented; mirrors how a chart shows "played out") · (b) execution-layer
+  outcomes fed back once 14A exists (couples signal logic to execution assumptions).
+- **Observation (not a decision input).** On the three course-example windows COND-03 failed for every candidate; on
+  CX-TE1-1 four candidates failed only COND-03.
+- **Status.** `NEEDS USER DECISION` before baselines.
+
+### OQ-37 · CBR15 location in a trending range without a direction
+- **Problem.** M15-LOC-02/03 need `cond.direction` (UP/DOWN). When the LTF swings give `NONE`, the CBR15 spec is silent.
+  The CBR1H spec blocks this case (M1H-COND-03, ASSUMPTION).
+- **Handling now.** `M15-LOC-TR-NODIR = False` (blocked by analogy), recorded per candidate.
+- **Status.** `NEEDS USER DECISION` (confirm the analogy or define another reading).
+
+### OQ-38 · Type 3 break before the 7.5-minute fill window
+- **Problem.** A 5s type 3 can arm and break (on STRUCTURE price) before mic 7.5. M15-TIME-01 allows fills only from 7.5.
+  A stop order placed after an earlier break would fill at the window open beyond the trigger.
+- **Handling now.** Lifecycle cancel `T3_BREAK_BEFORE_WINDOW` at the structure break time (the shift fired in the first
+  half, E15-027 "second half" entries). A setup re-arms only on a new sweep.
+- **Status.** `NEEDS USER DECISION` (confirm or define re-entry behaviour).
+
 ### OQ-31 · How does the ledger use the hindsight vendor-gap mask? (Phase 10)
 - **Problem.** At a decision time inside a DXY CFD vendor outage, a causal module can't yet tell the outage from thin
   quoting. The Phase 10 module shows the last quote for up to `max_quote_age_minutes` (10, IMPL) with REDUCED
