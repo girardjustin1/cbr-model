@@ -1,0 +1,107 @@
+{
+  "generated_utc": "2026-09-15T12:29:31+00:00",
+  "decision": "D21",
+  "days": [
+    {
+      "day": "2025-10-22",
+      "ticks_present": true,
+      "problems": [],
+      "ticks": {
+        "rows": 566221,
+        "monotonic_timestamps": true,
+        "duplicate_ticks_exact": 0,
+        "duplicate_timestamps": 0,
+        "non_positive_prices": 0,
+        "bad_spreads_ask_le_bid": 0,
+        "spread_quantiles": {
+          "50": 0.85,
+          "99": 2.327,
+          "100": 5.902
+        },
+        "first_ts": "2025-10-22 00:00:00.065000+00:00",
+        "last_ts": "2025-10-22 23:59:59.999000+00:00"
+      },
+      "raw_manifest_hash_matches": true,
+      "tick_sha256": "67e84b4841d16e4f03c816c6f2a27546b33f68fdeaa6295983ba4762e1bf882e",
+      "structure_1m": {
+        "present": true,
+        "rows": 1380,
+        "price_role_structure": true,
+        "deterministic_rebuild": true,
+        "manifest_sha_matches": true,
+        "manifest_source_tick_sha_matches": true,
+        "manifest_role": "STRUCTURE"
+      },
+      "structure_5s": {
+        "present": true,
+        "rows": 16538,
+        "price_role_structure": true,
+        "deterministic_rebuild": true,
+        "manifest_sha_matches": true,
+        "manifest_source_tick_sha_matches": true,
+        "manifest_role": "STRUCTURE"
+      },
+      "session": {
+        "scheduled_open_minutes": 1380,
+        "scheduled_closed_minutes": 60,
+        "bars_1m": 1380,
+        "missing_scheduled_open_minutes": 0,
+        "missing_runs": [],
+        "bars_inside_scheduled_closure": 0
+      },
+      "vendor_gap_minutes": 0,
+      "ready": true
+    },
+    {
+      "day": "2025-11-11",
+      "ticks_present": true,
+      "problems": [],
+      "ticks": {
+        "rows": 271884,
+        "monotonic_timestamps": true,
+        "duplicate_ticks_exact": 0,
+        "duplicate_timestamps": 0,
+        "non_positive_prices": 0,
+        "bad_spreads_ask_le_bid": 0,
+        "spread_quantiles": {
+          "50": 0.55,
+          "99": 0.797,
+          "100": 4.404
+        },
+        "first_ts": "2025-11-11 00:00:00.102000+00:00",
+        "last_ts": "2025-11-11 23:59:57.288000+00:00"
+      },
+      "raw_manifest_hash_matches": true,
+      "tick_sha256": "bc493fd5cb334d12c2f60b46202b623f651c4d741ef75e01bcd7376069f4fae9",
+      "structure_1m": {
+        "present": true,
+        "rows": 1380,
+        "price_role_structure": true,
+        "deterministic_rebuild": true,
+        "manifest_sha_matches": true,
+        "manifest_source_tick_sha_matches": true,
+        "manifest_role": "STRUCTURE"
+      },
+      "structure_5s": {
+        "present": true,
+        "rows": 16374,
+        "price_role_structure": true,
+        "deterministic_rebuild": true,
+        "manifest_sha_matches": true,
+        "manifest_source_tick_sha_matches": true,
+        "manifest_role": "STRUCTURE"
+      },
+      "session": {
+        "scheduled_open_minutes": 1380,
+        "scheduled_closed_minutes": 60,
+        "bars_1m": 1380,
+        "missing_scheduled_open_minutes": 0,
+        "missing_runs": [],
+        "bars_inside_scheduled_closure": 0
+      },
+      "vendor_gap_minutes": 0,
+      "ready": true
+    }
+  ],
+  "all_ready": true
+}
