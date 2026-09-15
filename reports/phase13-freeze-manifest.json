@@ -1,0 +1,171 @@
+{
+  "run_id": "CBR-RUN-013B-2",
+  "frozen_utc": "2026-09-15T22:20:39+00:00",
+  "ruling": "D25",
+  "git_commit": "eb1a9f372d9a30514ab130e7902b9793c2b70450",
+  "git_branch": "cbr-work_091526-4pm",
+  "files": {
+    "docs/governance/phase13-behavioral-parity-protocol.md": "7a364f70cff2a780536ce4912b256ad056ac0804de07f439acca988dc88ffc7f",
+    "docs/governance/d25-phase13-run-approval.md": "4672b9065e71f266371357dd54465a7952b1583dbc8bd8d04191f18d562f1b9a",
+    "config/phase13_behavioral_run.yaml": "2dafe514d545442e27ca3b0b18a570da1a500e9997ca5832444732738d743a07",
+    "docs/acceptance/phase13-acceptance-criteria.md": "2fd525ca58d202a44b7e2dd2d795de29222c0b5789a013ecfd6abcd0a1e0abc5",
+    "docs/governance/phase13-parity-protocol.md": "a5e0c4199ee515844088579f43d8de70d8098fd479f20c2f285b53153deee834",
+    "docs/governance/d24-phase13-fidelity-revision.md": "5eab38711069e4ac440b28f0a7b5fea228edc49e416d16cc8a9699b8e6f4da82",
+    "docs/strategy/parity-candidates/CBR1H_BASELINE_V1-PC2.yaml": "4f0e00c591ac0bd3c60fac393cbffe17bb765da6dba1237cefae9f3ee39738da",
+    "docs/strategy/parity-candidates/CBR15_BASELINE_V1-PC2.yaml": "8d5ffeddb7ced2003e19a4925daa97d8f04aeefa878fc063f0db1b4f2c0df360",
+    "research/examples/course_examples.jsonl": "4f2f6650baa4d76c0789dc550572ac32188d45b06a389e9d0e6c8a48f73e27d2",
+    "src/cbr/engine/parity.py": "803946c4d8c3d543bd352d2bd50fba7d69546a9be2f7f91bced31e30ae62ff28",
+    "src/cbr/engine/phase13_behavioral.py": "866662bdde0bd73bc57137234a5975518055e5f630fdcf6fc474c0750198de9a",
+    "src/cbr/data/feed_comparison.py": "a353661fe4b9cf4bb3df090adea60d73a7288ad095e5d3fcf8144f2082459fa9",
+    "src/cbr/data/dukascopy_fetch.py": "fad7bcfdb7ab83b1561bc27ca7067c5eede37b129ec9f7f4cead0cc8e1a1591f",
+    "src/cbr/data/canonical_bars.py": "06af04fcd43eb884261506cad07bfe9ebcdac4c6f2e7ed70e7fc63a66a93b59f",
+    "src/cbr/data/v1_dukascopy_readiness.py": "772e5bab0938419cd2fe0194a1dfcbd7806f48b0e5bb0cd517d37826ba8b676f",
+    "src/cbr/dxy/context.py": "ea0f0c5f7a840301e872ce1a4779d9af9ed390b431d17d285492d7dfaadda79e",
+    "config/dxy_context.yaml": "0bdb82bb4cee2f5226052fd612d2f8261aa7fedcc12395ecd915ca18f70ea73b",
+    "config/data_quality.yaml": "0b04de1edf2716701b924cd6daa8843a912e4cc84f21984130b4fc2a65dbd7b7",
+    "tests/engine/test_phase13_behavioral.py": "f10c2a150f7e1ad429714e5213a0965e64a3caedb906bf3a9c1a9b4f48613271",
+    "tests/test_feed_comparison.py": "2871bb318b211f1f3b7168e7b42a4a9c0f476b10efb2fff40a05851dba5c2e1d",
+    "docs/governance/phase13-run-incident-1.md": "01131e01096b62d5005e1f217044a88d366aa8dc23fcabc9d55ae22c7e38e29c"
+  },
+  "pc2": {
+    "record": "docs/strategy/parity-candidates/CBR1H_BASELINE_V1-PC2.yaml",
+    "spec_hash": "4dadc8b99cc4134888e5778704c0863d269d6f43ef9a5e47b1ba07fcb1b663b2",
+    "spec_files": {
+      "docs/strategy/cbr-primitives-machine-spec.md": "52a14d8c2aacb4a349f3de30525e4e752fb95a1eba9a10cc7741029f14005059",
+      "docs/strategy/15min-cbr-machine-spec.md": "6cda00d704ca8a3c1b1de211990a9a0bfb7f01c020a290c44b52a7abf65bc68e",
+      "config/strategy.yaml": "024a791e4211b01050cbf0140240b7e36476f03f2b860b35b1e930a2dd26ef5f",
+      "config/data_sources.yaml": "0d3041932937822328bfe13c624c0b1d9b36b48695364d9a34ed1f11e5c1aec6",
+      "src/cbr/engine/cbr15.py": "df1b0e460fc6bb2bc598c6ab090b7235556d822067c3247d3d9cbb3ad97721ca",
+      "src/cbr/engine/params.py": "4acd295a2453237a340d492fd4ba69702cb0ee1fa42723e6a9ec942216cd2a46",
+      "src/cbr/structure/swings.py": "d7c956eac7241dfeb8ef49455407699ab8633e57a04d887265d6bab9e8992073",
+      "src/cbr/structure/condition.py": "d818e0ed7ad586c7d061b2a0ff6ed47fd665667e20d8a3e5e99848d95e67a52d",
+      "src/cbr/structure/overextension.py": "30078ea0851d9cc086079e75f0a02e05023ecd584098cbe73f15f846dcac60c3",
+      "src/cbr/structure/shifts.py": "fd8418f404c348a5ed2a03fdd2fba35ae157724105170db6e08f090b0c9d17b0",
+      "src/cbr/structure/levels.py": "b6f85a859bfa911c4e927948d71f03b2cb3bab7535996990a4afc67230cbbaae",
+      "src/cbr/structure/indicators.py": "3435235bb3a86b43d0a97628d264b68e1f369a0290a6b5e288f95865e6f3ff5b",
+      "src/cbr/data/price_series.py": "9dd8993b6f590c06b304ac6af0f0197f00841c658f5e5a15cba421d33544effd",
+      "src/cbr/engine/common.py": "d5c9bea2c33a1d99e2d414a14413e05eb44f1f9a0cfabd4ac41ffc2fb0819264",
+      "docs/strategy/1h-cbr-machine-spec.md": "64772accb276fe9cb76cb52cc11e29095cfb0568eb6c78e892fad46eca70e80f",
+      "src/cbr/engine/cbr1h.py": "103440421808bfcdb92050993f99795e1ad27744f21624538a693008594c98b9",
+      "src/cbr/data/sessions.py": "bee25e7843dabd3518b6b01e063f9d3e21bd05973ff7c218aca21372ff1a25d8"
+    },
+    "selection_protocol": {
+      "src/cbr/engine/parity.py": "803946c4d8c3d543bd352d2bd50fba7d69546a9be2f7f91bced31e30ae62ff28",
+      "docs/governance/phase13-parity-protocol.md": "a5e0c4199ee515844088579f43d8de70d8098fd479f20c2f285b53153deee834"
+    }
+  },
+  "frozen_items": {
+    "recent_days": [
+      "2026-09-09",
+      "2026-09-10",
+      "2026-09-11",
+      "2026-09-14"
+    ],
+    "course_examples": {
+      "CX-LT1-1": "POSITIVE",
+      "CX-TE1-1": "POSITIVE",
+      "CX-LT3-2": "POSITIVE",
+      "CX-LT3-1": "NEGATIVE_CONTROL"
+    },
+    "candidate_selection": {
+      "code": "src/cbr/engine/parity.py",
+      "order": [
+        "SELECTED_ARMED",
+        "DIAGNOSTIC_ONLY",
+        "DIAGNOSTIC_FIRST_IN_ORDER"
+      ],
+      "per": [
+        "variant",
+        "view"
+      ],
+      "scored_variant": "D25 O-3: the first variant in order A, B whose BASELINE_SPEC evaluated candidate meets all four hard dimensions; otherwise the variant meeting the most hard dimensions (ties \u2192 A). Both variants always reported in full",
+      "candidate_identity_across_views": [
+        "variant",
+        "direction",
+        "five_second_sweep_time",
+        "five_second_shift_level"
+      ]
+    },
+    "mismatch_taxonomy": [
+      "DATA_LIMITATION",
+      "FEED_DIFFERENCE",
+      "FEED_DEPENDENT_SIGNAL_DIFFERENCE",
+      "EXECUTION_DEPENDENT",
+      "OWNER_BASELINE_CHOICE",
+      "UNRESOLVED_SPEC_AMBIGUITY",
+      "IMPLEMENTATION_BUG",
+      "CANON_MISMATCH"
+    ],
+    "structural_event_match": {
+      "same_event_kind": "5s type 3 shift",
+      "same_direction": true,
+      "same_15m_candle_as_tom_entry": true,
+      "max_abs_time_difference_minutes": 3,
+      "bar_tolerance": 1,
+      "never_used_for_selection": true
+    },
+    "feed_band": {
+      "implementation": "parity.calibrate",
+      "floor_usd": 0.02,
+      "residual_percentile": 95,
+      "round_up_to_usd": 0.05,
+      "also_report_percentile": 99,
+      "lag_range_minutes": 3,
+      "role": "descriptive; used only in the protocol \u00a76 materiality (margin) test; never an equality tolerance or strategy parameter"
+    },
+    "acceptance": {
+      "criterion_9": {
+        "core_concepts": [
+          "ltf_swing_membership",
+          "mtf_swing_membership",
+          "takes_15m",
+          "hour_extension_direction",
+          "condition_at_hour_open",
+          "type3_1m",
+          "hour_level_membership"
+        ],
+        "fail_evidence_if_rate_below": 0.5,
+        "concern_if_rate_below": 0.8,
+        "basis": "point estimate (Wilson 95% interval reported alongside)"
+      },
+      "verdict": {
+        "FAIL": [
+          "a complete-run repeat or an engine-run repeat is not identical (gate A)",
+          "the PC2 spec hash or a pinned file changed (gate B)",
+          "a hard dimension fails in a positive example with a class other than OWNER_BASELINE_CHOICE",
+          "an open IMPLEMENTATION_BUG affects signal membership (examples or negative control)",
+          "criterion 9 FAIL evidence"
+        ],
+        "OWNER_DETERMINATION_REQUIRED": [
+          "a hard dimension fails only with OWNER_BASELINE_CHOICE (D25 O-5)"
+        ],
+        "PASS": [
+          "no FAIL or OWNER_DETERMINATION_REQUIRED condition",
+          "every non-DXY dimension of the scored variants BEHAVIORAL_MATCH and every positive example ARMED",
+          "negative control has no eligible canonical signal",
+          "criterion 9 met without concern"
+        ],
+        "PASS_WITH_CONCERNS": "otherwise"
+      }
+    }
+  },
+  "recent_dukascopy_absent_at_freeze": false,
+  "recent_dukascopy_fetched_under": "CBR-RUN-013B-1",
+  "recent_tick_hashes_verified": true,
+  "supersedes": {
+    "run_id": "CBR-RUN-013B-1",
+    "manifest": "reports/phase13-freeze-manifest-CBR-RUN-013B-1.json",
+    "incident": "docs/governance/phase13-run-incident-1.md"
+  },
+  "pre_execution_tests": "528 passed, 1 skipped in 44.04s",
+  "lint": "[*] 1 fixable with the `--fix` option.",
+  "forexcom_exports": {
+    "references/tom-chart-data/FOREXCOM_XAUUSD, 1.csv": "5fb0a1b5d1ca717e2c03989eae6a138bfd2ede9494c82b106a4576abfd945e28",
+    "references/tom-chart-data/FOREXCOM_XAUUSD, 15.csv": "69b731582a2e161cbdd06590a281bf894b7692969a5cbca0c4f3ce3bec018a68",
+    "references/tom-chart-data/FOREXCOM_XAUUSD, 1D.csv": "891c30eb69cc230472a4b71e6b6af700e3fe09a516c38a72bf4a8416459f431b",
+    "references/tom-chart-data/FOREXCOM_XAUUSD, 240.csv": "a83531dd6fd32a55123ad2355b23a4eff54e5f246044116a1c10bd198915d55a",
+    "references/tom-chart-data/FOREXCOM_XAUUSD, 5.csv": "5d8f2d185eec39bbe272a6b2e8281cb0021b5f115807ff47648c3924f09c38a2",
+    "references/tom-chart-data/FOREXCOM_XAUUSD, 60.csv": "dd7814e2227d0f3dd62ca420aac2a9d74f90516fee9fcb081ed4a31c45daf299",
+    "references/tom-chart-data/TVC_DXY, 60.csv": "1602a763e7c5269e1d6642454097f2f0497aa6fb90382e64b4f9d5aac946a2a5"
+  }
+}
