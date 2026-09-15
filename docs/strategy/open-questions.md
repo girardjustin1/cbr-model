@@ -254,8 +254,12 @@ recordings, or the Notion journal) · `RESEARCH PARAMETER` (legitimately ambiguo
   extremes, (2) tick-derived mid/bid/ask options, (3) full-history availability, (4) implications for CBR15 and CBR1H,
   (5) implications for spot/futures/hybrid baselines, (6) implementation cost, (7) recommended choice, (8) validation
   tests. Never selected by profitability.
-- **Status.** `HARD PRECONDITION` for Phase 11 reliance on historical highs/lows (swings, ranges, extensions, sweeps,
-  stops, targets) and for Phase 14 (gate G2d). Open.
+- **Decision package delivered (2026-09-15):** `docs/decisions/oq25-canonical-price-extremes.md` (CBR-DEC-025), evidence
+  `reports/oq25-extrema-evidence.md`. Recommendation: STRUCTURE = tick-derived mid (`TICK_MID`), EXECUTION = tick
+  bid/ask, as two concepts; second-best: cost-reduced candle/tick hybrid (H). Provisional on V-1 (FOREXCOM export).
+  **Not implemented; canonical source unchanged until owner approval.**
+- **Status.** `NEEDS USER DECISION`. `HARD PRECONDITION` for Phase 11 reliance on historical highs/lows and for
+  Phase 14 (gate G2d).
 
 ### OQ-26 · Independent reference for fine-grained DXY structure (owner ruling D12-6)
 - **Problem.** DXY CFD vs DX futures agree at 15m/1h (15m corr 0.963-0.993 on the days under the 1m threshold) but not
@@ -321,7 +325,12 @@ recordings, or the Notion journal) · `RESEARCH PARAMETER` (legitimately ambiguo
   baseline statistics (data-quality exclusion; hindsight about data, not about price outcomes).
 - **Constraint.** The engine may never read `dq_hindsight_*` (enforced by column naming and the CBR-ACC-010 AC10-04b
   isolation test). Decided before Phase 15, never by profitability.
-- **Status.** `NEEDS USER DECISION` before baselines (does not block Phase 11 engine work, which consumes causal fields).
+- **Owner ruling D15-1 (2026-09-14).** Stays **OPEN** until before baseline statistics. Owner preference **Option B**:
+  affected rows stay in the ledger, keep causal DXY availability at decision time, and get a hindsight
+  lower-confidence/data-quality label; **no automatic exclusion** from the canonical baseline (exclusion would be a new
+  data-selection rule not in Tom's method). Baseline reports compare ALL SIGNALS vs SIGNALS WITH FULL DXY DATA as a
+  diagnostic only; the subset is never promoted to the canonical result without explicit approval.
+- **Status.** `OPEN` (owner preference B; confirm before baseline statistics).
 
 ### OQ-17 · Stop placement on the 15m model: tight vs breathing room
 - **Problem.** Course: no tight stops (E15-040). One journal trade uses a tight stop; another journal loss is
@@ -445,6 +454,7 @@ said to hold ~350 trades (P2G-37). The spoken and slide DXY figures disagree.
 | D12 | Phase 9 rulings: 2020-03-09 DXY hour = DATA_ERROR → MISSING, with detector `DXY_CFD_MISSING_WHILE_DX_ACTIVE`; 2019-03-11 DXY hour stays UNEXPLAINED → MISSING; new class REFERENCE_UNAVAILABLE; `cause_status` field; candle high/low construction is a hard safeguard before Phase 14; 1m/5s DXY structure not validated. Phase 9 PASS WITH CONCERNS, G1 approved with conditions | OQ-25, OQ-26, OQ-27, G1 |
 | D13 | Backtesting.py integrated in Phase 14B as a secondary execution, metrics, visualization and parity layer; Phase 14A custom simulator is authoritative; signal contract immutable; parity thresholds pre-registered (CBR-ARCH-014 §7); no `optimize()` or parameter search in Phases 14-16 | OQ-28, OQ-29, OQ-30, Phase 14 |
 | D14 | Phase 14 plan approved (not implemented; no Backtesting.py dependency). OQ-28 open: contract carries canonical stop inputs, not an executable stop. OQ-29 open: 5s CBR1H preserved; 1m only via Phase 13 evidence + proposed spec change. OQ-25: decision package due before Phase 11. OQ-30 open: licensing review before 14B. Phase 10 continues | OQ-25, OQ-28, OQ-29, OQ-30, Phase 10 |
+| D15 | Phase 10 accepted (PASS WITH CONCERNS, G10 approved). OQ-31 open, preference Option B (label, don't exclude; ALL vs FULL-DXY diagnostic only). Daily DXY CFD unavailability accepted: `DXY_AVAILABLE = false`, no directional meaning. Engineering thresholds stay IMPL, never optimized. OQ-25 decision package next; Phase 11 not started | OQ-25, OQ-31, G10 |
 
 ## Batched questions for the user (historical; answered above)
 

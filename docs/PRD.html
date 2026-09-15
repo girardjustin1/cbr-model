@@ -240,6 +240,7 @@ footer{border-top:1px solid var(--rule);padding-top:18px;font-size:.84rem;color:
           <tr><td class="id">D12</td><td>Phase 9 rulings</td><td>DXY 2020-03-09 20h DATA_ERROR and 2019-03-11 00h UNEXPLAINED are both handled as MISSING, flagged by detector <code>DXY_CFD_MISSING_WHILE_DX_ACTIVE</code>; new class REFERENCE_UNAVAILABLE; <code>cause_status</code>; candle-file high/low is a hard safeguard before Phase 14; 1m/5s DXY structure not validated</td></tr>
           <tr><td class="id">D13</td><td>Backtesting.py integrated in Phase 14B as a secondary layer</td><td>Execution cross-check, standard metrics, interactive charts and parity only. The custom simulator (14A) is authoritative for execution and the CBR engine for signals; signal contract immutable; parity thresholds pre-registered; no <code>optimize()</code> in Phases 14-16. Plan: <code>docs/architecture/phase14-execution-architecture.md</code></td></tr>
           <tr><td class="id">D14</td><td>Phase 14 plan approved, not implemented</td><td>OQ-28 open (stop inputs, not an executable stop); OQ-29 open (5s CBR1H kept); OQ-25 decision package before Phase 11; OQ-30 licensing review before 14B; Phase 10 continues</td></tr>
+          <tr><td class="id">D15</td><td>Phase 10 accepted (G10)</td><td>OQ-31 open, preference B: label outage-affected rows, never auto-exclude; ALL vs FULL-DXY is a diagnostic only. DXY daily unavailability means <code>DXY_AVAILABLE = false</code>, with no directional meaning. Engineering thresholds stay IMPL</td></tr>
         </tbody>
       </table></div>
     </section>
@@ -355,7 +356,7 @@ footer{border-top:1px solid var(--rule);padding-top:18px;font-size:.84rem;color:
           <tr><td class="id">8</td><td>Machine specifications</td><td>Primitives, CBR1H/CBR15 specs, strategy.yaml</td><td><span class="chip done">Done (review)</span></td></tr>
           <tr class="stage"><td colspan="4">B · Data &amp; reference engines</td></tr>
           <tr><td class="id">9</td><td>Historical data pipeline</td><td>CBR-ACC-009 v2.1 acceptance; exception register; data-quality detectors</td><td><span class="chip concern">Pass with concerns</span></td></tr>
-          <tr><td class="id">10</td><td>DXY context module</td><td>Causal quote + last-closed/forming 15m and 1h direction with state, confidence, reason codes; hindsight mask separate; no DXY rule or filter</td><td><span class="chip concern">Pass with concerns</span></td></tr>
+          <tr><td class="id">10</td><td>DXY context module</td><td>Causal quote + last-closed/forming 15m and 1h direction with state, confidence, reason codes; hindsight mask separate; no DXY rule or filter</td><td><span class="chip concern">Accepted with concerns · G10</span></td></tr>
           <tr><td class="id">11-12</td><td>CBR15 and CBR1H Python reference engines</td><td>Engine, signal ledger, unit + lookahead tests</td><td><span class="chip todo">Next</span></td></tr>
           <tr><td class="id">13</td><td>Tom ↔ Python parity gate</td><td>Signal parity report; every mismatch classified</td><td><span class="chip todo">Gate G2</span></td></tr>
           <tr class="stage"><td colspan="4">C · Untouched baselines</td></tr>
@@ -443,8 +444,8 @@ footer{border-top:1px solid var(--rule);padding-top:18px;font-size:.84rem;color:
         <li><strong>DXY missing data:</strong> <code>DXY_CFD_MISSING_WHILE_DX_ACTIVE</code> flags 7 periods on the checked days: both ruled hours, EST Monday 00h blocks, Thanksgiving 2022 from 17:59 to 21:57 UTC, and the Sunday 2025-11-09 reopen.</li>
         <li><strong>DXY timeframes:</strong> 15m/1h direction supported; 1m/5s structure not validated (OQ-26).</li>
         <li><strong>Candle extremes:</strong> up to 28 artificial minutes per XAUUSD window and 67 per DXY window; largest errors $0.425 and 0.3185. The candle-only flag misses most of them. Hard precondition before Phase 14.</li>
-        <li><strong>Phase 10: pass with concerns, awaiting owner acceptance.</strong> All CBR-ACC-010 criteria met on 24 days. Direction agreement vs DX: 15m 98.4%, 1h 98.8%. Concerns: the causal quote persists up to 10 min into an outage (OQ-31); winter 00:00-01:00 UTC has no DXY context; thinner 2018-2019 coverage; IMPL thresholds validated on 24 days only.</li>
-        <li><strong>Phase 11 not started.</strong> Needs owner acceptance of Phase 10 and the OQ-25 decision package. Phase 14A/14B planned only.</li>
+        <li><strong>Phase 10: pass with concerns, accepted (D15, G10).</strong> All CBR-ACC-010 criteria met on 24 days. Direction agreement vs DX: 15m 98.4%, 1h 98.8%. Concerns: the causal quote persists up to 10 min into an outage (OQ-31); winter 00:00-01:00 UTC has no DXY context; thinner 2018-2019 coverage; IMPL thresholds validated on 24 days only.</li>
+        <li><strong>Phase 11 not started. Blocker: OQ-25.</strong> Decision package delivered (<code>docs/decisions/oq25-canonical-price-extremes.md</code>): recommends tick mid for structure and tick bid/ask for execution, provisional on a FOREXCOM export check. Awaiting owner decision. Phase 14A/14B planned only.</li>
         <li><strong>Blocked:</strong> Trader.dev MCP returns 502 on every path. Commits are local only, not pushed.</li>
       </ul>
     </section>
@@ -488,7 +489,7 @@ footer{border-top:1px solid var(--rule);padding-top:18px;font-size:.84rem;color:
           <tr><td class="id">OQ-30</td><td>Backtesting.py is AGPL-3.0 and the repo is public</td><td>Owner licence review before Phase 14B; 14A unaffected</td></tr>
           <tr><td class="id">OQ-31</td><td>Ledger use of the hindsight DXY vendor-gap mask?</td><td>Owner decision before baselines; engines read causal fields only</td></tr>
           <tr><td class="id">OQ-24</td><td>Baseline feed: spot, GC/DX futures or hybrid?</td><td>Open until parity and cross-feed agreement exist; frozen before Phase 14; never chosen by profitability</td></tr>
-          <tr><td class="id">OQ-25</td><td>Canonical OHLC source for extremes (swings, ranges, extensions, stops, sweeps)?</td><td>Hard precondition before Phase 14 (G2d); candle-file highs/lows not authoritative meanwhile</td></tr>
+          <tr><td class="id">OQ-25</td><td>Canonical OHLC source for extremes (swings, ranges, extensions, stops, sweeps)?</td><td><strong>Phase 11 blocker.</strong> Package delivered (CBR-DEC-025): tick mid structure + tick bid/ask execution recommended; awaiting owner</td></tr>
           <tr><td class="id">OQ-26</td><td>Independent reference for 1m/5s DXY structure?</td><td>Open data dependency; 15m/1h DXY context only meanwhile</td></tr>
           <tr><td class="id">OQ-27</td><td>DXY CFD availability at DST-transition Mondays and the weekly reopen</td><td>Diagnostic approved; required before DXY availability assumptions are frozen</td></tr>
         </tbody>
