@@ -1,6 +1,6 @@
 # Phase 13 Readiness Checklist
 
-**Doc:** CBR-READY-013 · **Created:** 2026-09-15 (owner ruling D18-12) · **Updated:** 2026-09-15 (D21, Dukascopy V-1 preparation) ·
+**Doc:** CBR-READY-013 · **Created:** 2026-09-15 (owner ruling D18-12) · **Updated:** 2026-09-15 (D22, TradingView export inspection) ·
 **Status:** NOT READY
 
 Phase 13 (Tom ↔ Python parity) may not start while any mandatory item is unchecked. Items are checked only by an owner
@@ -29,17 +29,17 @@ ruling or a recorded, reproducible result, with the reference noted.
 | 17 | [x] CBR1H parity-candidate spec frozen | `CBR1H_BASELINE_V1-PC2` (PC1 kept for audit) | same |
 | 18 | [x] Causality tests passing | truncation + future mutation at mid-minute cuts (decision and trigger fields), timeframe completion, HVCS future-safety, determinism, ledger completeness | `tests/engine/` |
 | 19 | [x] Price-role guard tests passing | engines refuse non-STRUCTURE bars; guard scan | `tests/test_price_series.py`, `tests/engine/` |
-| 20 | [x] Full suite passing | 497 passed, 1 skipped; ruff clean (D21 commit) | |
+| 20 | [x] Full suite passing | 502 passed, 1 skipped; ruff clean (D22 commit) | |
 
 ## B. Waits on V-1 and owner authorization
 
 | # | Item | Status | Reference |
 |---|---|---|---|
-| 21 | [ ] FOREXCOM:XAUUSD calibration exports (`v1_cal_2025-10-22.csv`, `v1_cal_2025-11-11.csv`) | **V1_WAITING_FOR_OWNER_DATA** | protocol §6.2 |
-| 22 | [ ] FOREXCOM:XAUUSD course-window exports (`v1_CX-LT1-1.csv`, `v1_CX-TE1-1.csv`, `v1_CX-LT3-2.csv`) | **V1_WAITING_FOR_OWNER_DATA** | protocol §6.2 |
+| 21 | [ ] FOREXCOM:XAUUSD calibration exports (`v1_cal_2025-10-22.csv`, `v1_cal_2025-11-11.csv`) | **V1_SYMBOL_MISMATCH**: supplied Gold exports are FX:XAUUSD; 1m history starts 2026-09-08 | `docs/decisions/v1-tradingview-exports-assessment.md` |
+| 22 | [ ] FOREXCOM:XAUUSD course-window exports (`v1_CX-LT1-1.csv`, `v1_CX-TE1-1.csv`, `v1_CX-LT3-2.csv`) | same | same |
 | 23 | [ ] Identity screenshots (symbol, feed, chart timezone UTC) | missing | protocol §6.3a |
 | 24 | [x] Dukascopy comparison data for the calibration dates | D21: 2025-11-11 fetched (24 hour-files, 271,884 ticks); both days pass integrity, deterministic rebuild, STRUCTURE role and manifest-hash checks; 1,380/1,380 scheduled-open minutes each, 0 vendor gaps | `reports/v1-dukascopy-calibration-days.md`; `v1_ingest status` |
-| 25 | [ ] Feed calibration complete | not started (`v1_ingest calibrate` refuses) | D19-11 |
+| 25 | [ ] Feed calibration complete | not started (`v1_ingest calibrate` refuses); tool now reports all D22-1 measurements | D19-11, D22-1 |
 | 26 | [ ] Zero-lag requirement passes | not evaluated | protocol §4.3 |
 | 27 | [ ] Numeric price tolerances frozen before course scoring | `config/phase13_tolerances.yaml` NOT_FROZEN | D19-11/12 |
 | 28 | [ ] Final Phase 13 authorization issued | not issued; `parity.main()` refuses | D20-9 |
@@ -50,4 +50,4 @@ Not substituted (D19-13/14).
 
 **Current status (2026-09-15): NOT READY.** 21 of 28 items checked. Unchecked: 21 FOREXCOM calibration exports, 22 FOREXCOM
 course-window exports, 23 screenshots, 25 feed calibration, 26 zero-lag check, 27 numeric tolerances frozen, 28 final
-Phase 13 authorization. V-1 state: `V1_WAITING_FOR_OWNER_DATA`.
+Phase 13 authorization. V-1 state: `V1_SYMBOL_MISMATCH` (secondary `ONE_MINUTE_HISTORY_INSUFFICIENT`).

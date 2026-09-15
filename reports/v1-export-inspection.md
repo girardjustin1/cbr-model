@@ -1,5 +1,7 @@
 # V-1 Export Inspection: owner-supplied TradingView charts
 
+> **Superseded (D22)** by `reports/tradingview-exports-inspection.md` and `docs/decisions/v1-tradingview-exports-assessment.md`.
+
 Generated 2026-09-15T12:00:49+00:00 by `python -m cbr.engine.v1_ingest inspect references/charts`. Metadata only (symbol, timeframe, span, coverage); no prices are reproduced and nothing was renamed, copied or substituted.
 
 **Verdict: DATA_LIMITATION: no FOREXCOM:XAUUSD 1m export covers the V-1 windows** (D19-14). V-1 is not waived; Phase 13 stays blocked.

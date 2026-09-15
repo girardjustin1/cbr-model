@@ -1,0 +1,845 @@
+{
+  "directory": "references/charts",
+  "exports": [
+    {
+      "file": "FX_XAUUSD, 1.csv",
+      "path": "references/charts/FX_XAUUSD, 1.csv",
+      "sha256": "4d4aadd7f710d5fa8e1ef896fb80e293c550c043614859cc341baf81828f8993",
+      "exchange": "FX",
+      "ticker": "XAUUSD",
+      "timeframe": "1",
+      "tradingview_symbol": "FX:XAUUSD",
+      "columns": [
+        "time",
+        "open",
+        "high",
+        "low",
+        "close",
+        "Volume",
+        "Volume MA"
+      ],
+      "ohlc_columns": true,
+      "timestamp_basis": "unix epoch seconds (UTC by definition; chart timezone setting doesn't alter them)",
+      "timezone": "UTC",
+      "rows": 7099,
+      "first": "2026-09-08 08:15:00+00:00",
+      "last": "2026-09-15 11:54:00+00:00",
+      "modal_bar_spacing": "0 days 00:01:00",
+      "volume_column": "Volume",
+      "volume_non_null": 7099,
+      "extra_columns": [
+        "Volume MA"
+      ],
+      "oct_nov_2025": {
+        "bars": 0,
+        "fully_spanned": false
+      },
+      "v1_windows": {
+        "v1_CX-LT1-1.csv": {
+          "coverage": "NONE",
+          "bars_in_window": 0,
+          "expected_bars": 660,
+          "missing_bars": 660
+        },
+        "v1_CX-TE1-1.csv": {
+          "coverage": "NONE",
+          "bars_in_window": 0,
+          "expected_bars": 660,
+          "missing_bars": 660
+        },
+        "v1_CX-LT3-2.csv": {
+          "coverage": "NONE",
+          "bars_in_window": 0,
+          "expected_bars": 900,
+          "missing_bars": 900
+        },
+        "v1_cal_2025-10-22.csv": {
+          "coverage": "NONE",
+          "bars_in_window": 0,
+          "expected_bars": 1380,
+          "missing_bars": 1380
+        },
+        "v1_cal_2025-11-11.csv": {
+          "coverage": "NONE",
+          "bars_in_window": 0,
+          "expected_bars": 1380,
+          "missing_bars": 1380
+        }
+      },
+      "instrument": "GOLD",
+      "one_minute_days_short": {
+        "v1_CX-LT1-1.csv": 322,
+        "v1_CX-TE1-1.csv": 319,
+        "v1_CX-LT3-2.csv": 304,
+        "v1_cal_2025-10-22.csv": 321,
+        "v1_cal_2025-11-11.csv": 301
+      },
+      "v1_eligible": false,
+      "classification": "REFERENCE_ONLY",
+      "reasons": [
+        "SYMBOL_MISMATCH: FX:XAUUSD is not FOREXCOM:XAUUSD",
+        "ONE_MINUTE_HISTORY_INSUFFICIENT for v1_CX-LT1-1.csv, v1_CX-TE1-1.csv, v1_CX-LT3-2.csv, v1_cal_2025-10-22.csv, v1_cal_2025-11-11.csv"
+      ]
+    },
+    {
+      "file": "FX_XAUUSD, 15.csv",
+      "path": "references/charts/FX_XAUUSD, 15.csv",
+      "sha256": "a0662450fdbd6b4f26d32c4805965d3963eb02ec2a8604f45d37e1a55ff55c81",
+      "exchange": "FX",
+      "ticker": "XAUUSD",
+      "timeframe": "15",
+      "tradingview_symbol": "FX:XAUUSD",
+      "columns": [
+        "time",
+        "open",
+        "high",
+        "low",
+        "close",
+        "Volume",
+        "Volume MA"
+      ],
+      "ohlc_columns": true,
+      "timestamp_basis": "unix epoch seconds (UTC by definition; chart timezone setting doesn't alter them)",
+      "timezone": "UTC",
+      "rows": 7047,
+      "first": "2026-05-29 12:15:00+00:00",
+      "last": "2026-09-15 11:45:00+00:00",
+      "modal_bar_spacing": "0 days 00:15:00",
+      "volume_column": "Volume",
+      "volume_non_null": 7047,
+      "extra_columns": [
+        "Volume MA"
+      ],
+      "oct_nov_2025": {
+        "bars": 0,
+        "fully_spanned": false
+      },
+      "v1_windows": {
+        "v1_CX-LT1-1.csv": {
+          "coverage": "NONE",
+          "bars_in_window": 0,
+          "expected_bars": 44,
+          "missing_bars": 44
+        },
+        "v1_CX-TE1-1.csv": {
+          "coverage": "NONE",
+          "bars_in_window": 0,
+          "expected_bars": 44,
+          "missing_bars": 44
+        },
+        "v1_CX-LT3-2.csv": {
+          "coverage": "NONE",
+          "bars_in_window": 0,
+          "expected_bars": 60,
+          "missing_bars": 60
+        },
+        "v1_cal_2025-10-22.csv": {
+          "coverage": "NONE",
+          "bars_in_window": 0,
+          "expected_bars": 92,
+          "missing_bars": 92
+        },
+        "v1_cal_2025-11-11.csv": {
+          "coverage": "NONE",
+          "bars_in_window": 0,
+          "expected_bars": 92,
+          "missing_bars": 92
+        }
+      },
+      "instrument": "GOLD",
+      "v1_eligible": false,
+      "classification": "REFERENCE_ONLY; TRADINGVIEW_REFERENCE_FIXTURE",
+      "reasons": [
+        "SYMBOL_MISMATCH: FX:XAUUSD is not FOREXCOM:XAUUSD",
+        "not a 1-minute export (V-1 needs 1m OHLC)"
+      ]
+    },
+    {
+      "file": "FX_XAUUSD, 1D.csv",
+      "path": "references/charts/FX_XAUUSD, 1D.csv",
+      "sha256": "8310d22fe5348aad8176ebb8199d9935c992b8641df56c98cdceb8217e6d2896",
+      "exchange": "FX",
+      "ticker": "XAUUSD",
+      "timeframe": "1D",
+      "tradingview_symbol": "FX:XAUUSD",
+      "columns": [
+        "time",
+        "open",
+        "high",
+        "low",
+        "close",
+        "Volume",
+        "Volume MA"
+      ],
+      "ohlc_columns": true,
+      "timestamp_basis": "unix epoch seconds (UTC by definition; chart timezone setting doesn't alter them)",
+      "timezone": "UTC",
+      "rows": 7047,
+      "first": "1999-07-06 22:00:00+00:00",
+      "last": "2026-09-14 22:00:00+00:00",
+      "modal_bar_spacing": "1 days 00:00:00",
+      "volume_column": "Volume",
+      "volume_non_null": 7047,
+      "extra_columns": [
+        "Volume MA"
+      ],
+      "oct_nov_2025": {
+        "bars": 43,
+        "fully_spanned": true
+      },
+      "v1_windows": {
+        "v1_CX-LT1-1.csv": {
+          "coverage": "SPAN",
+          "bars_in_window": 1
+        },
+        "v1_CX-TE1-1.csv": {
+          "coverage": "SPAN",
+          "bars_in_window": 1
+        },
+        "v1_CX-LT3-2.csv": {
+          "coverage": "SPAN",
+          "bars_in_window": 1
+        },
+        "v1_cal_2025-10-22.csv": {
+          "coverage": "SPAN",
+          "bars_in_window": 1
+        },
+        "v1_cal_2025-11-11.csv": {
+          "coverage": "SPAN",
+          "bars_in_window": 1
+        }
+      },
+      "instrument": "GOLD",
+      "v1_eligible": false,
+      "classification": "REFERENCE_ONLY; TRADINGVIEW_REFERENCE_FIXTURE",
+      "reasons": [
+        "SYMBOL_MISMATCH: FX:XAUUSD is not FOREXCOM:XAUUSD",
+        "not a 1-minute export (V-1 needs 1m OHLC)"
+      ]
+    },
+    {
+      "file": "FX_XAUUSD, 240.csv",
+      "path": "references/charts/FX_XAUUSD, 240.csv",
+      "sha256": "b6d78625663278d7d8220f2e18c1506233c8c8cafb41874a38a79ee3c4bbb346",
+      "exchange": "FX",
+      "ticker": "XAUUSD",
+      "timeframe": "240",
+      "tradingview_symbol": "FX:XAUUSD",
+      "columns": [
+        "time",
+        "open",
+        "high",
+        "low",
+        "close",
+        "Volume",
+        "Volume MA"
+      ],
+      "ohlc_columns": true,
+      "timestamp_basis": "unix epoch seconds (UTC by definition; chart timezone setting doesn't alter them)",
+      "timezone": "UTC",
+      "rows": 7047,
+      "first": "2022-02-23 11:00:00+00:00",
+      "last": "2026-09-15 10:00:00+00:00",
+      "modal_bar_spacing": "0 days 04:00:00",
+      "volume_column": "Volume",
+      "volume_non_null": 7047,
+      "extra_columns": [
+        "Volume MA"
+      ],
+      "oct_nov_2025": {
+        "bars": 258,
+        "fully_spanned": true
+      },
+      "v1_windows": {
+        "v1_CX-LT1-1.csv": {
+          "coverage": "SPAN",
+          "bars_in_window": 3
+        },
+        "v1_CX-TE1-1.csv": {
+          "coverage": "SPAN",
+          "bars_in_window": 3
+        },
+        "v1_CX-LT3-2.csv": {
+          "coverage": "SPAN",
+          "bars_in_window": 4
+        },
+        "v1_cal_2025-10-22.csv": {
+          "coverage": "SPAN",
+          "bars_in_window": 6
+        },
+        "v1_cal_2025-11-11.csv": {
+          "coverage": "SPAN",
+          "bars_in_window": 6
+        }
+      },
+      "instrument": "GOLD",
+      "v1_eligible": false,
+      "classification": "REFERENCE_ONLY; TRADINGVIEW_REFERENCE_FIXTURE",
+      "reasons": [
+        "SYMBOL_MISMATCH: FX:XAUUSD is not FOREXCOM:XAUUSD",
+        "not a 1-minute export (V-1 needs 1m OHLC)"
+      ]
+    },
+    {
+      "file": "FX_XAUUSD, 5.csv",
+      "path": "references/charts/FX_XAUUSD, 5.csv",
+      "sha256": "c4368991e8e375864fd101b84ad3c0bb68f88584ba8fef9191afa05f525b6d88",
+      "exchange": "FX",
+      "ticker": "XAUUSD",
+      "timeframe": "5",
+      "tradingview_symbol": "FX:XAUUSD",
+      "columns": [
+        "time",
+        "open",
+        "high",
+        "low",
+        "close",
+        "Volume",
+        "Volume MA"
+      ],
+      "ohlc_columns": true,
+      "timestamp_basis": "unix epoch seconds (UTC by definition; chart timezone setting doesn't alter them)",
+      "timezone": "UTC",
+      "rows": 7047,
+      "first": "2026-08-10 22:25:00+00:00",
+      "last": "2026-09-15 11:50:00+00:00",
+      "modal_bar_spacing": "0 days 00:05:00",
+      "volume_column": "Volume",
+      "volume_non_null": 7047,
+      "extra_columns": [
+        "Volume MA"
+      ],
+      "oct_nov_2025": {
+        "bars": 0,
+        "fully_spanned": false
+      },
+      "v1_windows": {
+        "v1_CX-LT1-1.csv": {
+          "coverage": "NONE",
+          "bars_in_window": 0,
+          "expected_bars": 132,
+          "missing_bars": 132
+        },
+        "v1_CX-TE1-1.csv": {
+          "coverage": "NONE",
+          "bars_in_window": 0,
+          "expected_bars": 132,
+          "missing_bars": 132
+        },
+        "v1_CX-LT3-2.csv": {
+          "coverage": "NONE",
+          "bars_in_window": 0,
+          "expected_bars": 180,
+          "missing_bars": 180
+        },
+        "v1_cal_2025-10-22.csv": {
+          "coverage": "NONE",
+          "bars_in_window": 0,
+          "expected_bars": 276,
+          "missing_bars": 276
+        },
+        "v1_cal_2025-11-11.csv": {
+          "coverage": "NONE",
+          "bars_in_window": 0,
+          "expected_bars": 276,
+          "missing_bars": 276
+        }
+      },
+      "instrument": "GOLD",
+      "v1_eligible": false,
+      "classification": "REFERENCE_ONLY; TRADINGVIEW_REFERENCE_FIXTURE",
+      "reasons": [
+        "SYMBOL_MISMATCH: FX:XAUUSD is not FOREXCOM:XAUUSD",
+        "not a 1-minute export (V-1 needs 1m OHLC)"
+      ]
+    },
+    {
+      "file": "FX_XAUUSD, 60.csv",
+      "path": "references/charts/FX_XAUUSD, 60.csv",
+      "sha256": "5789336298f88a37e32a504f67378f222f5c7f4e31c1fcc7777a395607a5eaf7",
+      "exchange": "FX",
+      "ticker": "XAUUSD",
+      "timeframe": "60",
+      "tradingview_symbol": "FX:XAUUSD",
+      "columns": [
+        "time",
+        "open",
+        "high",
+        "low",
+        "close",
+        "Volume",
+        "Volume MA"
+      ],
+      "ohlc_columns": true,
+      "timestamp_basis": "unix epoch seconds (UTC by definition; chart timezone setting doesn't alter them)",
+      "timezone": "UTC",
+      "rows": 7047,
+      "first": "2025-07-08 05:00:00+00:00",
+      "last": "2026-09-15 11:00:00+00:00",
+      "modal_bar_spacing": "0 days 01:00:00",
+      "volume_column": "Volume",
+      "volume_non_null": 7047,
+      "extra_columns": [
+        "Volume MA"
+      ],
+      "oct_nov_2025": {
+        "bars": 988,
+        "fully_spanned": true
+      },
+      "v1_windows": {
+        "v1_CX-LT1-1.csv": {
+          "coverage": "FULL",
+          "bars_in_window": 11,
+          "expected_bars": 11,
+          "missing_bars": 0
+        },
+        "v1_CX-TE1-1.csv": {
+          "coverage": "FULL",
+          "bars_in_window": 11,
+          "expected_bars": 11,
+          "missing_bars": 0
+        },
+        "v1_CX-LT3-2.csv": {
+          "coverage": "FULL",
+          "bars_in_window": 15,
+          "expected_bars": 15,
+          "missing_bars": 0
+        },
+        "v1_cal_2025-10-22.csv": {
+          "coverage": "FULL",
+          "bars_in_window": 23,
+          "expected_bars": 23,
+          "missing_bars": 0
+        },
+        "v1_cal_2025-11-11.csv": {
+          "coverage": "FULL",
+          "bars_in_window": 23,
+          "expected_bars": 23,
+          "missing_bars": 0
+        }
+      },
+      "instrument": "GOLD",
+      "v1_eligible": false,
+      "classification": "REFERENCE_ONLY; TRADINGVIEW_REFERENCE_FIXTURE",
+      "reasons": [
+        "SYMBOL_MISMATCH: FX:XAUUSD is not FOREXCOM:XAUUSD",
+        "not a 1-minute export (V-1 needs 1m OHLC)"
+      ]
+    },
+    {
+      "file": "TVC_DXY, 1.csv",
+      "path": "references/charts/TVC_DXY, 1.csv",
+      "sha256": "9e51a104b02f56776dfa977aa46fde8a31189e03cb656a30b6aac218f0f1d4b5",
+      "exchange": "TVC",
+      "ticker": "DXY",
+      "timeframe": "1",
+      "tradingview_symbol": "TVC:DXY",
+      "columns": [
+        "time",
+        "open",
+        "high",
+        "low",
+        "close",
+        "Volume",
+        "Volume MA"
+      ],
+      "ohlc_columns": true,
+      "timestamp_basis": "unix epoch seconds (UTC by definition; chart timezone setting doesn't alter them)",
+      "timezone": "UTC",
+      "rows": 6291,
+      "first": "2026-09-08 19:22:00+00:00",
+      "last": "2026-09-15 11:55:00+00:00",
+      "modal_bar_spacing": "0 days 00:01:00",
+      "volume_column": "Volume",
+      "volume_non_null": 0,
+      "extra_columns": [
+        "Volume MA"
+      ],
+      "oct_nov_2025": {
+        "bars": 0,
+        "fully_spanned": false
+      },
+      "v1_windows": {
+        "v1_CX-LT1-1.csv": {
+          "coverage": "NONE",
+          "bars_in_window": 0,
+          "expected_bars": 660,
+          "missing_bars": 660
+        },
+        "v1_CX-TE1-1.csv": {
+          "coverage": "NONE",
+          "bars_in_window": 0,
+          "expected_bars": 660,
+          "missing_bars": 660
+        },
+        "v1_CX-LT3-2.csv": {
+          "coverage": "NONE",
+          "bars_in_window": 0,
+          "expected_bars": 900,
+          "missing_bars": 900
+        },
+        "v1_cal_2025-10-22.csv": {
+          "coverage": "NONE",
+          "bars_in_window": 0,
+          "expected_bars": 1380,
+          "missing_bars": 1380
+        },
+        "v1_cal_2025-11-11.csv": {
+          "coverage": "NONE",
+          "bars_in_window": 0,
+          "expected_bars": 1380,
+          "missing_bars": 1380
+        }
+      },
+      "instrument": "DXY",
+      "v1_eligible": false,
+      "classification": "TRADINGVIEW_REFERENCE_FIXTURE (informational)",
+      "reasons": [
+        "not XAUUSD (V-1 is XAUUSD feed fidelity); informational"
+      ]
+    },
+    {
+      "file": "TVC_DXY, 15.csv",
+      "path": "references/charts/TVC_DXY, 15.csv",
+      "sha256": "dbe59f95c3a97536bb9c22b2dcff8c02fb161be9bfb16168ec223a4febf7cef2",
+      "exchange": "TVC",
+      "ticker": "DXY",
+      "timeframe": "15",
+      "tradingview_symbol": "TVC:DXY",
+      "columns": [
+        "time",
+        "open",
+        "high",
+        "low",
+        "close",
+        "Volume",
+        "Volume MA"
+      ],
+      "ohlc_columns": true,
+      "timestamp_basis": "unix epoch seconds (UTC by definition; chart timezone setting doesn't alter them)",
+      "timezone": "UTC",
+      "rows": 6291,
+      "first": "2026-06-10 03:45:00+00:00",
+      "last": "2026-09-15 11:45:00+00:00",
+      "modal_bar_spacing": "0 days 00:15:00",
+      "volume_column": "Volume",
+      "volume_non_null": 0,
+      "extra_columns": [
+        "Volume MA"
+      ],
+      "oct_nov_2025": {
+        "bars": 0,
+        "fully_spanned": false
+      },
+      "v1_windows": {
+        "v1_CX-LT1-1.csv": {
+          "coverage": "NONE",
+          "bars_in_window": 0,
+          "expected_bars": 44,
+          "missing_bars": 44
+        },
+        "v1_CX-TE1-1.csv": {
+          "coverage": "NONE",
+          "bars_in_window": 0,
+          "expected_bars": 44,
+          "missing_bars": 44
+        },
+        "v1_CX-LT3-2.csv": {
+          "coverage": "NONE",
+          "bars_in_window": 0,
+          "expected_bars": 60,
+          "missing_bars": 60
+        },
+        "v1_cal_2025-10-22.csv": {
+          "coverage": "NONE",
+          "bars_in_window": 0,
+          "expected_bars": 92,
+          "missing_bars": 92
+        },
+        "v1_cal_2025-11-11.csv": {
+          "coverage": "NONE",
+          "bars_in_window": 0,
+          "expected_bars": 92,
+          "missing_bars": 92
+        }
+      },
+      "instrument": "DXY",
+      "v1_eligible": false,
+      "classification": "TRADINGVIEW_REFERENCE_FIXTURE (informational)",
+      "reasons": [
+        "not XAUUSD (V-1 is XAUUSD feed fidelity); informational"
+      ]
+    },
+    {
+      "file": "TVC_DXY, 1D.csv",
+      "path": "references/charts/TVC_DXY, 1D.csv",
+      "sha256": "dcf45641acea19a9e75cdd1440c4621ccda9c81246aaa4da2f3d3f5c5626ad20",
+      "exchange": "TVC",
+      "ticker": "DXY",
+      "timeframe": "1D",
+      "tradingview_symbol": "TVC:DXY",
+      "columns": [
+        "time",
+        "open",
+        "high",
+        "low",
+        "close",
+        "Volume",
+        "Volume MA"
+      ],
+      "ohlc_columns": true,
+      "timestamp_basis": "unix epoch seconds (UTC by definition; chart timezone setting doesn't alter them)",
+      "timezone": "UTC",
+      "rows": 6267,
+      "first": "2001-11-30 00:00:00+00:00",
+      "last": "2026-09-14 23:00:00+00:00",
+      "modal_bar_spacing": "1 days 00:00:00",
+      "volume_column": "Volume",
+      "volume_non_null": 0,
+      "extra_columns": [
+        "Volume MA"
+      ],
+      "oct_nov_2025": {
+        "bars": 43,
+        "fully_spanned": true
+      },
+      "v1_windows": {
+        "v1_CX-LT1-1.csv": {
+          "coverage": "SPAN",
+          "bars_in_window": 1
+        },
+        "v1_CX-TE1-1.csv": {
+          "coverage": "SPAN",
+          "bars_in_window": 1
+        },
+        "v1_CX-LT3-2.csv": {
+          "coverage": "SPAN",
+          "bars_in_window": 1
+        },
+        "v1_cal_2025-10-22.csv": {
+          "coverage": "SPAN",
+          "bars_in_window": 1
+        },
+        "v1_cal_2025-11-11.csv": {
+          "coverage": "SPAN",
+          "bars_in_window": 1
+        }
+      },
+      "instrument": "DXY",
+      "v1_eligible": false,
+      "classification": "TRADINGVIEW_REFERENCE_FIXTURE (informational)",
+      "reasons": [
+        "not XAUUSD (V-1 is XAUUSD feed fidelity); informational"
+      ]
+    },
+    {
+      "file": "TVC_DXY, 240.csv",
+      "path": "references/charts/TVC_DXY, 240.csv",
+      "sha256": "d606cb938645fbd7ac2a0bb503b39e412ca4f19664775987911c1842bc47d847",
+      "exchange": "TVC",
+      "ticker": "DXY",
+      "timeframe": "240",
+      "tradingview_symbol": "TVC:DXY",
+      "columns": [
+        "time",
+        "open",
+        "high",
+        "low",
+        "close",
+        "Volume",
+        "Volume MA"
+      ],
+      "ohlc_columns": true,
+      "timestamp_basis": "unix epoch seconds (UTC by definition; chart timezone setting doesn't alter them)",
+      "timezone": "UTC",
+      "rows": 6275,
+      "first": "2022-10-13 03:00:00+00:00",
+      "last": "2026-09-15 11:00:00+00:00",
+      "modal_bar_spacing": "0 days 04:00:00",
+      "volume_column": "Volume",
+      "volume_non_null": 0,
+      "extra_columns": [
+        "Volume MA"
+      ],
+      "oct_nov_2025": {
+        "bars": 265,
+        "fully_spanned": true
+      },
+      "v1_windows": {
+        "v1_CX-LT1-1.csv": {
+          "coverage": "SPAN",
+          "bars_in_window": 3
+        },
+        "v1_CX-TE1-1.csv": {
+          "coverage": "SPAN",
+          "bars_in_window": 3
+        },
+        "v1_CX-LT3-2.csv": {
+          "coverage": "SPAN",
+          "bars_in_window": 5
+        },
+        "v1_cal_2025-10-22.csv": {
+          "coverage": "SPAN",
+          "bars_in_window": 6
+        },
+        "v1_cal_2025-11-11.csv": {
+          "coverage": "SPAN",
+          "bars_in_window": 6
+        }
+      },
+      "instrument": "DXY",
+      "v1_eligible": false,
+      "classification": "TRADINGVIEW_REFERENCE_FIXTURE (informational)",
+      "reasons": [
+        "not XAUUSD (V-1 is XAUUSD feed fidelity); informational"
+      ]
+    },
+    {
+      "file": "TVC_DXY, 5.csv",
+      "path": "references/charts/TVC_DXY, 5.csv",
+      "sha256": "1304040e9935d01f0c0e93e02b7e21fffda61dec28b8273cd1dc8c93f8293f8e",
+      "exchange": "TVC",
+      "ticker": "DXY",
+      "timeframe": "5",
+      "tradingview_symbol": "TVC:DXY",
+      "columns": [
+        "time",
+        "open",
+        "high",
+        "low",
+        "close",
+        "Volume",
+        "Volume MA"
+      ],
+      "ohlc_columns": true,
+      "timestamp_basis": "unix epoch seconds (UTC by definition; chart timezone setting doesn't alter them)",
+      "timezone": "UTC",
+      "rows": 6291,
+      "first": "2026-08-13 04:45:00+00:00",
+      "last": "2026-09-15 11:55:00+00:00",
+      "modal_bar_spacing": "0 days 00:05:00",
+      "volume_column": "Volume",
+      "volume_non_null": 0,
+      "extra_columns": [
+        "Volume MA"
+      ],
+      "oct_nov_2025": {
+        "bars": 0,
+        "fully_spanned": false
+      },
+      "v1_windows": {
+        "v1_CX-LT1-1.csv": {
+          "coverage": "NONE",
+          "bars_in_window": 0,
+          "expected_bars": 132,
+          "missing_bars": 132
+        },
+        "v1_CX-TE1-1.csv": {
+          "coverage": "NONE",
+          "bars_in_window": 0,
+          "expected_bars": 132,
+          "missing_bars": 132
+        },
+        "v1_CX-LT3-2.csv": {
+          "coverage": "NONE",
+          "bars_in_window": 0,
+          "expected_bars": 180,
+          "missing_bars": 180
+        },
+        "v1_cal_2025-10-22.csv": {
+          "coverage": "NONE",
+          "bars_in_window": 0,
+          "expected_bars": 276,
+          "missing_bars": 276
+        },
+        "v1_cal_2025-11-11.csv": {
+          "coverage": "NONE",
+          "bars_in_window": 0,
+          "expected_bars": 276,
+          "missing_bars": 276
+        }
+      },
+      "instrument": "DXY",
+      "v1_eligible": false,
+      "classification": "TRADINGVIEW_REFERENCE_FIXTURE (informational)",
+      "reasons": [
+        "not XAUUSD (V-1 is XAUUSD feed fidelity); informational"
+      ]
+    },
+    {
+      "file": "TVC_DXY, 60.csv",
+      "path": "references/charts/TVC_DXY, 60.csv",
+      "sha256": "0357f52a926cc8ed06c0e760780050007d5827048fb77cf1abf88d2fbb3da18d",
+      "exchange": "TVC",
+      "ticker": "DXY",
+      "timeframe": "60",
+      "tradingview_symbol": "TVC:DXY",
+      "columns": [
+        "time",
+        "open",
+        "high",
+        "low",
+        "close",
+        "Volume",
+        "Volume MA"
+      ],
+      "ohlc_columns": true,
+      "timestamp_basis": "unix epoch seconds (UTC by definition; chart timezone setting doesn't alter them)",
+      "timezone": "UTC",
+      "rows": 6275,
+      "first": "2025-09-08 17:00:00+00:00",
+      "last": "2026-09-15 11:00:00+00:00",
+      "modal_bar_spacing": "0 days 01:00:00",
+      "volume_column": "Volume",
+      "volume_non_null": 0,
+      "extra_columns": [
+        "Volume MA"
+      ],
+      "oct_nov_2025": {
+        "bars": 1018,
+        "fully_spanned": true
+      },
+      "v1_windows": {
+        "v1_CX-LT1-1.csv": {
+          "coverage": "FULL",
+          "bars_in_window": 12,
+          "expected_bars": 11,
+          "missing_bars": 0
+        },
+        "v1_CX-TE1-1.csv": {
+          "coverage": "FULL",
+          "bars_in_window": 12,
+          "expected_bars": 11,
+          "missing_bars": 0
+        },
+        "v1_CX-LT3-2.csv": {
+          "coverage": "FULL",
+          "bars_in_window": 15,
+          "expected_bars": 15,
+          "missing_bars": 0
+        },
+        "v1_cal_2025-10-22.csv": {
+          "coverage": "FULL",
+          "bars_in_window": 24,
+          "expected_bars": 23,
+          "missing_bars": 0
+        },
+        "v1_cal_2025-11-11.csv": {
+          "coverage": "FULL",
+          "bars_in_window": 24,
+          "expected_bars": 23,
+          "missing_bars": 0
+        }
+      },
+      "instrument": "DXY",
+      "v1_eligible": false,
+      "classification": "TRADINGVIEW_REFERENCE_FIXTURE (informational)",
+      "reasons": [
+        "not XAUUSD (V-1 is XAUUSD feed fidelity); informational"
+      ]
+    }
+  ],
+  "usable_as_v1": [],
+  "state": "V1_SYMBOL_MISMATCH",
+  "generated_utc": "2026-09-15T12:51:54+00:00"
+}
