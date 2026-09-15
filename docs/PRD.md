@@ -1,7 +1,7 @@
 # CBR Model: PRD Summary
 
 **Doc:** CBR-PRD-001 · **Version:** v1.0 · 2026-09-14 · **Status:** Active (Phase 9 PASS WITH CONCERNS · G1 approved with conditions · Phase 10 authorized) · **Instruments:** XAUUSD + DXY
-**Branch:** `cbr-work-091426-10am` · Full version: `docs/PRD.html`
+**Branch:** `main` · Full version: `docs/PRD.html`
 
 ---
 
