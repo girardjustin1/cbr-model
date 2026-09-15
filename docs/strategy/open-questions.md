@@ -258,8 +258,11 @@ recordings, or the Notion journal) · `RESEARCH PARAMETER` (legitimately ambiguo
   `reports/oq25-extrema-evidence.md`. Recommendation: STRUCTURE = tick-derived mid (`TICK_MID`), EXECUTION = tick
   bid/ask, as two concepts; second-best: cost-reduced candle/tick hybrid (H). Provisional on V-1 (FOREXCOM export).
   **Not implemented; canonical source unchanged until owner approval.**
-- **Status.** `NEEDS USER DECISION`. `HARD PRECONDITION` for Phase 11 reliance on historical highs/lows and for
-  Phase 14 (gate G2d).
+- **Owner ruling D16 (2026-09-15): APPROVED.** STRUCTURE = tick-derived mid (`TICK_MID`, role `STRUCTURE`); EXECUTION =
+  tick-derived bid/ask (role `EXECUTION`); never one series for both; access guards required. V-1 (FOREXCOM export) is a
+  hard requirement before Phase 13 parity passes; material differences reopen OQ-25. Candle files and GC are not
+  canonical for structure extremes. Full tick history deferred (OQ-33).
+- **Status.** `RESOLVED` (D16). Gate G2d satisfied for source selection; validation V-1 pending before Phase 13.
 
 ### OQ-26 · Independent reference for fine-grained DXY structure (owner ruling D12-6)
 - **Problem.** DXY CFD vs DX futures agree at 15m/1h (15m corr 0.963-0.993 on the days under the 1m threshold) but not
@@ -312,6 +315,16 @@ recordings, or the Notion journal) · `RESEARCH PARAMETER` (legitimately ambiguo
   licensing review appropriate to the repository's intended use and distribution. If it conflicts, Backtesting.py may be
   replaced without affecting the authoritative simulator or the research methodology.
 - **Status.** `OPEN` (licensing review before Phase 14B).
+
+### OQ-33 · Historical tick acquisition strategy (D16-4)
+- **Problem.** D16 makes tick-derived mid/bid/ask canonical, but the full 2018-2026 XAU tick download (≈ 65k hourly files,
+  6-7 GB, 1.5-24 days) is deferred until the needed granularity is known.
+- **Options.** (A) full tick history · (B) targeted tick windows around armed candidate signals · (C) another validated
+  tick source · (D) staged/resumable hybrid acquisition.
+- **Constraint.** Decided after Phases 11-13 and the gate-required cross-feed/structure sensitivity checks, on fidelity,
+  reproducibility and execution needs; **never profitability**. Note: option B couples data coverage to engine output,
+  so its reproducibility and structure-window needs must be shown.
+- **Status.** `DEFERRED` (owner, D16-4).
 
 ### OQ-31 · How does the ledger use the hindsight vendor-gap mask? (Phase 10)
 - **Problem.** At a decision time inside a DXY CFD vendor outage, a causal module can't yet tell the outage from thin
@@ -455,6 +468,7 @@ said to hold ~350 trades (P2G-37). The spoken and slide DXY figures disagree.
 | D13 | Backtesting.py integrated in Phase 14B as a secondary execution, metrics, visualization and parity layer; Phase 14A custom simulator is authoritative; signal contract immutable; parity thresholds pre-registered (CBR-ARCH-014 §7); no `optimize()` or parameter search in Phases 14-16 | OQ-28, OQ-29, OQ-30, Phase 14 |
 | D14 | Phase 14 plan approved (not implemented; no Backtesting.py dependency). OQ-28 open: contract carries canonical stop inputs, not an executable stop. OQ-29 open: 5s CBR1H preserved; 1m only via Phase 13 evidence + proposed spec change. OQ-25: decision package due before Phase 11. OQ-30 open: licensing review before 14B. Phase 10 continues | OQ-25, OQ-28, OQ-29, OQ-30, Phase 10 |
 | D15 | Phase 10 accepted (PASS WITH CONCERNS, G10 approved). OQ-31 open, preference Option B (label, don't exclude; ALL vs FULL-DXY diagnostic only). Daily DXY CFD unavailability accepted: `DXY_AVAILABLE = false`, no directional meaning. Engineering thresholds stay IMPL, never optimized. OQ-25 decision package next; Phase 11 not started | OQ-25, OQ-31, G10 |
+| D16 | OQ-25 resolved: STRUCTURE = tick mid, EXECUTION = tick bid/ask, never one series for both, access guards + STRUCTURE/EXECUTION labels in schemas/manifests/reports. V-1 required before Phase 13 passes (reopen OQ-25 on material differences). Full tick history deferred (OQ-33). Phase 11 approved on downloaded tick days. Candle files and GC not canonical for extremes | OQ-25, OQ-33, Phases 11/13 |
 
 ## Batched questions for the user (historical; answered above)
 

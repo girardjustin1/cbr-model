@@ -1,0 +1,31 @@
+# Canonical price sources and roles (owner ruling D16, CBR-DEC-025). Changing this file requires an owner ruling.
+
+decision: D16
+structure:
+  price_role: STRUCTURE
+  instrument: xauusd
+  source: dukascopy_ticks
+  hl_method: TICK_MID                 # mid = (bid + ask) / 2 per tick; OHLC per interval
+  bars: [5s, 1m]                      # built from ticks
+  rollups: [5min, 15min, 1h]          # from STRUCTURE 1m, clock-aligned, usable at close
+  authoritative_for: [swing highs/lows, range highs/lows, range boundaries, extension highs/lows,
+                      liquidity takes/sweeps, extreme-sensitive structure logic, stop anchor/reference levels,
+                      target construction]
+execution:
+  price_role: EXECUTION
+  instrument: xauusd
+  source: dukascopy_ticks
+  hl_method: BID_ASK                  # bid OHLC and ask OHLC per interval, same ticks
+  bars: [5s, 1m]
+  authoritative_for: [entry fills, stop touches, target touches, spread, bid/ask execution, execution-cost simulation]
+not_canonical_for_extremes:
+  - {source: dukascopy_candle_files, allowed: [open/close checks, integrity diagnostics, bid/ask cross-checks,
+                                              coarse history, validation support]}
+  - {source: databento_gc_front, allowed: [cross-feed reference, broad-history research, volume, OQ-24 candidate]}
+context:
+  dxy: {source: dukascopy_candle_files, fields: [open, close], role: CONTEXT, note: "Phase 10; no DXY extremes"}
+history:
+  full_tick_download: DEFERRED        # D16-4, OQ-33
+validation:
+  V-1: {requirement: "FOREXCOM:XAUUSD export vs tick-mid structure on course-example windows",
+        gate: "before Phase 13 parity passes", on_material_difference: "stop; reopen OQ-25"}

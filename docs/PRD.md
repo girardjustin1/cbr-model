@@ -81,6 +81,7 @@ A trustworthy "no edge" answer counts as success. The TradingView indicator is b
 | D13 | Backtesting.py enters in **Phase 14B** as a secondary execution, standard-metrics, visualization and parity layer. The Phase 14A custom simulator is authoritative for execution; the CBR reference engine is authoritative for signals. Signal contract is immutable; parity thresholds pre-registered; no `optimize()` or parameter search in Phases 14-16. Plan: `docs/architecture/phase14-execution-architecture.md` |
 | D14 | Phase 14 plan approved, not implemented; Backtesting.py not a dependency. OQ-28 open (contract carries canonical stop inputs, not an executable stop); OQ-29 open (5s CBR1H preserved); OQ-25 decision package due before Phase 11; OQ-30 licensing review before 14B. Phase 10 continues |
 | D15 | Phase 10 accepted (PASS WITH CONCERNS, G10). OQ-31 open with preference B (label, don't exclude; ALL vs FULL-DXY diagnostic only). DXY daily unavailability = known limitation, `DXY_AVAILABLE = false`, no directional meaning. Engineering thresholds stay IMPL. OQ-25 package before Phase 11 |
+| D16 | OQ-25 resolved (CBR-DEC-025): **STRUCTURE price = tick-derived mid, EXECUTION price = tick-derived bid/ask**, never one series for both; access guards and STRUCTURE/EXECUTION labels in schemas, manifests and reports. V-1 FOREXCOM export required before Phase 13 passes. Full tick history deferred (OQ-33). Phase 11 approved on the downloaded tick days. Candle files and GC not canonical for extremes |
 
 ---
 
@@ -132,7 +133,7 @@ Both CBR models: **stop** beyond the extension extreme, **target** 50% of the ex
 
 | Source | What | Role | State |
 |---|---|---|---|
-| Dukascopy (free) | Spot gold + dollar index ticks and 1m bid/ask candles | Primary data, 5-second bars | Fixtures + 16 sample days validated (Phase 9); full history deferred (AC-11B). Candle high/low `SIDE_EXTREME_MEAN` is not authoritative for extremes (OQ-25) |
+| Dukascopy (free) | Spot gold ticks (canonical, D16) + dollar index 1m bid/ask candles | Gold ticks → STRUCTURE (mid) and EXECUTION (bid/ask) bars; DXY candles → context (open/close) | Tick days stored: 16 sample + 7 fixture-period days; full tick history **deferred** (OQ-33). Candle-file mid highs/lows never canonical (D16-6) |
 | Databento ($66.44) | GC + DX futures, 1-min (GC 2018-2026; DX from 2018-12-26) | Cross-check with real volume | Downloaded. No DX reference before 2018-12-26 (REFERENCE_UNAVAILABLE) |
 | TradingView export | FOREXCOM:XAUUSD, TVC:DXY | Exact match to Tom's charts; independent reference for 1m/5s DXY structure | Optional; needed if fine DXY structure is ever used (OQ-26) |
 
@@ -167,9 +168,9 @@ Research-derived variables carry `classification: RESEARCH-DERIVED`.
 ### B. Data & reference engines: phases 9-13 🟡 (9 ✅ with concerns)
 - **9 Historical data pipeline:** **PASS WITH CONCERNS** (2026-09-14, after owner ruling D12); **G1 approved with conditions**
 - **10 DXY context module: PASS WITH CONCERNS, accepted (D15, G10)** (CBR-ACC-010, `reports/phase10-dxy-context.md`). Causal quote + last-closed/forming 15m and 1h direction with state, confidence and reason codes; missing stays missing; hindsight vendor-gap mask kept separate (OQ-31); no DXY rule or filter. 
-- 11 CBR15 Python reference engine
+- **11 CBR15 Python reference engine: authorized (D16-5)** on stored tick days; STRUCTURE bars only; no profitability, optimization or holdout P&L
 - 12 CBR1H Python reference engine
-- **13 Tom ↔ Python parity gate:** the engine must reproduce the taught examples before any performance research
+- **13 Tom ↔ Python parity gate:** the engine must reproduce the taught examples before any performance research. **V-1 hard requirement (D16-3):** tick-mid structure compared with a FOREXCOM:XAUUSD export on the course-example windows; material differences reopen OQ-25
 
 ### C. Untouched baselines: phases 14-16
 - **Before 14:** define the canonical historical OHLC source for swings, range extremes, extension extremes, stops and sweeps (OQ-25, hard precondition, D12-5); complete the DXY DST/reopen availability diagnostic (OQ-27); freeze the baseline data feed (OQ-24: spot / futures / hybrid) on fidelity, signal agreement, structure agreement, availability, execution realism, 5s feasibility, reproducibility and known distortions, **never profitability**. If futures are chosen, the cross-feed signal-agreement requirement (G2b) must pass; if spot, AC-11B must be complete.
@@ -213,9 +214,9 @@ The Python reference engine is authoritative. LuxAlgo Quant may assist with Pine
 | Gate | After phase | Pass condition | Decided by |
 |---|---|---|---|
 | G1 Data ✅ | 9 | CBR-ACC-009 v2.1: AC-01…AC-10 + AC-11A; every failure classified; AC-11B may remain a concern. **Approved with conditions 2026-09-14** (`docs/governance/g1-approval.md`) | Owner |
-| G2 Faithful implementation | 13 | Engine reproduces taught examples on spot; every mismatch classified | Owner |
+| G2 Faithful implementation | 13 | Engine reproduces taught examples on spot; every mismatch classified; **V-1 FOREXCOM export check passed** (D16-3) | Owner |
 | G2b Cross-feed signal agreement | 13/14 | Engine run on spot and GC/DX over the 16 AC-11A sample days yields the same setups (direction, hour, entry window) at a rate pre-declared before measurement. Required before futures data can support any baseline performance claim | Owner |
-| G2d Canonical extremes source | pre-14 | OQ-25 decided: extreme-sensitive logic uses tick-built bars or another validated source, or candle-file highs/lows are shown quantitatively not to change signal membership or material execution results | Owner |
+| G2d Canonical extremes source ✅ | pre-14 | **Decided D16 (tick mid structure, tick bid/ask execution).** Original condition: OQ-25 decided: extreme-sensitive logic uses tick-built bars or another validated source, or candle-file highs/lows are shown quantitatively not to change signal membership or material execution results | Owner |
 | G2c Baseline feed frozen | pre-14 | OQ-24 decided on the owner's non-profitability criteria and recorded | Owner |
 | G14A Authoritative simulator | 14A | Fill-rule unit tests, same-bar and gap fixtures, determinism hash, holdout lock, hand-verified execution on the parity examples (no performance statistics) | Owner |
 | G14B Backtesting.py adapter | 14B | CBR-ARCH-014 §9: pinned version; adapter tests; signal membership, direction, entry-time and stop/target-spec parity 100%; every execution mismatch classified; deterministic reports; no rule changes; same frozen signal set as 14A | Owner |
@@ -270,7 +271,7 @@ _As of 2026-09-14, after owner ruling D12 and the Phase 9 acceptance rerun (`rep
 - **2020-06-17 gold.** 1m corr 0.920 with ~$3.7 basis drift; cause HYPOTHESIZED.
 - **OQ-27.** The DST-Monday DXY diagnostic is still pending (required before DXY availability assumptions are frozen).
 
-### Phase 10: **PASS WITH CONCERNS** (awaiting owner acceptance)
+### Phase 10: **PASS WITH CONCERNS** (accepted, D15)
 
 All CBR-ACC-010 criteria met on 24 days (8 fixture + 16 sample): UTC, truncation and future-mutation causality
 (300 seeded times per day), no forward-fill, hindsight isolation, no DX substitution, closure labelling, direction
@@ -279,7 +280,7 @@ recomputation, determinism, reference flags. Last-closed direction agreement vs 
 (00:00-01:00 UTC) has no DXY context because the CFD doesn't quote 18:00-20:00 New York; thinner 2018-2019 coverage;
 IMPL thresholds validated on 24 days only; no DXY extremes (OQ-25).
 
-**Phase 10 accepted (D15, G10 approved: `docs/governance/g10-approval.md`). Phase 11 not started.** Blocker: owner decision on OQ-25. Package delivered 2026-09-15 (`docs/decisions/oq25-canonical-price-extremes.md`): recommends STRUCTURE = tick mid, EXECUTION = tick bid/ask (two concepts), provisional on a FOREXCOM export check (V-1); full XAU tick history (≈ 6-7 GB) would become required before baselines. Phase 14 is
+**Phase 10 accepted (D15, G10: `docs/governance/g10-approval.md`). OQ-25 resolved (D16): STRUCTURE = tick mid, EXECUTION = tick bid/ask; guards in `src/cbr/data/price_series.py`. Phase 11 (CBR15 engine) in progress.** Full tick history deferred (OQ-33); V-1 required before Phase 13. Phase 14 is
 planned only (`docs/architecture/phase14-execution-architecture.md`). Not authorized: baseline profitability testing,
 OQ-24 via performance, holdout P&L, Phase 17, Backtesting.py implementation.
 
@@ -318,7 +319,8 @@ OQ-24 via performance, holdout P&L, Phase 17, Backtesting.py implementation.
 | OQ-11 / 12 | Stop buffer; 50% target vs 1:1 vs next level | Buffer range declared; target variants tested separately |
 | OQ-13 | DXY as confluence, veto or timing trigger? | Not in baseline; each tested separately |
 | OQ-21 | Trend: hard no-trade or quality downgrade? | Hard filter in V1; downgrade tested separately |
-| OQ-25 | Canonical OHLC source for extremes (swings, ranges, extensions, stops, sweeps)? | **Phase 11 blocker.** Decision package delivered (CBR-DEC-025): recommends tick mid for structure + tick bid/ask for execution; awaiting owner |
+| OQ-25 | Canonical OHLC source for extremes | **Resolved D16:** tick mid STRUCTURE, tick bid/ask EXECUTION; V-1 before Phase 13 |
+| OQ-33 | Historical tick acquisition strategy (full / targeted / other source / staged) | Deferred until after Phases 11-13 (D16-4); never by profitability |
 | OQ-26 | Independent reference for 1m/5s DXY structure? | Open data dependency; only 15m/1h DXY context used meanwhile |
 | OQ-27 | DXY CFD availability at DST-transition Mondays / weekly reopen | Diagnostic approved; required before DXY availability assumptions are frozen |
 | OQ-28 | Stop resolved at fill (current spec) or frozen at decision? | Decide in Phase 11, before Phase 13 |

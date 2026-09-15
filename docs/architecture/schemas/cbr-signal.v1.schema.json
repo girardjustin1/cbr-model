@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "cbr-signal.v1",
   "title": "CBR signal contract (engine -> every execution backend)",
-  "description": "PLANNING DRAFT (CBR-ARCH-014 §3, 2026-09-14). Finalized in Phase 11, frozen before Phase 13. Written once by the CBR reference engine; immutable during execution. Execution layers (custom simulator 14A, Backtesting.py adapter 14B) may not create, delete or edit signals. Owner ruling D14-1: the contract carries canonical stop INPUTS; the executable stop is resolved by the authoritative simulator (OQ-28 open).",
+  "description": "PLANNING DRAFT (CBR-ARCH-014 §3, 2026-09-14). Finalized in Phase 11, frozen before Phase 13. Written once by the CBR reference engine; immutable during execution. Execution layers (custom simulator 14A, Backtesting.py adapter 14B) may not create, delete or edit signals. Owner ruling D14-1: the contract carries canonical stop INPUTS; the executable stop is resolved by the authoritative simulator (OQ-28 open). Owner ruling D16: every price in a signal (extremes, ranges, trigger, target, stop anchor) is STRUCTURE price (tick-derived mid, TICK_MID); execution prices (bid/ask) never appear in a signal.",
   "type": "object",
   "additionalProperties": true,
   "required": [
@@ -28,7 +28,8 @@
     "source_feed",
     "data_confidence",
     "reason_code",
-    "spec_hash"
+    "spec_hash",
+    "price_role"
   ],
   "properties": {
     "signal_id": {
@@ -98,11 +99,9 @@
         },
         "extension_extreme_source": {
           "enum": [
-            "TICK_MID",
-            "SIDE_EXTREME_MEAN",
-            "OTHER_VALIDATED"
+            "TICK_MID"
           ],
-          "description": "OQ-25"
+          "description": "D16"
         },
         "direction": {
           "enum": [
@@ -191,11 +190,9 @@
     },
     "extremes_source": {
       "enum": [
-        "TICK_MID",
-        "SIDE_EXTREME_MEAN",
-        "OTHER_VALIDATED"
+        "TICK_MID"
       ],
-      "description": "D12-5 / OQ-25"
+      "description": "D16: canonical STRUCTURE extremes only"
     },
     "range_high": {
       "type": [
@@ -291,6 +288,10 @@
     "spec_hash": {
       "type": "string",
       "description": "Hash of machine spec + strategy.yaml + engine code"
+    },
+    "price_role": {
+      "const": "STRUCTURE",
+      "description": "D16: all signal prices are STRUCTURE prices; fills/touches are resolved on EXECUTION bars by the simulator"
     }
   }
 }

@@ -1,7 +1,9 @@
 # CBR15_BASELINE_V1: Machine Specification
 
 **Model id:** `CBR15_BASELINE_V1` · **Primitives:** `CBR_PRIMITIVES_V1` · **Parameters:**
-`config/strategy.yaml → models.CBR15_BASELINE_V1` · **Status:** draft for review · **Date:** 2026-09-14
+`config/strategy.yaml → models.CBR15_BASELINE_V1` · **Status:** draft for review · **Date:** 2026-09-14 (price roles D16, 2026-09-15)
+
+**Price roles (D16).** All rules in §2-§7 read STRUCTURE (tick-mid) bars; fills and stop/target touches belong to the execution layer (EXECUTION bid/ask bars). The engine never reads bid/ask.
 
 **Scope.** Core reversal Model D (`15min-cbr-spec.md` §6) with `in` rows of the rule matrix, Phase 1/2 definitions
 and user decisions D1-D7. **Excluded:** Models A-C (hourly-structure, 15m-structure, continuation), DXY, 5m-candle

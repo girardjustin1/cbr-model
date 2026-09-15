@@ -1,6 +1,6 @@
 # CBR Shared Primitives: Machine Specification
 
-**Version:** `CBR_PRIMITIVES_V1` (spec rev 1.1: type 3 pairing fix F-0) · **Status:** draft for review · **Date:** 2026-09-14
+**Version:** `CBR_PRIMITIVES_V1` (spec rev 1.2: price roles per D16; rev 1.1: type 3 pairing fix F-0) · **Status:** draft for review · **Date:** 2026-09-15
 
 Deterministic definitions used by `CBR1H_BASELINE_V1` and `CBR15_BASELINE_V1`. Every numeric value lives in
 `config/strategy.yaml`; this document refers to parameters by name (`param.*`). Each definition cites its
@@ -17,8 +17,8 @@ chosen for implementability (linked OQ) · `IMPL` = engineering necessity with n
 | Item | Definition |
 |---|---|
 | Time | All timestamps UTC, `timestamp[ns, UTC]`, bar **open** time. A bar with open `t` and length `Δ` is *closed* at `t+Δ` and usable only for decisions at or after `t+Δ`. |
-| Price | Mid = (bid+ask)/2 for OHLC. Bid/ask kept for fills (backtest layer). |
-| Bars | `B5s`, `B1m` built from Dukascopy ticks (D2). `B5m`, `B15m`, `B1h`, `B1d` resampled from `B1m`, clock-aligned (15m at :00/:15/:30/:45; 1h on the hour). |
+| Price roles (D16) | **STRUCTURE** price = tick-derived mid `(bid+ask)/2` (`hl_method = TICK_MID`, `price_role = STRUCTURE`). Every primitive in §1-§7 reads STRUCTURE bars only. **EXECUTION** price = tick-derived bid and ask OHLC (`price_role = EXECUTION`), read only by §8 execution semantics (fills, stop/target touches, spread). One OHLC series is never used for both; enforced by access guards (`cbr.data.price_series`). Dukascopy candle-file mid highs/lows (`SIDE_EXTREME_MEAN`) and GC futures are never canonical extremes (CBR-DEC-025). |
+| Bars | STRUCTURE `B5s`, `B1m` built from Dukascopy ticks (D2); `B5m`, `B15m`, `B1h`, `B1d` rolled up from STRUCTURE `B1m`, clock-aligned (15m at :00/:15/:30/:45; 1h on the hour). EXECUTION `B5s` (bid/ask) built from the same ticks. |
 | Minute-in-hour | `mih(t) = minutes(t) + seconds(t)/60` of UTC clock time. Timezone-invariant for whole-hour offsets. |
 | Gaps | A candle with any missing constituent `B1m` bar is `INCOMPLETE`; no setup may use an incomplete candle (missing data lowers confidence, never silently filled). |
 | Causality | Every function below takes `as_of` time and may read only bars closed at or before `as_of`. Enforced by a lookahead test (future bars mutated → identical outputs). |
@@ -194,6 +194,8 @@ No other session filter in V1 (D3).
 ---
 
 ## 8. Execution semantics shared by both models (IMPL + CANON)
+
+Price role (D16): fills and stop/target **touches** use EXECUTION bars (buy at ask, sell at bid; long exits observed on bid, short exits on ask). Stop **anchors** and target **levels** are STRUCTURE prices (`oe_extreme`, `C.open`).
 
 | Item | Definition | Evidence |
 |---|---|---|

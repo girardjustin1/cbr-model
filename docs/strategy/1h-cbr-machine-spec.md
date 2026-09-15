@@ -1,7 +1,9 @@
 # CBR1H_BASELINE_V1: Machine Specification
 
 **Model id:** `CBR1H_BASELINE_V1` · **Primitives:** `CBR_PRIMITIVES_V1` (`cbr-primitives-machine-spec.md`) ·
-**Parameters:** `config/strategy.yaml → models.CBR1H_BASELINE_V1` · **Status:** draft for review · **Date:** 2026-09-14
+**Parameters:** `config/strategy.yaml → models.CBR1H_BASELINE_V1` · **Status:** draft for review · **Date:** 2026-09-14 (price roles D16, 2026-09-15)
+
+**Price roles (D16).** All rules in §2-§6 read STRUCTURE (tick-mid) bars; fills and stop/target touches belong to the execution layer (EXECUTION bid/ask bars). The engine never reads bid/ask.
 
 **Scope.** Only rules marked `in` in `rule-matrix.md`, the Phase 1/2 definitions, and user decisions D1-D7.
 **Excluded** (D1 / ablations): fractal-shift & inverse-fractal-shift models, DXY, sessions beyond canonical no-trade
@@ -143,3 +145,5 @@ Diagnostics exist so Phase 17-18 can test whether they add information. They are
 Course examples the V1 engine must be evaluated against (`research/examples/course_examples.jsonl`):
 CX-LT1-1 (2025-10-21 ~01:39 UTC, BUY), CX-TE1-1 (2025-10-24 ~04:37 UTC, BUY), CX-LT3-2 (2025-11-10 01:40 UTC, SELL).
 Each outcome is classified as: reproduced / code bug / data difference / declared simplification / source ambiguity.
+
+**V-1 (owner ruling D16-3, hard requirement).** Phase 13 parity cannot be declared complete until tick-mid STRUCTURE has been compared against a representative TradingView FOREXCOM:XAUUSD export for the course-example windows (CBR-DEC-025 V-1). Material structure differences stop parity and reopen OQ-25. The source is never chosen by which produces better trades.
