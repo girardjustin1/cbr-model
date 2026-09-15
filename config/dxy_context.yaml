@@ -1,0 +1,22 @@
+# Phase 10 DXY context module (CBR-ACC-010). Context primitives only: no DXY trading rule, filter or veto (D14).
+# Labels: CANON (course rule) / ASSUMPTION (interpretation) / IMPL (engineering choice). All IMPL here were declared
+# before measurement on market data; their distributions are reported, never tuned.
+
+version: DXY_CONTEXT_V1
+source:
+  instrument: dollaridxusd                     # Dukascopy DXY CFD (D7)
+  series: candles_1m                           # Phase 9 validated; zero-volume rows already dropped
+  price_fields: [open, close]                  # IMPL: open/close only (Phase 9 AC-03); highs/lows wait for OQ-25
+timeframes:                                    # owner Phase 10 scope; 1m/5s DXY structure excluded (D12-6)
+  "15m": 15
+  "1h": 60
+direction:
+  flat_epsilon: {value: 0.0, label: IMPL, reason: "candle close direction; equal open/close = FLAT"}
+quote:
+  max_quote_age_minutes: {value: 10, label: IMPL, reason: "DXY CFD has thin minutes without quote updates (Phase 9); older last quotes are stale"}
+window:
+  min_coverage_full: {value: 0.5, label: IMPL, reason: "below half the expected-open minutes quoted -> REDUCED confidence"}
+missing:
+  # Causal use of the Phase 9 detector; thresholds come from config/data_quality.yaml (single source).
+  detector: DXY_CFD_MISSING_WHILE_DX_ACTIVE
+  unverified_run_minutes_from: data_quality.yaml:dxy_cfd_missing_while_dx_active.min_missing_run_minutes

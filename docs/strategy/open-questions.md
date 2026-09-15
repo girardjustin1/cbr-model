@@ -248,7 +248,14 @@ recordings, or the Notion journal) · `RESEARCH PARAMETER` (legitimately ambiguo
   files, only if shown quantitatively not to change signal membership or material execution results · (c) a hybrid:
   candle files for coarse structure, ticks for armed-signal hours · (d) another validated source.
 - **Constraint.** Never chosen by profitability. Decided together with OQ-24.
-- **Status.** `HARD PRECONDITION` for Phase 14 (gate G2d). Open.
+- **Owner ruling D14-3 (2026-09-14).** Higher priority than Backtesting.py. Candle-file extremes must not silently become
+  canonical. Not solved during Phase 10 unless Phase 10 genuinely needs it (it doesn't: DXY context uses opens and closes
+  only). **Before Phase 11 starts**, deliver an owner decision package covering: (1) available sources for canonical
+  extremes, (2) tick-derived mid/bid/ask options, (3) full-history availability, (4) implications for CBR15 and CBR1H,
+  (5) implications for spot/futures/hybrid baselines, (6) implementation cost, (7) recommended choice, (8) validation
+  tests. Never selected by profitability.
+- **Status.** `HARD PRECONDITION` for Phase 11 reliance on historical highs/lows (swings, ranges, extensions, sweeps,
+  stops, targets) and for Phase 14 (gate G2d). Open.
 
 ### OQ-26 · Independent reference for fine-grained DXY structure (owner ruling D12-6)
 - **Problem.** DXY CFD vs DX futures agree at 15m/1h (15m corr 0.963-0.993 on the days under the 1m threshold) but not
@@ -273,13 +280,22 @@ recordings, or the Notion journal) · `RESEARCH PARAMETER` (legitimately ambiguo
 - **Options.** (a) `ADD_SPREAD_AT_FILL`: the contract carries anchor + buffer; the simulator adds the fill-time spread
   (keeps the current spec) · (b) `FROZEN_AT_DECISION`: the whole stop is fixed when the signal is emitted (spec revision).
 - **Constraint.** Decided on spec fidelity and testability, **before Phase 13**; never after baselines exist.
-- **Status.** `NEEDS USER DECISION` (Phase 11).
+- **Owner ruling D14-1 (2026-09-14).** Stays **OPEN** until the Phase 11/12 engines and execution semantics exist. The
+  signal contract carries the **canonical stop inputs** (extension extreme, direction, canonical stop buffer and its
+  classification/source, spread/execution inputs when available), not a pretended executable stop price. The
+  authoritative simulator may compute the executable stop from the fill-time spread if that stays consistent with the
+  machine spec. No second trading rule is created to accommodate Backtesting.py; the custom simulator stays
+  authoritative.
+- **Status.** `OPEN` (revisit after Phases 11-12).
 
 ### OQ-29 · CBR1H execution clock: 5s or 1m? (D13)
 - **Problem.** The owner allows CBR1H on 1m bars if Phases 11-13 prove it sufficient, but primitives §8 fills both
   models' stop entries on 5s bars.
 - **Handling.** 5s stays the spec. Moving to 1m needs parity evidence that fills and signal membership don't change
   materially, plus an owner-approved spec revision before Phase 14A.
+- **Owner ruling D14-2 (2026-09-14).** Stays **OPEN**. CBR1H is not simplified to 1m for convenience; 5s behavior is
+  preserved. Phase 13 measures whether a 1m implementation gives sufficiently equivalent signal membership, timing,
+  structure and execution. If it does, a spec change is **proposed** for owner approval.
 - **Status.** `OPEN`, decided after Phase 13.
 
 ### OQ-30 · Backtesting.py licence (AGPL-3.0) in a public repository (D13)
@@ -288,7 +304,24 @@ recordings, or the Notion journal) · `RESEARCH PARAMETER` (legitimately ambiguo
 - **Handling.** Not added until Phase 14B. Owner reviews the licence implications (no legal conclusion is made here).
   Fallback if rejected: keep 14B visual/metrics outputs in a separate, isolated tool or choose another library,
   with no change to 14A.
-- **Status.** `NEEDS USER DECISION` before Phase 14B.
+- **Owner ruling D14-4 (2026-09-14).** Stays **OPEN** until Phase 14B; no legal conclusion now. Before 14B begins, run a
+  licensing review appropriate to the repository's intended use and distribution. If it conflicts, Backtesting.py may be
+  replaced without affecting the authoritative simulator or the research methodology.
+- **Status.** `OPEN` (licensing review before Phase 14B).
+
+### OQ-31 · How does the ledger use the hindsight vendor-gap mask? (Phase 10)
+- **Problem.** At a decision time inside a DXY CFD vendor outage, a causal module can't yet tell the outage from thin
+  quoting. The Phase 10 module shows the last quote for up to `max_quote_age_minutes` (10, IMPL) with REDUCED
+  confidence before it goes UNAVAILABLE; the causal vendor-gap flag fires only after a 30-min run with 15 active DX
+  minutes. The Phase 9 detector over the whole day (`dq_hindsight_*`) knows the outage immediately, but that uses future
+  data.
+- **Options.** (a) Causal fields only: a signal decides on what was knowable; the hindsight mask is reported but never
+  changes membership · (b) the hindsight mask labels ledger rows (`data_confidence` → REDUCED/UNAVAILABLE and reason
+  code) without changing whether the engine emitted a signal · (c) the hindsight mask excludes affected signals from
+  baseline statistics (data-quality exclusion; hindsight about data, not about price outcomes).
+- **Constraint.** The engine may never read `dq_hindsight_*` (enforced by column naming and the CBR-ACC-010 AC10-04b
+  isolation test). Decided before Phase 15, never by profitability.
+- **Status.** `NEEDS USER DECISION` before baselines (does not block Phase 11 engine work, which consumes causal fields).
 
 ### OQ-17 · Stop placement on the 15m model: tight vs breathing room
 - **Problem.** Course: no tight stops (E15-040). One journal trade uses a tight stop; another journal loss is
@@ -411,6 +444,7 @@ said to hold ~350 trades (P2G-37). The spoken and slide DXY figures disagree.
 | D11 | AC-11 split into AC-11A (required: 16-day stratified pipeline proof) and AC-11B (deferred full spot history); failures classified, not auto-FAIL; baseline feed (OQ-24) stays open until parity and cross-feed agreement, frozen before Phase 14, never chosen by profitability | OQ-24, Phase 9 |
 | D12 | Phase 9 rulings: 2020-03-09 DXY hour = DATA_ERROR → MISSING, with detector `DXY_CFD_MISSING_WHILE_DX_ACTIVE`; 2019-03-11 DXY hour stays UNEXPLAINED → MISSING; new class REFERENCE_UNAVAILABLE; `cause_status` field; candle high/low construction is a hard safeguard before Phase 14; 1m/5s DXY structure not validated. Phase 9 PASS WITH CONCERNS, G1 approved with conditions | OQ-25, OQ-26, OQ-27, G1 |
 | D13 | Backtesting.py integrated in Phase 14B as a secondary execution, metrics, visualization and parity layer; Phase 14A custom simulator is authoritative; signal contract immutable; parity thresholds pre-registered (CBR-ARCH-014 §7); no `optimize()` or parameter search in Phases 14-16 | OQ-28, OQ-29, OQ-30, Phase 14 |
+| D14 | Phase 14 plan approved (not implemented; no Backtesting.py dependency). OQ-28 open: contract carries canonical stop inputs, not an executable stop. OQ-29 open: 5s CBR1H preserved; 1m only via Phase 13 evidence + proposed spec change. OQ-25: decision package due before Phase 11. OQ-30 open: licensing review before 14B. Phase 10 continues | OQ-25, OQ-28, OQ-29, OQ-30, Phase 10 |
 
 ## Batched questions for the user (historical; answered above)
 

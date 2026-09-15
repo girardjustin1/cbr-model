@@ -85,7 +85,7 @@ both 14A and 14B must load the same hash.
 | `entry_expiry_time` | Order cancelled if unfilled by this time (`timing.end`; spec §8 "Order expiry") |
 | `entry_order_type` | `STOP` (spec §8: break entries) |
 | `entry_reference_price` | Trigger price (`t3.trigger_price` / `hilo.trigger_price`) |
-| `stop_price` | Stop specification at decision time (see §3.2) |
+| `stop_rule` | Canonical stop inputs: extension extreme, direction, canonical buffer (value, label, source), spread policy, execution inputs when available (§3.2, D14-1). `stop_price` is an optional spread-free reference only, never an executable stop |
 | `target_price` | `oe_extreme − 0.5 × (oe_extreme − candle.open)` (mirror LONG) |
 | `extension_high`, `extension_low` | Extension extremes at decision time, with `extremes_source` (`TICK_MID` / `SIDE_EXTREME_MEAN`; D12-5) |
 | `range_high`, `range_low` | Condition-range extremes at decision time |
@@ -100,6 +100,11 @@ both 14A and 14B must load the same hash.
 Optional diagnostics are the ledger fields of `1h-cbr-machine-spec.md` §7 / `15min-cbr-machine-spec.md` §8.
 
 ### 3.2 Conflict to resolve in Phase 11: stop resolved at fill (OQ-28)
+
+> **Owner ruling D14-1 (2026-09-14):** OQ-28 stays OPEN until the Phase 11/12 engines and execution semantics exist. The
+> contract represents the canonical stop **inputs** (not a pretended executable price). The authoritative simulator may
+> compute the executable stop using the fill-time spread if that remains consistent with the machine spec. No second
+> trading rule is created to accommodate Backtesting.py.
 
 The current spec computes the stop **at fill**: `oe_extreme (at fill) ± buffer_atr × ATR(1m,14) ± spread`
 (M1H-SL-01, primitives §8). A contract with a fixed `stop_price` at decision time is not the same thing. The planned

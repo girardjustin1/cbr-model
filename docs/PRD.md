@@ -79,6 +79,7 @@ A trustworthy "no edge" answer counts as success. The TradingView indicator is b
 | D11 | AC-11 split: AC-11A (16-day stratified spot-pipeline proof, required for Phase 9) + AC-11B (full spot history, deferred); failures classified; baseline feed (OQ-24) open until parity and cross-feed agreement, frozen before Phase 14, never chosen by profitability |
 | D12 | Phase 9 rulings: DXY 2020-03-09 20h = DATA_ERROR → MISSING, flagged by detector `DXY_CFD_MISSING_WHILE_DX_ACTIVE`; DXY 2019-03-11 00h stays UNEXPLAINED → MISSING; new class REFERENCE_UNAVAILABLE; `cause_status` (unproven causes never used as evidence); candle-file high/low = hard safeguard before Phase 14; 1m/5s DXY structure not validated. Record: `docs/governance/g1-approval.md` |
 | D13 | Backtesting.py enters in **Phase 14B** as a secondary execution, standard-metrics, visualization and parity layer. The Phase 14A custom simulator is authoritative for execution; the CBR reference engine is authoritative for signals. Signal contract is immutable; parity thresholds pre-registered; no `optimize()` or parameter search in Phases 14-16. Plan: `docs/architecture/phase14-execution-architecture.md` |
+| D14 | Phase 14 plan approved, not implemented; Backtesting.py not a dependency. OQ-28 open (contract carries canonical stop inputs, not an executable stop); OQ-29 open (5s CBR1H preserved); OQ-25 decision package due before Phase 11; OQ-30 licensing review before 14B. Phase 10 continues |
 
 ---
 
@@ -164,7 +165,7 @@ Research-derived variables carry `classification: RESEARCH-DERIVED`.
 
 ### B. Data & reference engines: phases 9-13 🟡 (9 ✅ with concerns)
 - **9 Historical data pipeline:** **PASS WITH CONCERNS** (2026-09-14, after owner ruling D12); **G1 approved with conditions**
-- **10 DXY context module: authorized.** Missing stays missing, availability/confidence explicit with reason codes, 15m/1h context favored over 1m/5s structure, no DXY filter optimized
+- **10 DXY context module: PASS WITH CONCERNS** (CBR-ACC-010, `reports/phase10-dxy-context.md`). Causal quote + last-closed/forming 15m and 1h direction with state, confidence and reason codes; missing stays missing; hindsight vendor-gap mask kept separate (OQ-31); no DXY rule or filter. Awaiting owner acceptance
 - 11 CBR15 Python reference engine
 - 12 CBR1H Python reference engine
 - **13 Tom ↔ Python parity gate:** the engine must reproduce the taught examples before any performance research
@@ -242,8 +243,8 @@ _As of 2026-09-14, after owner ruling D12 and the Phase 9 acceptance rerun (`rep
 | Course videos ingested | 73 (~15.2 h) |
 | Core evidence records | 151 |
 | Candidate records | 258 |
-| Tests passing | 419 |
-| Open questions tracked | 30 |
+| Tests passing | 433 |
+| Open questions tracked | 31 |
 | Data spend | $66.44 (Databento) |
 
 ### Phase 9: **PASS WITH CONCERNS** · G1 approved with conditions
@@ -268,8 +269,18 @@ _As of 2026-09-14, after owner ruling D12 and the Phase 9 acceptance rerun (`rep
 - **2020-06-17 gold.** 1m corr 0.920 with ~$3.7 basis drift; cause HYPOTHESIZED.
 - **OQ-27.** The DST-Monday DXY diagnostic is still pending (required before DXY availability assumptions are frozen).
 
-**Active phase: Phase 10 (authorized), unchanged by D13.** Phase 14 is planned only (`docs/architecture/phase14-execution-architecture.md`). DXY context module only. Not authorized: baseline profitability testing, OQ-24 via
-performance, holdout P&L, Phase 17.
+### Phase 10: **PASS WITH CONCERNS** (awaiting owner acceptance)
+
+All CBR-ACC-010 criteria met on 24 days (8 fixture + 16 sample): UTC, truncation and future-mutation causality
+(300 seeded times per day), no forward-fill, hindsight isolation, no DX substitution, closure labelling, direction
+recomputation, determinism, reference flags. Last-closed direction agreement vs DX: 15m 98.4%, 1h 98.8%
+(threshold 80%). Concerns: the causal quote persists up to 10 min into a vendor outage (OQ-31); winter Asia hour 1
+(00:00-01:00 UTC) has no DXY context because the CFD doesn't quote 18:00-20:00 New York; thinner 2018-2019 coverage;
+IMPL thresholds validated on 24 days only; no DXY extremes (OQ-25).
+
+**Phase 11 not started.** Prerequisites: owner acceptance of Phase 10 and the OQ-25 decision package (D14-3). Phase 14 is
+planned only (`docs/architecture/phase14-execution-architecture.md`). Not authorized: baseline profitability testing,
+OQ-24 via performance, holdout P&L, Phase 17, Backtesting.py implementation.
 
 - **Commits:** local only, not pushed
 - **Blocked:** Trader.dev MCP server returns 502 on every path
@@ -312,6 +323,7 @@ performance, holdout P&L, Phase 17.
 | OQ-28 | Stop resolved at fill (current spec) or frozen at decision? | Decide in Phase 11, before Phase 13 |
 | OQ-29 | CBR1H execution clock: 5s (spec) or 1m? | 5s unless Phase 13 evidence + owner spec revision |
 | OQ-30 | Backtesting.py is AGPL-3.0; the repo is public | Owner licence review before Phase 14B; 14A unaffected |
+| OQ-31 | Ledger use of the hindsight DXY vendor-gap mask (label, exclude, or report only)? | Owner decision before baselines; engine reads causal fields only |
 | OQ-24 | Baseline feed: Dukascopy spot, GC/DX futures, or hybrid? | Open until Phase 9 validation, engines, Phase 13 parity and cross-feed agreement exist; frozen before Phase 14; never chosen by profitability |
 
 Full register: `docs/strategy/open-questions.md`

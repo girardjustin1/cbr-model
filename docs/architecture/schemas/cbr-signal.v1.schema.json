@@ -2,64 +2,295 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "cbr-signal.v1",
   "title": "CBR signal contract (engine -> every execution backend)",
-  "description": "PLANNING DRAFT (CBR-ARCH-014 §3, 2026-09-14). Finalized in Phase 11, frozen before Phase 13. Written once by the CBR reference engine; immutable during execution. Execution layers (custom simulator 14A, Backtesting.py adapter 14B) may not create, delete or edit signals.",
+  "description": "PLANNING DRAFT (CBR-ARCH-014 §3, 2026-09-14). Finalized in Phase 11, frozen before Phase 13. Written once by the CBR reference engine; immutable during execution. Execution layers (custom simulator 14A, Backtesting.py adapter 14B) may not create, delete or edit signals. Owner ruling D14-1: the contract carries canonical stop INPUTS; the executable stop is resolved by the authoritative simulator (OQ-28 open).",
   "type": "object",
   "additionalProperties": true,
   "required": [
-    "signal_id", "model", "variant", "timestamp", "direction", "entry_trigger_time", "entry_expiry_time",
-    "entry_order_type", "entry_reference_price", "stop_price", "stop_rule", "target_price",
-    "extension_high", "extension_low", "extremes_source", "range_high", "range_low",
-    "context_state", "dxy_state", "session_state", "source_feed", "data_confidence", "reason_code", "spec_hash"
+    "signal_id",
+    "model",
+    "variant",
+    "timestamp",
+    "direction",
+    "entry_trigger_time",
+    "entry_expiry_time",
+    "entry_order_type",
+    "entry_reference_price",
+    "stop_rule",
+    "target_price",
+    "extension_high",
+    "extension_low",
+    "extremes_source",
+    "range_high",
+    "range_low",
+    "context_state",
+    "dxy_state",
+    "session_state",
+    "source_feed",
+    "data_confidence",
+    "reason_code",
+    "spec_hash"
   ],
   "properties": {
-    "signal_id": {"type": "string", "description": "Deterministic: model/variant/candle_open_utc/direction/seq"},
-    "model": {"enum": ["CBR1H_BASELINE_V1", "CBR15_BASELINE_V1"]},
-    "variant": {"type": "string"},
-    "timestamp": {"type": "string", "format": "date-time", "description": "Decision time, UTC: close time of the last bar used; all inputs closed at or before it"},
-    "direction": {"enum": ["LONG", "SHORT"]},
-    "entry_trigger_time": {"type": "string", "format": "date-time", "description": "Open time of the first bar on which the entry order is active (> timestamp). Not the fill time"},
-    "entry_expiry_time": {"type": "string", "format": "date-time", "description": "Unfilled order cancelled at this time (timing.end)"},
-    "entry_order_type": {"enum": ["STOP"]},
-    "entry_reference_price": {"type": "number", "description": "Trigger price (t3 / hilo trigger)"},
-    "stop_price": {"type": "number", "description": "Spread-free stop specification at decision time: anchor +/- buffer_price (OQ-28)"},
+    "signal_id": {
+      "type": "string",
+      "description": "Deterministic: model/variant/candle_open_utc/direction/seq"
+    },
+    "model": {
+      "enum": [
+        "CBR1H_BASELINE_V1",
+        "CBR15_BASELINE_V1"
+      ]
+    },
+    "variant": {
+      "type": "string"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Decision time, UTC: close time of the last bar used; all inputs closed at or before it"
+    },
+    "direction": {
+      "enum": [
+        "LONG",
+        "SHORT"
+      ]
+    },
+    "entry_trigger_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Open time of the first bar on which the entry order is active (> timestamp). Not the fill time"
+    },
+    "entry_expiry_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Unfilled order cancelled at this time (timing.end)"
+    },
+    "entry_order_type": {
+      "enum": [
+        "STOP"
+      ]
+    },
+    "entry_reference_price": {
+      "type": "number",
+      "description": "Trigger price (t3 / hilo trigger)"
+    },
+    "stop_price": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "OPTIONAL reference level only: extension_extreme +/- canonical buffer, spread-free. NOT an executable stop (D14-1). May be null."
+    },
     "stop_rule": {
       "type": "object",
-      "required": ["anchor", "buffer_price", "spread_policy"],
+      "description": "Canonical stop inputs sufficient to reproduce the stop deterministically (D14-1, OQ-28 open).",
+      "required": [
+        "extension_extreme",
+        "direction",
+        "buffer",
+        "spread_policy",
+        "execution_inputs"
+      ],
       "properties": {
-        "anchor": {"type": "number", "description": "oe_extreme at decision time"},
-        "buffer_price": {"type": "number", "description": "param.stop.buffer_atr x ATR(1m,14) at decision time"},
-        "spread_policy": {"enum": ["ADD_SPREAD_AT_FILL", "FROZEN_AT_DECISION"], "description": "OQ-28: current spec = ADD_SPREAD_AT_FILL"}
+        "extension_extreme": {
+          "type": "number",
+          "description": "oe_extreme at decision time (the extreme the stop sits beyond)"
+        },
+        "extension_extreme_source": {
+          "enum": [
+            "TICK_MID",
+            "SIDE_EXTREME_MEAN",
+            "OTHER_VALIDATED"
+          ],
+          "description": "OQ-25"
+        },
+        "direction": {
+          "enum": [
+            "LONG",
+            "SHORT"
+          ],
+          "description": "stop is below the extreme for LONG, above for SHORT"
+        },
+        "buffer": {
+          "type": "object",
+          "required": [
+            "param",
+            "value",
+            "unit",
+            "label",
+            "source"
+          ],
+          "properties": {
+            "param": {
+              "const": "stop.buffer_atr"
+            },
+            "value": {
+              "type": "number"
+            },
+            "unit": {
+              "const": "ATR(1m,14)"
+            },
+            "atr_at_decision": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "label": {
+              "enum": [
+                "CANON",
+                "ASSUMPTION",
+                "IMPL"
+              ]
+            },
+            "source": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "evidence ids / open questions, e.g. OQ-11"
+            }
+          }
+        },
+        "spread_policy": {
+          "enum": [
+            "ADD_SPREAD_AT_FILL",
+            "FROZEN_AT_DECISION"
+          ],
+          "description": "current machine spec: ADD_SPREAD_AT_FILL (M1H-SL-01); OQ-28 open"
+        },
+        "execution_inputs": {
+          "type": "object",
+          "description": "spread/execution inputs when available at decision time; resolution happens in the simulator",
+          "properties": {
+            "spread_at_decision": {
+              "type": [
+                "number",
+                "null"
+              ]
+            },
+            "spread_source": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        }
       }
     },
-    "target_price": {"type": "number", "description": "oe_extreme - 0.5 x (oe_extreme - candle.open), mirrored for LONG"},
-    "extension_high": {"type": "number"},
-    "extension_low": {"type": "number"},
-    "extremes_source": {"enum": ["TICK_MID", "SIDE_EXTREME_MEAN", "OTHER_VALIDATED"], "description": "D12-5 / OQ-25"},
-    "range_high": {"type": ["number", "null"]},
-    "range_low": {"type": ["number", "null"]},
-    "context_state": {"type": "object", "description": "condition class, OE state, timing-window state"},
+    "target_price": {
+      "type": "number",
+      "description": "oe_extreme - 0.5 x (oe_extreme - candle.open), mirrored for LONG"
+    },
+    "extension_high": {
+      "type": "number"
+    },
+    "extension_low": {
+      "type": "number"
+    },
+    "extremes_source": {
+      "enum": [
+        "TICK_MID",
+        "SIDE_EXTREME_MEAN",
+        "OTHER_VALIDATED"
+      ],
+      "description": "D12-5 / OQ-25"
+    },
+    "range_high": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "range_low": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "context_state": {
+      "type": "object",
+      "description": "condition class, OE state, timing-window state"
+    },
     "dxy_state": {
       "type": "object",
-      "required": ["availability"],
+      "required": [
+        "availability"
+      ],
       "properties": {
-        "availability": {"enum": ["AVAILABLE", "MISSING", "REFERENCE_UNAVAILABLE"]},
-        "direction_15m": {"enum": ["UP", "DOWN", "FLAT", null]},
-        "direction_1h": {"enum": ["UP", "DOWN", "FLAT", null]},
-        "reason_codes": {"type": "array", "items": {"type": "string"}}
+        "availability": {
+          "enum": [
+            "AVAILABLE",
+            "MISSING",
+            "REFERENCE_UNAVAILABLE"
+          ]
+        },
+        "direction_15m": {
+          "enum": [
+            "UP",
+            "DOWN",
+            "FLAT",
+            null
+          ]
+        },
+        "direction_1h": {
+          "enum": [
+            "UP",
+            "DOWN",
+            "FLAT",
+            null
+          ]
+        },
+        "reason_codes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
       },
       "description": "Context only; no 1m/5s DXY structure (D12-6)"
     },
-    "session_state": {"type": "object", "description": "session label; active no-trade windows NT_SYDNEY / NT_ROLLOVER / NT_INCOMPLETE"},
-    "source_feed": {"type": "object", "required": ["feed_id", "manifest_hash"]},
+    "session_state": {
+      "type": "object",
+      "description": "session label; active no-trade windows NT_SYDNEY / NT_ROLLOVER / NT_INCOMPLETE"
+    },
+    "source_feed": {
+      "type": "object",
+      "required": [
+        "feed_id",
+        "manifest_hash"
+      ]
+    },
     "data_confidence": {
       "type": "object",
-      "required": ["level", "reason_codes"],
+      "required": [
+        "level",
+        "reason_codes"
+      ],
       "properties": {
-        "level": {"enum": ["FULL", "REDUCED", "UNAVAILABLE"]},
-        "reason_codes": {"type": "array", "items": {"type": "string"}}
+        "level": {
+          "enum": [
+            "FULL",
+            "REDUCED",
+            "UNAVAILABLE"
+          ]
+        },
+        "reason_codes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
       }
     },
-    "reason_code": {"type": "string", "description": "ARMED, or a no-trade code (BLOCKED_*, INVALIDATED_*, NT_*, MISSING_DATA)"},
-    "spec_hash": {"type": "string", "description": "Hash of machine spec + strategy.yaml + engine code"}
+    "reason_code": {
+      "type": "string",
+      "description": "ARMED, or a no-trade code (BLOCKED_*, INVALIDATED_*, NT_*, MISSING_DATA)"
+    },
+    "spec_hash": {
+      "type": "string",
+      "description": "Hash of machine spec + strategy.yaml + engine code"
+    }
   }
 }

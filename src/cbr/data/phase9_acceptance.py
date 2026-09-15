@@ -25,6 +25,8 @@ import yaml
 
 from cbr.data import dukascopy_fetch as dk
 from cbr.data import quality as q
+from cbr.data.futures import load_front
+from cbr.data.sessions import expected_closed
 
 ROOT = Path(__file__).resolve().parents[3]
 REPORT_JSON = ROOT / "reports" / "phase9-data-acceptance.json"
@@ -51,24 +53,9 @@ RULED_HANDLING = "MISSING"
 PAIRS = (("xauusd", "gc_front_ohlcv1m", "XAUUSD vs GC"), ("dollaridxusd", "dx_front_ohlcv1m", "DXY CFD vs DX"))
 
 
-def _dx_front() -> pd.DataFrame:
-    dx = pd.read_parquet(ROOT / "data" / "raw" / "databento" / "dx_front_ohlcv1m.parquet")
-    dx = dx[(dx["publisher_id"] == dx["publisher_id"].mode().iloc[0]) & (dx["close"] > 0)]
-    return dx[~dx.index.duplicated()]
-
-
 def fixture_days() -> list[date]:
     return sorted({d + timedelta(days=o) for d in dk.FIXTURE_DAYS.values() for o in (-1, 0, 1)
                    if (d + timedelta(days=o)).weekday() != 5})
-
-
-def expected_closed(ts: pd.Timestamp) -> str | None:
-    ny = ts.tz_convert(NY)
-    if ny.weekday() == 5 or (ny.weekday() == 4 and ny.hour >= 17) or (ny.weekday() == 6 and ny.hour < 18):
-        return "weekend"
-    if ny.hour == 17:
-        return "daily_break"
-    return None
 
 
 def _runs(stamps: list[pd.Timestamp]) -> list[str]:
@@ -142,7 +129,7 @@ def check_candles(inst: str, day: date, label: str, manifest: dict, col: Collect
         start = pd.Timestamp(day, tz="UTC")
         out["dxy_missing_while_dx_active"] = [
             {k: (str(v) if isinstance(v, pd.Timestamp) else v) for k, v in r.items()}
-            for r in q.dxy_cfd_missing_while_dx_active(c.index, _dx_front(), start, start + pd.Timedelta(days=1))]
+            for r in q.dxy_cfd_missing_while_dx_active(c.index, load_front("dx_front_ohlcv1m"), start, start + pd.Timedelta(days=1))]
     out["candle_hl_suspect_minutes"] = int(q.suspect_candle_extrema(c).sum())
     return out
 

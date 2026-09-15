@@ -1,0 +1,4081 @@
+{
+  "generated_utc": "2026-09-15T00:19:49.490537+00:00",
+  "config": {
+    "version": "DXY_CONTEXT_V1",
+    "timeframes": {
+      "15m": 15,
+      "1h": 60
+    },
+    "flat_epsilon": 0.0,
+    "max_quote_age_minutes": 10,
+    "min_coverage_full": 0.5,
+    "run_minutes": 30,
+    "dx_active_minutes": 15
+  },
+  "verdict": "PASS WITH CONCERNS",
+  "criteria": {
+    "AC10-01": "MET",
+    "AC10-02": "MET",
+    "AC10-03": "MET",
+    "AC10-04": "MET",
+    "AC10-04b": "MET",
+    "AC10-05": "MET",
+    "AC10-06": "MET",
+    "AC10-07": "MET",
+    "AC10-08": "MET",
+    "AC10-09": "MET",
+    "AC10-10": "MET"
+  },
+  "concerns": [
+    "Causal quote shown for up to 10 decision minutes at the start of a ruled vendor outage (max age 10 min, REDUCED confidence) before it becomes UNAVAILABLE; hindsight mask marks the full outage. Ledger use: OQ-31.",
+    "On 9 of 9 EST (winter) trading days, last-closed 15m DXY context has no quotes (NO_QUOTES/VENDOR_MISSING) for decision times 00:15-01:00 UTC (Asia hour 1, tradable after NT_SYDNEY): the CFD does not quote 18:00-20:00 New York. CBR setups there will carry DXY UNAVAILABLE.",
+    "Report artifact, not a data property: each day file starts at 00:00 UTC, so windows reaching back before 00:00 are NOT_LOADED for the first 15 (15m) / 60 (1h) decision minutes of every test day. Contiguous multi-day loads (engine use) don't have this.",
+    "60 last-closed window decision times REDUCED (low coverage) on 2018-2019 days: early DXY CFD quoting is thinner (Phase 9: 16-20% zero 1m returns in 2019).",
+    "IMPL thresholds (flat_epsilon 0, min_coverage_full 0.5, max_quote_age 10 min) validated on 24 days only; revalidate on AC-11B history before baseline use.",
+    "No DXY highs/lows, extension extremes, range condition or DXY shifts: those need OQ-25 and remain Phase 17/18 ablation inputs; 1m/5s DXY structure excluded (D12-6)."
+  ],
+  "checks": {
+    "AC10-01": [
+      {
+        "ok": true,
+        "detail": "fixture 2025-10-20"
+      },
+      {
+        "ok": true,
+        "detail": "fixture 2025-10-20: naive input rejected"
+      },
+      {
+        "ok": true,
+        "detail": "fixture 2025-10-21"
+      },
+      {
+        "ok": true,
+        "detail": "fixture 2025-10-21: naive input rejected"
+      },
+      {
+        "ok": true,
+        "detail": "fixture 2025-10-22"
+      },
+      {
+        "ok": true,
+        "detail": "fixture 2025-10-22: naive input rejected"
+      },
+      {
+        "ok": true,
+        "detail": "fixture 2025-10-23"
+      },
+      {
+        "ok": true,
+        "detail": "fixture 2025-10-23: naive input rejected"
+      },
+      {
+        "ok": true,
+        "detail": "fixture 2025-10-24"
+      },
+      {
+        "ok": true,
+        "detail": "fixture 2025-10-24: naive input rejected"
+      },
+      {
+        "ok": true,
+        "detail": "fixture 2025-11-09"
+      },
+      {
+        "ok": true,
+        "detail": "fixture 2025-11-09: naive input rejected"
+      },
+      {
+        "ok": true,
+        "detail": "fixture 2025-11-10"
+      },
+      {
+        "ok": true,
+        "detail": "fixture 2025-11-10: naive input rejected"
+      },
+      {
+        "ok": true,
+        "detail": "fixture 2025-11-11"
+      },
+      {
+        "ok": true,
+        "detail": "fixture 2025-11-11: naive input rejected"
+      },
+      {
+        "ok": true,
+        "detail": "MID-2018 2018-02-21"
+      },
+      {
+        "ok": true,
+        "detail": "MID-2018 2018-02-21: naive input rejected"
+      },
+      {
+        "ok": true,
+        "detail": "MID-2019 2019-04-17"
+      },
+      {
+        "ok": true,
+        "detail": "MID-2019 2019-04-17: naive input rejected"
+      },
+      {
+        "ok": true,
+        "detail": "MID-2020 2020-06-17"
+      },
+      {
+        "ok": true,
+        "detail": "MID-2020 2020-06-17: naive input rejected"
+      },
+      {
+        "ok": true,
+        "detail": "MID-2021 2021-08-18"
+      },
+      {
+        "ok": true,
+        "detail": "MID-2021 2021-08-18: naive input rejected"
+      },
+      {
+        "ok": true,
+        "detail": "MID-2022 2022-10-19"
+      },
+      {
+        "ok": true,
+        "detail": "MID-2022 2022-10-19: naive input rejected"
+      },
+      {
+        "ok": true,
+        "detail": "MID-2023 2023-12-20"
+      },
+      {
+        "ok": true,
+        "detail": "MID-2023 2023-12-20: naive input rejected"
+      },
+      {
+        "ok": true,
+        "detail": "MID-2024 2024-03-20"
+      },
+      {
+        "ok": true,
+        "detail": "MID-2024 2024-03-20: naive input rejected"
+      },
+      {
+        "ok": true,
+        "detail": "DST-SPRING-2019 2019-03-11"
+      },
+      {
+        "ok": true,
+        "detail": "DST-SPRING-2019 2019-03-11: naive input rejected"
+      },
+      {
+        "ok": true,
+        "detail": "DST-AUTUMN-2023 2023-11-06"
+      },
+      {
+        "ok": true,
+        "detail": "DST-AUTUMN-2023 2023-11-06: naive input rejected"
+      },
+      {
+        "ok": true,
+        "detail": "US-HOLIDAY-2022-THANKSGIVING 2022-11-24"
+      },
+      {
+        "ok": true,
+        "detail": "US-HOLIDAY-2022-THANKSGIVING 2022-11-24: naive input rejected"
+      },
+      {
+        "ok": true,
+        "detail": "MONDAY-REOPEN-2021 2021-02-01"
+      },
+      {
+        "ok": true,
+        "detail": "MONDAY-REOPEN-2021 2021-02-01: naive input rejected"
+      },
+      {
+        "ok": true,
+        "detail": "DXY-CFD-FIRST-MONTH-2018 2018-01-17"
+      },
+      {
+        "ok": true,
+        "detail": "DXY-CFD-FIRST-MONTH-2018 2018-01-17: naive input rejected"
+      },
+      {
+        "ok": true,
+        "detail": "HIGHVOL-2020-03-09 2020-03-09"
+      },
+      {
+        "ok": true,
+        "detail": "HIGHVOL-2020-03-09 2020-03-09: naive input rejected"
+      },
+      {
+        "ok": true,
+        "detail": "HIGHVOL-2020-03-16 2020-03-16"
+      },
+      {
+        "ok": true,
+        "detail": "HIGHVOL-2020-03-16 2020-03-16: naive input rejected"
+      },
+      {
+        "ok": true,
+        "detail": "HIGHVOL-2022-03-08 2022-03-08"
+      },
+      {
+        "ok": true,
+        "detail": "HIGHVOL-2022-03-08 2022-03-08: naive input rejected"
+      },
+      {
+        "ok": true,
+        "detail": "HIGHVOL-2024-04-12 2024-04-12"
+      },
+      {
+        "ok": true,
+        "detail": "HIGHVOL-2024-04-12 2024-04-12: naive input rejected"
+      }
+    ],
+    "AC10-02": [
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-10-20",
+          "times": 300,
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-10-21",
+          "times": 300,
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-10-22",
+          "times": 300,
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-10-23",
+          "times": 300,
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-10-24",
+          "times": 300,
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-11-09",
+          "times": 300,
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-11-10",
+          "times": 300,
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-11-11",
+          "times": 300,
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2018 2018-02-21",
+          "times": 300,
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2019 2019-04-17",
+          "times": 300,
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2020 2020-06-17",
+          "times": 300,
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2021 2021-08-18",
+          "times": 300,
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2022 2022-10-19",
+          "times": 300,
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2023 2023-12-20",
+          "times": 300,
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2024 2024-03-20",
+          "times": 300,
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "DST-SPRING-2019 2019-03-11",
+          "times": 300,
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "DST-AUTUMN-2023 2023-11-06",
+          "times": 300,
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "US-HOLIDAY-2022-THANKSGIVING 2022-11-24",
+          "times": 300,
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MONDAY-REOPEN-2021 2021-02-01",
+          "times": 300,
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "DXY-CFD-FIRST-MONTH-2018 2018-01-17",
+          "times": 300,
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "HIGHVOL-2020-03-09 2020-03-09",
+          "times": 300,
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "HIGHVOL-2020-03-16 2020-03-16",
+          "times": 300,
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "HIGHVOL-2022-03-08 2022-03-08",
+          "times": 300,
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "HIGHVOL-2024-04-12 2024-04-12",
+          "times": 300,
+          "mismatches": []
+        }
+      }
+    ],
+    "AC10-03": [
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-10-20",
+          "times": 300,
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-10-21",
+          "times": 300,
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-10-22",
+          "times": 300,
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-10-23",
+          "times": 300,
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-10-24",
+          "times": 300,
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-11-09",
+          "times": 300,
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-11-10",
+          "times": 300,
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-11-11",
+          "times": 300,
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2018 2018-02-21",
+          "times": 300,
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2019 2019-04-17",
+          "times": 300,
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2020 2020-06-17",
+          "times": 300,
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2021 2021-08-18",
+          "times": 300,
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2022 2022-10-19",
+          "times": 300,
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2023 2023-12-20",
+          "times": 300,
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2024 2024-03-20",
+          "times": 300,
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "DST-SPRING-2019 2019-03-11",
+          "times": 300,
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "DST-AUTUMN-2023 2023-11-06",
+          "times": 300,
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "US-HOLIDAY-2022-THANKSGIVING 2022-11-24",
+          "times": 300,
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MONDAY-REOPEN-2021 2021-02-01",
+          "times": 300,
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "DXY-CFD-FIRST-MONTH-2018 2018-01-17",
+          "times": 300,
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "HIGHVOL-2020-03-09 2020-03-09",
+          "times": 300,
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "HIGHVOL-2020-03-16 2020-03-16",
+          "times": 300,
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "HIGHVOL-2022-03-08 2022-03-08",
+          "times": 300,
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "HIGHVOL-2024-04-12 2024-04-12",
+          "times": 300,
+          "mismatches": []
+        }
+      }
+    ],
+    "AC10-04": [
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-10-20",
+          "violations": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-10-21",
+          "violations": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-10-22",
+          "violations": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-10-23",
+          "violations": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-10-24",
+          "violations": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-11-09",
+          "violations": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-11-10",
+          "violations": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-11-11",
+          "violations": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2018 2018-02-21",
+          "violations": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2019 2019-04-17",
+          "violations": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2020 2020-06-17",
+          "violations": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2021 2021-08-18",
+          "violations": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2022 2022-10-19",
+          "violations": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2023 2023-12-20",
+          "violations": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2024 2024-03-20",
+          "violations": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "DST-SPRING-2019 2019-03-11",
+          "violations": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "DST-SPRING-2019 2019-03-11",
+          "ruled": {
+            "interval": [
+              "2019-03-11T00:00:00+00:00",
+              "2019-03-11T01:00:00+00:00"
+            ],
+            "hindsight_mask_all_minutes": true,
+            "causal_quote_shown_minutes": 0,
+            "causal_quote_shown_max_age_s": NaN
+          }
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "DST-AUTUMN-2023 2023-11-06",
+          "violations": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "US-HOLIDAY-2022-THANKSGIVING 2022-11-24",
+          "violations": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MONDAY-REOPEN-2021 2021-02-01",
+          "violations": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "DXY-CFD-FIRST-MONTH-2018 2018-01-17",
+          "violations": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "HIGHVOL-2020-03-09 2020-03-09",
+          "violations": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "HIGHVOL-2020-03-09 2020-03-09",
+          "ruled": {
+            "interval": [
+              "2020-03-09T20:00:00+00:00",
+              "2020-03-09T21:00:00+00:00"
+            ],
+            "hindsight_mask_all_minutes": true,
+            "causal_quote_shown_minutes": 10,
+            "causal_quote_shown_max_age_s": 600.0
+          }
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "HIGHVOL-2020-03-16 2020-03-16",
+          "violations": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "HIGHVOL-2022-03-08 2022-03-08",
+          "violations": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "HIGHVOL-2024-04-12 2024-04-12",
+          "violations": []
+        }
+      }
+    ],
+    "AC10-04b": [
+      {
+        "ok": true,
+        "detail": "fixture 2025-10-20"
+      },
+      {
+        "ok": true,
+        "detail": "fixture 2025-10-21"
+      },
+      {
+        "ok": true,
+        "detail": "fixture 2025-10-22"
+      },
+      {
+        "ok": true,
+        "detail": "fixture 2025-10-23"
+      },
+      {
+        "ok": true,
+        "detail": "fixture 2025-10-24"
+      },
+      {
+        "ok": true,
+        "detail": "fixture 2025-11-09"
+      },
+      {
+        "ok": true,
+        "detail": "fixture 2025-11-10"
+      },
+      {
+        "ok": true,
+        "detail": "fixture 2025-11-11"
+      },
+      {
+        "ok": true,
+        "detail": "MID-2018 2018-02-21"
+      },
+      {
+        "ok": true,
+        "detail": "MID-2019 2019-04-17"
+      },
+      {
+        "ok": true,
+        "detail": "MID-2020 2020-06-17"
+      },
+      {
+        "ok": true,
+        "detail": "MID-2021 2021-08-18"
+      },
+      {
+        "ok": true,
+        "detail": "MID-2022 2022-10-19"
+      },
+      {
+        "ok": true,
+        "detail": "MID-2023 2023-12-20"
+      },
+      {
+        "ok": true,
+        "detail": "MID-2024 2024-03-20"
+      },
+      {
+        "ok": true,
+        "detail": "DST-SPRING-2019 2019-03-11"
+      },
+      {
+        "ok": true,
+        "detail": "DST-AUTUMN-2023 2023-11-06"
+      },
+      {
+        "ok": true,
+        "detail": "US-HOLIDAY-2022-THANKSGIVING 2022-11-24"
+      },
+      {
+        "ok": true,
+        "detail": "MONDAY-REOPEN-2021 2021-02-01"
+      },
+      {
+        "ok": true,
+        "detail": "DXY-CFD-FIRST-MONTH-2018 2018-01-17"
+      },
+      {
+        "ok": true,
+        "detail": "HIGHVOL-2020-03-09 2020-03-09"
+      },
+      {
+        "ok": true,
+        "detail": "HIGHVOL-2020-03-16 2020-03-16"
+      },
+      {
+        "ok": true,
+        "detail": "HIGHVOL-2022-03-08 2022-03-08"
+      },
+      {
+        "ok": true,
+        "detail": "HIGHVOL-2024-04-12 2024-04-12"
+      }
+    ],
+    "AC10-05": [
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-10-20",
+          "dx_prices_irrelevant": true,
+          "dx_only_removes": true
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-10-21",
+          "dx_prices_irrelevant": true,
+          "dx_only_removes": true
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-10-22",
+          "dx_prices_irrelevant": true,
+          "dx_only_removes": true
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-10-23",
+          "dx_prices_irrelevant": true,
+          "dx_only_removes": true
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-10-24",
+          "dx_prices_irrelevant": true,
+          "dx_only_removes": true
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-11-09",
+          "dx_prices_irrelevant": true,
+          "dx_only_removes": true
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-11-10",
+          "dx_prices_irrelevant": true,
+          "dx_only_removes": true
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-11-11",
+          "dx_prices_irrelevant": true,
+          "dx_only_removes": true
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2018 2018-02-21",
+          "dx_prices_irrelevant": true,
+          "dx_only_removes": true
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2019 2019-04-17",
+          "dx_prices_irrelevant": true,
+          "dx_only_removes": true
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2020 2020-06-17",
+          "dx_prices_irrelevant": true,
+          "dx_only_removes": true
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2021 2021-08-18",
+          "dx_prices_irrelevant": true,
+          "dx_only_removes": true
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2022 2022-10-19",
+          "dx_prices_irrelevant": true,
+          "dx_only_removes": true
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2023 2023-12-20",
+          "dx_prices_irrelevant": true,
+          "dx_only_removes": true
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2024 2024-03-20",
+          "dx_prices_irrelevant": true,
+          "dx_only_removes": true
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "DST-SPRING-2019 2019-03-11",
+          "dx_prices_irrelevant": true,
+          "dx_only_removes": true
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "DST-AUTUMN-2023 2023-11-06",
+          "dx_prices_irrelevant": true,
+          "dx_only_removes": true
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "US-HOLIDAY-2022-THANKSGIVING 2022-11-24",
+          "dx_prices_irrelevant": true,
+          "dx_only_removes": true
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MONDAY-REOPEN-2021 2021-02-01",
+          "dx_prices_irrelevant": true,
+          "dx_only_removes": true
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "DXY-CFD-FIRST-MONTH-2018 2018-01-17",
+          "dx_prices_irrelevant": true,
+          "dx_only_removes": true
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "HIGHVOL-2020-03-09 2020-03-09",
+          "dx_prices_irrelevant": true,
+          "dx_only_removes": true
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "HIGHVOL-2020-03-16 2020-03-16",
+          "dx_prices_irrelevant": true,
+          "dx_only_removes": true
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "HIGHVOL-2022-03-08 2022-03-08",
+          "dx_prices_irrelevant": true,
+          "dx_only_removes": true
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "HIGHVOL-2024-04-12 2024-04-12",
+          "dx_prices_irrelevant": true,
+          "dx_only_removes": true
+        }
+      }
+    ],
+    "AC10-06": [
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-10-20",
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-10-21",
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-10-22",
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-10-23",
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-10-24",
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-11-09",
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-11-10",
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-11-11",
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2018 2018-02-21",
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2019 2019-04-17",
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2020 2020-06-17",
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2021 2021-08-18",
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2022 2022-10-19",
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2023 2023-12-20",
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2024 2024-03-20",
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "DST-SPRING-2019 2019-03-11",
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "DST-AUTUMN-2023 2023-11-06",
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "US-HOLIDAY-2022-THANKSGIVING 2022-11-24",
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MONDAY-REOPEN-2021 2021-02-01",
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "DXY-CFD-FIRST-MONTH-2018 2018-01-17",
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "HIGHVOL-2020-03-09 2020-03-09",
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "HIGHVOL-2020-03-16 2020-03-16",
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "HIGHVOL-2022-03-08 2022-03-08",
+          "mismatches": []
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "HIGHVOL-2024-04-12 2024-04-12",
+          "mismatches": []
+        }
+      }
+    ],
+    "AC10-07": [
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-10-20",
+          "windows_checked": 105,
+          "wrong": 0
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-10-21",
+          "windows_checked": 105,
+          "wrong": 0
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-10-22",
+          "windows_checked": 105,
+          "wrong": 0
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-10-23",
+          "windows_checked": 105,
+          "wrong": 0
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-10-24",
+          "windows_checked": 105,
+          "wrong": 0
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-11-09",
+          "windows_checked": 0,
+          "wrong": 0
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-11-10",
+          "windows_checked": 105,
+          "wrong": 0
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-11-11",
+          "windows_checked": 105,
+          "wrong": 0
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2018 2018-02-21",
+          "windows_checked": 105,
+          "wrong": 0
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2019 2019-04-17",
+          "windows_checked": 105,
+          "wrong": 0
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2020 2020-06-17",
+          "windows_checked": 105,
+          "wrong": 0
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2021 2021-08-18",
+          "windows_checked": 105,
+          "wrong": 0
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2022 2022-10-19",
+          "windows_checked": 105,
+          "wrong": 0
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2023 2023-12-20",
+          "windows_checked": 105,
+          "wrong": 0
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2024 2024-03-20",
+          "windows_checked": 105,
+          "wrong": 0
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "DST-SPRING-2019 2019-03-11",
+          "windows_checked": 100,
+          "wrong": 0
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "DST-AUTUMN-2023 2023-11-06",
+          "windows_checked": 105,
+          "wrong": 0
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "US-HOLIDAY-2022-THANKSGIVING 2022-11-24",
+          "windows_checked": 85,
+          "wrong": 0
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MONDAY-REOPEN-2021 2021-02-01",
+          "windows_checked": 105,
+          "wrong": 0
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "DXY-CFD-FIRST-MONTH-2018 2018-01-17",
+          "windows_checked": 105,
+          "wrong": 0
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "HIGHVOL-2020-03-09 2020-03-09",
+          "windows_checked": 100,
+          "wrong": 0
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "HIGHVOL-2020-03-16 2020-03-16",
+          "windows_checked": 105,
+          "wrong": 0
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "HIGHVOL-2022-03-08 2022-03-08",
+          "windows_checked": 105,
+          "wrong": 0
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "HIGHVOL-2024-04-12 2024-04-12",
+          "windows_checked": 105,
+          "wrong": 0
+        }
+      }
+    ],
+    "AC10-08": [
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-10-20",
+          "hash": "7d09c81d975b7cc74d8410df11a4daf63e9cd89b50528d207c1b94d58fc21198"
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-10-21",
+          "hash": "c9f11a0d5b81add2af11c5862d6f267486af183ba7cb0ec8b4ead7c0194cd4a2"
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-10-22",
+          "hash": "a14616ecedc6705af70aac305ebdc7d839585fec2d38407317a19b192db4c0c0"
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-10-23",
+          "hash": "a9fc6bcd72174cd1220e750b94e2c1f08b081e1648c0065885a1e7c8b1d9f510"
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-10-24",
+          "hash": "6687d8bb461db7ad5387a2185db7c57c28ab30482ca0208498a9e3de97d85994"
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-11-09",
+          "hash": "538c037b9118f1577e80b8291194952ed2b3453399add5aeec6c54096b616d77"
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-11-10",
+          "hash": "abdf14e135a589c23797084e538ff4472be07e7a54ec1549532bc6f5dfce826c"
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-11-11",
+          "hash": "469dd0868d6f1247f42093ecce2bd8c4ed55603f7ad088024b0675c91e955263"
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2018 2018-02-21",
+          "hash": "4a01f6880fde2bd92bf5edfddabbdf4c94b8351f6a5111aff312dbe1c734c308"
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2019 2019-04-17",
+          "hash": "50beb19e6680e16fd7d38c3ec0500525b05506a26d8b2b71b1a36b0b17ed29ed"
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2020 2020-06-17",
+          "hash": "20ed1f0243fbc62fc59564c41db19dd1b68258526542ba9efcf70e5ad75541dd"
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2021 2021-08-18",
+          "hash": "f125cf90c83cad488fccd786a7a6df1adf92300fe4c2527bee8ce3489bdb677f"
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2022 2022-10-19",
+          "hash": "af4f3302f51471f43f8d4b960cabc708ab1001114374d0e7e007c164a0d2018c"
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2023 2023-12-20",
+          "hash": "4652baf50556a65c73446aea24354fbdc920394da698bb28cdadcafe9776e616"
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2024 2024-03-20",
+          "hash": "4ac9b5331977e22fe1cc37a1802fb3082f9d362fc148bb4825a038b579e78fc8"
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "DST-SPRING-2019 2019-03-11",
+          "hash": "dfd9fd9e68b95204717f5e7cd2957e23d02dbaaa900db770e7c9926dd2a604d7"
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "DST-AUTUMN-2023 2023-11-06",
+          "hash": "c0ca14d16c88d33622a5f21a8764f53361fc206371c7ed1496e570a60eb6036b"
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "US-HOLIDAY-2022-THANKSGIVING 2022-11-24",
+          "hash": "0777ea955a841cd363a4a1951cc7ad264c8844c496610b54ce07db8e36520dcd"
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MONDAY-REOPEN-2021 2021-02-01",
+          "hash": "0c18f837117d43bd5d574bfe70e7b7db778ac2eec6fc78a7a2bf05a8c13225f3"
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "DXY-CFD-FIRST-MONTH-2018 2018-01-17",
+          "hash": "245fda7dcf642c89ed72239817c43f10150252e9a12f3df29bfd43848850cfe5"
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "HIGHVOL-2020-03-09 2020-03-09",
+          "hash": "1589972706b195de3c701fddfb5e65904ce54bd016f5babaa554bbdc258e26b9"
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "HIGHVOL-2020-03-16 2020-03-16",
+          "hash": "2a1a5da078cb33480458a3b857a5579bdef4294c9936188bdb091f62acb9e99f"
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "HIGHVOL-2022-03-08 2022-03-08",
+          "hash": "03c1e438710c9e64dcaefe7a542db7191f89b02ed1adbe8d62c771c048587467"
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "HIGHVOL-2024-04-12 2024-04-12",
+          "hash": "092ab82d6cc1d454193299da170781d7853a1258e3ba4825b074de35cd265ab1"
+        }
+      }
+    ],
+    "AC10-09": [
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-10-20",
+          "dx_reference": true,
+          "decision_times_with_DX_REFERENCE_UNAVAILABLE": 0
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-10-21",
+          "dx_reference": true,
+          "decision_times_with_DX_REFERENCE_UNAVAILABLE": 0
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-10-22",
+          "dx_reference": true,
+          "decision_times_with_DX_REFERENCE_UNAVAILABLE": 0
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-10-23",
+          "dx_reference": true,
+          "decision_times_with_DX_REFERENCE_UNAVAILABLE": 0
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-10-24",
+          "dx_reference": true,
+          "decision_times_with_DX_REFERENCE_UNAVAILABLE": 0
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-11-09",
+          "dx_reference": true,
+          "decision_times_with_DX_REFERENCE_UNAVAILABLE": 0
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-11-10",
+          "dx_reference": true,
+          "decision_times_with_DX_REFERENCE_UNAVAILABLE": 0
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "fixture 2025-11-11",
+          "dx_reference": true,
+          "decision_times_with_DX_REFERENCE_UNAVAILABLE": 0
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2018 2018-02-21",
+          "dx_reference": false,
+          "decision_times_with_DX_REFERENCE_UNAVAILABLE": 1440
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2019 2019-04-17",
+          "dx_reference": true,
+          "decision_times_with_DX_REFERENCE_UNAVAILABLE": 0
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2020 2020-06-17",
+          "dx_reference": true,
+          "decision_times_with_DX_REFERENCE_UNAVAILABLE": 0
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2021 2021-08-18",
+          "dx_reference": true,
+          "decision_times_with_DX_REFERENCE_UNAVAILABLE": 0
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2022 2022-10-19",
+          "dx_reference": true,
+          "decision_times_with_DX_REFERENCE_UNAVAILABLE": 0
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2023 2023-12-20",
+          "dx_reference": true,
+          "decision_times_with_DX_REFERENCE_UNAVAILABLE": 0
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MID-2024 2024-03-20",
+          "dx_reference": true,
+          "decision_times_with_DX_REFERENCE_UNAVAILABLE": 0
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "DST-SPRING-2019 2019-03-11",
+          "dx_reference": true,
+          "decision_times_with_DX_REFERENCE_UNAVAILABLE": 0
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "DST-AUTUMN-2023 2023-11-06",
+          "dx_reference": true,
+          "decision_times_with_DX_REFERENCE_UNAVAILABLE": 0
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "US-HOLIDAY-2022-THANKSGIVING 2022-11-24",
+          "dx_reference": true,
+          "decision_times_with_DX_REFERENCE_UNAVAILABLE": 0
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "MONDAY-REOPEN-2021 2021-02-01",
+          "dx_reference": true,
+          "decision_times_with_DX_REFERENCE_UNAVAILABLE": 0
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "DXY-CFD-FIRST-MONTH-2018 2018-01-17",
+          "dx_reference": false,
+          "decision_times_with_DX_REFERENCE_UNAVAILABLE": 1440
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "HIGHVOL-2020-03-09 2020-03-09",
+          "dx_reference": true,
+          "decision_times_with_DX_REFERENCE_UNAVAILABLE": 0
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "HIGHVOL-2020-03-16 2020-03-16",
+          "dx_reference": true,
+          "decision_times_with_DX_REFERENCE_UNAVAILABLE": 0
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "HIGHVOL-2022-03-08 2022-03-08",
+          "dx_reference": true,
+          "decision_times_with_DX_REFERENCE_UNAVAILABLE": 0
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "day": "HIGHVOL-2024-04-12 2024-04-12",
+          "dx_reference": true,
+          "decision_times_with_DX_REFERENCE_UNAVAILABLE": 0
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "days_processed": 24
+        }
+      }
+    ],
+    "AC10-10": [
+      {
+        "ok": true,
+        "detail": {
+          "timeframe": "15m",
+          "windows": 1173,
+          "agree": 1154,
+          "rate": 0.9838
+        }
+      },
+      {
+        "ok": true,
+        "detail": {
+          "timeframe": "1h",
+          "windows": 344,
+          "agree": 340,
+          "rate": 0.9884
+        }
+      }
+    ]
+  },
+  "days": [
+    {
+      "label": "fixture",
+      "day": "2025-10-20",
+      "rows": 1440,
+      "hash": "7d09c81d975b7cc74d8410df11a4daf63e9cd89b50528d207c1b94d58fc21198",
+      "dx_reference": true,
+      "utc_offset_ny": -4,
+      "unavailable_15m_last_by_utc_hour": {
+        "0": 15,
+        "21": 45,
+        "22": 60,
+        "23": 60
+      },
+      "asia_hour1_decisions_without_dxy_quotes": 0,
+      "weekday": 0,
+      "comparison_vs_dx": {
+        "15m": {
+          "windows": 41,
+          "agree": 40
+        },
+        "1h": {
+          "windows": 17,
+          "agree": 17
+        }
+      },
+      "distributions": {
+        "15m_last": {
+          "states": {
+            "OK": 1260,
+            "NO_QUOTES": 106,
+            "CLOSED_SCHEDULE": 60,
+            "NOT_LOADED": 14
+          },
+          "confidence": {
+            "FULL": 1260,
+            "UNAVAILABLE": 180
+          }
+        },
+        "15m_forming": {
+          "states": {
+            "OK": 1175,
+            "NO_QUOTES": 112,
+            "NO_ELAPSED_TIME": 96,
+            "CLOSED_SCHEDULE": 56,
+            "LOW_COVERAGE": 1
+          },
+          "confidence": {
+            "FULL": 1175,
+            "UNAVAILABLE": 264,
+            "REDUCED": 1
+          }
+        },
+        "1h_last": {
+          "states": {
+            "OK": 1260,
+            "NO_QUOTES": 61,
+            "CLOSED_SCHEDULE": 60,
+            "NOT_LOADED": 59
+          },
+          "confidence": {
+            "FULL": 1260,
+            "UNAVAILABLE": 180
+          }
+        },
+        "1h_forming": {
+          "states": {
+            "OK": 1239,
+            "NO_QUOTES": 118,
+            "CLOSED_SCHEDULE": 59,
+            "NO_ELAPSED_TIME": 24
+          },
+          "confidence": {
+            "FULL": 1239,
+            "UNAVAILABLE": 201
+          }
+        }
+      },
+      "quote": {
+        "available_share": 0.875,
+        "confidence": {
+          "FULL": 1230,
+          "UNAVAILABLE": 180,
+          "REDUCED": 30
+        },
+        "age_s_p50_p95_when_available": [
+          0.0,
+          0.0
+        ]
+      },
+      "ruled_intervals": []
+    },
+    {
+      "label": "fixture",
+      "day": "2025-10-21",
+      "rows": 1440,
+      "hash": "c9f11a0d5b81add2af11c5862d6f267486af183ba7cb0ec8b4ead7c0194cd4a2",
+      "dx_reference": true,
+      "utc_offset_ny": -4,
+      "unavailable_15m_last_by_utc_hour": {
+        "0": 15,
+        "21": 45,
+        "22": 60,
+        "23": 60
+      },
+      "asia_hour1_decisions_without_dxy_quotes": 0,
+      "weekday": 1,
+      "comparison_vs_dx": {
+        "15m": {
+          "windows": 59,
+          "agree": 57
+        },
+        "1h": {
+          "windows": 19,
+          "agree": 19
+        }
+      },
+      "distributions": {
+        "15m_last": {
+          "states": {
+            "OK": 1260,
+            "NO_QUOTES": 106,
+            "CLOSED_SCHEDULE": 60,
+            "NOT_LOADED": 14
+          },
+          "confidence": {
+            "FULL": 1260,
+            "UNAVAILABLE": 180
+          }
+        },
+        "15m_forming": {
+          "states": {
+            "OK": 1175,
+            "NO_QUOTES": 112,
+            "NO_ELAPSED_TIME": 96,
+            "CLOSED_SCHEDULE": 56,
+            "LOW_COVERAGE": 1
+          },
+          "confidence": {
+            "FULL": 1175,
+            "UNAVAILABLE": 264,
+            "REDUCED": 1
+          }
+        },
+        "1h_last": {
+          "states": {
+            "OK": 1260,
+            "NO_QUOTES": 61,
+            "CLOSED_SCHEDULE": 60,
+            "NOT_LOADED": 59
+          },
+          "confidence": {
+            "FULL": 1260,
+            "UNAVAILABLE": 180
+          }
+        },
+        "1h_forming": {
+          "states": {
+            "OK": 1239,
+            "NO_QUOTES": 118,
+            "CLOSED_SCHEDULE": 59,
+            "NO_ELAPSED_TIME": 24
+          },
+          "confidence": {
+            "FULL": 1239,
+            "UNAVAILABLE": 201
+          }
+        }
+      },
+      "quote": {
+        "available_share": 0.875,
+        "confidence": {
+          "FULL": 1241,
+          "UNAVAILABLE": 180,
+          "REDUCED": 19
+        },
+        "age_s_p50_p95_when_available": [
+          0.0,
+          0.0
+        ]
+      },
+      "ruled_intervals": []
+    },
+    {
+      "label": "fixture",
+      "day": "2025-10-22",
+      "rows": 1440,
+      "hash": "a14616ecedc6705af70aac305ebdc7d839585fec2d38407317a19b192db4c0c0",
+      "dx_reference": true,
+      "utc_offset_ny": -4,
+      "unavailable_15m_last_by_utc_hour": {
+        "0": 15,
+        "21": 45,
+        "22": 60,
+        "23": 60
+      },
+      "asia_hour1_decisions_without_dxy_quotes": 0,
+      "weekday": 2,
+      "comparison_vs_dx": {
+        "15m": {
+          "windows": 47,
+          "agree": 46
+        },
+        "1h": {
+          "windows": 16,
+          "agree": 16
+        }
+      },
+      "distributions": {
+        "15m_last": {
+          "states": {
+            "OK": 1260,
+            "NO_QUOTES": 106,
+            "CLOSED_SCHEDULE": 60,
+            "NOT_LOADED": 14
+          },
+          "confidence": {
+            "FULL": 1260,
+            "UNAVAILABLE": 180
+          }
+        },
+        "15m_forming": {
+          "states": {
+            "OK": 1173,
+            "NO_QUOTES": 113,
+            "NO_ELAPSED_TIME": 96,
+            "CLOSED_SCHEDULE": 56,
+            "LOW_COVERAGE": 2
+          },
+          "confidence": {
+            "FULL": 1173,
+            "UNAVAILABLE": 265,
+            "REDUCED": 2
+          }
+        },
+        "1h_last": {
+          "states": {
+            "OK": 1260,
+            "NO_QUOTES": 61,
+            "CLOSED_SCHEDULE": 60,
+            "NOT_LOADED": 59
+          },
+          "confidence": {
+            "FULL": 1260,
+            "UNAVAILABLE": 180
+          }
+        },
+        "1h_forming": {
+          "states": {
+            "OK": 1239,
+            "NO_QUOTES": 118,
+            "CLOSED_SCHEDULE": 59,
+            "NO_ELAPSED_TIME": 24
+          },
+          "confidence": {
+            "FULL": 1239,
+            "UNAVAILABLE": 201
+          }
+        }
+      },
+      "quote": {
+        "available_share": 0.875,
+        "confidence": {
+          "FULL": 1221,
+          "UNAVAILABLE": 180,
+          "REDUCED": 39
+        },
+        "age_s_p50_p95_when_available": [
+          0.0,
+          0.0
+        ]
+      },
+      "ruled_intervals": []
+    },
+    {
+      "label": "fixture",
+      "day": "2025-10-23",
+      "rows": 1440,
+      "hash": "a9fc6bcd72174cd1220e750b94e2c1f08b081e1648c0065885a1e7c8b1d9f510",
+      "dx_reference": true,
+      "utc_offset_ny": -4,
+      "unavailable_15m_last_by_utc_hour": {
+        "0": 15,
+        "21": 45,
+        "22": 60,
+        "23": 60
+      },
+      "asia_hour1_decisions_without_dxy_quotes": 0,
+      "weekday": 3,
+      "comparison_vs_dx": {
+        "15m": {
+          "windows": 43,
+          "agree": 40
+        },
+        "1h": {
+          "windows": 16,
+          "agree": 16
+        }
+      },
+      "distributions": {
+        "15m_last": {
+          "states": {
+            "OK": 1260,
+            "NO_QUOTES": 106,
+            "CLOSED_SCHEDULE": 60,
+            "NOT_LOADED": 14
+          },
+          "confidence": {
+            "FULL": 1260,
+            "UNAVAILABLE": 180
+          }
+        },
+        "15m_forming": {
+          "states": {
+            "OK": 1173,
+            "NO_QUOTES": 115,
+            "NO_ELAPSED_TIME": 96,
+            "CLOSED_SCHEDULE": 56
+          },
+          "confidence": {
+            "FULL": 1173,
+            "UNAVAILABLE": 267
+          }
+        },
+        "1h_last": {
+          "states": {
+            "OK": 1260,
+            "NO_QUOTES": 61,
+            "CLOSED_SCHEDULE": 60,
+            "NOT_LOADED": 59
+          },
+          "confidence": {
+            "FULL": 1260,
+            "UNAVAILABLE": 180
+          }
+        },
+        "1h_forming": {
+          "states": {
+            "OK": 1237,
+            "NO_QUOTES": 120,
+            "CLOSED_SCHEDULE": 59,
+            "NO_ELAPSED_TIME": 24
+          },
+          "confidence": {
+            "FULL": 1237,
+            "UNAVAILABLE": 203
+          }
+        }
+      },
+      "quote": {
+        "available_share": 0.875,
+        "confidence": {
+          "FULL": 1223,
+          "UNAVAILABLE": 180,
+          "REDUCED": 37
+        },
+        "age_s_p50_p95_when_available": [
+          0.0,
+          0.0
+        ]
+      },
+      "ruled_intervals": []
+    },
+    {
+      "label": "fixture",
+      "day": "2025-10-24",
+      "rows": 1440,
+      "hash": "6687d8bb461db7ad5387a2185db7c57c28ab30482ca0208498a9e3de97d85994",
+      "dx_reference": true,
+      "utc_offset_ny": -4,
+      "unavailable_15m_last_by_utc_hour": {
+        "0": 15,
+        "21": 45,
+        "22": 60,
+        "23": 60
+      },
+      "asia_hour1_decisions_without_dxy_quotes": 0,
+      "weekday": 4,
+      "comparison_vs_dx": {
+        "15m": {
+          "windows": 50,
+          "agree": 49
+        },
+        "1h": {
+          "windows": 14,
+          "agree": 14
+        }
+      },
+      "distributions": {
+        "15m_last": {
+          "states": {
+            "OK": 1260,
+            "CLOSED_SCHEDULE": 166,
+            "NOT_LOADED": 14
+          },
+          "confidence": {
+            "FULL": 1260,
+            "UNAVAILABLE": 180
+          }
+        },
+        "15m_forming": {
+          "states": {
+            "OK": 1164,
+            "CLOSED_SCHEDULE": 168,
+            "NO_ELAPSED_TIME": 96,
+            "NO_QUOTES": 6,
+            "LOW_COVERAGE": 6
+          },
+          "confidence": {
+            "FULL": 1164,
+            "UNAVAILABLE": 270,
+            "REDUCED": 6
+          }
+        },
+        "1h_last": {
+          "states": {
+            "OK": 1260,
+            "CLOSED_SCHEDULE": 121,
+            "NOT_LOADED": 59
+          },
+          "confidence": {
+            "FULL": 1260,
+            "UNAVAILABLE": 180
+          }
+        },
+        "1h_forming": {
+          "states": {
+            "OK": 1236,
+            "CLOSED_SCHEDULE": 177,
+            "NO_ELAPSED_TIME": 24,
+            "NO_QUOTES": 2,
+            "LOW_COVERAGE": 1
+          },
+          "confidence": {
+            "FULL": 1236,
+            "UNAVAILABLE": 203,
+            "REDUCED": 1
+          }
+        }
+      },
+      "quote": {
+        "available_share": 0.875,
+        "confidence": {
+          "FULL": 1207,
+          "UNAVAILABLE": 180,
+          "REDUCED": 53
+        },
+        "age_s_p50_p95_when_available": [
+          0.0,
+          0.0
+        ]
+      },
+      "ruled_intervals": []
+    },
+    {
+      "label": "fixture",
+      "day": "2025-11-09",
+      "rows": 1440,
+      "hash": "538c037b9118f1577e80b8291194952ed2b3453399add5aeec6c54096b616d77",
+      "dx_reference": true,
+      "utc_offset_ny": -5,
+      "unavailable_15m_last_by_utc_hour": {
+        "0": 60,
+        "1": 60,
+        "2": 60,
+        "3": 60,
+        "4": 60,
+        "5": 60,
+        "6": 60,
+        "7": 60,
+        "8": 60,
+        "9": 60,
+        "10": 60,
+        "11": 60,
+        "12": 60,
+        "13": 60,
+        "14": 60,
+        "15": 60,
+        "16": 60,
+        "17": 60,
+        "18": 60,
+        "19": 60,
+        "20": 60,
+        "21": 60,
+        "22": 60,
+        "23": 60
+      },
+      "asia_hour1_decisions_without_dxy_quotes": 0,
+      "weekday": 6,
+      "comparison_vs_dx": {
+        "15m": {
+          "windows": 0,
+          "agree": 0
+        },
+        "1h": {
+          "windows": 0,
+          "agree": 0
+        }
+      },
+      "distributions": {
+        "15m_last": {
+          "states": {
+            "CLOSED_SCHEDULE": 1380,
+            "VENDOR_MISSING": 42,
+            "NOT_LOADED": 14,
+            "NO_QUOTES": 4
+          },
+          "confidence": {
+            "UNAVAILABLE": 1440
+          }
+        },
+        "15m_forming": {
+          "states": {
+            "CLOSED_SCHEDULE": 1288,
+            "NO_ELAPSED_TIME": 96,
+            "VENDOR_MISSING": 39,
+            "NO_QUOTES": 17
+          },
+          "confidence": {
+            "UNAVAILABLE": 1440
+          }
+        },
+        "1h_last": {
+          "states": {
+            "CLOSED_SCHEDULE": 1380,
+            "NOT_LOADED": 59,
+            "VENDOR_MISSING": 1
+          },
+          "confidence": {
+            "UNAVAILABLE": 1440
+          }
+        },
+        "1h_forming": {
+          "states": {
+            "CLOSED_SCHEDULE": 1357,
+            "VENDOR_MISSING": 41,
+            "NO_ELAPSED_TIME": 24,
+            "NO_QUOTES": 18
+          },
+          "confidence": {
+            "UNAVAILABLE": 1440
+          }
+        }
+      },
+      "quote": {
+        "available_share": 0.0,
+        "confidence": {
+          "UNAVAILABLE": 1440
+        },
+        "age_s_p50_p95_when_available": null
+      },
+      "ruled_intervals": []
+    },
+    {
+      "label": "fixture",
+      "day": "2025-11-10",
+      "rows": 1440,
+      "hash": "abdf14e135a589c23797084e538ff4472be07e7a54ec1549532bc6f5dfce826c",
+      "dx_reference": true,
+      "utc_offset_ny": -5,
+      "unavailable_15m_last_by_utc_hour": {
+        "0": 60,
+        "1": 15,
+        "22": 45,
+        "23": 60
+      },
+      "asia_hour1_decisions_without_dxy_quotes": 45,
+      "weekday": 0,
+      "comparison_vs_dx": {
+        "15m": {
+          "windows": 56,
+          "agree": 55
+        },
+        "1h": {
+          "windows": 17,
+          "agree": 17
+        }
+      },
+      "distributions": {
+        "15m_last": {
+          "states": {
+            "OK": 1260,
+            "NO_QUOTES": 61,
+            "CLOSED_SCHEDULE": 60,
+            "VENDOR_MISSING": 45,
+            "NOT_LOADED": 14
+          },
+          "confidence": {
+            "FULL": 1260,
+            "UNAVAILABLE": 180
+          }
+        },
+        "15m_forming": {
+          "states": {
+            "OK": 1170,
+            "NO_ELAPSED_TIME": 96,
+            "NO_QUOTES": 85,
+            "CLOSED_SCHEDULE": 56,
+            "VENDOR_MISSING": 28,
+            "LOW_COVERAGE": 5
+          },
+          "confidence": {
+            "FULL": 1170,
+            "UNAVAILABLE": 265,
+            "REDUCED": 5
+          }
+        },
+        "1h_last": {
+          "states": {
+            "OK": 1260,
+            "VENDOR_MISSING": 60,
+            "CLOSED_SCHEDULE": 60,
+            "NOT_LOADED": 59,
+            "NO_QUOTES": 1
+          },
+          "confidence": {
+            "FULL": 1260,
+            "UNAVAILABLE": 180
+          }
+        },
+        "1h_forming": {
+          "states": {
+            "OK": 1239,
+            "NO_QUOTES": 88,
+            "CLOSED_SCHEDULE": 59,
+            "VENDOR_MISSING": 30,
+            "NO_ELAPSED_TIME": 24
+          },
+          "confidence": {
+            "FULL": 1239,
+            "UNAVAILABLE": 201
+          }
+        }
+      },
+      "quote": {
+        "available_share": 0.875,
+        "confidence": {
+          "FULL": 1209,
+          "UNAVAILABLE": 180,
+          "REDUCED": 51
+        },
+        "age_s_p50_p95_when_available": [
+          0.0,
+          0.0
+        ]
+      },
+      "ruled_intervals": []
+    },
+    {
+      "label": "fixture",
+      "day": "2025-11-11",
+      "rows": 1440,
+      "hash": "469dd0868d6f1247f42093ecce2bd8c4ed55603f7ad088024b0675c91e955263",
+      "dx_reference": true,
+      "utc_offset_ny": -5,
+      "unavailable_15m_last_by_utc_hour": {
+        "0": 60,
+        "1": 15,
+        "22": 45,
+        "23": 60
+      },
+      "asia_hour1_decisions_without_dxy_quotes": 45,
+      "weekday": 1,
+      "comparison_vs_dx": {
+        "15m": {
+          "windows": 44,
+          "agree": 44
+        },
+        "1h": {
+          "windows": 14,
+          "agree": 13
+        }
+      },
+      "distributions": {
+        "15m_last": {
+          "states": {
+            "OK": 1260,
+            "NO_QUOTES": 106,
+            "CLOSED_SCHEDULE": 60,
+            "NOT_LOADED": 14
+          },
+          "confidence": {
+            "FULL": 1260,
+            "UNAVAILABLE": 180
+          }
+        },
+        "15m_forming": {
+          "states": {
+            "OK": 1175,
+            "NO_QUOTES": 113,
+            "NO_ELAPSED_TIME": 96,
+            "CLOSED_SCHEDULE": 56
+          },
+          "confidence": {
+            "FULL": 1175,
+            "UNAVAILABLE": 265
+          }
+        },
+        "1h_last": {
+          "states": {
+            "OK": 1260,
+            "NO_QUOTES": 61,
+            "CLOSED_SCHEDULE": 60,
+            "NOT_LOADED": 59
+          },
+          "confidence": {
+            "FULL": 1260,
+            "UNAVAILABLE": 180
+          }
+        },
+        "1h_forming": {
+          "states": {
+            "OK": 1239,
+            "NO_QUOTES": 118,
+            "CLOSED_SCHEDULE": 59,
+            "NO_ELAPSED_TIME": 24
+          },
+          "confidence": {
+            "FULL": 1239,
+            "UNAVAILABLE": 201
+          }
+        }
+      },
+      "quote": {
+        "available_share": 0.875,
+        "confidence": {
+          "FULL": 1225,
+          "UNAVAILABLE": 180,
+          "REDUCED": 35
+        },
+        "age_s_p50_p95_when_available": [
+          0.0,
+          0.0
+        ]
+      },
+      "ruled_intervals": []
+    },
+    {
+      "label": "MID-2018",
+      "day": "2018-02-21",
+      "rows": 1440,
+      "hash": "4a01f6880fde2bd92bf5edfddabbdf4c94b8351f6a5111aff312dbe1c734c308",
+      "dx_reference": false,
+      "utc_offset_ny": -5,
+      "unavailable_15m_last_by_utc_hour": {
+        "0": 60,
+        "1": 15,
+        "22": 45,
+        "23": 60
+      },
+      "asia_hour1_decisions_without_dxy_quotes": 45,
+      "weekday": 2,
+      "comparison_vs_dx": {},
+      "distributions": {
+        "15m_last": {
+          "states": {
+            "OK": 1245,
+            "NO_QUOTES": 106,
+            "CLOSED_SCHEDULE": 60,
+            "LOW_COVERAGE": 15,
+            "NOT_LOADED": 14
+          },
+          "confidence": {
+            "FULL": 1245,
+            "UNAVAILABLE": 180,
+            "REDUCED": 15
+          }
+        },
+        "15m_forming": {
+          "states": {
+            "OK": 1153,
+            "NO_QUOTES": 124,
+            "NO_ELAPSED_TIME": 96,
+            "CLOSED_SCHEDULE": 56,
+            "LOW_COVERAGE": 11
+          },
+          "confidence": {
+            "FULL": 1153,
+            "UNAVAILABLE": 276,
+            "REDUCED": 11
+          }
+        },
+        "1h_last": {
+          "states": {
+            "OK": 1260,
+            "NO_QUOTES": 61,
+            "CLOSED_SCHEDULE": 60,
+            "NOT_LOADED": 59
+          },
+          "confidence": {
+            "FULL": 1260,
+            "UNAVAILABLE": 180
+          }
+        },
+        "1h_forming": {
+          "states": {
+            "OK": 1239,
+            "NO_QUOTES": 118,
+            "CLOSED_SCHEDULE": 59,
+            "NO_ELAPSED_TIME": 24
+          },
+          "confidence": {
+            "FULL": 1239,
+            "UNAVAILABLE": 201
+          }
+        }
+      },
+      "quote": {
+        "available_share": 0.8729,
+        "confidence": {
+          "FULL": 1217,
+          "UNAVAILABLE": 183,
+          "REDUCED": 40
+        },
+        "age_s_p50_p95_when_available": [
+          0.0,
+          0.0
+        ]
+      },
+      "ruled_intervals": []
+    },
+    {
+      "label": "MID-2019",
+      "day": "2019-04-17",
+      "rows": 1440,
+      "hash": "50beb19e6680e16fd7d38c3ec0500525b05506a26d8b2b71b1a36b0b17ed29ed",
+      "dx_reference": true,
+      "utc_offset_ny": -4,
+      "unavailable_15m_last_by_utc_hour": {
+        "0": 15,
+        "21": 45,
+        "22": 60,
+        "23": 60
+      },
+      "asia_hour1_decisions_without_dxy_quotes": 0,
+      "weekday": 2,
+      "comparison_vs_dx": {
+        "15m": {
+          "windows": 52,
+          "agree": 52
+        },
+        "1h": {
+          "windows": 16,
+          "agree": 16
+        }
+      },
+      "distributions": {
+        "15m_last": {
+          "states": {
+            "OK": 1245,
+            "NO_QUOTES": 106,
+            "CLOSED_SCHEDULE": 60,
+            "LOW_COVERAGE": 15,
+            "NOT_LOADED": 14
+          },
+          "confidence": {
+            "FULL": 1245,
+            "UNAVAILABLE": 180,
+            "REDUCED": 15
+          }
+        },
+        "15m_forming": {
+          "states": {
+            "OK": 1168,
+            "NO_QUOTES": 116,
+            "NO_ELAPSED_TIME": 96,
+            "CLOSED_SCHEDULE": 56,
+            "LOW_COVERAGE": 4
+          },
+          "confidence": {
+            "FULL": 1168,
+            "UNAVAILABLE": 268,
+            "REDUCED": 4
+          }
+        },
+        "1h_last": {
+          "states": {
+            "OK": 1260,
+            "NO_QUOTES": 61,
+            "CLOSED_SCHEDULE": 60,
+            "NOT_LOADED": 59
+          },
+          "confidence": {
+            "FULL": 1260,
+            "UNAVAILABLE": 180
+          }
+        },
+        "1h_forming": {
+          "states": {
+            "OK": 1235,
+            "NO_QUOTES": 118,
+            "CLOSED_SCHEDULE": 59,
+            "NO_ELAPSED_TIME": 24,
+            "LOW_COVERAGE": 4
+          },
+          "confidence": {
+            "FULL": 1235,
+            "UNAVAILABLE": 201,
+            "REDUCED": 4
+          }
+        }
+      },
+      "quote": {
+        "available_share": 0.875,
+        "confidence": {
+          "FULL": 1184,
+          "UNAVAILABLE": 180,
+          "REDUCED": 76
+        },
+        "age_s_p50_p95_when_available": [
+          0.0,
+          60.0
+        ]
+      },
+      "ruled_intervals": []
+    },
+    {
+      "label": "MID-2020",
+      "day": "2020-06-17",
+      "rows": 1440,
+      "hash": "20ed1f0243fbc62fc59564c41db19dd1b68258526542ba9efcf70e5ad75541dd",
+      "dx_reference": true,
+      "utc_offset_ny": -4,
+      "unavailable_15m_last_by_utc_hour": {
+        "0": 15,
+        "21": 45,
+        "22": 60,
+        "23": 60
+      },
+      "asia_hour1_decisions_without_dxy_quotes": 0,
+      "weekday": 2,
+      "comparison_vs_dx": {
+        "15m": {
+          "windows": 63,
+          "agree": 62
+        },
+        "1h": {
+          "windows": 20,
+          "agree": 20
+        }
+      },
+      "distributions": {
+        "15m_last": {
+          "states": {
+            "OK": 1260,
+            "NO_QUOTES": 106,
+            "CLOSED_SCHEDULE": 60,
+            "NOT_LOADED": 14
+          },
+          "confidence": {
+            "FULL": 1260,
+            "UNAVAILABLE": 180
+          }
+        },
+        "15m_forming": {
+          "states": {
+            "OK": 1176,
+            "NO_QUOTES": 112,
+            "NO_ELAPSED_TIME": 96,
+            "CLOSED_SCHEDULE": 56
+          },
+          "confidence": {
+            "FULL": 1176,
+            "UNAVAILABLE": 264
+          }
+        },
+        "1h_last": {
+          "states": {
+            "OK": 1260,
+            "NO_QUOTES": 61,
+            "CLOSED_SCHEDULE": 60,
+            "NOT_LOADED": 59
+          },
+          "confidence": {
+            "FULL": 1260,
+            "UNAVAILABLE": 180
+          }
+        },
+        "1h_forming": {
+          "states": {
+            "OK": 1239,
+            "NO_QUOTES": 118,
+            "CLOSED_SCHEDULE": 59,
+            "NO_ELAPSED_TIME": 24
+          },
+          "confidence": {
+            "FULL": 1239,
+            "UNAVAILABLE": 201
+          }
+        }
+      },
+      "quote": {
+        "available_share": 0.875,
+        "confidence": {
+          "FULL": 1257,
+          "UNAVAILABLE": 180,
+          "REDUCED": 3
+        },
+        "age_s_p50_p95_when_available": [
+          0.0,
+          0.0
+        ]
+      },
+      "ruled_intervals": []
+    },
+    {
+      "label": "MID-2021",
+      "day": "2021-08-18",
+      "rows": 1440,
+      "hash": "f125cf90c83cad488fccd786a7a6df1adf92300fe4c2527bee8ce3489bdb677f",
+      "dx_reference": true,
+      "utc_offset_ny": -4,
+      "unavailable_15m_last_by_utc_hour": {
+        "0": 15,
+        "21": 45,
+        "22": 60,
+        "23": 60
+      },
+      "asia_hour1_decisions_without_dxy_quotes": 0,
+      "weekday": 2,
+      "comparison_vs_dx": {
+        "15m": {
+          "windows": 50,
+          "agree": 50
+        },
+        "1h": {
+          "windows": 15,
+          "agree": 15
+        }
+      },
+      "distributions": {
+        "15m_last": {
+          "states": {
+            "OK": 1230,
+            "NO_QUOTES": 106,
+            "CLOSED_SCHEDULE": 60,
+            "LOW_COVERAGE": 30,
+            "NOT_LOADED": 14
+          },
+          "confidence": {
+            "FULL": 1230,
+            "UNAVAILABLE": 180,
+            "REDUCED": 30
+          }
+        },
+        "15m_forming": {
+          "states": {
+            "OK": 1164,
+            "NO_QUOTES": 115,
+            "NO_ELAPSED_TIME": 96,
+            "CLOSED_SCHEDULE": 56,
+            "LOW_COVERAGE": 9
+          },
+          "confidence": {
+            "FULL": 1164,
+            "UNAVAILABLE": 267,
+            "REDUCED": 9
+          }
+        },
+        "1h_last": {
+          "states": {
+            "OK": 1260,
+            "NO_QUOTES": 61,
+            "CLOSED_SCHEDULE": 60,
+            "NOT_LOADED": 59
+          },
+          "confidence": {
+            "FULL": 1260,
+            "UNAVAILABLE": 180
+          }
+        },
+        "1h_forming": {
+          "states": {
+            "OK": 1239,
+            "NO_QUOTES": 118,
+            "CLOSED_SCHEDULE": 59,
+            "NO_ELAPSED_TIME": 24
+          },
+          "confidence": {
+            "FULL": 1239,
+            "UNAVAILABLE": 201
+          }
+        }
+      },
+      "quote": {
+        "available_share": 0.875,
+        "confidence": {
+          "FULL": 1184,
+          "UNAVAILABLE": 180,
+          "REDUCED": 76
+        },
+        "age_s_p50_p95_when_available": [
+          0.0,
+          60.0
+        ]
+      },
+      "ruled_intervals": []
+    },
+    {
+      "label": "MID-2022",
+      "day": "2022-10-19",
+      "rows": 1440,
+      "hash": "af4f3302f51471f43f8d4b960cabc708ab1001114374d0e7e007c164a0d2018c",
+      "dx_reference": true,
+      "utc_offset_ny": -4,
+      "unavailable_15m_last_by_utc_hour": {
+        "0": 15,
+        "21": 45,
+        "22": 60,
+        "23": 60
+      },
+      "asia_hour1_decisions_without_dxy_quotes": 0,
+      "weekday": 2,
+      "comparison_vs_dx": {
+        "15m": {
+          "windows": 76,
+          "agree": 75
+        },
+        "1h": {
+          "windows": 19,
+          "agree": 19
+        }
+      },
+      "distributions": {
+        "15m_last": {
+          "states": {
+            "OK": 1260,
+            "NO_QUOTES": 106,
+            "CLOSED_SCHEDULE": 60,
+            "NOT_LOADED": 14
+          },
+          "confidence": {
+            "FULL": 1260,
+            "UNAVAILABLE": 180
+          }
+        },
+        "15m_forming": {
+          "states": {
+            "OK": 1176,
+            "NO_QUOTES": 112,
+            "NO_ELAPSED_TIME": 96,
+            "CLOSED_SCHEDULE": 56
+          },
+          "confidence": {
+            "FULL": 1176,
+            "UNAVAILABLE": 264
+          }
+        },
+        "1h_last": {
+          "states": {
+            "OK": 1260,
+            "NO_QUOTES": 61,
+            "CLOSED_SCHEDULE": 60,
+            "NOT_LOADED": 59
+          },
+          "confidence": {
+            "FULL": 1260,
+            "UNAVAILABLE": 180
+          }
+        },
+        "1h_forming": {
+          "states": {
+            "OK": 1239,
+            "NO_QUOTES": 118,
+            "CLOSED_SCHEDULE": 59,
+            "NO_ELAPSED_TIME": 24
+          },
+          "confidence": {
+            "FULL": 1239,
+            "UNAVAILABLE": 201
+          }
+        }
+      },
+      "quote": {
+        "available_share": 0.875,
+        "confidence": {
+          "FULL": 1258,
+          "UNAVAILABLE": 180,
+          "REDUCED": 2
+        },
+        "age_s_p50_p95_when_available": [
+          0.0,
+          0.0
+        ]
+      },
+      "ruled_intervals": []
+    },
+    {
+      "label": "MID-2023",
+      "day": "2023-12-20",
+      "rows": 1440,
+      "hash": "4652baf50556a65c73446aea24354fbdc920394da698bb28cdadcafe9776e616",
+      "dx_reference": true,
+      "utc_offset_ny": -5,
+      "unavailable_15m_last_by_utc_hour": {
+        "0": 60,
+        "1": 15,
+        "22": 45,
+        "23": 60
+      },
+      "asia_hour1_decisions_without_dxy_quotes": 45,
+      "weekday": 2,
+      "comparison_vs_dx": {
+        "15m": {
+          "windows": 50,
+          "agree": 50
+        },
+        "1h": {
+          "windows": 19,
+          "agree": 18
+        }
+      },
+      "distributions": {
+        "15m_last": {
+          "states": {
+            "OK": 1260,
+            "NO_QUOTES": 106,
+            "CLOSED_SCHEDULE": 60,
+            "NOT_LOADED": 14
+          },
+          "confidence": {
+            "FULL": 1260,
+            "UNAVAILABLE": 180
+          }
+        },
+        "15m_forming": {
+          "states": {
+            "OK": 1176,
+            "NO_QUOTES": 112,
+            "NO_ELAPSED_TIME": 96,
+            "CLOSED_SCHEDULE": 56
+          },
+          "confidence": {
+            "FULL": 1176,
+            "UNAVAILABLE": 264
+          }
+        },
+        "1h_last": {
+          "states": {
+            "OK": 1260,
+            "NO_QUOTES": 61,
+            "CLOSED_SCHEDULE": 60,
+            "NOT_LOADED": 59
+          },
+          "confidence": {
+            "FULL": 1260,
+            "UNAVAILABLE": 180
+          }
+        },
+        "1h_forming": {
+          "states": {
+            "OK": 1239,
+            "NO_QUOTES": 118,
+            "CLOSED_SCHEDULE": 59,
+            "NO_ELAPSED_TIME": 24
+          },
+          "confidence": {
+            "FULL": 1239,
+            "UNAVAILABLE": 201
+          }
+        }
+      },
+      "quote": {
+        "available_share": 0.875,
+        "confidence": {
+          "FULL": 1245,
+          "UNAVAILABLE": 180,
+          "REDUCED": 15
+        },
+        "age_s_p50_p95_when_available": [
+          0.0,
+          0.0
+        ]
+      },
+      "ruled_intervals": []
+    },
+    {
+      "label": "MID-2024",
+      "day": "2024-03-20",
+      "rows": 1440,
+      "hash": "4ac9b5331977e22fe1cc37a1802fb3082f9d362fc148bb4825a038b579e78fc8",
+      "dx_reference": true,
+      "utc_offset_ny": -4,
+      "unavailable_15m_last_by_utc_hour": {
+        "0": 15,
+        "21": 45,
+        "22": 60,
+        "23": 60
+      },
+      "asia_hour1_decisions_without_dxy_quotes": 0,
+      "weekday": 2,
+      "comparison_vs_dx": {
+        "15m": {
+          "windows": 47,
+          "agree": 46
+        },
+        "1h": {
+          "windows": 13,
+          "agree": 12
+        }
+      },
+      "distributions": {
+        "15m_last": {
+          "states": {
+            "OK": 1260,
+            "NO_QUOTES": 106,
+            "CLOSED_SCHEDULE": 60,
+            "NOT_LOADED": 14
+          },
+          "confidence": {
+            "FULL": 1260,
+            "UNAVAILABLE": 180
+          }
+        },
+        "15m_forming": {
+          "states": {
+            "OK": 1166,
+            "NO_QUOTES": 119,
+            "NO_ELAPSED_TIME": 96,
+            "CLOSED_SCHEDULE": 56,
+            "LOW_COVERAGE": 3
+          },
+          "confidence": {
+            "FULL": 1166,
+            "UNAVAILABLE": 271,
+            "REDUCED": 3
+          }
+        },
+        "1h_last": {
+          "states": {
+            "OK": 1260,
+            "NO_QUOTES": 61,
+            "CLOSED_SCHEDULE": 60,
+            "NOT_LOADED": 59
+          },
+          "confidence": {
+            "FULL": 1260,
+            "UNAVAILABLE": 180
+          }
+        },
+        "1h_forming": {
+          "states": {
+            "OK": 1239,
+            "NO_QUOTES": 118,
+            "CLOSED_SCHEDULE": 59,
+            "NO_ELAPSED_TIME": 24
+          },
+          "confidence": {
+            "FULL": 1239,
+            "UNAVAILABLE": 201
+          }
+        }
+      },
+      "quote": {
+        "available_share": 0.875,
+        "confidence": {
+          "FULL": 1205,
+          "UNAVAILABLE": 180,
+          "REDUCED": 55
+        },
+        "age_s_p50_p95_when_available": [
+          0.0,
+          0.0
+        ]
+      },
+      "ruled_intervals": []
+    },
+    {
+      "label": "DST-SPRING-2019",
+      "day": "2019-03-11",
+      "rows": 1440,
+      "hash": "dfd9fd9e68b95204717f5e7cd2957e23d02dbaaa900db770e7c9926dd2a604d7",
+      "dx_reference": true,
+      "utc_offset_ny": -4,
+      "unavailable_15m_last_by_utc_hour": {
+        "0": 60,
+        "1": 15,
+        "21": 45,
+        "22": 60,
+        "23": 60
+      },
+      "asia_hour1_decisions_without_dxy_quotes": 45,
+      "weekday": 0,
+      "comparison_vs_dx": {
+        "15m": {
+          "windows": 41,
+          "agree": 40
+        },
+        "1h": {
+          "windows": 11,
+          "agree": 11
+        }
+      },
+      "distributions": {
+        "15m_last": {
+          "states": {
+            "OK": 1200,
+            "NO_QUOTES": 121,
+            "CLOSED_SCHEDULE": 60,
+            "VENDOR_MISSING": 45,
+            "NOT_LOADED": 14
+          },
+          "confidence": {
+            "FULL": 1200,
+            "UNAVAILABLE": 240
+          }
+        },
+        "15m_forming": {
+          "states": {
+            "OK": 1106,
+            "NO_QUOTES": 148,
+            "NO_ELAPSED_TIME": 96,
+            "CLOSED_SCHEDULE": 56,
+            "VENDOR_MISSING": 28,
+            "LOW_COVERAGE": 6
+          },
+          "confidence": {
+            "FULL": 1106,
+            "UNAVAILABLE": 328,
+            "REDUCED": 6
+          }
+        },
+        "1h_last": {
+          "states": {
+            "OK": 1200,
+            "NO_QUOTES": 61,
+            "VENDOR_MISSING": 60,
+            "CLOSED_SCHEDULE": 60,
+            "NOT_LOADED": 59
+          },
+          "confidence": {
+            "FULL": 1200,
+            "UNAVAILABLE": 240
+          }
+        },
+        "1h_forming": {
+          "states": {
+            "OK": 1176,
+            "NO_QUOTES": 150,
+            "CLOSED_SCHEDULE": 59,
+            "VENDOR_MISSING": 30,
+            "NO_ELAPSED_TIME": 24,
+            "LOW_COVERAGE": 1
+          },
+          "confidence": {
+            "FULL": 1176,
+            "UNAVAILABLE": 263,
+            "REDUCED": 1
+          }
+        }
+      },
+      "quote": {
+        "available_share": 0.8333,
+        "confidence": {
+          "FULL": 1133,
+          "UNAVAILABLE": 240,
+          "REDUCED": 67
+        },
+        "age_s_p50_p95_when_available": [
+          0.0,
+          60.0
+        ]
+      },
+      "ruled_intervals": [
+        {
+          "interval": [
+            "2019-03-11T00:00:00+00:00",
+            "2019-03-11T01:00:00+00:00"
+          ],
+          "hindsight_mask_all_minutes": true,
+          "causal_quote_shown_minutes": 0,
+          "causal_quote_shown_max_age_s": NaN
+        }
+      ]
+    },
+    {
+      "label": "DST-AUTUMN-2023",
+      "day": "2023-11-06",
+      "rows": 1440,
+      "hash": "c0ca14d16c88d33622a5f21a8764f53361fc206371c7ed1496e570a60eb6036b",
+      "dx_reference": true,
+      "utc_offset_ny": -5,
+      "unavailable_15m_last_by_utc_hour": {
+        "0": 60,
+        "1": 15,
+        "22": 45,
+        "23": 60
+      },
+      "asia_hour1_decisions_without_dxy_quotes": 45,
+      "weekday": 0,
+      "comparison_vs_dx": {
+        "15m": {
+          "windows": 59,
+          "agree": 57
+        },
+        "1h": {
+          "windows": 18,
+          "agree": 18
+        }
+      },
+      "distributions": {
+        "15m_last": {
+          "states": {
+            "OK": 1260,
+            "NO_QUOTES": 61,
+            "CLOSED_SCHEDULE": 60,
+            "VENDOR_MISSING": 45,
+            "NOT_LOADED": 14
+          },
+          "confidence": {
+            "FULL": 1260,
+            "UNAVAILABLE": 180
+          }
+        },
+        "15m_forming": {
+          "states": {
+            "OK": 1175,
+            "NO_ELAPSED_TIME": 96,
+            "NO_QUOTES": 85,
+            "CLOSED_SCHEDULE": 56,
+            "VENDOR_MISSING": 28
+          },
+          "confidence": {
+            "FULL": 1175,
+            "UNAVAILABLE": 265
+          }
+        },
+        "1h_last": {
+          "states": {
+            "OK": 1260,
+            "VENDOR_MISSING": 60,
+            "CLOSED_SCHEDULE": 60,
+            "NOT_LOADED": 59,
+            "NO_QUOTES": 1
+          },
+          "confidence": {
+            "FULL": 1260,
+            "UNAVAILABLE": 180
+          }
+        },
+        "1h_forming": {
+          "states": {
+            "OK": 1239,
+            "NO_QUOTES": 88,
+            "CLOSED_SCHEDULE": 59,
+            "VENDOR_MISSING": 30,
+            "NO_ELAPSED_TIME": 24
+          },
+          "confidence": {
+            "FULL": 1239,
+            "UNAVAILABLE": 201
+          }
+        }
+      },
+      "quote": {
+        "available_share": 0.875,
+        "confidence": {
+          "FULL": 1233,
+          "UNAVAILABLE": 180,
+          "REDUCED": 27
+        },
+        "age_s_p50_p95_when_available": [
+          0.0,
+          0.0
+        ]
+      },
+      "ruled_intervals": []
+    },
+    {
+      "label": "US-HOLIDAY-2022-THANKSGIVING",
+      "day": "2022-11-24",
+      "rows": 1440,
+      "hash": "0777ea955a841cd363a4a1951cc7ad264c8844c496610b54ce07db8e36520dcd",
+      "dx_reference": true,
+      "utc_offset_ny": -5,
+      "unavailable_15m_last_by_utc_hour": {
+        "0": 60,
+        "1": 15,
+        "18": 45,
+        "19": 60,
+        "20": 60,
+        "21": 60,
+        "22": 60,
+        "23": 60
+      },
+      "asia_hour1_decisions_without_dxy_quotes": 45,
+      "weekday": 3,
+      "comparison_vs_dx": {
+        "15m": {
+          "windows": 58,
+          "agree": 57
+        },
+        "1h": {
+          "windows": 14,
+          "agree": 14
+        }
+      },
+      "distributions": {
+        "15m_last": {
+          "states": {
+            "OK": 1020,
+            "VENDOR_MISSING": 272,
+            "NO_QUOTES": 74,
+            "CLOSED_SCHEDULE": 60,
+            "NOT_LOADED": 14
+          },
+          "confidence": {
+            "FULL": 1020,
+            "UNAVAILABLE": 420
+          }
+        },
+        "15m_forming": {
+          "states": {
+            "OK": 952,
+            "VENDOR_MISSING": 253,
+            "NO_ELAPSED_TIME": 96,
+            "NO_QUOTES": 83,
+            "CLOSED_SCHEDULE": 56
+          },
+          "confidence": {
+            "FULL": 952,
+            "UNAVAILABLE": 488
+          }
+        },
+        "1h_last": {
+          "states": {
+            "OK": 989,
+            "VENDOR_MISSING": 272,
+            "NO_QUOTES": 60,
+            "CLOSED_SCHEDULE": 60,
+            "NOT_LOADED": 59
+          },
+          "confidence": {
+            "FULL": 989,
+            "UNAVAILABLE": 451
+          }
+        },
+        "1h_forming": {
+          "states": {
+            "OK": 1003,
+            "VENDOR_MISSING": 267,
+            "NO_QUOTES": 87,
+            "CLOSED_SCHEDULE": 59,
+            "NO_ELAPSED_TIME": 24
+          },
+          "confidence": {
+            "FULL": 1003,
+            "UNAVAILABLE": 437
+          }
+        }
+      },
+      "quote": {
+        "available_share": 0.7146,
+        "confidence": {
+          "FULL": 1019,
+          "UNAVAILABLE": 411,
+          "REDUCED": 10
+        },
+        "age_s_p50_p95_when_available": [
+          0.0,
+          0.0
+        ]
+      },
+      "ruled_intervals": []
+    },
+    {
+      "label": "MONDAY-REOPEN-2021",
+      "day": "2021-02-01",
+      "rows": 1440,
+      "hash": "0c18f837117d43bd5d574bfe70e7b7db778ac2eec6fc78a7a2bf05a8c13225f3",
+      "dx_reference": true,
+      "utc_offset_ny": -5,
+      "unavailable_15m_last_by_utc_hour": {
+        "0": 60,
+        "1": 15,
+        "22": 45,
+        "23": 60
+      },
+      "asia_hour1_decisions_without_dxy_quotes": 45,
+      "weekday": 0,
+      "comparison_vs_dx": {
+        "15m": {
+          "windows": 56,
+          "agree": 56
+        },
+        "1h": {
+          "windows": 17,
+          "agree": 16
+        }
+      },
+      "distributions": {
+        "15m_last": {
+          "states": {
+            "OK": 1260,
+            "NO_QUOTES": 61,
+            "CLOSED_SCHEDULE": 60,
+            "VENDOR_MISSING": 45,
+            "NOT_LOADED": 14
+          },
+          "confidence": {
+            "FULL": 1260,
+            "UNAVAILABLE": 180
+          }
+        },
+        "15m_forming": {
+          "states": {
+            "OK": 1176,
+            "NO_ELAPSED_TIME": 96,
+            "NO_QUOTES": 84,
+            "CLOSED_SCHEDULE": 56,
+            "VENDOR_MISSING": 28
+          },
+          "confidence": {
+            "FULL": 1176,
+            "UNAVAILABLE": 264
+          }
+        },
+        "1h_last": {
+          "states": {
+            "OK": 1260,
+            "VENDOR_MISSING": 60,
+            "CLOSED_SCHEDULE": 60,
+            "NOT_LOADED": 59,
+            "NO_QUOTES": 1
+          },
+          "confidence": {
+            "FULL": 1260,
+            "UNAVAILABLE": 180
+          }
+        },
+        "1h_forming": {
+          "states": {
+            "OK": 1239,
+            "NO_QUOTES": 88,
+            "CLOSED_SCHEDULE": 59,
+            "VENDOR_MISSING": 30,
+            "NO_ELAPSED_TIME": 24
+          },
+          "confidence": {
+            "FULL": 1239,
+            "UNAVAILABLE": 201
+          }
+        }
+      },
+      "quote": {
+        "available_share": 0.875,
+        "confidence": {
+          "FULL": 1237,
+          "UNAVAILABLE": 180,
+          "REDUCED": 23
+        },
+        "age_s_p50_p95_when_available": [
+          0.0,
+          0.0
+        ]
+      },
+      "ruled_intervals": []
+    },
+    {
+      "label": "DXY-CFD-FIRST-MONTH-2018",
+      "day": "2018-01-17",
+      "rows": 1440,
+      "hash": "245fda7dcf642c89ed72239817c43f10150252e9a12f3df29bfd43848850cfe5",
+      "dx_reference": false,
+      "utc_offset_ny": -5,
+      "unavailable_15m_last_by_utc_hour": {
+        "0": 60,
+        "1": 15,
+        "22": 45,
+        "23": 60
+      },
+      "asia_hour1_decisions_without_dxy_quotes": 45,
+      "weekday": 2,
+      "comparison_vs_dx": {},
+      "distributions": {
+        "15m_last": {
+          "states": {
+            "OK": 1230,
+            "NO_QUOTES": 106,
+            "CLOSED_SCHEDULE": 60,
+            "LOW_COVERAGE": 30,
+            "NOT_LOADED": 14
+          },
+          "confidence": {
+            "FULL": 1230,
+            "UNAVAILABLE": 180,
+            "REDUCED": 30
+          }
+        },
+        "15m_forming": {
+          "states": {
+            "OK": 1142,
+            "NO_QUOTES": 125,
+            "NO_ELAPSED_TIME": 96,
+            "CLOSED_SCHEDULE": 56,
+            "LOW_COVERAGE": 21
+          },
+          "confidence": {
+            "FULL": 1142,
+            "UNAVAILABLE": 277,
+            "REDUCED": 21
+          }
+        },
+        "1h_last": {
+          "states": {
+            "OK": 1260,
+            "NO_QUOTES": 61,
+            "CLOSED_SCHEDULE": 60,
+            "NOT_LOADED": 59
+          },
+          "confidence": {
+            "FULL": 1260,
+            "UNAVAILABLE": 180
+          }
+        },
+        "1h_forming": {
+          "states": {
+            "OK": 1223,
+            "NO_QUOTES": 118,
+            "CLOSED_SCHEDULE": 59,
+            "NO_ELAPSED_TIME": 24,
+            "LOW_COVERAGE": 16
+          },
+          "confidence": {
+            "FULL": 1223,
+            "UNAVAILABLE": 201,
+            "REDUCED": 16
+          }
+        }
+      },
+      "quote": {
+        "available_share": 0.8681,
+        "confidence": {
+          "FULL": 1212,
+          "UNAVAILABLE": 190,
+          "REDUCED": 38
+        },
+        "age_s_p50_p95_when_available": [
+          0.0,
+          0.0
+        ]
+      },
+      "ruled_intervals": []
+    },
+    {
+      "label": "HIGHVOL-2020-03-09",
+      "day": "2020-03-09",
+      "rows": 1440,
+      "hash": "1589972706b195de3c701fddfb5e65904ce54bd016f5babaa554bbdc258e26b9",
+      "dx_reference": true,
+      "utc_offset_ny": -4,
+      "unavailable_15m_last_by_utc_hour": {
+        "0": 15,
+        "20": 45,
+        "21": 60,
+        "22": 60,
+        "23": 60
+      },
+      "asia_hour1_decisions_without_dxy_quotes": 0,
+      "weekday": 0,
+      "comparison_vs_dx": {
+        "15m": {
+          "windows": 77,
+          "agree": 77
+        },
+        "1h": {
+          "windows": 19,
+          "agree": 19
+        }
+      },
+      "distributions": {
+        "15m_last": {
+          "states": {
+            "OK": 1200,
+            "VENDOR_MISSING": 151,
+            "CLOSED_SCHEDULE": 60,
+            "NO_QUOTES": 15,
+            "NOT_LOADED": 14
+          },
+          "confidence": {
+            "FULL": 1200,
+            "UNAVAILABLE": 240
+          }
+        },
+        "15m_forming": {
+          "states": {
+            "OK": 1120,
+            "VENDOR_MISSING": 140,
+            "NO_ELAPSED_TIME": 96,
+            "CLOSED_SCHEDULE": 56,
+            "NO_QUOTES": 28
+          },
+          "confidence": {
+            "FULL": 1120,
+            "UNAVAILABLE": 320
+          }
+        },
+        "1h_last": {
+          "states": {
+            "OK": 1200,
+            "VENDOR_MISSING": 121,
+            "CLOSED_SCHEDULE": 60,
+            "NOT_LOADED": 59
+          },
+          "confidence": {
+            "FULL": 1200,
+            "UNAVAILABLE": 240
+          }
+        },
+        "1h_forming": {
+          "states": {
+            "OK": 1180,
+            "VENDOR_MISSING": 148,
+            "CLOSED_SCHEDULE": 59,
+            "NO_QUOTES": 29,
+            "NO_ELAPSED_TIME": 24
+          },
+          "confidence": {
+            "FULL": 1180,
+            "UNAVAILABLE": 260
+          }
+        }
+      },
+      "quote": {
+        "available_share": 0.8403,
+        "confidence": {
+          "FULL": 1200,
+          "UNAVAILABLE": 230,
+          "REDUCED": 10
+        },
+        "age_s_p50_p95_when_available": [
+          0.0,
+          0.0
+        ]
+      },
+      "ruled_intervals": [
+        {
+          "interval": [
+            "2020-03-09T20:00:00+00:00",
+            "2020-03-09T21:00:00+00:00"
+          ],
+          "hindsight_mask_all_minutes": true,
+          "causal_quote_shown_minutes": 10,
+          "causal_quote_shown_max_age_s": 600.0
+        }
+      ]
+    },
+    {
+      "label": "HIGHVOL-2020-03-16",
+      "day": "2020-03-16",
+      "rows": 1440,
+      "hash": "2a1a5da078cb33480458a3b857a5579bdef4294c9936188bdb091f62acb9e99f",
+      "dx_reference": true,
+      "utc_offset_ny": -4,
+      "unavailable_15m_last_by_utc_hour": {
+        "0": 15,
+        "21": 45,
+        "22": 60,
+        "23": 60
+      },
+      "asia_hour1_decisions_without_dxy_quotes": 0,
+      "weekday": 0,
+      "comparison_vs_dx": {
+        "15m": {
+          "windows": 77,
+          "agree": 74
+        },
+        "1h": {
+          "windows": 19,
+          "agree": 19
+        }
+      },
+      "distributions": {
+        "15m_last": {
+          "states": {
+            "OK": 1260,
+            "NO_QUOTES": 106,
+            "CLOSED_SCHEDULE": 60,
+            "NOT_LOADED": 14
+          },
+          "confidence": {
+            "FULL": 1260,
+            "UNAVAILABLE": 180
+          }
+        },
+        "15m_forming": {
+          "states": {
+            "OK": 1176,
+            "NO_QUOTES": 112,
+            "NO_ELAPSED_TIME": 96,
+            "CLOSED_SCHEDULE": 56
+          },
+          "confidence": {
+            "FULL": 1176,
+            "UNAVAILABLE": 264
+          }
+        },
+        "1h_last": {
+          "states": {
+            "OK": 1260,
+            "NO_QUOTES": 61,
+            "CLOSED_SCHEDULE": 60,
+            "NOT_LOADED": 59
+          },
+          "confidence": {
+            "FULL": 1260,
+            "UNAVAILABLE": 180
+          }
+        },
+        "1h_forming": {
+          "states": {
+            "OK": 1239,
+            "NO_QUOTES": 118,
+            "CLOSED_SCHEDULE": 59,
+            "NO_ELAPSED_TIME": 24
+          },
+          "confidence": {
+            "FULL": 1239,
+            "UNAVAILABLE": 201
+          }
+        }
+      },
+      "quote": {
+        "available_share": 0.875,
+        "confidence": {
+          "FULL": 1257,
+          "UNAVAILABLE": 180,
+          "REDUCED": 3
+        },
+        "age_s_p50_p95_when_available": [
+          0.0,
+          0.0
+        ]
+      },
+      "ruled_intervals": []
+    },
+    {
+      "label": "HIGHVOL-2022-03-08",
+      "day": "2022-03-08",
+      "rows": 1440,
+      "hash": "03c1e438710c9e64dcaefe7a542db7191f89b02ed1adbe8d62c771c048587467",
+      "dx_reference": true,
+      "utc_offset_ny": -5,
+      "unavailable_15m_last_by_utc_hour": {
+        "0": 60,
+        "1": 15,
+        "22": 45,
+        "23": 60
+      },
+      "asia_hour1_decisions_without_dxy_quotes": 45,
+      "weekday": 1,
+      "comparison_vs_dx": {
+        "15m": {
+          "windows": 67,
+          "agree": 67
+        },
+        "1h": {
+          "windows": 16,
+          "agree": 16
+        }
+      },
+      "distributions": {
+        "15m_last": {
+          "states": {
+            "OK": 1260,
+            "NO_QUOTES": 106,
+            "CLOSED_SCHEDULE": 60,
+            "NOT_LOADED": 14
+          },
+          "confidence": {
+            "FULL": 1260,
+            "UNAVAILABLE": 180
+          }
+        },
+        "15m_forming": {
+          "states": {
+            "OK": 1175,
+            "NO_QUOTES": 113,
+            "NO_ELAPSED_TIME": 96,
+            "CLOSED_SCHEDULE": 56
+          },
+          "confidence": {
+            "FULL": 1175,
+            "UNAVAILABLE": 265
+          }
+        },
+        "1h_last": {
+          "states": {
+            "OK": 1260,
+            "NO_QUOTES": 61,
+            "CLOSED_SCHEDULE": 60,
+            "NOT_LOADED": 59
+          },
+          "confidence": {
+            "FULL": 1260,
+            "UNAVAILABLE": 180
+          }
+        },
+        "1h_forming": {
+          "states": {
+            "OK": 1239,
+            "NO_QUOTES": 118,
+            "CLOSED_SCHEDULE": 59,
+            "NO_ELAPSED_TIME": 24
+          },
+          "confidence": {
+            "FULL": 1239,
+            "UNAVAILABLE": 201
+          }
+        }
+      },
+      "quote": {
+        "available_share": 0.875,
+        "confidence": {
+          "FULL": 1251,
+          "UNAVAILABLE": 180,
+          "REDUCED": 9
+        },
+        "age_s_p50_p95_when_available": [
+          0.0,
+          0.0
+        ]
+      },
+      "ruled_intervals": []
+    },
+    {
+      "label": "HIGHVOL-2024-04-12",
+      "day": "2024-04-12",
+      "rows": 1440,
+      "hash": "092ab82d6cc1d454193299da170781d7853a1258e3ba4825b074de35cd265ab1",
+      "dx_reference": true,
+      "utc_offset_ny": -4,
+      "unavailable_15m_last_by_utc_hour": {
+        "0": 15,
+        "21": 45,
+        "22": 60,
+        "23": 60
+      },
+      "asia_hour1_decisions_without_dxy_quotes": 0,
+      "weekday": 4,
+      "comparison_vs_dx": {
+        "15m": {
+          "windows": 60,
+          "agree": 60
+        },
+        "1h": {
+          "windows": 15,
+          "agree": 15
+        }
+      },
+      "distributions": {
+        "15m_last": {
+          "states": {
+            "OK": 1260,
+            "CLOSED_SCHEDULE": 166,
+            "NOT_LOADED": 14
+          },
+          "confidence": {
+            "FULL": 1260,
+            "UNAVAILABLE": 180
+          }
+        },
+        "15m_forming": {
+          "states": {
+            "OK": 1173,
+            "CLOSED_SCHEDULE": 168,
+            "NO_ELAPSED_TIME": 96,
+            "NO_QUOTES": 2,
+            "LOW_COVERAGE": 1
+          },
+          "confidence": {
+            "FULL": 1173,
+            "UNAVAILABLE": 266,
+            "REDUCED": 1
+          }
+        },
+        "1h_last": {
+          "states": {
+            "OK": 1260,
+            "CLOSED_SCHEDULE": 121,
+            "NOT_LOADED": 59
+          },
+          "confidence": {
+            "FULL": 1260,
+            "UNAVAILABLE": 180
+          }
+        },
+        "1h_forming": {
+          "states": {
+            "OK": 1239,
+            "CLOSED_SCHEDULE": 177,
+            "NO_ELAPSED_TIME": 24
+          },
+          "confidence": {
+            "FULL": 1239,
+            "UNAVAILABLE": 201
+          }
+        }
+      },
+      "quote": {
+        "available_share": 0.875,
+        "confidence": {
+          "FULL": 1230,
+          "UNAVAILABLE": 180,
+          "REDUCED": 30
+        },
+        "age_s_p50_p95_when_available": [
+          0.0,
+          0.0
+        ]
+      },
+      "ruled_intervals": []
+    }
+  ]
+}
