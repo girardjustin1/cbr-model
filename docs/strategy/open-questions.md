@@ -395,6 +395,44 @@ recordings, or the Notion journal) · `RESEARCH PARAMETER` (legitimately ambiguo
   evaluated normally if its qualifying break falls in the second half. The early one is never resurrected.
 - **Status.** `RESOLVED` (D17-5).
 
+### OQ-39 · CBR1H entry trigger: spec entry models vs the course examples (Phase 12 parity)
+- **Conflict.** The spec's CBR1H entry models are 6A `HVCS_HILO` (1m, or 5m when LVCS) and 6B `FRACTAL_1M` (1m type 3
+  → 50% pullback → HILO). All three hourly course examples enter on a **5-second shift**:
+  - CX-LT1-1: "Had a shift of market structure on the 5 second to get the low to take out a high" (V1H-live_trade_1, 00:02:47);
+  - CX-TE1-1: "i just entered off the break of that high because it's a second shift um it's a bit of a high low entry as well but yeah more of a second shift" (V1H-trade_example_1, 00:12:17);
+  - CX-LT3-2: seconds shift with DXY/gold-spread correlation (V1H-live_trade_3, 00:15:20).
+- **Parity (Phase 12).** 6A reproduces entry time and stop anchor within MATCH tolerance on all three examples and the
+  structure trigger within MATCH (CX-LT1-1, CX-LT3-2) or FEED_NEAR (CX-TE1-1, −$1.50) tolerance, but prescribes a HILO tier that conflicts with the nearest candidate on CX-LT1-1 (5m required, LVCS) and
+  CX-LT3-2 (1m required). 6B reproduces **none** (no completed 1m type 3 in those hours).
+- **Options.** (a) keep 6A/6B as written · (b) add a 5-second type 3 entry model for CBR1H (as CBR15 §7), as a new
+  variant · (c) define the HILO tier differently. Decided on Level 1 evidence, never outcomes.
+- **Status.** `NEEDS USER DECISION` before Phase 13 parity.
+
+### OQ-40 · Condition window across market closures (CBR1H 8 h, CBR15 2 h)
+- **Problem.** `condition.classify` measures its window in clock hours. On CX-LT3-2 (Monday 01:00 UTC) the 8 h window
+  starts Sunday 17:00, inside the weekend closure; only ~2 h of trading data qualify, giving 0 MTF legs → `UNDEFINED`.
+  Tom: "very bullish, a little bit trendy" (V1H-live_trade_3, 00:01:07).
+- **Options.** (a) clock hours (implemented) · (b) trading hours (skip expected-closed minutes, reaching back into
+  Friday) · (c) block the first hours after a weekly reopen as insufficient context.
+- **Status.** `NEEDS USER DECISION` before Phase 13.
+
+### OQ-41 · Reference candle for `oe_prev_candle_break` in CBR1H
+- **Reading implemented.** The 15m candle before the one containing the decision time (a decision on a 15m boundary
+  belongs to the ending candle). CBR15 uses Q−1 for its own candle. The spec says "the previous candle of timeframe 15m"
+  without fixing the reference point for an hourly setup.
+- **Status.** `NEEDS USER DECISION` (confirm).
+
+### OQ-42 · M1H-TIME-02 (:30 candle veto): fill time vs decision time
+- **Reading implemented.** The spec conditions on "the fill occurs in the 15m candle opening at :30". Fills are execution
+  (D16), so the engine evaluates the veto for orders whose activation falls in that candle, using data before the
+  decision; the :15 exception uses the closed :15 candle. An order armed before :30 that fills after :30 isn't vetoed.
+- **Status.** `NEEDS USER DECISION` (confirm, or move the veto to the execution layer's fill time).
+
+### OQ-43 · HVCS "end_bar ≤ as_of" (6A condition 1)
+- **Reading implemented.** Valid when the longest HVCS in the extension direction ending at any closed 1m bar of the hour
+  up to the decision lasts ≥ 4 minutes; its body size decides the LVCS/5m tier.
+- **Status.** `NEEDS USER DECISION` (confirm, or require the HVCS to end at the bar before the HILO).
+
 ### OQ-31 · How does the ledger use the hindsight vendor-gap mask? (Phase 10)
 - **Problem.** At a decision time inside a DXY CFD vendor outage, a causal module can't yet tell the outage from thin
   quoting. The Phase 10 module shows the last quote for up to `max_quote_age_minutes` (10, IMPL) with REDUCED
@@ -539,6 +577,7 @@ said to hold ~350 trades (P2G-37). The spoken and slide DXY figures disagree.
 | D15 | Phase 10 accepted (PASS WITH CONCERNS, G10 approved). OQ-31 open, preference Option B (label, don't exclude; ALL vs FULL-DXY diagnostic only). Daily DXY CFD unavailability accepted: `DXY_AVAILABLE = false`, no directional meaning. Engineering thresholds stay IMPL, never optimized. OQ-25 decision package next; Phase 11 not started | OQ-25, OQ-31, G10 |
 | D16 | OQ-25 resolved: STRUCTURE = tick mid, EXECUTION = tick bid/ask, never one series for both, access guards + STRUCTURE/EXECUTION labels in schemas/manifests/reports. V-1 required before Phase 13 passes (reopen OQ-25 on material differences). Full tick history deferred (OQ-33). Phase 11 approved on downloaded tick days. Candle files and GC not canonical for extremes | OQ-25, OQ-33, Phases 11/13 |
 | D17 | Phase 11 accepted (PASS WITH CONCERNS, G11: construction, causality, determinism); CBR15 not baseline-eligible. OQ-34 open until Phase 12 (NOT_EVALUATED neither pass nor fail). OQ-35 resolved: stop anchor = most adverse STRUCTURE extension extreme through activation/fill, fields kept separate. OQ-36 interpretation not approved; evidence package required. OQ-37 resolved: TREND_DIRECTION_UNRESOLVED context failure. OQ-38 resolved: TYPE3_RESOLVED_TOO_EARLY, no resurrection. F-3 approved. Phase 12 authorized | OQ-34…OQ-38, G11 |
+| — | Phase 12 (pending owner review): OQ-39 entry trigger vs course examples, OQ-40 condition window across closures, OQ-41 prev-15m reference, OQ-42 q30 veto timing, OQ-43 HVCS end bar | Phase 13 |
 
 ## Batched questions for the user (historical; answered above)
 

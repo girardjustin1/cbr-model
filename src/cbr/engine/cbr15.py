@@ -28,6 +28,16 @@ import pandas as pd
 
 from cbr.data.price_series import require_structure, rollup_structure
 from cbr.data.sessions import expected_closed_mask
+from cbr.engine.common import (
+    M1,
+    M15,
+    S5,
+    _anchor_path,
+    _atr_at,
+    _er,
+    _minutes_complete,
+    anchor_at,
+)
 from cbr.engine.params import Cbr15Params, load_cbr15, spec_hash
 from cbr.structure import condition as cond_mod
 from cbr.structure import overextension as oe_mod
@@ -36,7 +46,6 @@ from cbr.structure.levels import aoi_tap, candle_close_levels, in_rollover, in_s
 from cbr.structure.shifts import Type3Arm, hvcs, track_type3
 from cbr.structure.swings import legs, usable, zigzag
 
-M1, S5, M15 = pd.Timedelta(minutes=1), pd.Timedelta(seconds=5), pd.Timedelta(minutes=15)
 HTF_CLEAR, HTF_VETO, HTF_NOT_EVALUATED = "CLEAR", "VETO", "NOT_EVALUATED"
 TREND_DIRECTION_UNRESOLVED = "TREND_DIRECTION_UNRESOLVED"
 TYPE3_RESOLVED_TOO_EARLY = "TYPE3_RESOLVED_TOO_EARLY"
@@ -60,25 +69,6 @@ class Cbr15Result:
     candles: pd.DataFrame           # one row per evaluated 15m candle, candle-level rules
     signals: list[dict]             # ARMED candidates in cbr-signal.v1 shape
     spec_hash: str
-
-
-def _atr_at(series: pd.Series, bar_len: pd.Timedelta, as_of: pd.Timestamp) -> float | None:
-    known = series[series.index + bar_len <= as_of].dropna()
-    return float(known.iloc[-1]) if len(known) else None
-
-
-def _minutes_complete(index: pd.DatetimeIndex, start: pd.Timestamp, end: pd.Timestamp) -> tuple[bool, int]:
-    """All expected-open minutes in [start, end) have a STRUCTURE 1m bar."""
-    if end <= start:
-        return True, 0
-    mins = pd.date_range(start, end, freq="1min", inclusive="left")
-    expected = mins[~expected_closed_mask(mins)]
-    missing = expected.difference(index)
-    return len(missing) == 0, len(missing)
-
-
-def _er(price: float, leg: pd.Series) -> float | None:
-    return abs(price - leg["p_end"]) / leg["size"] if leg["size"] else None
 
 
 def run_cbr15(s1m: pd.DataFrame, s5s: pd.DataFrame, *, start: pd.Timestamp, end: pd.Timestamp,
@@ -282,37 +272,6 @@ def _evaluate_candidate(q0, q_end, q_open, cond, candle_rules, oe, a: Type3Arm, 
         "mic_structure_touch": ((touch_time - q0) / M1) if touch_time is not None else None,
         "s5_break_size_atr1m": (abs(a.broken_price - a.trigger_price) / a1) if a1 else None,
     }
-
-
-def _anchor_path(s5s: pd.DataFrame, q0: pd.Timestamp, activation: pd.Timestamp, end: pd.Timestamp, d: str):
-    """Most adverse STRUCTURE 5s extreme of the candle's extension since Q.t0: value (and bar close time) through
-    `activation`, then each new extreme until `end` as [close_time, value] (lifecycle, causal at each time)."""
-    sell = d == "SELL"
-    col = "high" if sell else "low"
-    bars = s5s[(s5s.index >= q0) & (s5s.index + S5 <= end)][col]
-    if not len(bars):
-        return None, None, []
-    run = bars.cummax() if sell else bars.cummin()
-    close = run.index + S5
-    before = run[close <= activation]
-    anchor = float(before.iloc[-1]) if len(before) else None
-    anchor_time = None
-    if len(before):
-        hit = before[before == before.iloc[-1]]
-        anchor_time = hit.index[0] + S5
-    after = run[close > activation]
-    changed = after[after != after.shift(1, fill_value=anchor if anchor is not None else float("nan"))]
-    path = [[t + S5, float(v)] for t, v in changed.items()]
-    return anchor, anchor_time, path
-
-
-def anchor_at(row: pd.Series, t: pd.Timestamp) -> float | None:
-    """Stop anchor in force at time t (latest path value with close ≤ t), for simulators and raw-setup resolution."""
-    value = row["structure_stop_anchor"]
-    for when, v in row["stop_anchor_path"]:
-        if when <= t:
-            value = v
-    return value
 
 
 def _resolve_raw_outcomes(cand: pd.DataFrame, s5s: pd.DataFrame, p: Cbr15Params) -> None:

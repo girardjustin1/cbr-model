@@ -1,0 +1,1007 @@
+{
+  "generated_utc": "2026-09-15T05:13:36.832624+00:00",
+  "tolerances": {
+    "price_match": 0.5,
+    "price_feed_near": 2.0,
+    "time_match_min": 2.0,
+    "pre_registered": false
+  },
+  "examples": [
+    {
+      "example": "CX-LT1-1",
+      "variant": "A",
+      "tom": {
+        "span": [
+          "2025-10-20 00:00",
+          "2025-10-21 06:00",
+          "2025-10-21 01:00"
+        ],
+        "tom_entry_utc": "2025-10-21 01:39:15",
+        "direction": "BUY",
+        "entry": 4340.13,
+        "stop": 4332.96,
+        "target": 4351.59,
+        "context": "RANGE",
+        "context_quote": "relatively range bound over the past five to 12 plus hours",
+        "entry_model": "5s seconds shift",
+        "target_note": "tool target; closed manually at ~1.3R"
+      },
+      "hour": {
+        "condition": "RANGE",
+        "c_med": 0.8126784180292626,
+        "n_legs": 3,
+        "cond_direction": "NONE",
+        "rules_failed": [],
+        "context_reason": null,
+        "h_open": 4368.726500000001
+      },
+      "neighbours": [
+        {
+          "decision": "2025-10-21 01:37:00+00:00",
+          "tier": "1m",
+          "kind": "prior",
+          "trigger": 4345.035,
+          "trigger_minus_tom": 4.905,
+          "touch": null,
+          "rules_failed": [
+            "M1H-6A-4-HILO-TIER",
+            "M1H-COND-04",
+            "M1H-OE-02"
+          ]
+        },
+        {
+          "decision": "2025-10-21 01:38:00+00:00",
+          "tier": "1m",
+          "kind": "prior",
+          "trigger": 4342.575,
+          "trigger_minus_tom": 2.445,
+          "touch": null,
+          "rules_failed": [
+            "M1H-6A-4-HILO-TIER",
+            "M1H-COND-04",
+            "M1H-OE-02"
+          ]
+        },
+        {
+          "decision": "2025-10-21 01:39:00+00:00",
+          "tier": "1m",
+          "kind": "prior",
+          "trigger": 4340.185,
+          "trigger_minus_tom": 0.055,
+          "touch": "2025-10-21 01:39:35+00:00",
+          "rules_failed": [
+            "M1H-6A-4-HILO-TIER",
+            "M1H-COND-04",
+            "M1H-OE-02"
+          ]
+        },
+        {
+          "decision": "2025-10-21 01:40:00+00:00",
+          "tier": "5m",
+          "kind": "prior",
+          "trigger": 4347.43,
+          "trigger_minus_tom": 7.3,
+          "touch": null,
+          "rules_failed": [
+            "M1H-COND-04",
+            "M1H-OE-02"
+          ]
+        }
+      ],
+      "comparisons": [
+        {
+          "dimension": "context",
+          "engine": "RANGE",
+          "tom": "RANGE",
+          "class": "MATCH",
+          "mismatch_class": null
+        },
+        {
+          "dimension": "direction",
+          "engine": "BUY",
+          "tom": "BUY",
+          "class": "MATCH",
+          "mismatch_class": null
+        },
+        {
+          "dimension": "extension",
+          "engine": {
+            "dir": "DOWN",
+            "duration_min": 38.0,
+            "no_pullback": false,
+            "extreme": 4332.955,
+            "two_sided": false
+          },
+          "tom": "hour pushed one way ~20-30 min into the range extreme",
+          "class": "MISMATCH",
+          "mismatch_class": "DECLARED_BASELINE_CHOICE (D8 / OQ-22: no-pullback measured from the hour open)"
+        },
+        {
+          "dimension": "timing_window",
+          "engine": "22 \u2264 mih \u2264 52",
+          "tom": 39.25,
+          "class": "MATCH",
+          "mismatch_class": null
+        },
+        {
+          "dimension": "structure_trigger",
+          "engine": {
+            "trigger": 4340.185,
+            "tier": "1m",
+            "kind": "prior",
+            "decision": "2025-10-21 01:39:00+00:00"
+          },
+          "tom": 4340.13,
+          "diff": 0.055,
+          "class": "MATCH",
+          "mismatch_class": null
+        },
+        {
+          "dimension": "entry_time",
+          "engine": "2025-10-21 01:39:35+00:00",
+          "tom": "2025-10-21 01:39:15+00:00",
+          "diff_min": 0.33,
+          "class": "MATCH",
+          "mismatch_class": null
+        },
+        {
+          "dimension": "stop_anchor",
+          "engine": {
+            "at_activation": 4332.955,
+            "at_touch": 4332.955
+          },
+          "tom": 4332.96,
+          "diff": -0.005,
+          "class": "MATCH",
+          "mismatch_class": null
+        },
+        {
+          "dimension": "target_inputs",
+          "engine": {
+            "h_open": 4368.726500000001,
+            "target_at_touch": 4350.84075
+          },
+          "tom": 4351.59,
+          "diff": -0.749,
+          "class": "FEED_NEAR",
+          "note": "tool target; closed manually at ~1.3R",
+          "mismatch_class": "DATA_DIFFERENCE (feed/level offset within $2; Phase 9)"
+        },
+        {
+          "dimension": "acceptance",
+          "engine": "REJECTED",
+          "tom": "taken",
+          "class": "MISMATCH",
+          "failed_rules": [
+            {
+              "rule": "M1H-6A-4-HILO-TIER",
+              "class": "SPEC_VS_EXAMPLE_CONFLICT",
+              "reason": "OQ-39: this HILO's tier isn't the one spec 6A prescribes for the HVCS volume (1m normally, 5m when low-volume); Tom enters on a 5-second shift"
+            },
+            {
+              "rule": "M1H-COND-04",
+              "class": "UNRESOLVED_INTERPRETATION",
+              "reason": "OQ-36 scope: prior played-out setups (resolution basis not approved)"
+            },
+            {
+              "rule": "M1H-OE-02",
+              "class": "DECLARED_BASELINE_CHOICE",
+              "reason": "D8 / OQ-22: V1 measures no-pullback from the hour open; LAST_RESET is a pre-registered ablation"
+            }
+          ],
+          "mismatch_class": "COMPOSITE (see failed-rule classes)"
+        }
+      ],
+      "candidates_in_hour": 50,
+      "armed": 0,
+      "rule_failures": [
+        [
+          "M1H-COND-04",
+          50
+        ],
+        [
+          "M1H-OE-02",
+          48
+        ],
+        [
+          "M1H-LOC-01",
+          30
+        ],
+        [
+          "M1H-OE-01",
+          23
+        ],
+        [
+          "M1H-6A-4-HILO-TIER",
+          23
+        ],
+        [
+          "M1H-TIME-01",
+          19
+        ],
+        [
+          "M1H-OE-04b",
+          16
+        ],
+        [
+          "IMPL-REWARD",
+          12
+        ],
+        [
+          "M1H-6A-2-PREV-BREAK",
+          11
+        ],
+        [
+          "M1H-6A-3-NEW-EXTREME-IN-Q",
+          9
+        ],
+        [
+          "M1H-OE-04a",
+          6
+        ],
+        [
+          "M1H-6A-1-HVCS",
+          1
+        ]
+      ],
+      "hourly_state_at_tom_entry": []
+    },
+    {
+      "example": "CX-LT1-1",
+      "variant": "B",
+      "tom": {
+        "span": [
+          "2025-10-20 00:00",
+          "2025-10-21 06:00",
+          "2025-10-21 01:00"
+        ],
+        "tom_entry_utc": "2025-10-21 01:39:15",
+        "direction": "BUY",
+        "entry": 4340.13,
+        "stop": 4332.96,
+        "target": 4351.59,
+        "context": "RANGE",
+        "context_quote": "relatively range bound over the past five to 12 plus hours",
+        "entry_model": "5s seconds shift",
+        "target_note": "tool target; closed manually at ~1.3R"
+      },
+      "hour": {
+        "condition": "RANGE",
+        "c_med": 0.8126784180292626,
+        "n_legs": 3,
+        "cond_direction": "NONE",
+        "rules_failed": [],
+        "context_reason": null,
+        "h_open": 4368.726500000001
+      },
+      "neighbours": [],
+      "comparisons": [
+        {
+          "dimension": "context",
+          "engine": "RANGE",
+          "tom": "RANGE",
+          "class": "MATCH",
+          "mismatch_class": null
+        },
+        {
+          "dimension": "direction",
+          "engine": "BUY",
+          "tom": "BUY",
+          "class": "MATCH",
+          "mismatch_class": null
+        },
+        {
+          "dimension": "extension",
+          "engine": {
+            "dir": "DOWN",
+            "duration_min": 38.0,
+            "no_pullback": false,
+            "extreme": 4332.955,
+            "two_sided": false
+          },
+          "tom": "hour pushed one way ~20-30 min into the range extreme",
+          "class": "MISMATCH",
+          "mismatch_class": "DECLARED_BASELINE_CHOICE (D8 / OQ-22: no-pullback measured from the hour open)"
+        },
+        {
+          "dimension": "timing_window",
+          "engine": "22 \u2264 mih \u2264 52",
+          "tom": 39.25,
+          "class": "MATCH",
+          "mismatch_class": null
+        },
+        {
+          "dimension": "structure_trigger",
+          "engine": null,
+          "tom": 4340.13,
+          "class": "NOT_REPRODUCED",
+          "mismatch_class": "SPEC_VS_EXAMPLE_CONFLICT (OQ-39: Tom's entry is a 5s shift; FRACTAL_1M found no completed 1m type 3)"
+        }
+      ],
+      "candidates_in_hour": 0,
+      "armed": 0,
+      "rule_failures": [],
+      "hourly_state_at_tom_entry": null
+    },
+    {
+      "example": "CX-TE1-1",
+      "variant": "A",
+      "tom": {
+        "span": [
+          "2025-10-23 00:00",
+          "2025-10-24 07:00",
+          "2025-10-24 04:00"
+        ],
+        "tom_entry_utc": "2025-10-24 04:37:30",
+        "direction": "BUY",
+        "entry": 4105.58,
+        "stop": 4102.8,
+        "target": 4109.71,
+        "context": "TRENDING_RANGE (bearish, counter) or RANGE",
+        "context_quote": "Identified the condition as a trending range, a bearish trending range ... which is fine if it's more range bound, which it is",
+        "entry_model": "5s seconds shift ('a bit of a high low entry')",
+        "target_note": "tool levels may be illustrative (tool R:R 1.49 vs stated 2.3R)"
+      },
+      "hour": {
+        "condition": "RANGE",
+        "c_med": 1.0587606202839743,
+        "n_legs": 4,
+        "cond_direction": "UP",
+        "rules_failed": [],
+        "context_reason": NaN,
+        "h_open": 4122.4400000000005
+      },
+      "neighbours": [
+        {
+          "decision": "2025-10-24 04:35:00+00:00",
+          "tier": "1m",
+          "kind": "prior",
+          "trigger": 4105.41,
+          "trigger_minus_tom": -0.17,
+          "touch": "2025-10-24 04:35:00+00:00",
+          "rules_failed": [
+            "M1H-COND-04",
+            "M1H-OE-02"
+          ]
+        },
+        {
+          "decision": "2025-10-24 04:35:00+00:00",
+          "tier": "5m",
+          "kind": "prior",
+          "trigger": 4107.73,
+          "trigger_minus_tom": 2.15,
+          "touch": null,
+          "rules_failed": [
+            "M1H-6A-4-HILO-TIER",
+            "M1H-COND-04",
+            "M1H-OE-02"
+          ]
+        },
+        {
+          "decision": "2025-10-24 04:36:25+00:00",
+          "tier": "1m",
+          "kind": "same",
+          "trigger": 4105.565,
+          "trigger_minus_tom": -0.015,
+          "touch": null,
+          "rules_failed": [
+            "M1H-COND-04",
+            "M1H-OE-02"
+          ]
+        },
+        {
+          "decision": "2025-10-24 04:37:00+00:00",
+          "tier": "1m",
+          "kind": "prior",
+          "trigger": 4105.23,
+          "trigger_minus_tom": -0.35,
+          "touch": null,
+          "rules_failed": [
+            "M1H-COND-04",
+            "M1H-OE-02"
+          ]
+        },
+        {
+          "decision": "2025-10-24 04:38:00+00:00",
+          "tier": "1m",
+          "kind": "prior",
+          "trigger": 4104.085,
+          "trigger_minus_tom": -1.495,
+          "touch": "2025-10-24 04:38:00+00:00",
+          "rules_failed": [
+            "M1H-COND-04",
+            "M1H-OE-02"
+          ]
+        }
+      ],
+      "comparisons": [
+        {
+          "dimension": "context",
+          "engine": "RANGE",
+          "tom": "TRENDING_RANGE (bearish, counter) or RANGE",
+          "class": "MATCH",
+          "mismatch_class": null
+        },
+        {
+          "dimension": "direction",
+          "engine": "BUY",
+          "tom": "BUY",
+          "class": "MATCH",
+          "mismatch_class": null
+        },
+        {
+          "dimension": "extension",
+          "engine": {
+            "dir": "DOWN",
+            "duration_min": 36.0,
+            "no_pullback": false,
+            "extreme": 4103.110000000001,
+            "two_sided": false
+          },
+          "tom": "hour pushed one way ~20-30 min into the range extreme",
+          "class": "MISMATCH",
+          "mismatch_class": "DECLARED_BASELINE_CHOICE (D8 / OQ-22: no-pullback measured from the hour open)"
+        },
+        {
+          "dimension": "timing_window",
+          "engine": "22 \u2264 mih \u2264 52",
+          "tom": 37.5,
+          "class": "MATCH",
+          "mismatch_class": null
+        },
+        {
+          "dimension": "structure_trigger",
+          "engine": {
+            "trigger": 4104.085000000001,
+            "tier": "1m",
+            "kind": "prior",
+            "decision": "2025-10-24 04:38:00+00:00"
+          },
+          "tom": 4105.58,
+          "diff": -1.495,
+          "class": "FEED_NEAR",
+          "mismatch_class": "DATA_DIFFERENCE (feed/level offset within $2; Phase 9)"
+        },
+        {
+          "dimension": "entry_time",
+          "engine": "2025-10-24 04:38:00+00:00",
+          "tom": "2025-10-24 04:37:30+00:00",
+          "diff_min": 0.5,
+          "class": "MATCH",
+          "mismatch_class": null
+        },
+        {
+          "dimension": "stop_anchor",
+          "engine": {
+            "at_activation": 4102.8814999999995,
+            "at_touch": 4102.8814999999995
+          },
+          "tom": 4102.8,
+          "diff": 0.081,
+          "class": "MATCH",
+          "mismatch_class": null
+        },
+        {
+          "dimension": "target_inputs",
+          "engine": {
+            "h_open": 4122.4400000000005,
+            "target_at_touch": 4112.66075
+          },
+          "tom": 4109.71,
+          "diff": 2.951,
+          "class": "MISMATCH",
+          "note": "tool levels may be illustrative (tool R:R 1.49 vs stated 2.3R)",
+          "mismatch_class": "EXAMPLE_TARGET_NOT_SPEC_TARGET (tool levels may be illustrative (tool R:R 1.49 vs stated 2.3R))"
+        },
+        {
+          "dimension": "acceptance",
+          "engine": "REJECTED",
+          "tom": "taken",
+          "class": "MISMATCH",
+          "failed_rules": [
+            {
+              "rule": "M1H-COND-04",
+              "class": "UNRESOLVED_INTERPRETATION",
+              "reason": "OQ-36 scope: prior played-out setups (resolution basis not approved)"
+            },
+            {
+              "rule": "M1H-OE-02",
+              "class": "DECLARED_BASELINE_CHOICE",
+              "reason": "D8 / OQ-22: V1 measures no-pullback from the hour open; LAST_RESET is a pre-registered ablation"
+            }
+          ],
+          "mismatch_class": "COMPOSITE (see failed-rule classes)"
+        }
+      ],
+      "candidates_in_hour": 44,
+      "armed": 0,
+      "rule_failures": [
+        [
+          "M1H-COND-04",
+          44
+        ],
+        [
+          "M1H-OE-02",
+          43
+        ],
+        [
+          "M1H-OE-01",
+          22
+        ],
+        [
+          "M1H-TIME-01",
+          22
+        ],
+        [
+          "M1H-OE-04b",
+          20
+        ],
+        [
+          "M1H-LOC-01",
+          16
+        ],
+        [
+          "M1H-6A-2-PREV-BREAK",
+          11
+        ],
+        [
+          "IMPL-REWARD",
+          10
+        ],
+        [
+          "M1H-6A-4-HILO-TIER",
+          9
+        ],
+        [
+          "M1H-6A-1-HVCS",
+          3
+        ],
+        [
+          "M1H-6A-3-NEW-EXTREME-IN-Q",
+          3
+        ],
+        [
+          "M1H-OE-04a",
+          2
+        ]
+      ],
+      "hourly_state_at_tom_entry": []
+    },
+    {
+      "example": "CX-TE1-1",
+      "variant": "B",
+      "tom": {
+        "span": [
+          "2025-10-23 00:00",
+          "2025-10-24 07:00",
+          "2025-10-24 04:00"
+        ],
+        "tom_entry_utc": "2025-10-24 04:37:30",
+        "direction": "BUY",
+        "entry": 4105.58,
+        "stop": 4102.8,
+        "target": 4109.71,
+        "context": "TRENDING_RANGE (bearish, counter) or RANGE",
+        "context_quote": "Identified the condition as a trending range, a bearish trending range ... which is fine if it's more range bound, which it is",
+        "entry_model": "5s seconds shift ('a bit of a high low entry')",
+        "target_note": "tool levels may be illustrative (tool R:R 1.49 vs stated 2.3R)"
+      },
+      "hour": {
+        "condition": "RANGE",
+        "c_med": 1.0587606202839743,
+        "n_legs": 4,
+        "cond_direction": "UP",
+        "rules_failed": [],
+        "context_reason": NaN,
+        "h_open": 4122.4400000000005
+      },
+      "neighbours": [],
+      "comparisons": [
+        {
+          "dimension": "context",
+          "engine": "RANGE",
+          "tom": "TRENDING_RANGE (bearish, counter) or RANGE",
+          "class": "MATCH",
+          "mismatch_class": null
+        },
+        {
+          "dimension": "direction",
+          "engine": "BUY",
+          "tom": "BUY",
+          "class": "MATCH",
+          "mismatch_class": null
+        },
+        {
+          "dimension": "extension",
+          "engine": {
+            "dir": "DOWN",
+            "duration_min": 36.0,
+            "no_pullback": false,
+            "extreme": 4103.110000000001,
+            "two_sided": false
+          },
+          "tom": "hour pushed one way ~20-30 min into the range extreme",
+          "class": "MISMATCH",
+          "mismatch_class": "DECLARED_BASELINE_CHOICE (D8 / OQ-22: no-pullback measured from the hour open)"
+        },
+        {
+          "dimension": "timing_window",
+          "engine": "22 \u2264 mih \u2264 52",
+          "tom": 37.5,
+          "class": "MATCH",
+          "mismatch_class": null
+        },
+        {
+          "dimension": "structure_trigger",
+          "engine": null,
+          "tom": 4105.58,
+          "class": "NOT_REPRODUCED",
+          "mismatch_class": "SPEC_VS_EXAMPLE_CONFLICT (OQ-39: Tom's entry is a 5s shift; FRACTAL_1M found no completed 1m type 3)"
+        }
+      ],
+      "candidates_in_hour": 0,
+      "armed": 0,
+      "rule_failures": [],
+      "hourly_state_at_tom_entry": null
+    },
+    {
+      "example": "CX-LT3-2",
+      "variant": "A",
+      "tom": {
+        "span": [
+          "2025-11-07 00:00",
+          "2025-11-10 04:00",
+          "2025-11-10 01:00"
+        ],
+        "tom_entry_utc": "2025-11-10 01:40:00",
+        "direction": "SELL",
+        "entry": 4050.71,
+        "stop": 4053.3,
+        "target": 4043.8,
+        "context": "unclear: 'very bullish, a little bit trendy'",
+        "context_quote": "So very bullish, um, a little bit trendy.",
+        "entry_model": "5s seconds shift with correlation",
+        "target_note": "initial TP at a nearer level; 50% described as most aggressive"
+      },
+      "hour": {
+        "condition": "UNDEFINED",
+        "c_med": null,
+        "n_legs": 0,
+        "cond_direction": "NONE",
+        "rules_failed": [
+          "M1H-COND-01",
+          "M1H-COND-02"
+        ],
+        "context_reason": null,
+        "h_open": 4020.425
+      },
+      "neighbours": [
+        {
+          "decision": "2025-11-10 01:37:00+00:00",
+          "tier": "1m",
+          "kind": "prior",
+          "trigger": 4051.38,
+          "trigger_minus_tom": 0.67,
+          "touch": "2025-11-10 01:37:45+00:00",
+          "rules_failed": [
+            "M1H-COND-01",
+            "M1H-COND-02",
+            "M1H-COND-04",
+            "M1H-OE-02"
+          ]
+        },
+        {
+          "decision": "2025-11-10 01:38:00+00:00",
+          "tier": "1m",
+          "kind": "prior",
+          "trigger": 4050.96,
+          "trigger_minus_tom": 0.25,
+          "touch": null,
+          "rules_failed": [
+            "M1H-COND-01",
+            "M1H-COND-02",
+            "M1H-COND-04",
+            "M1H-OE-02"
+          ]
+        },
+        {
+          "decision": "2025-11-10 01:40:00+00:00",
+          "tier": "5m",
+          "kind": "prior",
+          "trigger": 4050.218,
+          "trigger_minus_tom": -0.492,
+          "touch": "2025-11-10 01:40:15+00:00",
+          "rules_failed": [
+            "M1H-6A-4-HILO-TIER",
+            "M1H-COND-01",
+            "M1H-COND-02",
+            "M1H-COND-04",
+            "M1H-OE-02"
+          ]
+        }
+      ],
+      "comparisons": [
+        {
+          "dimension": "context",
+          "engine": "UNDEFINED",
+          "tom": "unclear: 'very bullish, a little bit trendy'",
+          "class": "MISMATCH",
+          "mismatch_class": "SOURCE_AMBIGUITY (OQ-40: condition window across the weekend closure)"
+        },
+        {
+          "dimension": "direction",
+          "engine": "SELL",
+          "tom": "SELL",
+          "class": "MATCH",
+          "mismatch_class": null
+        },
+        {
+          "dimension": "extension",
+          "engine": {
+            "dir": "UP",
+            "duration_min": 37.0,
+            "no_pullback": false,
+            "extreme": 4053.425,
+            "two_sided": false
+          },
+          "tom": "hour pushed one way ~20-30 min into the range extreme",
+          "class": "MISMATCH",
+          "mismatch_class": "DECLARED_BASELINE_CHOICE (D8 / OQ-22: no-pullback measured from the hour open)"
+        },
+        {
+          "dimension": "timing_window",
+          "engine": "22 \u2264 mih \u2264 52",
+          "tom": 40.0,
+          "class": "MATCH",
+          "mismatch_class": null
+        },
+        {
+          "dimension": "structure_trigger",
+          "engine": {
+            "trigger": 4050.2185,
+            "tier": "5m",
+            "kind": "prior",
+            "decision": "2025-11-10 01:40:00+00:00"
+          },
+          "tom": 4050.71,
+          "diff": -0.492,
+          "class": "MATCH",
+          "mismatch_class": null
+        },
+        {
+          "dimension": "entry_time",
+          "engine": "2025-11-10 01:40:15+00:00",
+          "tom": "2025-11-10 01:40:00+00:00",
+          "diff_min": 0.25,
+          "class": "MATCH",
+          "mismatch_class": null
+        },
+        {
+          "dimension": "stop_anchor",
+          "engine": {
+            "at_activation": 4053.425,
+            "at_touch": 4053.425
+          },
+          "tom": 4053.3,
+          "diff": 0.125,
+          "class": "MATCH",
+          "mismatch_class": null
+        },
+        {
+          "dimension": "target_inputs",
+          "engine": {
+            "h_open": 4020.425,
+            "target_at_touch": 4036.925
+          },
+          "tom": 4043.8,
+          "diff": -6.875,
+          "class": "MISMATCH",
+          "note": "initial TP at a nearer level; 50% described as most aggressive",
+          "mismatch_class": "EXAMPLE_TARGET_NOT_SPEC_TARGET (initial TP at a nearer level; 50% described as most aggressive)"
+        },
+        {
+          "dimension": "acceptance",
+          "engine": "REJECTED",
+          "tom": "taken",
+          "class": "MISMATCH",
+          "failed_rules": [
+            {
+              "rule": "M1H-6A-4-HILO-TIER",
+              "class": "SPEC_VS_EXAMPLE_CONFLICT",
+              "reason": "OQ-39: this HILO's tier isn't the one spec 6A prescribes for the HVCS volume (1m normally, 5m when low-volume); Tom enters on a 5-second shift"
+            },
+            {
+              "rule": "M1H-COND-01",
+              "class": "SOURCE_AMBIGUITY",
+              "reason": "OQ-40: 8 h condition window measured in clock hours reaches into the weekend closure"
+            },
+            {
+              "rule": "M1H-COND-02",
+              "class": "SOURCE_AMBIGUITY",
+              "reason": "OQ-40: as above"
+            },
+            {
+              "rule": "M1H-COND-04",
+              "class": "UNRESOLVED_INTERPRETATION",
+              "reason": "OQ-36 scope: prior played-out setups (resolution basis not approved)"
+            },
+            {
+              "rule": "M1H-OE-02",
+              "class": "DECLARED_BASELINE_CHOICE",
+              "reason": "D8 / OQ-22: V1 measures no-pullback from the hour open; LAST_RESET is a pre-registered ablation"
+            }
+          ],
+          "mismatch_class": "COMPOSITE (see failed-rule classes)"
+        }
+      ],
+      "candidates_in_hour": 45,
+      "armed": 0,
+      "rule_failures": [
+        [
+          "M1H-COND-01",
+          45
+        ],
+        [
+          "M1H-COND-02",
+          45
+        ],
+        [
+          "M1H-COND-04",
+          45
+        ],
+        [
+          "M1H-OE-02",
+          36
+        ],
+        [
+          "M1H-OE-01",
+          19
+        ],
+        [
+          "M1H-TIME-01",
+          19
+        ],
+        [
+          "IMPL-REWARD",
+          13
+        ],
+        [
+          "M1H-6A-2-PREV-BREAK",
+          11
+        ],
+        [
+          "M1H-6A-3-NEW-EXTREME-IN-Q",
+          11
+        ],
+        [
+          "M1H-OE-04b",
+          10
+        ],
+        [
+          "M1H-6A-4-HILO-TIER",
+          10
+        ],
+        [
+          "M1H-6A-1-HVCS",
+          6
+        ]
+      ],
+      "hourly_state_at_tom_entry": []
+    },
+    {
+      "example": "CX-LT3-2",
+      "variant": "B",
+      "tom": {
+        "span": [
+          "2025-11-07 00:00",
+          "2025-11-10 04:00",
+          "2025-11-10 01:00"
+        ],
+        "tom_entry_utc": "2025-11-10 01:40:00",
+        "direction": "SELL",
+        "entry": 4050.71,
+        "stop": 4053.3,
+        "target": 4043.8,
+        "context": "unclear: 'very bullish, a little bit trendy'",
+        "context_quote": "So very bullish, um, a little bit trendy.",
+        "entry_model": "5s seconds shift with correlation",
+        "target_note": "initial TP at a nearer level; 50% described as most aggressive"
+      },
+      "hour": {
+        "condition": "UNDEFINED",
+        "c_med": null,
+        "n_legs": 0,
+        "cond_direction": "NONE",
+        "rules_failed": [
+          "M1H-COND-01",
+          "M1H-COND-02"
+        ],
+        "context_reason": null,
+        "h_open": 4020.425
+      },
+      "neighbours": [],
+      "comparisons": [
+        {
+          "dimension": "context",
+          "engine": "UNDEFINED",
+          "tom": "unclear: 'very bullish, a little bit trendy'",
+          "class": "MISMATCH",
+          "mismatch_class": "SOURCE_AMBIGUITY (OQ-40: condition window across the weekend closure)"
+        },
+        {
+          "dimension": "direction",
+          "engine": "SELL",
+          "tom": "SELL",
+          "class": "MATCH",
+          "mismatch_class": null
+        },
+        {
+          "dimension": "extension",
+          "engine": {
+            "dir": "UP",
+            "duration_min": 37.0,
+            "no_pullback": false,
+            "extreme": 4053.425,
+            "two_sided": false
+          },
+          "tom": "hour pushed one way ~20-30 min into the range extreme",
+          "class": "MISMATCH",
+          "mismatch_class": "DECLARED_BASELINE_CHOICE (D8 / OQ-22: no-pullback measured from the hour open)"
+        },
+        {
+          "dimension": "timing_window",
+          "engine": "22 \u2264 mih \u2264 52",
+          "tom": 40.0,
+          "class": "MATCH",
+          "mismatch_class": null
+        },
+        {
+          "dimension": "structure_trigger",
+          "engine": null,
+          "tom": 4050.71,
+          "class": "NOT_REPRODUCED",
+          "mismatch_class": "SPEC_VS_EXAMPLE_CONFLICT (OQ-39: Tom's entry is a 5s shift; FRACTAL_1M found no completed 1m type 3)"
+        }
+      ],
+      "candidates_in_hour": 0,
+      "armed": 0,
+      "rule_failures": [],
+      "hourly_state_at_tom_entry": null
+    }
+  ],
+  "cbr15_with_htf": [
+    {
+      "example": "CX-LT1-1",
+      "candidates": 8,
+      "htf_states": [
+        [
+          "CLEAR",
+          8
+        ]
+      ],
+      "armed": 0
+    },
+    {
+      "example": "CX-TE1-1",
+      "candidates": 14,
+      "htf_states": [
+        [
+          "CLEAR",
+          14
+        ]
+      ],
+      "armed": 0
+    },
+    {
+      "example": "CX-LT3-2",
+      "candidates": 9,
+      "htf_states": [
+        [
+          "CLEAR",
+          9
+        ]
+      ],
+      "armed": 0
+    }
+  ]
+}

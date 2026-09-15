@@ -242,6 +242,7 @@ footer{border-top:1px solid var(--rule);padding-top:18px;font-size:.84rem;color:
           <tr><td class="id">D14</td><td>Phase 14 plan approved, not implemented</td><td>OQ-28 open (stop inputs, not an executable stop); OQ-29 open (5s CBR1H kept); OQ-25 decision package before Phase 11; OQ-30 licensing review before 14B; Phase 10 continues</td></tr>
           <tr><td class="id">D15</td><td>Phase 10 accepted (G10)</td><td>OQ-31 open, preference B: label outage-affected rows, never auto-exclude; ALL vs FULL-DXY is a diagnostic only. DXY daily unavailability means <code>DXY_AVAILABLE = false</code>, with no directional meaning. Engineering thresholds stay IMPL</td></tr>
           <tr><td class="id">D16</td><td>OQ-25 resolved: canonical price extremes</td><td>STRUCTURE price = tick-derived mid; EXECUTION price = tick-derived bid/ask; never one series for both, enforced by access guards and role labels. V-1 required before Phase 13 passes. Full tick history deferred (OQ-33). Candle files and GC not canonical for extremes</td></tr>
+          <tr><td class="id">D17</td><td>Phase 11 accepted (G11); CBR15 not baseline-eligible</td><td>Stop anchor = most adverse structure extension extreme through activation/fill (OQ-35); unresolved trend direction is a context failure (OQ-37); an early type 3 is cancelled (OQ-38); hourly veto not evaluated until Phase 12 (OQ-34); "played out" interpretation not approved, evidence package required (OQ-36)</td></tr>
         </tbody>
       </table></div>
     </section>
@@ -358,8 +359,8 @@ footer{border-top:1px solid var(--rule);padding-top:18px;font-size:.84rem;color:
           <tr class="stage"><td colspan="4">B · Data &amp; reference engines</td></tr>
           <tr><td class="id">9</td><td>Historical data pipeline</td><td>CBR-ACC-009 v2.1 acceptance; exception register; data-quality detectors</td><td><span class="chip concern">Pass with concerns</span></td></tr>
           <tr><td class="id">10</td><td>DXY context module</td><td>Causal quote + last-closed/forming 15m and 1h direction with state, confidence, reason codes; hindsight mask separate; no DXY rule or filter</td><td><span class="chip concern">Accepted with concerns · G10</span></td></tr>
-          <tr><td class="id">11</td><td>CBR15 Python reference engine</td><td>STRUCTURE-only, causal, deterministic; every candidate's rule outcomes; ARMED signals in cbr-signal.v1 shape</td><td><span class="chip concern">Pass with concerns · review</span></td></tr>
-          <tr><td class="id">12</td><td>CBR1H Python reference engine</td><td>Engine, signal ledger, unit + lookahead tests</td><td><span class="chip todo">Not started</span></td></tr>
+          <tr><td class="id">11</td><td>CBR15 Python reference engine</td><td>STRUCTURE-only, causal, deterministic; every candidate's rule outcomes; stop anchor through activation (D17); not baseline-eligible (OQ-36)</td><td><span class="chip concern">Accepted with concerns · G11</span></td></tr>
+          <tr><td class="id">12</td><td>CBR1H Python reference engine</td><td>Variants A/B; causal hourly state for the 15m veto; course-example parity without outcomes</td><td><span class="chip concern">Pass with concerns · review</span></td></tr>
           <tr><td class="id">13</td><td>Tom ↔ Python parity gate</td><td>Signal parity report; every mismatch classified; V-1 FOREXCOM export check required (D16-3)</td><td><span class="chip todo">Gate G2</span></td></tr>
           <tr class="stage"><td colspan="4">C · Untouched baselines</td></tr>
           <tr><td class="id">pre-14</td><td>Canonical extremes source (OQ-25) · DXY availability diagnostic (OQ-27) · baseline feed frozen (OQ-24)</td><td>Gates G2b, G2c, G2d; never chosen by profitability</td><td><span class="chip block">Hard preconditions</span></td></tr>
@@ -425,8 +426,8 @@ footer{border-top:1px solid var(--rule);padding-top:18px;font-size:.84rem;color:
       <div class="facts">
         <div><b>73</b><span>course videos ingested</span></div>
         <div><b>151</b><span>core evidence records</span></div>
-        <div><b>448</b><span>tests passing</span></div>
-        <div><b>38</b><span>open questions tracked</span></div>
+        <div><b>460</b><span>tests passing</span></div>
+        <div><b>43</b><span>open questions tracked</span></div>
         <div><b>51 / 0</b><span>Phase 9 failures classified / blocking</span></div>
         <div><b>$66.44</b><span>data spend (Databento)</span></div>
       </div>
@@ -448,7 +449,8 @@ footer{border-top:1px solid var(--rule);padding-top:18px;font-size:.84rem;color:
         <li><strong>Candle extremes:</strong> up to 28 artificial minutes per XAUUSD window and 67 per DXY window; largest errors $0.425 and 0.3185. The candle-only flag misses most of them. Hard precondition before Phase 14.</li>
         <li><strong>Phase 10: pass with concerns, accepted (D15, G10).</strong> All CBR-ACC-010 criteria met on 24 days. Direction agreement vs DX: 15m 98.4%, 1h 98.8%. Concerns: the causal quote persists up to 10 min into an outage (OQ-31); winter 00:00-01:00 UTC has no DXY context; thinner 2018-2019 coverage; IMPL thresholds validated on 24 days only.</li>
         <li><strong>OQ-25 resolved (D16).</strong> Tick mid is the STRUCTURE price and tick bid/ask the EXECUTION price, with access guards.</li>
-        <li><strong>Phase 11: CBR15 engine built, pass with concerns, awaiting owner review.</strong> Causal and deterministic on the course-example windows; 31 candidates, none armed; owner rulings needed on OQ-34…38 (hourly veto dependency, stop anchor instant, prior-setup outcome basis, trending range without direction, break before 7.5 min). Phase 12 not started.</li>
+        <li><strong>Phase 11 accepted (D17, G11).</strong> CBR15 is not baseline-eligible until the OQ-36 evidence package and the hourly veto are resolved.</li>
+        <li><strong>Phase 12: CBR1H engine built, pass with concerns, awaiting owner review.</strong> Parity without outcomes: entry time and stop anchor match all three examples; the trigger matches two within $0.50 (third within $1.50); acceptance differs on all three, each cause classified (hour-open pullback D8, prior setups OQ-36, entry trigger OQ-39, weekend window OQ-40). Phase 13 not started.</li>
         <li><strong>Blocked:</strong> Trader.dev MCP returns 502 on every path. Commits are local only, not pushed.</li>
       </ul>
     </section>
@@ -490,11 +492,11 @@ footer{border-top:1px solid var(--rule);padding-top:18px;font-size:.84rem;color:
           <tr><td class="id">OQ-28</td><td>Stop resolved at fill (current spec) or frozen at decision?</td><td>Decide in Phase 11, before Phase 13</td></tr>
           <tr><td class="id">OQ-29</td><td>CBR1H execution clock: 5s (spec) or 1m?</td><td>5s unless Phase 13 evidence plus an owner spec revision</td></tr>
           <tr><td class="id">OQ-30</td><td>Backtesting.py is AGPL-3.0 and the repo is public</td><td>Owner licence review before Phase 14B; 14A unaffected</td></tr>
-          <tr><td class="id">OQ-34</td><td>CBR15 hourly veto needs the CBR1H engine</td><td>NOT_EVALUATED until Phase 12; signals carry reduced confidence</td></tr>
-          <tr><td class="id">OQ-35</td><td>Stop anchor: extreme at decision (1m) vs at fill (5s) vs sweep extreme</td><td>Literal decision-time value implemented; Tom's CX-LT1-1 stop matches the at-fill extreme; decide before Phase 13</td></tr>
-          <tr><td class="id">OQ-36</td><td>"Played out" outcome basis for the prior-setup rule</td><td>STRUCTURE-price touches implemented; decide before baselines</td></tr>
-          <tr><td class="id">OQ-37</td><td>CBR15 location in a trending range with no direction</td><td>Blocked by analogy to the hourly spec</td></tr>
-          <tr><td class="id">OQ-38</td><td>Type 3 break before the 7.5-minute window</td><td>Order cancelled at the break</td></tr>
+          <tr><td class="id">OQ-34</td><td>CBR15 hourly veto needs the CBR1H engine</td><td>Hourly state now exposed; ARMED part evaluable; FILLED part needs Phase 14A</td></tr>
+          <tr><td class="id">OQ-36</td><td>What a "prior working / played-out setup" means</td><td>Interpretation not approved (D17-3); Level 1 evidence package required</td></tr>
+          <tr><td class="id">OQ-39</td><td>CBR1H entry trigger: spec 1m HILO / fractal vs Tom's 5-second shift</td><td>Owner decision before Phase 13</td></tr>
+          <tr><td class="id">OQ-40</td><td>Condition window across weekend closures</td><td>Owner decision before Phase 13</td></tr>
+          <tr><td class="id">OQ-41…43</td><td>CBR1H readings: previous-15m reference, :30 veto timing, HVCS end bar</td><td>Owner confirmation</td></tr>
           <tr><td class="id">OQ-31</td><td>Ledger use of the hindsight DXY vendor-gap mask?</td><td>Owner decision before baselines; engines read causal fields only</td></tr>
           <tr><td class="id">OQ-24</td><td>Baseline feed: spot, GC/DX futures or hybrid?</td><td>Open until parity and cross-feed agreement exist; frozen before Phase 14; never chosen by profitability</td></tr>
           <tr><td class="id">OQ-25</td><td>Canonical OHLC source for extremes (swings, ranges, extensions, stops, sweeps)?</td><td><strong>Resolved (D16):</strong> tick mid STRUCTURE, tick bid/ask EXECUTION; V-1 before Phase 13</td></tr>
