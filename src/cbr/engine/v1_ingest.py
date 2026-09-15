@@ -340,7 +340,8 @@ def build_source_manifest(families: dict[str, Path]) -> dict:
                 "v1_window_coverage": {n: c["coverage"] for n, c in info.get("v1_windows", {}).items()},
                 "derived_slices": []})
     out = {"generated_utc": datetime.now(UTC).replace(microsecond=0).isoformat(), "decision": "D23",
-           "families": {k: str(v) for k, v in families.items()}, "records": records}
+           "families": {k: str(Path(v).relative_to(ROOT)) if Path(v).is_relative_to(ROOT) else Path(v).name
+                        for k, v in families.items()}, "records": records}
     SOURCE_MANIFEST.write_text(json.dumps(out, indent=2, default=str) + "\n")
     return out
 

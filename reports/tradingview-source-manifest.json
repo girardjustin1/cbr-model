@@ -1,9 +1,9 @@
 {
-  "generated_utc": "2026-09-15T13:08:26+00:00",
+  "generated_utc": "2026-09-15T13:28:34+00:00",
   "decision": "D23",
   "families": {
-    "A_TOM_CHART_DATA": "/Users/girardjustin/Documents/trade/cbr-model/references/tom-chart-data",
-    "B_OWNER_TRADINGVIEW_REFERENCE": "/Users/girardjustin/Documents/trade/cbr-model/references/charts"
+    "A_TOM_CHART_DATA": "references/tom-chart-data",
+    "B_OWNER_TRADINGVIEW_REFERENCE": "references/charts"
   },
   "records": [
     {
