@@ -249,6 +249,7 @@ footer{border-top:1px solid var(--rule);padding-top:18px;font-size:.84rem;color:
           <tr><td class="id">D21</td><td>V-1 preparation only</td><td>Dukascopy ticks for 2025-11-11 fetched and validated; both calibration days pass integrity, rebuild and hash checks; FOREXCOM exports and screenshots still needed; calibration values will be proposed, never frozen automatically</td></tr>
           <tr><td class="id">D22</td><td>TradingView exports inspected</td><td>Calibration tool completed; supplied gold exports are FX:XAUUSD, not FOREXCOM, and their 1-minute history starts 2026-09-08, so V-1 state is symbol mismatch; hourly and daily files kept as reference fixtures; TVC:DXY matches the DXY feed on Tom’s charts; options A/B/C await the owner</td></tr>
           <tr><td class="id">D23</td><td>Tom chart data inspected</td><td>FOREXCOM:XAUUSD and TVC:DXY exports at 1-minute to daily; the right gold feed is now present, but 1-minute history starts 2026-09-09, so none of the five V-1 windows is covered at 1 minute; hourly bars cover all five; no DXY 1-minute overlap with stored Dukascopy data</td></tr>
+          <tr><td class="id">D24</td><td>Phase 13 redefined</td><td>Strategy fidelity and behavioral parity: Dukascopy stays canonical; V-1 becomes supporting validation because historical FOREXCOM 1-minute data isn’t available; gate A–G on behavioral agreement with the three hourly examples, classified mismatches and documented feed differences; categorical verdicts; a pass means faithful enough for execution and baseline testing, not profitability</td></tr>
         </tbody>
       </table></div>
     </section>
@@ -367,7 +368,7 @@ footer{border-top:1px solid var(--rule);padding-top:18px;font-size:.84rem;color:
           <tr><td class="id">10</td><td>DXY context module</td><td>Causal quote + last-closed/forming 15m and 1h direction with state, confidence, reason codes; hindsight mask separate; no DXY rule or filter</td><td><span class="chip concern">Accepted with concerns · G10</span></td></tr>
           <tr><td class="id">11</td><td>CBR15 Python reference engine</td><td>STRUCTURE-only, causal, deterministic; every candidate's rule outcomes; stop anchor through activation (D17); not baseline-eligible (OQ-36)</td><td><span class="chip concern">Accepted with concerns · G11</span></td></tr>
           <tr><td class="id">12</td><td>CBR1H Python reference engine</td><td>Variants A/B; causal hourly state for the 15m veto; course-example parity without outcomes</td><td><span class="chip concern">Accepted with concerns · G12</span></td></tr>
-          <tr><td class="id">13</td><td>Tom ↔ Python parity gate</td><td>Signal parity report; every mismatch classified; V-1 FOREXCOM export check required (D16-3); readiness checklist 21/28; PC2 specs frozen</td><td><span class="chip block">Not ready</span></td></tr>
+          <tr><td class="id">13</td><td>Strategy fidelity and behavioral parity</td><td>Behavioral agreement with the three hourly course examples on frozen PC2 and Dukascopy; every mismatch classified; feed differences documented; recent FOREXCOM feed study; V-1 supporting only (D24)</td><td><span class="chip block">Not ready · run proposed</span></td></tr>
           <tr class="stage"><td colspan="4">C · Untouched baselines</td></tr>
           <tr><td class="id">pre-14</td><td>Canonical extremes source (OQ-25) · DXY availability diagnostic (OQ-27) · baseline feed frozen (OQ-24)</td><td>Gates G2b, G2c, G2d; never chosen by profitability</td><td><span class="chip block">Hard preconditions</span></td></tr>
           <tr><td class="id">14A</td><td>Authoritative custom execution simulator</td><td>Frozen signals in; bid/ask fills, spread, slippage, costs, rollover, missing data, same-bar and gap rules; gross/net R; ledger; holdout lock</td><td><span class="chip todo">Pending · G14A</span></td></tr>
@@ -410,7 +411,7 @@ footer{border-top:1px solid var(--rule);padding-top:18px;font-size:.84rem;color:
         <thead><tr><th>Gate</th><th>After</th><th>Pass condition</th><th>Status</th></tr></thead>
         <tbody>
           <tr><td class="id">G1 Data</td><td>9</td><td>CBR-ACC-009 v2.1: AC-01…AC-10 + AC-11A; every failure classified; AC-11B may remain a concern</td><td><span class="chip concern">Approved with conditions</span></td></tr>
-          <tr><td class="id">G2 Faithful implementation</td><td>13</td><td>Engine reproduces taught examples on spot; every mismatch classified</td><td><span class="chip todo">Pending</span></td></tr>
+          <tr><td class="id">G2 Faithful implementation</td><td>13</td><td>Behavioral agreement with the taught examples on Dukascopy spot; every mismatch classified; feed differences documented (D24)</td><td><span class="chip todo">Pending</span></td></tr>
           <tr><td class="id">G2b Cross-feed agreement</td><td>13/14</td><td>Spot vs GC/DX signal agreement over the 16 sample days at a rate declared before measurement; required before futures support any baseline claim</td><td><span class="chip todo">Pending</span></td></tr>
           <tr><td class="id">G2d Canonical extremes</td><td>pre-14</td><td>OQ-25 decided: tick-built or other validated extremes, or candle-file highs/lows shown not to change signal membership or material execution results</td><td><span class="chip block">Hard precondition</span></td></tr>
           <tr><td class="id">G2c Feed frozen</td><td>pre-14</td><td>OQ-24 decided on non-profitability criteria and recorded</td><td><span class="chip todo">Pending</span></td></tr>
@@ -457,7 +458,7 @@ footer{border-top:1px solid var(--rule);padding-top:18px;font-size:.84rem;color:
         <li><strong>OQ-25 resolved (D16).</strong> Tick mid is the STRUCTURE price and tick bid/ask the EXECUTION price, with access guards.</li>
         <li><strong>Phase 11 accepted (D17, G11).</strong> CBR15 is not fully baseline-eligible while the hourly veto's fill component is execution-dependent.</li>
         <li><strong>Phase 12 accepted (D18, G12).</strong> Its parity tolerances and candidate selection were rejected and aren't evidence.</li>
-        <li><strong>D23: right feed, not enough 1-minute history; Phase 13 not ready.</strong> The Tom chart-data exports are FOREXCOM:XAUUSD (probable, pending a symbol screenshot) and TVC:DXY. Their 1-minute gold history starts 2026-09-09, 302–323 days after the V-1 windows; hourly bars cover all five windows. The Dukascopy side is ready. 504 tests pass.</li>
+        <li><strong>D24: Phase 13 redefined; run proposed.</strong> Phase 13 now tests whether the engine recognizes the CBR behavior Tom teaches, not tick-for-tick FOREXCOM prices. The historical FOREXCOM 1-minute check is supporting evidence only. The behavioral-parity run (three hourly examples, frozen PC2, Dukascopy data, FOREXCOM hourly fidelity, recent 1-minute feed study) awaits owner approval of eight decisions.</li>
         <li><strong>Blocked:</strong> Trader.dev MCP returns 502 on every path. Commits are local only, not pushed.</li>
       </ul>
     </section>
@@ -507,7 +508,7 @@ footer{border-top:1px solid var(--rule);padding-top:18px;font-size:.84rem;color:
           <tr><td class="id">OQ-44 / 45</td><td>HVCS continuity; 15m condition-window basis</td><td><strong>Resolved (D20):</strong> both adopted as assumptions</td></tr>
           <tr><td class="id">OQ-31</td><td>Ledger use of the hindsight DXY vendor-gap mask?</td><td>Owner decision before baselines; engines read causal fields only</td></tr>
           <tr><td class="id">OQ-24</td><td>Baseline feed: spot, GC/DX futures or hybrid?</td><td>Open until parity and cross-feed agreement exist; frozen before Phase 14; never chosen by profitability</td></tr>
-          <tr><td class="id">OQ-25</td><td>Canonical OHLC source for extremes (swings, ranges, extensions, stops, sweeps)?</td><td><strong>Resolved (D16):</strong> tick mid STRUCTURE, tick bid/ask EXECUTION; V-1 before Phase 13</td></tr>
+          <tr><td class="id">OQ-25</td><td>Canonical OHLC source for extremes (swings, ranges, extensions, stops, sweeps)?</td><td><strong>Resolved (D16):</strong> tick mid STRUCTURE, tick bid/ask EXECUTION; V-1 supporting validation since D24</td></tr>
           <tr><td class="id">OQ-26</td><td>Independent reference for 1m/5s DXY structure?</td><td>Open data dependency; 15m/1h DXY context only meanwhile</td></tr>
           <tr><td class="id">OQ-27</td><td>DXY CFD availability at DST-transition Mondays and the weekly reopen</td><td>Diagnostic approved; required before DXY availability assumptions are frozen</td></tr>
         </tbody>

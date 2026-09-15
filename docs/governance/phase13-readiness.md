@@ -1,10 +1,11 @@
 # Phase 13 Readiness Checklist
 
-**Doc:** CBR-READY-013 · **Created:** 2026-09-15 (owner ruling D18-12) · **Updated:** 2026-09-15 (D23, Tom chart-data inspection) ·
+**Doc:** CBR-READY-013 · **Created:** 2026-09-15 (owner ruling D18-12) · **Updated:** 2026-09-15 (D24, fidelity revision) ·
 **Status:** NOT READY
 
-Phase 13 (Tom ↔ Python parity) may not start while any mandatory item is unchecked. Items are checked only by an owner
-ruling or a recorded, reproducible result, with the reference noted.
+Phase 13 is now **STRATEGY FIDELITY AND BEHAVIORAL PARITY** (D24; gate CBR-ACC-013). It may not run while any
+mandatory item in sections A or C is unchecked. Section B (V-1) is **supporting feed-fidelity validation** and no longer
+blocks (D24-2). Items are checked only by an owner ruling or a recorded, reproducible result.
 
 ## A. Spec resolution and implementation
 
@@ -31,9 +32,13 @@ ruling or a recorded, reproducible result, with the reference noted.
 | 19 | [x] Price-role guard tests passing | engines refuse non-STRUCTURE bars; guard scan | `tests/test_price_series.py`, `tests/engine/` |
 | 20 | [x] Full suite passing | 504 passed, 1 skipped; ruff clean (D23 commit) | |
 
-## B. Waits on V-1 and owner authorization
+## B. V-1: supporting feed-fidelity validation (non-blocking since D24)
 
-| # | Item | Status | Reference |
+Historical FOREXCOM:XAUUSD 1m data for the 2025 course and calibration windows was unavailable: TradingView intraday
+export history reached only about one week of 1m bars (FOREXCOM 1m from 2026-09-09; D22, D23). The V-1 tooling, reports
+and Dukascopy calibration days are preserved as supporting evidence.
+
+| # | Item (supporting) | Status | Reference |
 |---|---|---|---|
 | 21 | [ ] FOREXCOM:XAUUSD calibration exports (2025-10-22, 2025-11-11) | **V1_TOM_DATA_INSUFFICIENT**: `references/tom-chart-data` has FOREXCOM:XAUUSD (PROBABLE_FOREXCOM) but 1m only from 2026-09-09; no FOREXCOM 1m bar on either calibration day | `docs/decisions/v1-tom-chart-data-assessment.md` |
 | 22 | [ ] FOREXCOM:XAUUSD course-window exports (1m) | same: FOREXCOM 1h covers all three course windows, 1m covers none | same |
@@ -41,14 +46,21 @@ ruling or a recorded, reproducible result, with the reference noted.
 | 24 | [x] Dukascopy comparison data for the calibration dates | D21: 2025-11-11 fetched (24 hour-files, 271,884 ticks); both days pass integrity, deterministic rebuild, STRUCTURE role and manifest-hash checks; 1,380/1,380 scheduled-open minutes each, 0 vendor gaps | `reports/v1-dukascopy-calibration-days.md`; `v1_ingest status` |
 | 25 | [ ] Feed calibration complete | not started (`v1_ingest calibrate` refuses); tool now reports all D22-1 measurements | D19-11, D22-1 |
 | 26 | [ ] Zero-lag requirement passes | not evaluated | protocol §4.3 |
-| 27 | [ ] Numeric price tolerances frozen before course scoring | `config/phase13_tolerances.yaml` NOT_FROZEN | D19-11/12 |
-| 28 | [ ] Final Phase 13 authorization issued | not issued; `parity.main()` refuses | D20-9 |
+| 27 | [ ] Numeric V-1 price tolerances frozen | `config/phase13_tolerances.yaml` NOT_FROZEN; no longer a prerequisite (D24): the behavioral run uses structural-event equivalence and the P-4 feed band | D19-11/12, D24 |
+| 28 | [ ] Final V-1-based parity authorization | superseded by item 36 (D24); `parity.main()` still refuses the V-1 scoring path | D20-9, D24 |
 
-**Owner-supplied charts (2026-09-15).** `references/charts` holds `FX:XAUUSD` and `TVC:DXY` exports; the 1m file starts
-2026-09-08, so no FOREXCOM:XAUUSD 1m export covers the V-1 windows: **DATA_LIMITATION** (`reports/v1-export-inspection.md`).
-Not substituted (D19-13/14).
+## C. Behavioral-parity gate (mandatory, D24)
 
-**Current status (2026-09-15): NOT READY.** 21 of 28 items checked. Unchecked: 21 FOREXCOM calibration exports, 22 FOREXCOM
-course-window exports, 23 screenshots, 25 feed calibration, 26 zero-lag check, 27 numeric tolerances frozen, 28 final
-Phase 13 authorization. V-1 state: `V1_TOM_DATA_INSUFFICIENT` (correct FOREXCOM source present; 1m history 302-323
-days short of the windows). No item newly satisfied by the D23 data.
+| # | Item | Status | Reference |
+|---|---|---|---|
+| 29 | [ ] Behavioral-parity run protocol and decisions P-1…P-8 approved | proposed | `docs/governance/phase13-behavioral-parity-protocol.md` |
+| 30 | [ ] Protocol frozen (hash) and run code committed with tests | not started | CBR-PROT-013B §8 |
+| 31 | [ ] Recent feed comparison complete (Dukascopy for the P-2 days fetched and validated; agreement rates and feed band reported) | not started | CBR-ACC-013 G; CBR-PROT-013B §7.1 |
+| 32 | [ ] Higher-timeframe fidelity (FOREXCOM 1h/4h/1D; TVC:DXY 1h) reported | not started | CBR-ACC-013 F; §7.2 |
+| 33 | [ ] Behavioral-parity runs executed twice with identical result hashes (gate A) | not started | §2 |
+| 34 | [ ] Every mismatch classified; no unexplained or open implementation mismatch (gates B, D, E) | not started | §5 |
+| 35 | [ ] Feed differences documented (gate F) and gate G assessed under the P-5 rule | not started | §6, §7.1 |
+| 36 | [ ] Owner Phase 13 verdict issued (PASS / PASS WITH CONCERNS / FAIL) | not issued | CBR-ACC-013 §7 |
+
+**Current status (2026-09-15): NOT READY.** Mandatory: 20 of 28 checked (A 20/20; C 0/8). Supporting V-1: 1 of 8
+checked. Next step: owner approval of CBR-PROT-013B and P-1…P-8.

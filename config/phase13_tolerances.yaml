@@ -1,3 +1,5 @@
+# D24: V-1 reclassified as supporting feed-fidelity validation. These V-1 tolerances are no longer a Phase 13
+# prerequisite; the behavioral-parity run (CBR-PROT-013B) uses structural-event equivalence and its own P-4 feed band.
 # Phase 13 parity tolerances (CBR-PROT-013 §4; owner ruling D19-11/12).
 # METHOD approved in principle (D19-11). VALUES are computed from V-1 NON-course calibration days only and frozen here
 # BEFORE the final parity run; they are never changed after looking at course-example parity.
