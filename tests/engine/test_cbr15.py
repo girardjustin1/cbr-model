@@ -142,3 +142,56 @@ def test_signal_contract_shape_with_prior_rule_relaxed_for_shape_only():
         assert set(schema["properties"]["stop_rule"]["required"]) <= set(sig["stop_rule"])
         assert sig["data_confidence"]["reason_codes"] == ["HTF_NOT_EVALUATED"]
         assert sig["stop_rule"]["execution_inputs"]["spread_at_decision"] is None        # engine never reads spread
+
+
+# ---- owner ruling D17 (Phase 11 review) ----
+
+def test_anchor_path_tracks_most_adverse_extension_extreme_through_activation():
+    rows = [(100, 100.5, 99.9, 100.4), (100.4, 101.0, 100.2, 100.8), (100.8, 100.9, 100.1, 100.2),
+            (100.2, 101.4, 100.0, 101.3), (101.3, 101.2, 100.5, 100.6)]
+    b = _bars5(rows, start="2025-10-21 00:07:40")
+    q0, act, end = T("2025-10-21 00:07:40"), T("2025-10-21 00:07:55"), T("2025-10-21 00:08:05")
+    anchor, when, path = cbr15._anchor_path(b, q0, act, end, "SELL")
+    assert anchor == 101.0 and when == T("2025-10-21 00:07:50")          # highest high through activation
+    assert path == [[T("2025-10-21 00:08:00"), 101.4]]                   # new extreme after activation
+    row = pd.Series({"structure_stop_anchor": anchor, "stop_anchor_path": path})
+    assert cbr15.anchor_at(row, T("2025-10-21 00:07:59")) == 101.0 and cbr15.anchor_at(row, T("2025-10-21 00:08:00")) == 101.4
+    long_anchor, _, _ = cbr15._anchor_path(b, q0, act, end, "BUY")
+    assert long_anchor == 99.9
+
+
+def _window(a, b):
+    from cbr.data.canonical_bars import load_structure
+    try:
+        return load_structure(a, b, "1m"), load_structure(a, b, "5s")
+    except FileNotFoundError:
+        pytest.skip("stored STRUCTURE bars not present")
+
+
+def test_unresolved_trend_direction_is_a_recorded_context_failure():
+    s1, s5 = _window(T("2025-10-20 18:00"), T("2025-10-21 05:00"))
+    r = cbr15.run_cbr15(s1, s5, start=T("2025-10-21 03:30"), end=T("2025-10-21 04:00"))
+    tr_none = r.candles[(r.candles["condition"] == "TRENDING_RANGE") & (r.candles["cond_direction"] == "NONE")]
+    assert len(tr_none) > 0
+    assert (tr_none["context_reason"] == cbr15.TREND_DIRECTION_UNRESOLVED).all()
+    c = r.candidates[r.candidates["cond_direction"] == "NONE"]
+    assert len(c) and c["reject_reasons"].map(lambda x: cbr15.TREND_DIRECTION_UNRESOLVED in x).all()
+
+
+def test_type3_resolved_before_second_half_is_not_kept_armed():
+    s1, s5 = _window(T("2025-10-20 18:00"), T("2025-10-21 01:00"))
+    r = cbr15.run_cbr15(s1, s5, start=T("2025-10-21 00:00"), end=T("2025-10-21 00:15"))
+    early = r.candidates[r.candidates["cancel_reason"] == cbr15.TYPE3_RESOLVED_TOO_EARLY]
+    assert len(early) > 0
+    assert (early["cancel_time"] == early["structure_trigger_touch_time"]).all()
+    assert (early["structure_trigger_touch_time"] < early["candle_open_utc"] + pd.Timedelta(minutes=7.5)).all()
+
+
+def test_htf_not_evaluated_is_neither_pass_nor_fail_and_blocks_eligibility():
+    s1, s5 = _fixture()
+    r = cbr15.run_cbr15(s1, s5, start=FIXTURE[2], end=FIXTURE[3])
+    c = r.candidates
+    assert not c["rules_failed"].map(lambda f: "M15-HTF-01" in f).any()
+    assert c["rules_not_evaluated"].map(lambda f: "M15-HTF-01" in f).all()
+    assert (~c["baseline_eligible"]).all()
+    assert c["eligibility_blockers"].map(lambda b: cbr15.BLOCKER_HTF in b and cbr15.BLOCKER_OQ36 in b).all()

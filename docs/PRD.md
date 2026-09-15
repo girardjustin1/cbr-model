@@ -82,6 +82,7 @@ A trustworthy "no edge" answer counts as success. The TradingView indicator is b
 | D14 | Phase 14 plan approved, not implemented; Backtesting.py not a dependency. OQ-28 open (contract carries canonical stop inputs, not an executable stop); OQ-29 open (5s CBR1H preserved); OQ-25 decision package due before Phase 11; OQ-30 licensing review before 14B. Phase 10 continues |
 | D15 | Phase 10 accepted (PASS WITH CONCERNS, G10). OQ-31 open with preference B (label, don't exclude; ALL vs FULL-DXY diagnostic only). DXY daily unavailability = known limitation, `DXY_AVAILABLE = false`, no directional meaning. Engineering thresholds stay IMPL. OQ-25 package before Phase 11 |
 | D16 | OQ-25 resolved (CBR-DEC-025): **STRUCTURE price = tick-derived mid, EXECUTION price = tick-derived bid/ask**, never one series for both; access guards and STRUCTURE/EXECUTION labels in schemas, manifests and reports. V-1 FOREXCOM export required before Phase 13 passes. Full tick history deferred (OQ-33). Phase 11 approved on the downloaded tick days. Candle files and GC not canonical for extremes |
+| D17 | Phase 11 accepted (PASS WITH CONCERNS, G11); CBR15 not baseline-eligible. OQ-35/37/38 resolved (stop anchor through activation/fill; unresolved trend direction = context failure; early type 3 cancelled). OQ-34 open until Phase 12; OQ-36 interpretation not approved (evidence package). Phase 12 authorized |
 
 ---
 
@@ -168,8 +169,8 @@ Research-derived variables carry `classification: RESEARCH-DERIVED`.
 ### B. Data & reference engines: phases 9-13 🟡 (9 ✅ with concerns)
 - **9 Historical data pipeline:** **PASS WITH CONCERNS** (2026-09-14, after owner ruling D12); **G1 approved with conditions**
 - **10 DXY context module: PASS WITH CONCERNS, accepted (D15, G10)** (CBR-ACC-010, `reports/phase10-dxy-context.md`). Causal quote + last-closed/forming 15m and 1h direction with state, confidence and reason codes; missing stays missing; hindsight vendor-gap mask kept separate (OQ-31); no DXY rule or filter. 
-- **11 CBR15 Python reference engine: built, PASS WITH CONCERNS (awaiting owner review)** (`src/cbr/engine/cbr15.py`, `docs/engine/cbr15-implementation-map.md`, `reports/phase11-cbr15-engine.md`). STRUCTURE bars only; causal and deterministic; every candidate's rule outcomes in the ledger. Owner rulings needed: OQ-34 (hourly veto needs Phase 12), OQ-35 (stop anchor instant), OQ-36 (COND-03 outcome basis), OQ-37 (TR with no direction), OQ-38 (break before 7.5 min)
-- 12 CBR1H Python reference engine
+- **11 CBR15 Python reference engine: PASS WITH CONCERNS, accepted (D17, G11); not baseline-eligible** (`src/cbr/engine/cbr15.py`, `docs/engine/cbr15-implementation-map.md`, `reports/phase11-cbr15-engine.md`). STRUCTURE bars only; causal and deterministic; every candidate's rule outcomes in the ledger. Rulings D17: OQ-35/37/38 resolved; OQ-34 open until Phase 12; OQ-36 interpretation not approved (evidence package required)
+- **12 CBR1H Python reference engine: authorized (D17-7)**; must expose causal hourly state for M15-HTF-01; parity on the hourly course examples without outcomes
 - **13 Tom ↔ Python parity gate:** the engine must reproduce the taught examples before any performance research. **V-1 hard requirement (D16-3):** tick-mid structure compared with a FOREXCOM:XAUUSD export on the course-example windows; material differences reopen OQ-25
 
 ### C. Untouched baselines: phases 14-16
@@ -280,7 +281,7 @@ recomputation, determinism, reference flags. Last-closed direction agreement vs 
 (00:00-01:00 UTC) has no DXY context because the CFD doesn't quote 18:00-20:00 New York; thinner 2018-2019 coverage;
 IMPL thresholds validated on 24 days only; no DXY extremes (OQ-25).
 
-**Phase 10 accepted (D15, G10: `docs/governance/g10-approval.md`). OQ-25 resolved (D16): STRUCTURE = tick mid, EXECUTION = tick bid/ask; guards in `src/cbr/data/price_series.py`. Phase 11 (CBR15 engine) built: PASS WITH CONCERNS, awaiting owner rulings on OQ-34…OQ-38. Phase 12 not started.** Full tick history deferred (OQ-33); V-1 required before Phase 13. Phase 14 is
+**Phase 10 accepted (D15, G10: `docs/governance/g10-approval.md`). OQ-25 resolved (D16): STRUCTURE = tick mid, EXECUTION = tick bid/ask; guards in `src/cbr/data/price_series.py`. Phase 11 accepted (D17, G11); CBR15 not baseline-eligible (OQ-36 evidence package, hourly veto). Phase 12 (CBR1H) in progress.** Full tick history deferred (OQ-33); V-1 required before Phase 13. Phase 14 is
 planned only (`docs/architecture/phase14-execution-architecture.md`). Not authorized: baseline profitability testing,
 OQ-24 via performance, holdout P&L, Phase 17, Backtesting.py implementation.
 
@@ -321,10 +322,10 @@ OQ-24 via performance, holdout P&L, Phase 17, Backtesting.py implementation.
 | OQ-21 | Trend: hard no-trade or quality downgrade? | Hard filter in V1; downgrade tested separately |
 | OQ-25 | Canonical OHLC source for extremes | **Resolved D16:** tick mid STRUCTURE, tick bid/ask EXECUTION; V-1 before Phase 13 |
 | OQ-34 | CBR15 hourly veto depends on the CBR1H engine | NOT_EVALUATED until Phase 12; signals REDUCED confidence |
-| OQ-35 | Stop anchor: oe_extreme at decision (1m) vs at fill (5s) vs sweep extreme | Literal decision-time value implemented; Tom's CX-LT1-1 stop matches the at-fill extreme; decide before Phase 13 |
-| OQ-36 | COND-03 "played out" outcome basis | STRUCTURE-price touches implemented; decide before baselines |
-| OQ-37 | CBR15 location in a trending range with no direction | Blocked by analogy to M1H-COND-03 |
-| OQ-38 | Type 3 break before the 7.5-minute window | Cancelled at the break |
+| OQ-35 | Stop anchor | **Resolved D17-2:** most adverse STRUCTURE extension extreme through activation/fill; separate fields |
+| OQ-36 | COND-03 "prior working setup" meaning | **Interpretation not approved (D17-3).** Level 1 evidence package required before CBR15 eligibility |
+| OQ-37 | Trending range with no direction | **Resolved D17-4:** TREND_DIRECTION_UNRESOLVED context failure |
+| OQ-38 | Type 3 break before minute 7.5 | **Resolved D17-5:** TYPE3_RESOLVED_TOO_EARLY; no resurrection |
 | OQ-33 | Historical tick acquisition strategy (full / targeted / other source / staged) | Deferred until after Phases 11-13 (D16-4); never by profitability |
 | OQ-26 | Independent reference for 1m/5s DXY structure? | Open data dependency; only 15m/1h DXY context used meanwhile |
 | OQ-27 | DXY CFD availability at DST-transition Mondays / weekly reopen | Diagnostic approved; required before DXY availability assumptions are frozen |

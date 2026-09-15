@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "cbr-signal.v1",
   "title": "CBR signal contract (engine -> every execution backend)",
-  "description": "PLANNING DRAFT (CBR-ARCH-014 §3, 2026-09-14). Finalized in Phase 11, frozen before Phase 13. Written once by the CBR reference engine; immutable during execution. Execution layers (custom simulator 14A, Backtesting.py adapter 14B) may not create, delete or edit signals. Owner ruling D14-1: the contract carries canonical stop INPUTS; the executable stop is resolved by the authoritative simulator (OQ-28 open). Owner ruling D16: every price in a signal (extremes, ranges, trigger, target, stop anchor) is STRUCTURE price (tick-derived mid, TICK_MID); execution prices (bid/ask) never appear in a signal.",
+  "description": "PLANNING DRAFT (CBR-ARCH-014 §3, 2026-09-14). Finalized in Phase 11, frozen before Phase 13. Written once by the CBR reference engine; immutable during execution. Execution layers (custom simulator 14A, Backtesting.py adapter 14B) may not create, delete or edit signals. Owner ruling D14-1: the contract carries canonical stop INPUTS; the executable stop is resolved by the authoritative simulator (OQ-28 open). Owner ruling D16: every price in a signal (extremes, ranges, trigger, target, stop anchor) is STRUCTURE price (tick-derived mid, TICK_MID); execution prices (bid/ask) never appear in a signal. Owner ruling D17-2 (OQ-35): stop anchor = most adverse STRUCTURE extreme of the active extension observed up to entry activation / fill; the anchor at activation, its time, source and path are carried separately from the decision-time extreme, sweep extreme, fill-time extreme and final execution stop.",
   "type": "object",
   "additionalProperties": true,
   "required": [
@@ -90,7 +90,10 @@
         "direction",
         "buffer",
         "spread_policy",
-        "execution_inputs"
+        "execution_inputs",
+        "structure_stop_anchor",
+        "stop_anchor_time",
+        "stop_anchor_source"
       ],
       "properties": {
         "extension_extreme": {
@@ -175,6 +178,75 @@
               ]
             }
           }
+        },
+        "candle_open_price": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "extension origin (candle open, STRUCTURE)"
+        },
+        "extension_extreme_at_decision": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "extension extreme from closed 1m bars at decision time"
+        },
+        "sweep_extreme": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "type 3 sweep bar extreme at decision"
+        },
+        "structure_stop_anchor": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "D17-2: most adverse STRUCTURE extreme of the extension through entry activation"
+        },
+        "stop_anchor_time": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "stop_anchor_source": {
+          "type": "string",
+          "description": "e.g. STRUCTURE_TICK_MID_5S_EXTENSION_EXTREME"
+        },
+        "stop_anchor_path": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "prefixItems": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "number"
+              }
+            ]
+          },
+          "description": "each later new extreme [close_time, value] until the order ends; the execution layer takes the latest value at or before its fill (never reads STRUCTURE bars)"
+        },
+        "structure_extreme_at_fill": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "resolved by the execution layer; null in engine output"
+        },
+        "final_execution_stop": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Phase 14A; null in engine output"
         }
       }
     },
@@ -292,6 +364,21 @@
     "price_role": {
       "const": "STRUCTURE",
       "description": "D16: all signal prices are STRUCTURE prices; fills/touches are resolved on EXECUTION bars by the simulator"
+    },
+    "eligibility": {
+      "type": "object",
+      "properties": {
+        "baseline_eligible": {
+          "type": "boolean"
+        },
+        "blockers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "D17: explicit baseline eligibility and blockers (e.g. HTF_NOT_EVALUATED, COND03_INTERPRETATION_UNAPPROVED)"
     }
   }
 }

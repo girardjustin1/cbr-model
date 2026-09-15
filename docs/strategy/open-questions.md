@@ -334,7 +334,10 @@ recordings, or the Notion journal) · `RESEARCH PARAMETER` (legitimately ambiguo
 - **Also open.** "ARMED or FILLED": FILLED is an execution state (Phase 14A). Proposed reading: the veto uses the hourly
   engine's ARMED signals active at `as_of` (signal logic only), with FILLED added once execution exists, never by
   reading bid/ask in the engine.
-- **Status.** `NEEDS USER DECISION` before CBR15 signals are baseline-eligible (after Phase 12).
+- **Owner ruling D17-1 (2026-09-15).** Open until Phase 12. `NOT_EVALUATED` is neither PASS nor FAIL; an otherwise valid
+  candidate is never rejected solely because the hourly engine is unavailable; an explicit eligibility flag is carried.
+  Rerun CBR15 with M15-HTF-01 once CBR1H exists.
+- **Status.** `OPEN` (Phase 12).
 
 ### OQ-35 · Stop anchor instant and granularity for CBR15 (and OE extreme at 5s)
 - **Problem.** Three spec statements disagree: M15-SL-01 "stop beyond `oe_extreme`" (no instant); M1H-SL-01
@@ -348,7 +351,12 @@ recordings, or the Notion journal) · `RESEARCH PARAMETER` (legitimately ambiguo
   order's life), so execution never reads structure bars (D16) · (c) `t3.sweep_extreme` up to the break.
   Related: whether location (`pos`) and OE duration should use 5s-inclusive extremes.
 - **Constraint.** Decided on spec fidelity and parity evidence (Phase 13), never trade outcomes. Interacts with OQ-28.
-- **Status.** `NEEDS USER DECISION` before Phase 13 parity.
+- **Owner ruling D17-2 (2026-09-15): RESOLVED.** Stop anchor = the most adverse canonical STRUCTURE extreme belonging
+  to the active extension, observed causally up to entry activation / fill (SHORT highest, LONG lowest). A STRUCTURE
+  price; spread and the final executable stop belong to execution. Kept separate: extension extreme at candle open,
+  evolving extreme, sweep extreme, structure extreme at activation, at fill, final execution stop. CX-LT1-1 supports but
+  doesn't universally validate it; contradicting Level 1 evidence reopens OQ-35.
+- **Status.** `RESOLVED` (D17-2).
 
 ### OQ-36 · Outcome basis of "raw setups that played out" (M15-COND-03; extends OQ-05)
 - **Problem.** COND-03 needs past setups that reached target before stop. Under D16 signal code can't read bid/ask, and
@@ -360,20 +368,32 @@ recordings, or the Notion journal) · `RESEARCH PARAMETER` (legitimately ambiguo
   outcomes fed back once 14A exists (couples signal logic to execution assumptions).
 - **Observation (not a decision input).** On the three course-example windows COND-03 failed for every candidate; on
   CX-TE1-1 four candidates failed only COND-03.
-- **Status.** `NEEDS USER DECISION` before baselines.
+- **Owner ruling D17-3 (2026-09-15).** Current interpretation **NOT approved**. COND-03 is not removed, weakened, zeroed
+  or reinterpreted by signal count. An **OQ-36 evidence resolution package** from Level 1 evidence is required before
+  CBR15 is baseline-eligible: Tom's exact language (working/previous/played out/resolved/active setup), what "working
+  setup in the previous hour" means, the terminating event, when it's evaluated, which structure tier it uses, and
+  visual examples; each interpretation with evidence id, video, timestamp, quote, machine reading and consequences for the
+  examples. No P&L, no choice by signal count. Insufficient evidence → reported unresolved for owner decision.
+- **Status.** `OPEN` (evidence package pending). CBR15 not baseline-eligible.
 
 ### OQ-37 · CBR15 location in a trending range without a direction
 - **Problem.** M15-LOC-02/03 need `cond.direction` (UP/DOWN). When the LTF swings give `NONE`, the CBR15 spec is silent.
   The CBR1H spec blocks this case (M1H-COND-03, ASSUMPTION).
 - **Handling now.** `M15-LOC-TR-NODIR = False` (blocked by analogy), recorded per candidate.
-- **Status.** `NEEDS USER DECISION` (confirm the analogy or define another reading).
+- **Owner ruling D17-4 (2026-09-15): RESOLVED.** Don't infer direction. The case is `TREND_DIRECTION_UNRESOLVED`, a
+  deterministic context failure rejecting the setup from canonical eligibility, recorded in the ledger. Future Level 1
+  evidence defining a direction rule reopens it.
+- **Status.** `RESOLVED` (D17-4).
 
 ### OQ-38 · Type 3 break before the 7.5-minute fill window
 - **Problem.** A 5s type 3 can arm and break (on STRUCTURE price) before mic 7.5. M15-TIME-01 allows fills only from 7.5.
   A stop order placed after an earlier break would fill at the window open beyond the trigger.
 - **Handling now.** Lifecycle cancel `T3_BREAK_BEFORE_WINDOW` at the structure break time (the shift fired in the first
   half, E15-027 "second half" entries). A setup re-arms only on a new sweep.
-- **Status.** `NEEDS USER DECISION` (confirm or define re-entry behaviour).
+- **Owner ruling D17-5 (2026-09-15): RESOLVED.** A type 3 resolving before minute 7.5 isn't a valid CBR15 entry and
+  doesn't stay armed (`TYPE3_RESOLVED_TOO_EARLY`). A new, causally independent type 3 later in the same candle is
+  evaluated normally if its qualifying break falls in the second half. The early one is never resurrected.
+- **Status.** `RESOLVED` (D17-5).
 
 ### OQ-31 · How does the ledger use the hindsight vendor-gap mask? (Phase 10)
 - **Problem.** At a decision time inside a DXY CFD vendor outage, a causal module can't yet tell the outage from thin
@@ -518,6 +538,7 @@ said to hold ~350 trades (P2G-37). The spoken and slide DXY figures disagree.
 | D14 | Phase 14 plan approved (not implemented; no Backtesting.py dependency). OQ-28 open: contract carries canonical stop inputs, not an executable stop. OQ-29 open: 5s CBR1H preserved; 1m only via Phase 13 evidence + proposed spec change. OQ-25: decision package due before Phase 11. OQ-30 open: licensing review before 14B. Phase 10 continues | OQ-25, OQ-28, OQ-29, OQ-30, Phase 10 |
 | D15 | Phase 10 accepted (PASS WITH CONCERNS, G10 approved). OQ-31 open, preference Option B (label, don't exclude; ALL vs FULL-DXY diagnostic only). Daily DXY CFD unavailability accepted: `DXY_AVAILABLE = false`, no directional meaning. Engineering thresholds stay IMPL, never optimized. OQ-25 decision package next; Phase 11 not started | OQ-25, OQ-31, G10 |
 | D16 | OQ-25 resolved: STRUCTURE = tick mid, EXECUTION = tick bid/ask, never one series for both, access guards + STRUCTURE/EXECUTION labels in schemas/manifests/reports. V-1 required before Phase 13 passes (reopen OQ-25 on material differences). Full tick history deferred (OQ-33). Phase 11 approved on downloaded tick days. Candle files and GC not canonical for extremes | OQ-25, OQ-33, Phases 11/13 |
+| D17 | Phase 11 accepted (PASS WITH CONCERNS, G11: construction, causality, determinism); CBR15 not baseline-eligible. OQ-34 open until Phase 12 (NOT_EVALUATED neither pass nor fail). OQ-35 resolved: stop anchor = most adverse STRUCTURE extension extreme through activation/fill, fields kept separate. OQ-36 interpretation not approved; evidence package required. OQ-37 resolved: TREND_DIRECTION_UNRESOLVED context failure. OQ-38 resolved: TYPE3_RESOLVED_TOO_EARLY, no resurrection. F-3 approved. Phase 12 authorized | OQ-34…OQ-38, G11 |
 
 ## Batched questions for the user (historical; answered above)
 

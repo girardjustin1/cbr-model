@@ -39,3 +39,12 @@ def test_backtesting_py_not_added_before_phase_14b():
 def test_no_optimizer_calls_in_source():
     offenders = [p for p in (ROOT / "src").rglob("*.py") if ".optimize(" in p.read_text()]
     assert offenders == []
+
+
+def test_stop_anchor_fields_required_by_d17():
+    schema = json.loads(SCHEMA.read_text())
+    rule = schema["properties"]["stop_rule"]
+    assert {"structure_stop_anchor", "stop_anchor_time", "stop_anchor_source", "direction", "buffer"} <= set(rule["required"])
+    for kept_apart in ("extension_extreme_at_decision", "sweep_extreme", "structure_stop_anchor", "stop_anchor_path",
+                       "structure_extreme_at_fill", "final_execution_stop"):
+        assert kept_apart in rule["properties"]

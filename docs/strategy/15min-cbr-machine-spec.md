@@ -38,9 +38,10 @@ cond = condition_classifier(tier=LTF, W=param.cond.window_hours, as_of=Q.t0)
 |---|---|---|---|
 | M15-COND-01 | CBR15-COND-003 | `cond.condition ∈ {RANGE, TRENDING_RANGE}`; `TREND/UNDEFINED` → BLOCKED | CANON |
 | M15-COND-02 | CBR15-COND-002 | `param.cond.min_legs (3) ≤ cond.n_legs ≤ param.cond.max_legs (6)`; `< 3` → BLOCKED(RANGE_TOO_BIG); `> 6` → BLOCKED(LOWER_TF_RANGE) | CANON (E15-048) |
-| M15-COND-03 | CBR15-COND-004 | `prior_played_out(lookback = param.prior.hard_lookback_min = 60) ≥ 1`; else BLOCKED(NO_SETUPS_LAST_HOUR). `prior_played_out(120 min)` recorded (slide: "3+ = good") | CANON rule (E15-049); raw-setup definition as in 1h spec §2 |
+| M15-COND-03 | CBR15-COND-004 | `prior_played_out(lookback = param.prior.hard_lookback_min = 60) ≥ 1`; else BLOCKED(NO_SETUPS_LAST_HOUR). `prior_played_out(120 min)` recorded (slide: "3+ = good") | CANON rule (E15-049); raw-setup definition as in 1h spec §2. **Interpretation of "played out" NOT approved (D17-3, OQ-36): implemented unchanged, every candidate carries an eligibility blocker until the evidence package resolves it** |
 | M15-COND-04 | CBR15-COND-005 | current leg index `cond.n_legs + 1 ≥ 3` (not leg 1 or 2). Upper bound "leg 5" recorded, not filtered (range start undefined) | CANON lower bound; upper diag (OQ-06) |
 | M15-COND-05 | CBR15-COND-006/007 | recorded only (hourly setups present? / clarity) | diagnostic |
+| M15-COND-06 | D17-4 (OQ-37) | `TRENDING_RANGE` whose direction the classifier can't determine → context failure `TREND_DIRECTION_UNRESOLVED` (no inferred direction) | owner ruling |
 
 ## 3. Location (where)
 
@@ -68,7 +69,7 @@ cond = condition_classifier(tier=LTF, W=param.cond.window_hours, as_of=Q.t0)
 
 | Rule id | Written rule | Logic | Label |
 |---|---|---|---|
-| M15-TIME-01 | CBR15-TIME-003 | fill at `param.timing.start_mic (7.5) ≤ mic < 15`; orders cancelled at candle close | CANON (E15-027) |
+| M15-TIME-01 | CBR15-TIME-003 | fill at `param.timing.start_mic (7.5) ≤ mic < 15`; orders cancelled at candle close. A type 3 that resolves (breaks) before mic 7.5 is not a valid entry and is cancelled at the break (`TYPE3_RESOLVED_TOO_EARLY`); a later, independent type 3 is evaluated normally (D17-5, OQ-38) | CANON (E15-027); owner ruling |
 | M15-TIME-02 | CBR15-TIME-001 | no session filter beyond canonical no-trade windows | CANON (E15-026) + D3 |
 | M15-TIME-03 | CBR15-TIME-004/005 | `mih` anchor (:07/:22/:37/:52), "new 5m candle created the break" flag recorded | diagnostic |
 
@@ -76,7 +77,7 @@ cond = condition_classifier(tier=LTF, W=param.cond.window_hours, as_of=Q.t0)
 
 | Rule id | Written rule | Logic | Label |
 |---|---|---|---|
-| M15-HTF-01 | CBR15-HTF-001 | **Veto** if, in the current hour `H`, a raw `CBR1H_BASELINE_V1-A` setup is ARMED or FILLED with direction opposite to `d` at `as_of` ("don't trade 15m CBR against an active hourly CBR") | CANON rule; "active hourly CBR" operationalised by the hourly machine spec (IMPL) |
+| M15-HTF-01 | CBR15-HTF-001 | **Veto** if, in the current hour `H`, a raw `CBR1H_BASELINE_V1-A` setup is ARMED or FILLED with direction opposite to `d` at `as_of` ("don't trade 15m CBR against an active hourly CBR"). Until the hourly state is available the rule is `NOT_EVALUATED`: neither pass nor fail, never the sole rejection reason, and signals are not baseline-eligible (D17-1, OQ-34) | CANON rule; "active hourly CBR" operationalised by the hourly machine spec (IMPL) |
 
 ## 7. Entry, stop, target
 
@@ -90,7 +91,7 @@ ORDER: stop at t3.trigger_price                                   # breakout ent
 |---|---|---|---|
 | M15-ENTRY-01 | CBR15-ENTRY-001 | 5-second type 3 (Phase 1 definition on `S5` swings) | CANON (E15-037, EP1-008) |
 | M15-ENTRY-02 | CBR15-ENTRY-002 | breakout entry only; "wait for 50% pullback on bigger shifts" is **not** implemented in V1 | declared simplification |
-| M15-SL-01 | CBR15-SL-001/002 | stop beyond `oe_extreme` + `param.stop.buffer_atr × ATR(1m,14)` + spread | CANON; buffer ASSUMPTION |
+| M15-SL-01 | CBR15-SL-001/002 | stop beyond the **stop anchor** + `param.stop.buffer_atr × ATR(1m,14)` + spread. Stop anchor (D17-2, OQ-35) = most adverse STRUCTURE extreme of the active extension (since `Q.open`, 5s bars) observed up to entry activation / fill; spread and the final executable stop are execution-layer. Recorded separately: candle open, extreme at decision, sweep extreme, anchor at activation (+ path), extreme at fill, final stop | CANON; buffer ASSUMPTION; anchor instant owner ruling |
 | M15-TP-01 | CBR15-TP-001 | target = `oe_extreme − 0.5 × (oe_extreme − Q.open)` (SELL; mirror BUY) | CANON |
 | M15-EXIT-01 | EP1-018 | forced flat at rollover | CANON |
 

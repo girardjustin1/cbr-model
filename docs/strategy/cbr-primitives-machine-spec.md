@@ -132,6 +132,8 @@ On tier `τ` with confirmed swings (Section 1), evaluated on bars of that tier.
 
 Bullish type 3 mirrors. **CHoCH** (EP1-010) is recorded when step 3 happens without step 2; not an entry in V1.
 
+**Step 1 read literally (F-3, D17-6).** The reference engines disarm an unswept pair as soon as a newer swing is confirmed (`track_type3(latest_pair_only=True)`). The legacy primitive `find_type3` kept older unswept pairs armed; it is preserved unchanged for existing callers.
+
 ### 4.2 HILO (Phase 2 definition, frame-confirmed)
 
 On `B1m` (or `B5m` when `hvcs_state == LVCS`, EP2-005). CANON EP2-001…003.
@@ -201,7 +203,7 @@ Price role (D16): fills and stop/target **touches** use EXECUTION bars (buy at a
 |---|---|---|
 | Entry order | Stop order at the trigger price (`t3.trigger_price` / `hilo.trigger_price`), placed when the trigger pattern becomes possible, filled on the first `B5s` bar trading through it at `max(trigger, bar.open)` + slippage (buys; mirror sells) | Break entries: E1H-035, E15-038 |
 | Order expiry | Unfilled at window end (`timing.end`) → cancelled, logged `EXPIRED` | IMPL |
-| Stop | Conservative: beyond `oe_extreme` by `param.stop.buffer_atr × ATR(1m,14)` + current spread | CANON E1H-036, E15-039, E15-040 ("breathing room"); buffer `ASSUMPTION` (OQ-11) |
+| Stop | Conservative: beyond the stop anchor by `param.stop.buffer_atr × ATR(1m,14)` + current spread. **Stop anchor (D17-2)** = most adverse STRUCTURE extreme of the active extension observed causally up to entry activation / fill | CANON E1H-036, E15-039, E15-040 ("breathing room"); buffer `ASSUMPTION` (OQ-11); anchor instant owner ruling (OQ-35) |
 | Target | `oe_extreme − 0.5 × (oe_extreme − C.open)` (sell; mirror buy), where `C` is the model's candle | CANON E1H-037, E15-039 |
 | Reward check | Skip if entry is already at or beyond the target, or `reward/risk < param.min_rr` (default 0 = only a positive-reward requirement) | IMPL (prevents negative-reward orders; `min_rr` is not a strategy rule) |
 | Same-bar stop & target | Stop assumed first | IMPL (conservative) |

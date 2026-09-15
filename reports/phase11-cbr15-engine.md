@@ -1,11 +1,11 @@
 # Phase 11: CBR15 Reference Engine Run (course-example windows)
 
-Generated 2026-09-15T04:40:38.733549+00:00 by `src/cbr/engine/phase11_run.py`. Implementation parity use only: no fills, trade outcomes or P&L. The course examples are **CBR1H** trades; CBR15 output here is informational.
+Generated 2026-09-15T05:03:06.940695+00:00 by `src/cbr/engine/phase11_run.py`. Implementation parity use only: no fills, trade outcomes or P&L. The course examples are **CBR1H** trades; CBR15 output here is informational.
 
 ## CX-LT1-1
 
 Tom (CBR1H): {'direction': 'BUY', 'entry_utc': '2025-10-21 01:39', 'entry': 4340.13, 'stop': 4332.96, 'target': 4351.59, 'model': 'CBR1H'}. Candles 2025-10-21 01:00 → 2025-10-21 02:00 UTC, warm-up from 2025-10-20 18:00.
-Deterministic: True · causality (truncation at 3 cut times): True · spec hash `acb1ae2df03f`
+Deterministic: True · causality (truncation at 3 cut times): True · spec hash `0f539ef24f3d`
 
 | Candle | Condition | Legs | c_med | Candle-level failures | Candidates |
 |---|---|---|---|---|---|
@@ -31,7 +31,7 @@ ARMED signals: 0
 ## CX-TE1-1
 
 Tom (CBR1H): {'direction': 'BUY', 'entry_utc': '2025-10-24 04:37', 'model': 'CBR1H'}. Candles 2025-10-24 04:00 → 2025-10-24 05:00 UTC, warm-up from 2025-10-23 20:00.
-Deterministic: True · causality (truncation at 3 cut times): True · spec hash `acb1ae2df03f`
+Deterministic: True · causality (truncation at 3 cut times): True · spec hash `0f539ef24f3d`
 
 | Candle | Condition | Legs | c_med | Candle-level failures | Candidates |
 |---|---|---|---|---|---|
@@ -63,7 +63,7 @@ ARMED signals: 0
 ## CX-LT3-2
 
 Tom (CBR1H): {'direction': 'SELL', 'entry_utc': '2025-11-10 01:40', 'model': 'CBR1H'}. Candles 2025-11-10 01:00 → 2025-11-10 02:00 UTC, warm-up from 2025-11-07 12:00.
-Deterministic: True · causality (truncation at 3 cut times): True · spec hash `acb1ae2df03f`
+Deterministic: True · causality (truncation at 3 cut times): True · spec hash `0f539ef24f3d`
 
 | Candle | Condition | Legs | c_med | Candle-level failures | Candidates |
 |---|---|---|---|---|---|
@@ -79,7 +79,7 @@ Deterministic: True · causality (truncation at 3 cut times): True · spec hash 
 | 01:18:35 | SELL | REJECTED | IMPL-REWARD, M15-COND-02, M15-COND-03, M15-OE-01 | M15-HTF-01 | 1 | 4031.730 | 4031.825 | True | 4028.540 | 4029.485 | 0 | OE_PULLBACK |
 | 01:26:05 | SELL | REJECTED | M15-COND-02, M15-COND-03, M15-OE-02 | M15-HTF-01 | 9 | 4047.145 | 4047.170 | True | 4043.965 | 4037.193 | 0 | OE_PULLBACK |
 | 01:43:35 | SELL | REJECTED | IMPL-REWARD, M15-COND-03, M15-OE-02 | M15-HTF-01 | 7 | 4053.425 | 4052.740 | False | 4048.530 | 4050.645 | 0 | OE_PULLBACK |
-| 01:50:00 | SELL | REJECTED | IMPL-REWARD, M15-COND-01, M15-COND-03, M15-LOC-04, M15-OE-02, M15-OE-03a, M15-OE-03b | M15-HTF-01 | 4 | 4052.840 | 4052.840 | False | 4050.960 | 4051.863 | 0 | T3_BREAK_BEFORE_WINDOW |
+| 01:50:00 | SELL | REJECTED | IMPL-REWARD, M15-COND-01, M15-COND-03, M15-LOC-04, M15-OE-02, M15-OE-03a, M15-OE-03b | M15-HTF-01 | 4 | 4052.840 | 4052.840 | False | 4050.960 | 4051.863 | 0 | TYPE3_RESOLVED_TOO_EARLY |
 | 01:52:50 | BUY | REJECTED | IMPL-REWARD, M15-COND-01, M15-COND-03, M15-LOC-04, M15-OE-02, M15-OE-03a, M15-OE-03b | M15-HTF-01 | 6 | 4047.060 | 4047.030 | True | 4049.935 | 4048.972 | 0 | OE_PULLBACK |
 | 01:54:55 | BUY | REJECTED | M15-COND-01, M15-COND-03, M15-OE-02 | M15-HTF-01 | 8 | 4043.776 | 4042.631 | True | 4046.150 | 4047.331 | 0 | OE_PULLBACK |
 | 01:56:25 | BUY | REJECTED | M15-COND-01, M15-COND-03, M15-OE-02 | M15-HTF-01 | 10 | 4041.700 | 4041.477 | True | 4044.330 | 4046.293 | 0 | OE_PULLBACK |

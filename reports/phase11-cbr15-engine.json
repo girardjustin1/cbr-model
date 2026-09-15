@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-09-15T04:40:38.733549+00:00",
+  "generated_utc": "2026-09-15T05:03:06.940695+00:00",
   "windows": [
     {
       "window": "CX-LT1-1",
@@ -17,7 +17,7 @@
         "target": 4351.59,
         "model": "CBR1H"
       },
-      "spec_hash": "acb1ae2df03f415c6a4d6778c2a0cca6695997ae0788f24616067d7c8387a1c4",
+      "spec_hash": "0f539ef24f3dd441f41298ff0135fc7f9101f9ecd2f281d0f5a638f0646b3dde",
       "result_hash": "551fdba7c6c0097571f02b45bd224d2157bd8dc9af9d10f5e73ee0c9a128fd1d",
       "deterministic": true,
       "causality_truncation": [
@@ -49,6 +49,7 @@
           "q_open": 4368.7265,
           "prev_missing_minutes": 0,
           "cond_02_reason": null,
+          "context_reason": null,
           "candidates": 1,
           "rules_failed": []
         },
@@ -63,6 +64,7 @@
           "q_open": 4359.01,
           "prev_missing_minutes": 0,
           "cond_02_reason": null,
+          "context_reason": null,
           "candidates": 2,
           "rules_failed": []
         },
@@ -77,6 +79,7 @@
           "q_open": 4350.3885,
           "prev_missing_minutes": 0,
           "cond_02_reason": null,
+          "context_reason": null,
           "candidates": 2,
           "rules_failed": []
         },
@@ -91,6 +94,7 @@
           "q_open": 4346.215,
           "prev_missing_minutes": 0,
           "cond_02_reason": null,
+          "context_reason": null,
           "candidates": 3,
           "rules_failed": []
         }
@@ -378,7 +382,7 @@
         "entry_utc": "2025-10-24 04:37",
         "model": "CBR1H"
       },
-      "spec_hash": "acb1ae2df03f415c6a4d6778c2a0cca6695997ae0788f24616067d7c8387a1c4",
+      "spec_hash": "0f539ef24f3dd441f41298ff0135fc7f9101f9ecd2f281d0f5a638f0646b3dde",
       "result_hash": "0884ef8f30a4f3bbf64b74848134211e3d0b0f4e2cdc0a14bd1eca5598047754",
       "deterministic": true,
       "causality_truncation": [
@@ -410,6 +414,7 @@
           "q_open": 4122.44,
           "prev_missing_minutes": 0,
           "cond_02_reason": null,
+          "context_reason": null,
           "candidates": 3,
           "rules_failed": []
         },
@@ -424,6 +429,7 @@
           "q_open": 4116.58,
           "prev_missing_minutes": 0,
           "cond_02_reason": null,
+          "context_reason": null,
           "candidates": 6,
           "rules_failed": []
         },
@@ -438,6 +444,7 @@
           "q_open": 4107.025,
           "prev_missing_minutes": 0,
           "cond_02_reason": null,
+          "context_reason": null,
           "candidates": 2,
           "rules_failed": []
         },
@@ -452,6 +459,7 @@
           "q_open": 4106.72,
           "prev_missing_minutes": 0,
           "cond_02_reason": null,
+          "context_reason": null,
           "candidates": 3,
           "rules_failed": []
         }
@@ -897,7 +905,7 @@
         "entry_utc": "2025-11-10 01:40",
         "model": "CBR1H"
       },
-      "spec_hash": "acb1ae2df03f415c6a4d6778c2a0cca6695997ae0788f24616067d7c8387a1c4",
+      "spec_hash": "0f539ef24f3dd441f41298ff0135fc7f9101f9ecd2f281d0f5a638f0646b3dde",
       "result_hash": "b4eee2f039bca4a4b2fbb57288a36358e50184dd643eed690b7a2dc503e4c1fc",
       "deterministic": true,
       "causality_truncation": [
@@ -929,6 +937,7 @@
           "q_open": 4020.425,
           "prev_missing_minutes": 0,
           "cond_02_reason": "LOWER_TF_RANGE",
+          "context_reason": null,
           "candidates": 2,
           "rules_failed": [
             "M15-COND-02"
@@ -945,6 +954,7 @@
           "q_open": 4027.24,
           "prev_missing_minutes": 0,
           "cond_02_reason": "LOWER_TF_RANGE",
+          "context_reason": null,
           "candidates": 2,
           "rules_failed": [
             "M15-COND-02"
@@ -961,6 +971,7 @@
           "q_open": 4047.865,
           "prev_missing_minutes": 0,
           "cond_02_reason": null,
+          "context_reason": null,
           "candidates": 1,
           "rules_failed": []
         },
@@ -975,6 +986,7 @@
           "q_open": 4050.885,
           "prev_missing_minutes": 0,
           "cond_02_reason": null,
+          "context_reason": null,
           "candidates": 4,
           "rules_failed": [
             "M15-COND-01"
@@ -1154,7 +1166,7 @@
           "entry_reference_price": 4050.96,
           "target_price": 4051.8625,
           "prior_played_out_60m": 0,
-          "cancel_reason": "T3_BREAK_BEFORE_WINDOW",
+          "cancel_reason": "TYPE3_RESOLVED_TOO_EARLY",
           "structure_trigger_touch_time": "2025-11-10T01:50:40.000Z"
         },
         {

@@ -38,6 +38,13 @@ from cbr.structure.swings import legs, usable, zigzag
 
 M1, S5, M15 = pd.Timedelta(minutes=1), pd.Timedelta(seconds=5), pd.Timedelta(minutes=15)
 HTF_CLEAR, HTF_VETO, HTF_NOT_EVALUATED = "CLEAR", "VETO", "NOT_EVALUATED"
+TREND_DIRECTION_UNRESOLVED = "TREND_DIRECTION_UNRESOLVED"
+TYPE3_RESOLVED_TOO_EARLY = "TYPE3_RESOLVED_TOO_EARLY"
+STOP_ANCHOR_SOURCE = "STRUCTURE_TICK_MID_5S_EXTENSION_EXTREME"
+REASONS = {"M15-COND-TR-DIRECTION": TREND_DIRECTION_UNRESOLVED, "M15-COND-02": "COND_LEGS_OUT_OF_RANGE"}
+# Eligibility blockers (D17): signals are not baseline-eligible while any applies.
+BLOCKER_HTF = "HTF_NOT_EVALUATED (OQ-34)"
+BLOCKER_OQ36 = "COND03_INTERPRETATION_UNAPPROVED (OQ-36)"
 
 # Decision fields: fully determined by data known at `timestamp` (causality tests compare these).
 DECISION_FIELDS = ["signal_id", "candle_open_utc", "timestamp", "direction", "event", "rules_failed",
@@ -143,13 +150,17 @@ def _evaluate_candle(q0, s1m, s5s, atr1m, sw_ltf, b15, atr15, levels, arms, p: C
         "M15-COND-04": cond.n_legs + 1 >= p.min_leg_index,
         "NT_INCOMPLETE_Q_OPEN": q_open is not None,
         "NT_INCOMPLETE_PREV_15M": prev is not None and prev_complete,
+        # OQ-37 ruling (D17-4): a trending range whose direction the canonical rules can't determine is a context failure
+        "M15-COND-TR-DIRECTION": not (cond.condition == cond_mod.TRENDING_RANGE and cond.direction == "NONE"),
     }
     cond_reason = None
     if not candle_rules["M15-COND-02"]:
         cond_reason = "RANGE_TOO_BIG" if cond.n_legs < p.min_legs else "LOWER_TF_RANGE"
+    context_reason = None if candle_rules["M15-COND-TR-DIRECTION"] else TREND_DIRECTION_UNRESOLVED
     crow = {"candle_open_utc": q0, "condition": cond.condition, "c_med": cond.c_med, "n_legs": cond.n_legs,
             "cond_direction": cond.direction, "range_high": cond.range_high, "range_low": cond.range_low,
             "q_open": q_open, "prev_missing_minutes": prev_missing, "cond_02_reason": cond_reason,
+            "context_reason": context_reason,
             "candidates": 0, "rules_failed": [k for k, v in candle_rules.items() if not v]}
     rows = []
     for a in arms:
@@ -167,12 +178,12 @@ def _evaluate_candle(q0, s1m, s5s, atr1m, sw_ltf, b15, atr15, levels, arms, p: C
         if a.direction != d:
             continue                                   # not a candidate: shift in the extension's direction
         crow["candidates"] += 1
-        rows.append(_evaluate_candidate(q0, q_end, q_open, cond, candle_rules, oe, a, as_of, a1, d, s1m, atr1m,
+        rows.append(_evaluate_candidate(q0, q_end, q_open, cond, candle_rules, oe, a, as_of, a1, d, s1m, s5s, atr1m,
                                         sw_ltf, atr15, levels, p, htf))
     return crow, rows
 
 
-def _evaluate_candidate(q0, q_end, q_open, cond, candle_rules, oe, a: Type3Arm, as_of, a1, d, s1m, atr1m, sw_ltf,
+def _evaluate_candidate(q0, q_end, q_open, cond, candle_rules, oe, a: Type3Arm, as_of, a1, d, s1m, s5s, atr1m, sw_ltf,
                         atr15, levels, p: Cbr15Params, htf) -> dict:
     rules: dict[str, bool | None] = dict(candle_rules)
     rules["M15-COND-03"] = None                                     # set after raw setups are resolved
@@ -189,7 +200,7 @@ def _evaluate_candidate(q0, q_end, q_open, cond, candle_rules, oe, a: Type3Arm, 
         rules["M15-LOC-01"] = pos is not None and (pos >= p.range_extreme if d == "SELL" else pos <= 1 - p.range_extreme)
     elif cond.condition == cond_mod.TRENDING_RANGE:
         if cond.direction == "NONE":
-            rules["M15-LOC-TR-NODIR"] = False                         # OQ-37
+            pass                                                      # context failure M15-COND-TR-DIRECTION (OQ-37)
         elif (d == "SELL") == (cond.direction == "UP"):             # counter-trend
             kind = "H" if d == "SELL" else "L"
             last = known[known["kind"] == kind]
@@ -225,7 +236,7 @@ def _evaluate_candidate(q0, q_end, q_open, cond, candle_rules, oe, a: Type3Arm, 
     cancel_time, cancel_reason = q_end, "WINDOW_END"
     touch_time = a.end_time if a.end == "BREAK" else None
     if touch_time is not None and touch_time < window_start:
-        cancel_time, cancel_reason = touch_time, "T3_BREAK_BEFORE_WINDOW"          # OQ-38
+        cancel_time, cancel_reason = touch_time, TYPE3_RESOLVED_TOO_EARLY          # OQ-38 ruling D17-5
     if a.end in ("TIMEOUT", "NEW_SWING") and a.end_time is not None and a.end_time < cancel_time:
         cancel_time, cancel_reason = a.end_time, f"T3_{a.end}"
     horizon = min(cancel_time, touch_time) if touch_time is not None else cancel_time
@@ -239,6 +250,10 @@ def _evaluate_candidate(q0, q_end, q_open, cond, candle_rules, oe, a: Type3Arm, 
             break
 
     buffer_price = p.buffer_atr * (a1 or 0.0)
+    # OQ-35 ruling (D17-2): stop anchor = most adverse STRUCTURE extreme of the extension observed up to entry
+    # activation / fill. The engine records the anchor at activation and its path until the order ends; the value at
+    # fill is resolved by the execution layer from this path (it never reads STRUCTURE bars itself).
+    anchor_act, anchor_act_time, path = _anchor_path(s5s, q0, active_from, cancel_time, d)
     hv = hvcs(s1m[s1m.index + M1 <= as_of], (as_of - M1).floor("1min"), oe.direction, atr_1m=a1,
               min_minutes=p.hvcs_min_minutes, max_violations=p.hvcs_max_violations,
               lvcs_body_atr=p.hvcs_lvcs_body_atr) if a1 else None
@@ -256,6 +271,9 @@ def _evaluate_candidate(q0, q_end, q_open, cond, candle_rules, oe, a: Type3Arm, 
         "sweep_beyond_oe_extreme": (a.sweep_bar_extreme > oe.extreme) if d == "SELL" else (a.sweep_bar_extreme < oe.extreme),
         "entry_reference_price": a.trigger_price, "entry_trigger_time": active_from, "entry_expiry_time": q_end,
         "target_price": target, "stop_extension_extreme": oe.extreme, "stop_buffer_price": buffer_price,
+        "candle_open_price": q_open, "ext_extreme_at_decision": oe.extreme,
+        "structure_stop_anchor": anchor_act, "stop_anchor_time": anchor_act_time,
+        "stop_anchor_source": STOP_ANCHOR_SOURCE, "stop_anchor_path": path,
         "extension_high": max(oe.extreme, q_open), "extension_low": min(oe.extreme, q_open),
         "cancel_time": cancel_time, "cancel_reason": cancel_reason, "structure_trigger_touch_time": touch_time,
         "t3_extreme_before_end": a.extreme_before_end,                # lifecycle: sweep extreme up to the break (OQ-35)
@@ -264,6 +282,37 @@ def _evaluate_candidate(q0, q_end, q_open, cond, candle_rules, oe, a: Type3Arm, 
         "mic_structure_touch": ((touch_time - q0) / M1) if touch_time is not None else None,
         "s5_break_size_atr1m": (abs(a.broken_price - a.trigger_price) / a1) if a1 else None,
     }
+
+
+def _anchor_path(s5s: pd.DataFrame, q0: pd.Timestamp, activation: pd.Timestamp, end: pd.Timestamp, d: str):
+    """Most adverse STRUCTURE 5s extreme of the candle's extension since Q.t0: value (and bar close time) through
+    `activation`, then each new extreme until `end` as [close_time, value] (lifecycle, causal at each time)."""
+    sell = d == "SELL"
+    col = "high" if sell else "low"
+    bars = s5s[(s5s.index >= q0) & (s5s.index + S5 <= end)][col]
+    if not len(bars):
+        return None, None, []
+    run = bars.cummax() if sell else bars.cummin()
+    close = run.index + S5
+    before = run[close <= activation]
+    anchor = float(before.iloc[-1]) if len(before) else None
+    anchor_time = None
+    if len(before):
+        hit = before[before == before.iloc[-1]]
+        anchor_time = hit.index[0] + S5
+    after = run[close > activation]
+    changed = after[after != after.shift(1, fill_value=anchor if anchor is not None else float("nan"))]
+    path = [[t + S5, float(v)] for t, v in changed.items()]
+    return anchor, anchor_time, path
+
+
+def anchor_at(row: pd.Series, t: pd.Timestamp) -> float | None:
+    """Stop anchor in force at time t (latest path value with close ≤ t), for simulators and raw-setup resolution."""
+    value = row["structure_stop_anchor"]
+    for when, v in row["stop_anchor_path"]:
+        if when <= t:
+            value = v
+    return value
 
 
 def _resolve_raw_outcomes(cand: pd.DataFrame, s5s: pd.DataFrame, p: Cbr15Params) -> None:
@@ -290,7 +339,9 @@ def _structure_outcome(r, s5s: pd.DataFrame, p: Cbr15Params) -> tuple[str, pd.Ti
     hit = win.index[(win["low"] <= r["entry_reference_price"]) if sell else (win["high"] >= r["entry_reference_price"])]
     if not len(hit):
         return "NO_TOUCH", r["cancel_time"]
-    stop = r["stop_extension_extreme"] + (r["stop_buffer_price"] if sell else -r["stop_buffer_price"])
+    anchor = anchor_at(r, hit[0]) if "stop_anchor_path" in r else r["stop_extension_extreme"]
+    anchor = r["stop_extension_extreme"] if anchor is None else anchor
+    stop = anchor + (r["stop_buffer_price"] if sell else -r["stop_buffer_price"])   # anchor through the touch (D17-2)
     after = s5s[s5s.index >= hit[0]]
     for t, row in after.iterrows():
         ny_flat = in_rollover(t, pre_min=p.rollover_flat_before_min, post_min=0)
@@ -326,6 +377,10 @@ def _apply_prior_rule(cand: pd.DataFrame, p: Cbr15Params) -> None:
     cand["rules_failed"] = failed
     cand["rules_not_evaluated"] = [sorted(k for k, v in r.items() if v is None) for r in cand["rules"]]
     cand["event"] = events
+    cand["reject_reasons"] = [sorted({REASONS.get(k, k) for k in f}) for f in failed]
+    cand["eligibility_blockers"] = [
+        ([BLOCKER_HTF] if rules.get("M15-HTF-01") is None else []) + [BLOCKER_OQ36] for rules in cand["rules"]]
+    cand["baseline_eligible"] = False                                  # D17: not eligible until the blockers clear
     seq = cand.groupby(["candle_open_utc", "direction"]).cumcount()
     cand["signal_id"] = [f"CBR15_BASELINE_V1/{r['variant']}/{r['candle_open_utc']:%Y%m%dT%H%M}/{r['direction']}/{s}"
                          for (_, r), s in zip(cand.iterrows(), seq, strict=True)]
@@ -350,12 +405,22 @@ def _signal(r: pd.Series, p: Cbr15Params, shash: str, dxy: pd.DataFrame | None) 
         "entry_trigger_time": r["entry_trigger_time"].isoformat(), "entry_expiry_time": r["entry_expiry_time"].isoformat(),
         "entry_order_type": "STOP", "entry_reference_price": r["entry_reference_price"],
         "stop_rule": {"extension_extreme": r["stop_extension_extreme"], "extension_extreme_source": "TICK_MID",
+                      "candle_open_price": r["candle_open_price"],
+                      "extension_extreme_at_decision": r["ext_extreme_at_decision"],
+                      "sweep_extreme": r["sweep_bar_extreme"],
+                      "structure_stop_anchor": r["structure_stop_anchor"],
+                      "stop_anchor_time": None if r["stop_anchor_time"] is None else r["stop_anchor_time"].isoformat(),
+                      "stop_anchor_source": r["stop_anchor_source"],
+                      "stop_anchor_path": [[t.isoformat(), v] for t, v in r["stop_anchor_path"]],
+                      "structure_extreme_at_fill": None,      # resolved by the execution layer from the path (D17-2)
+                      "final_execution_stop": None,           # Phase 14A
                       "direction": "LONG" if long else "SHORT",
                       "buffer": {"param": "stop.buffer_atr", "value": p.buffer_atr, "unit": "ATR(1m,14)",
                                  "atr_at_decision": r["atr_1m"], "label": "ASSUMPTION", "source": ["OQ-11"]},
                       "spread_policy": "ADD_SPREAD_AT_FILL",
                       "execution_inputs": {"spread_at_decision": None, "spread_source": None}},
-        "stop_price": r["stop_extension_extreme"] + (-r["stop_buffer_price"] if long else r["stop_buffer_price"]),
+        "stop_price": None if r["structure_stop_anchor"] is None else        # reference only (D14-1), not executable
+        r["structure_stop_anchor"] + (-r["stop_buffer_price"] if long else r["stop_buffer_price"]),
         "target_price": r["target_price"], "extension_high": r["extension_high"], "extension_low": r["extension_low"],
         "extremes_source": "TICK_MID", "range_high": r["range_high"], "range_low": r["range_low"],
         "context_state": {"condition": r["condition"], "c_med": r["c_med"], "n_legs": r["n_legs"],
@@ -367,6 +432,7 @@ def _signal(r: pd.Series, p: Cbr15Params, shash: str, dxy: pd.DataFrame | None) 
         "session_state": {"nt_sydney": False, "nt_rollover": False},
         "source_feed": {"feed_id": "dukascopy_ticks:xauusd", "manifest_hash": None},
         "data_confidence": {"level": "REDUCED" if reasons else "FULL", "reason_codes": reasons},
+        "eligibility": {"baseline_eligible": False, "blockers": list(r["eligibility_blockers"])},
         "reason_code": "ARMED", "spec_hash": shash,
         "lifecycle": {"cancel_time": r["cancel_time"].isoformat(), "cancel_reason": r["cancel_reason"],
                       "structure_trigger_touch_time": None if pd.isna(r["structure_trigger_touch_time"])
