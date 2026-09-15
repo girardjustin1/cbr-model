@@ -1,6 +1,6 @@
 # CBR Shared Primitives: Machine Specification
 
-**Version:** `CBR_PRIMITIVES_V1` (spec rev 1.3: D19 window basis, HILO role, HVCS end bar; rev 1.2: price roles per D16; rev 1.1: type 3 pairing fix F-0) · **Status:** PARITY-CANDIDATE PC1 · **Date:** 2026-09-15
+**Version:** `CBR_PRIMITIVES_V1` (spec rev 1.4: D20 CBR15 window basis TRADABLE, HVCS continuity ASSUMPTION; rev 1.3: D19 window basis, HILO role, HVCS end bar; rev 1.2: price roles per D16; rev 1.1: type 3 pairing fix F-0) · **Status:** PARITY-CANDIDATE PC2 · **Date:** 2026-09-15
 
 Deterministic definitions used by `CBR1H_BASELINE_V1` and `CBR15_BASELINE_V1`. Every numeric value lives in
 `config/strategy.yaml`; this document refers to parameters by name (`param.*`). Each definition cites its
@@ -66,7 +66,7 @@ on each closed bar b:
 
 ## 2. Condition classifier (CANON thresholds, ASSUMPTION aggregation; OQ-02)
 
-Input: tier `τ`, window `W` ending at `as_of`. Legs = completed legs with `t_start ≥ window_start`, where `window_start = as_of − W` (basis `CLOCK`) or the start of the last `W` scheduled-tradable minutes (basis `TRADABLE`: weekend and daily-break closures don't consume the window; vendor gaps do). Basis per model: `param.cond.window_basis` (CBR1H TRADABLE, D19-3; CBR15 CLOCK, OQ-45). Clock, tradable and missing minutes are recorded.
+Input: tier `τ`, window `W` ending at `as_of`. Legs = completed legs with `t_start ≥ window_start`, where `window_start = as_of − W` (basis `CLOCK`) or the start of the last `W` scheduled-tradable minutes (basis `TRADABLE`: weekend and daily-break closures don't consume the window; vendor gaps do). Basis per model: `param.cond.window_basis` (both TRADABLE: CBR1H D19-3, CBR15 D20-5; ASSUMPTION). Clock, tradable and missing minutes are recorded.
 
 ```
 corrections = [ legs[i+1].size / legs[i].size  for consecutive legs i ]      # "correction of the previous move"
@@ -161,7 +161,7 @@ hvcs.duration = run length in minutes;  valid if ≥ param.hvcs.min_minutes (4) 
 hvcs.body_atr = mean(|close−open|)/ATR(1m,14) over run;  LVCS if < param.hvcs.lvcs_body_atr   ASSUMPTION (OQ-08)
 ```
 
-**End bar for CBR1H (D19-6, OQ-43).** The HVCS must run directly into the shift: `end_bar` = the closed `B1m` bar that set the extension extreme (final displacement bar). Closed bars after it are indecision bars; the sequence is continuous while each keeps the respected side (DOWN: `high ≤ end_bar.high`; UP: `low ≥ end_bar.low`). No maximum indecision count (OQ-44).
+**End bar for CBR1H (D19-6, OQ-43).** The HVCS must run directly into the shift: `end_bar` = the closed `B1m` bar that set the extension extreme (final displacement bar). Closed bars after it are indecision bars; the sequence is continuous while each keeps the respected side (DOWN: `high ≤ end_bar.high`; UP: `low ≥ end_bar.low`). No maximum indecision count. The continuity reading is an ASSUMPTION (OQ-44, D20-4); bar counts between the HVCS and the shift are diagnostics, never filters.
 
 ---
 

@@ -14,9 +14,11 @@ Owner ruling D19 (Phase 13 readiness):
     direction.
   * :30 TIMING (OQ-42): evaluated at the 5s shift time as the diagnostic `timing30_state`; hard-veto semantics are
     unresolved, so it never rejects a signal.
-  * PRIOR SETUPS (OQ-36): M1H-COND-04 counts qualifying CBR1H setups FORMED (raw setups: every rule except COND-04) with
-    decision time in [H.t0 − lookback, H.t0); outcomes are never used. `prior_setup_played_out_status` = UNKNOWN.
+  * PRIOR SETUPS (OQ-36, D20-1/2): M1H-COND-04 counts setups FORMED (`raw_setup_armed`: the candidate passed every
+    setup rule except the recursive prior-setup rule) with decision time in [H.t0 − lookback, H.t0), so setups inside
+    the current hour never count; outcomes are never used. `prior_setup_played_out_status` = UNKNOWN.
   * CONDITION WINDOW (OQ-40): measured in scheduled-tradable time (ASSUMPTION).
+  * HVCS CONTINUITY (OQ-44, D20-4): ASSUMPTION; gap / indecision counts are diagnostics, never filters.
 
 Causality: decision fields (`DECISION_FIELDS`) use only bars closed at the candidate's `timestamp` (the sweeping 5s bar's
 close); trigger-time fields (`TRIGGER_FIELDS`) use only bars closed at the 5s shift. A 1m bar is used only after its
@@ -52,7 +54,7 @@ from cbr.structure import condition as cond_mod
 from cbr.structure import overextension as oe_mod
 from cbr.structure.indicators import atr
 from cbr.structure.levels import aoi_tap, candle_close_levels, in_rollover, in_sydney_session
-from cbr.structure.shifts import CandleSequence, Type3Arm, hvcs, track_type3
+from cbr.structure.shifts import Type3Arm, hvcs, track_type3
 from cbr.structure.swings import legs, usable, zigzag
 
 H1, M5, M30 = pd.Timedelta(hours=1), pd.Timedelta(minutes=5), pd.Timedelta(minutes=30)
@@ -63,14 +65,16 @@ T30_PASS, T30_CONCERN, T30_NA, T30_UNRESOLVED = "PASS", "QUALITY_CONCERN", "NOT_
 PLAYED_OUT_UNKNOWN = "UNKNOWN"
 # Eligibility blockers still open after D19 (Phase 13 parity-candidate, not a validated baseline)
 BLOCKER_PARITY = "PHASE13_PARITY_NOT_RUN"
-BLOCKER_HVCS_GAP = "HVCS_INDECISION_LIMIT_UNRESOLVED (OQ-44)"
+HVCS_CONTINUOUS, HVCS_BROKEN, HVCS_NONE = "CONTINUOUS", "SIDE_BROKEN", "NO_HVCS"
 
 DECISION_FIELDS = ["signal_id", "hour_open_utc", "timestamp", "direction", "entry_model", "parent_structure_type",
                    "parent_structure_time", "event", "rules_failed", "activation_time", "five_second_shift_level",
                    "five_second_sweep_time", "valid_until", "ext_extreme_at_decision", "condition", "c_med", "n_legs",
                    "cond_direction", "condition_tradable_minutes", "condition_elapsed_clock_minutes",
-                   "condition_missing_minutes", "oe_duration_min", "oe_size", "hvcs_minutes", "hvcs_end_bar",
-                   "hvcs_gap_bars", "q_break_by_q", "q_prev_closed_in_trade_direction", "prior_setup_count",
+                   "condition_missing_minutes", "oe_duration_min", "oe_size", "hvcs_minutes", "hvcs_start_time",
+                   "hvcs_end_time", "hvcs_extension_extreme_time", "bars_between_hvcs_and_shift",
+                   "indecision_bars_between", "continuity_state", "q_break_by_q", "q_prev_closed_in_trade_direction",
+                   "raw_setup_armed", "prior_setup_window_start", "prior_setup_window_end", "prior_setup_count",
                    "m1_hilo_armed_at_decision"]
 TRIGGER_FIELDS = ["signal_id", "five_second_shift_time", "timing30_state", "timing30_push", "timing30_threshold"]
 
@@ -125,22 +129,37 @@ def hilo_arms(bars: pd.DataFrame, s5s: pd.DataFrame, tf: pd.Timedelta, side: str
 
 # ------------------------------------------------------------------ HVCS leading into the shift (OQ-43)
 
-def hvcs_into_shift(closed_1m: pd.DataFrame, end_bar: pd.Timestamp | None, direction: str, *, atr_1m: float,
-                    min_minutes: int, max_violations: int, lvcs_body_atr: float
-                    ) -> tuple[CandleSequence | None, int, bool]:
-    """HVCS that runs directly into the shift (D19-6, OQ-43). `end_bar` is the final displacement bar: the closed 1m bar
-    that set the extension extreme. The sequence is the HVCS run ending there. Closed bars after it are indecision bars;
-    the sequence stays continuous into the shift while none of them breaks the side it respected (DOWN: a high above the
-    end bar's high; UP: a low below its low). No maximum indecision count is imposed: none is sourced (OQ-44).
-    Returns (sequence, indecision bar count, continuous)."""
-    if end_bar is None or end_bar not in closed_1m.index or not atr_1m:
-        return None, 0, False
-    gap = closed_1m[closed_1m.index > end_bar]
-    ref = closed_1m.loc[end_bar]
-    continuous = bool((gap["high"] <= ref["high"]).all()) if direction == "DOWN" else bool((gap["low"] >= ref["low"]).all())
-    seq = hvcs(closed_1m, end_bar, direction, atr_1m=atr_1m, min_minutes=min_minutes, max_violations=max_violations,
+def hvcs_into_shift(bars_1m: pd.DataFrame, end_bar: pd.Timestamp | None, direction: str, as_of: pd.Timestamp, *,
+                    atr_1m: float, min_minutes: int, max_violations: int, lvcs_body_atr: float) -> dict:
+    """HVCS that runs directly into the shift (D19-6; continuity reading ASSUMPTION, OQ-44 / D20-4).
+
+    Only 1m bars closed at `as_of` are read (future-safe). `end_bar` is the final displacement bar: the closed bar that set
+    the extension extreme. The sequence is the HVCS run ending there. Closed bars after it and before `as_of` are the bars
+    between the HVCS and the shift; the sequence stays CONTINUOUS while none of them breaks the side it respected (DOWN:
+    high above the end bar's high; UP: low below its low). No maximum count is imposed; the counts are diagnostics only.
+    Indecision bars = bars between that don't themselves conform to the sequence."""
+    out = {"sequence": None, "hvcs_start_time": None, "hvcs_end_time": end_bar, "bars_between_hvcs_and_shift": None,
+           "indecision_bars_between": None, "continuity_state": HVCS_NONE}
+    closed = bars_1m[bars_1m.index + M1 <= as_of]
+    if end_bar is None or end_bar not in closed.index or not atr_1m:
+        return out
+    seq = hvcs(closed, end_bar, direction, atr_1m=atr_1m, min_minutes=min_minutes, max_violations=max_violations,
                lvcs_body_atr=lvcs_body_atr)
-    return seq, len(gap), continuous
+    between = closed[closed.index > end_bar]
+    ref = closed.loc[end_bar]
+    if direction == "DOWN":
+        broken = bool((between["high"] > ref["high"]).any())
+        prev_h = closed["high"].shift(1).loc[between.index]
+        conform = (between["high"] <= prev_h) & (between["close"] < between["open"])
+    else:
+        broken = bool((between["low"] < ref["low"]).any())
+        prev_l = closed["low"].shift(1).loc[between.index]
+        conform = (between["low"] >= prev_l) & (between["close"] > between["open"])
+    out.update({"sequence": seq,
+                "hvcs_start_time": end_bar - (seq.minutes - 1) * M1 if seq.minutes else None,
+                "bars_between_hvcs_and_shift": len(between), "indecision_bars_between": int((~conform).sum()),
+                "continuity_state": HVCS_BROKEN if broken else HVCS_CONTINUOUS})
+    return out
 
 
 # ------------------------------------------------------------------ engine
@@ -337,15 +356,15 @@ def _evaluate_candidate(h0, h_open, cond, win, hour_rules, oe, a1, q0, a: Type3A
     rules["M1H-OE-04a"] = not oe.two_sided
     rules["M1H-OE-04b"] = a1h is not None and oe.size >= p.oe_min_size_atr * a1h
 
-    closed = ctx.s1m[(ctx.s1m.index + M1 <= as_of) & (ctx.s1m.index >= h0 - M30)]
-    hv_end = oe.extreme_time
-    hv, hv_gap, hv_continuous = hvcs_into_shift(
-        closed, hv_end, oe.direction, atr_1m=a1 or 0.0, min_minutes=p.hvcs_min_minutes,
-        max_violations=p.hvcs_max_violations, lvcs_body_atr=p.hvcs_lvcs_body_atr)
+    recent = ctx.s1m[(ctx.s1m.index >= h0 - M30) & (ctx.s1m.index < as_of)]
+    hvd = hvcs_into_shift(recent, oe.extreme_time, oe.direction, as_of, atr_1m=a1 or 0.0,
+                          min_minutes=p.hvcs_min_minutes, max_violations=p.hvcs_max_violations,
+                          lvcs_body_atr=p.hvcs_lvcs_body_atr)
+    hv, hv_end = hvd["sequence"], hvd["hvcs_end_time"]
     q = prev_15m_break(ctx.s5s, ctx.b15, q0, as_of, d)
     if parent is None:                                             # variant A: HVCS → 5s shift
         parent_type, parent_time, parent_known = PARENT_HVCS, hv_end, (None if hv_end is None else hv_end + M1)
-        rules["M1H-6A-1-HVCS-INTO-SHIFT"] = bool(hv and hv.valid and hv_continuous)
+        rules["M1H-6A-1-HVCS-INTO-SHIFT"] = bool(hv and hv.valid and hvd["continuity_state"] == HVCS_CONTINUOUS)
         rules["M1H-6A-2-PREV-15M-BROKEN-BY-Q"] = bool(q["q_break_by_q"] or q["q_prev_closed_in_trade_direction"])
         rules["M1H-6A-3-NEW-EXTREME-IN-Q"] = oe.extreme_time is not None and oe.extreme_time >= q0
     else:                                                          # variant B: 1m type 3 → pullback → 5s shift
@@ -416,7 +435,9 @@ def _evaluate_candidate(h0, h_open, cond, win, hour_rules, oe, a1, q0, a: Type3A
         "oe_no_pullback": oe.no_pullback, "oe_two_sided": oe.two_sided, "oe_opposite_wick": oe.opposite_wick,
         "oe_prev_candle_break": oe.prev_candle_break, "atr_1m": a1, "atr_1h": a1h,
         "hvcs_minutes": hv.minutes if hv else None, "hvcs_body_atr": hv.body_atr if hv else None,
-        "hvcs_end_bar": hv_end, "hvcs_gap_bars": hv_gap, "hvcs_continuous": hv_continuous,
+        **{k: hvd[k] for k in ("hvcs_start_time", "hvcs_end_time", "bars_between_hvcs_and_shift",
+                               "indecision_bars_between", "continuity_state")},
+        "hvcs_extension_extreme_time": oe.extreme_time,
         "lvcs": bool(hv and hv.low_volume), **q,
         "five_second_sweep_time": a.sweep_time, "five_second_shift_level": trigger, "five_second_shift_time": shift,
         "five_second_swept_price": a.swept_price, "five_second_broken_price": a.broken_price,
@@ -432,16 +453,18 @@ def _evaluate_candidate(h0, h_open, cond, win, hour_rules, oe, a1, q0, a: Type3A
 
 
 def _apply_prior(cand: pd.DataFrame, p: Cbr1hParams) -> None:
-    """M1H-COND-04 (D19-1, OQ-36 C′): ≥ prior.min_count qualifying CBR1H setups FORMED with decision time in
-    [H.t0 − prior.lookback_hours, H.t0). A qualifying setup is a raw setup: every rule except COND-04 passes. Formation
+    """M1H-COND-04 (D19-1, D20-1/2): ≥ prior.min_count setups FORMED with decision time in [H.t0 − prior.lookback_hours,
+    H.t0). Formed = `raw_setup_armed`: every setup rule passes except the recursive prior-setup rule itself (so a setup
+    never needs its own prior history to count). Window end H.t0: setups inside the current hour never count. Formation
     only: no target, stop, touch, structure resolution or fill is read."""
-    cand["raw_setup"] = [all(v is True for k, v in r.items() if k != "M1H-COND-04" and v is not None)
-                         for r in cand["rules"]]
-    raw = cand[cand["raw_setup"]]
+    cand["raw_setup_armed"] = [all(v is True for k, v in r.items() if k != "M1H-COND-04" and v is not None)
+                               for r in cand["rules"]]
+    raw = cand[cand["raw_setup_armed"]]
+    cand["prior_setup_window_start"] = cand["hour_open_utc"] - p.prior_lookback
+    cand["prior_setup_window_end"] = cand["hour_open_utc"]
     counts, latest, failed, events = [], [], [], []
     for _, r in cand.iterrows():
-        h0 = r["hour_open_utc"]
-        prior = raw[(raw["timestamp"] >= h0 - p.prior_lookback) & (raw["timestamp"] < h0)]
+        prior = raw[(raw["timestamp"] >= r["prior_setup_window_start"]) & (raw["timestamp"] < r["prior_setup_window_end"])]
         counts.append(len(prior))
         latest.append(prior["timestamp"].max() if len(prior) else pd.NaT)
         r["rules"]["M1H-COND-04"] = len(prior) >= p.prior_min_count
@@ -456,9 +479,7 @@ def _apply_prior(cand: pd.DataFrame, p: Cbr1hParams) -> None:
     cand["rules_not_evaluated"] = [sorted(k for k, v in rr.items() if v is None) for rr in cand["rules"]]
     cand["event"] = events
     cand["reject_reasons"] = [sorted({TREND_DIRECTION_UNRESOLVED if k == "M1H-COND-03" else k for k in f}) for f in failed]
-    cand["eligibility_blockers"] = [
-        [BLOCKER_PARITY] + ([BLOCKER_HVCS_GAP] if r["parent_structure_type"] == PARENT_HVCS else [])
-        for _, r in cand.iterrows()]
+    cand["eligibility_blockers"] = [[BLOCKER_PARITY] for _ in range(len(cand))]
     cand["baseline_eligible"] = False
     seq = cand.groupby(["hour_open_utc", "direction"]).cumcount()
     cand["signal_id"] = [f"CBR1H_BASELINE_V1/{r['variant']}/{r['hour_open_utc']:%Y%m%dT%H%M}/{r['direction']}/{s}"
@@ -506,7 +527,10 @@ def _signal(r: pd.Series, p: Cbr1hParams, shash: str) -> dict:
                           "oe_duration_min": r["oe_duration_min"], "hvcs_minutes": r["hvcs_minutes"],
                           "prior_setup_exists": bool(r["prior_setup_exists"]),
                           "prior_setup_count": int(r["prior_setup_count"]),
-                          "prior_setup_played_out_status": r["prior_setup_played_out_status"]},
+                          "prior_setup_window_start": _iso(r["prior_setup_window_start"]),
+                          "prior_setup_window_end": _iso(r["prior_setup_window_end"]),
+                          "prior_setup_played_out_status": r["prior_setup_played_out_status"],
+                          "hvcs_continuity_state": r["continuity_state"]},
         "dxy_state": {"availability": "MISSING", "direction_15m": None, "direction_1h": None, "reason_codes": ["NOT_PROVIDED"]},
         "session_state": {"nt_sydney": False, "nt_rollover": False},
         "source_feed": {"feed_id": "dukascopy_ticks:xauusd", "manifest_hash": None},
@@ -529,7 +553,7 @@ def hourly_state(result: Cbr1hResult, as_of: pd.Timestamp) -> list[dict]:
     if not len(c):
         return []
     h0 = (as_of - pd.Timedelta(microseconds=1)).floor("1h")        # the hour containing as_of (a boundary belongs to the ending hour)
-    sel = c[(c["hour_open_utc"] == h0) & (c["timestamp"] <= as_of) & c["raw_setup"]]
+    sel = c[(c["hour_open_utc"] == h0) & (c["timestamp"] <= as_of) & c["raw_setup_armed"]]
     out = []
     for _, r in sel.iterrows():
         shift = r["five_second_shift_time"]

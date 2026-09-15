@@ -76,7 +76,7 @@ models:
     prior:
       min_count:      {value: 1,  label: ASSUMPTION, source: [OQ-05], research_range: [1, 2]}
       lookback_hours: {value: 10, label: ASSUMPTION, source: [OQ-05, OQ-36], research_range: [5, 10],
-                       note: "D19-1: CBR1H's own lookback, [H.t0 - lookback, H.t0); counts setups FORMED, never outcomes"}
+                       note: "D19-1/D20-2: CBR1H's own lookback, [H.t0 - lookback, H.t0); setups FORMED; not optimized"}
     loc:
       range_extreme:  {value: 0.75, label: CANON, source: [E15-015, E1H-002]}
       pro_er_min:     {value: 0.50, label: CANON, source: [E1H-012, E1H-015, E15-015]}
@@ -102,8 +102,8 @@ models:
       tier: LTF
       window_hours:   {value: 2.0, label: ASSUMPTION, source: [OQ-03], research_range: [1.5, 2.0, 2.5],
                        note: "canonical window is 1.5-2.5 h (E15-003, E15-004)"}
-      window_basis:   {value: CLOCK, label: ASSUMPTION, source: [OQ-45], research_range: [CLOCK, TRADABLE],
-                       note: "D19-3 lists the tradable-time change for CBR1H only; CBR15 unchanged pending OQ-45"}
+      window_basis:   {value: TRADABLE, label: ASSUMPTION, source: [OQ-45], research_range: [TRADABLE, CLOCK],
+                       note: "D20-5: same scheduled-closure principle as CBR1H; vendor gaps stay in time; not optimized"}
       min_legs:       {value: 3, label: CANON, source: [E15-048]}
       max_legs:       {value: 6, label: CANON, source: [E15-048]}
       min_leg_index:  {value: 3, label: CANON, source: [E15-050]}

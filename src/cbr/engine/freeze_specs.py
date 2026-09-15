@@ -19,18 +19,24 @@ import yaml
 from cbr.engine.params import ROOT, SPEC_FILES, STRATEGY, spec_hash
 
 OUT_DIR = ROOT / "docs" / "strategy" / "parity-candidates"
-VERSION = "PC1"
+VERSION = "PC2"
+SUPERSEDES = "PC1"                    # kept unchanged for audit (D20-7)
 EVIDENCE_FILES = ["research/evidence/strategy_evidence.jsonl", "docs/decisions/oq36-prior-setup-evidence.md",
                   "docs/decisions/oq39-hourly-entry-evidence.md", "docs/decisions/oq40-42-context-timing-evidence.md",
                   "docs/decisions/oq25-canonical-price-extremes.md"]
 PROTOCOL_FILES = ["src/cbr/engine/parity.py", "docs/governance/phase13-parity-protocol.md"]
-DECISIONS = ["D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "D9", "D16", "D17", "D18", "D19"]
+DECISIONS = ["D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "D9", "D16", "D17", "D18", "D19", "D20"]
+RULING_RECORDS = ["docs/governance/d19-phase13-readiness-ruling.md", "docs/governance/d20-d19-followup-ruling.md"]
 
 MODELS = {
     "CBR15_BASELINE_V1": {
         "spec": "docs/strategy/15min-cbr-machine-spec.md",
-        "unresolved_rules": [
-            {"rule": "M15-COND window basis across closures", "open_question": "OQ-45", "handling": "CLOCK (ASSUMPTION)"},
+        "unresolved_rules": [],
+        "interpretation_assumptions": [
+            {"item": "condition window in tradable-market time", "open_question": "OQ-45", "ruling": "D20-5"},
+            {"item": "setup formed = raw_setup_armed (non-recursive; no fill/outcome)", "open_question": "OQ-36",
+             "ruling": "D19-1, D20-1"},
+            {"item": "M15-LOC-04: Q takes Q−1, no trade-direction exception", "open_question": "OQ-41", "ruling": "D20-3"},
         ],
         "execution_dependent_rules": [
             {"rule": "M15-HTF-01 fill component (hourly setup FILLED)", "state": "HTF_FILL_STATE = NOT_EVALUATED",
@@ -45,14 +51,21 @@ MODELS = {
         "unresolved_rules": [
             {"rule": "M1H-TIME-02 :30 hard veto vs quality downgrade", "open_question": "OQ-42",
              "handling": "timing30_state diagnostic; never rejects"},
-            {"rule": "M1H-6A-1 HVCS indecision-bar limit", "open_question": "OQ-44",
-             "handling": "structural continuity (respected side), no count; eligibility blocker"},
+        ],
+        "interpretation_assumptions": [
+            {"item": "HVCS continuity: respected side held until the shift; no count; counts are diagnostics",
+             "open_question": "OQ-44", "ruling": "D20-4"},
+            {"item": "condition window in tradable-market time", "open_question": "OQ-40", "ruling": "D19-3"},
+            {"item": "setup formed = raw_setup_armed; prior window [H.t0 - 10 h, H.t0) (10 h ASSUMPTION)",
+             "open_question": "OQ-36, OQ-05", "ruling": "D19-1, D20-1, D20-2"},
+            {"item": "Q−1 broken by Q, exception Q−1 closed in trade direction (E1H-023)", "open_question": "OQ-41",
+             "ruling": "D19-4"},
         ],
         "execution_dependent_rules": [
             {"rule": "fills, one fill per hour, final executable stop, target fixed at fill", "class": "EXECUTION_DEPENDENT",
              "resolves_in": "Phase 14A"},
         ],
-        "open_blockers": ["HVCS_INDECISION_LIMIT_UNRESOLVED (OQ-44)", "PHASE13_PARITY_NOT_RUN"],
+        "open_blockers": ["PHASE13_PARITY_NOT_RUN"],
     },
 }
 
@@ -85,11 +98,13 @@ def record(model: str) -> dict:
             params[p["label"]][path] = entry
     return {
         "spec_version": f"{model}-{VERSION}",
+        "supersedes": f"{model}-{SUPERSEDES}",
         "status": "PARITY-CANDIDATE (frozen for the Phase 13 parity run; NOT a validated strategy spec)",
         "frozen_utc": datetime.now(UTC).replace(microsecond=0).isoformat(),
         "machine_spec": m["spec"],
         "variants": cfg["models"][model]["variants"],
         "decisions": DECISIONS,
+        "ruling_records": {f: sha(f) for f in RULING_RECORDS},
         "spec_hash": spec_hash(),
         "spec_files": {f: sha(f) for f in SPEC_FILES},
         "evidence": {f: sha(f) for f in EVIDENCE_FILES},
@@ -98,6 +113,7 @@ def record(model: str) -> dict:
                                       "prior/same, signal_id; ARMED only; per variant; no course input"},
         "parameters": params,
         "unresolved_rules": m["unresolved_rules"],
+        "interpretation_assumptions": m["interpretation_assumptions"],
         "execution_dependent_rules": m["execution_dependent_rules"],
         "open_eligibility_blockers": m["open_blockers"],
         "not_frozen_here": ["config/phase13_tolerances.yaml numeric values (need V-1 calibration, D19-11)"],

@@ -142,7 +142,13 @@ def load_tradingview_csv(path: Path) -> pd.DataFrame:
     raw = pd.read_csv(path)
     raw.columns = [c.strip().lower() for c in raw.columns]
     t = raw["time"]
-    idx = pd.to_datetime(t, unit="s", utc=True) if pd.api.types.is_numeric_dtype(t) else pd.to_datetime(t, utc=True)
+    if pd.api.types.is_numeric_dtype(t):
+        idx = pd.to_datetime(t, unit="s", utc=True)                      # unix seconds are UTC by definition
+    else:
+        parsed = pd.to_datetime(t, format="ISO8601")
+        if getattr(parsed.dt, "tz", None) is None:
+            raise ValueError(f"{path.name}: ISO times without a UTC offset are ambiguous; export with ISO time + offset")
+        idx = parsed.dt.tz_convert("UTC")
     out = raw[["open", "high", "low", "close"]].astype(float)
     out.index = pd.DatetimeIndex(idx, name="ts")
     if not out.index.is_monotonic_increasing or out.index.has_duplicates:

@@ -1,12 +1,14 @@
 # CBR1H_BASELINE_V1: Machine Specification
 
 **Model id:** `CBR1H_BASELINE_V1` · **Primitives:** `CBR_PRIMITIVES_V1` (`cbr-primitives-machine-spec.md`) ·
-**Parameters:** `config/strategy.yaml → models.CBR1H_BASELINE_V1` · **Status:** PARITY-CANDIDATE `PC1` (not a validated strategy spec) · **Date:** 2026-09-14 (price roles D16; D19 rulings 2026-09-15)
+**Parameters:** `config/strategy.yaml → models.CBR1H_BASELINE_V1` · **Status:** PARITY-CANDIDATE `PC2` (not a validated strategy spec) · **Date:** 2026-09-14 (price roles D16; D19, D20 rulings 2026-09-15)
 
 **D19 changes (Phase 13 readiness).** 5-second shift is the canonical entry trigger (OQ-39); setup structure and entry
 trigger are separate; Q−1 must be broken by Q (OQ-41); :30 timing evaluated at the shift, diagnostic only (OQ-42); HVCS
 runs directly into the shift (OQ-43, indecision limit OQ-44); prior-setup EXISTENCE, not outcome (OQ-36); condition
-window in tradable time (OQ-40, ASSUMPTION). Frozen record: `docs/strategy/parity-candidates/CBR1H_BASELINE_V1-PC1.yaml`.
+window in tradable time (OQ-40, ASSUMPTION). **D20:** "formed" = `raw_setup_armed` (non-recursive); prior window ends at
+H.t0; HVCS continuity approved as ASSUMPTION (OQ-44) with diagnostics only. Frozen record:
+`docs/strategy/parity-candidates/CBR1H_BASELINE_V1-PC2.yaml` (PC1 kept for audit).
 
 **Price roles (D16).** All rules in §2-§6 read STRUCTURE (tick-mid) bars; fills and stop/target touches belong to the execution layer (EXECUTION bid/ask bars). The engine never reads bid/ask.
 
@@ -55,7 +57,7 @@ Recorded: condition_elapsed_clock_minutes, condition_tradable_minutes, condition
 | M1H-COND-01 | CBR1H-COND-001/002 | `cond.condition ∈ {RANGE, TRENDING_RANGE}` | CANON |
 | M1H-COND-02 | CBR1H-COND-003/004 | `cond.condition ∈ {TREND, UNDEFINED}` → **BLOCKED(COND_TREND/UNDEFINED)** | CANON |
 | M1H-COND-03 | ASSUMPTION | `TRENDING_RANGE` with `direction == NONE` → BLOCKED(COND_TR_NO_DIR) | ASSUMPTION (OQ-02) |
-| M1H-COND-04 | CBR1H-COND-006 | `prior_setup_count ≥ param.prior.min_count` where `prior_setup_count` = number of qualifying CBR1H setups **FORMED** (raw setups: every rule except M1H-COND-04 passes) with decision time in `[H.t0 − param.prior.lookback_hours, H.t0)`. No target, stop, touch, structure resolution or fill is read. Recorded: `prior_setup_exists`, `prior_setup_count`, `prior_setup_latest_time`, `prior_setup_played_out_status = UNKNOWN` (diagnostic, non-blocking) | CANON rule (existence, D19-1 / OQ-36 C′); count and lookback ASSUMPTION (OQ-05, OQ-36); CBR1H's own semantics, not CBR15's |
+| M1H-COND-04 | CBR1H-COND-006 | `prior_setup_count ≥ param.prior.min_count` where `prior_setup_count` = number of CBR1H setups **FORMED** (`raw_setup_armed`: every setup rule except the recursive M1H-COND-04 passes, D20-1) with decision time in `[H.t0 − param.prior.lookback_hours, H.t0)`; setups inside the current hour never count (D20-2); `prior_setup_window_start/end` recorded. No target, stop, touch, structure resolution or fill is read. Recorded: `prior_setup_exists`, `prior_setup_count`, `prior_setup_latest_time`, `prior_setup_played_out_status = UNKNOWN` (diagnostic, non-blocking) | CANON rule (existence, D19-1 / OQ-36 C′); count and lookback ASSUMPTION (OQ-05, OQ-36); CBR1H's own semantics, not CBR15's |
 
 ## 3. Location (where)
 
@@ -106,7 +108,9 @@ ARM at the 5s sweep close (as_of) when ALL:
   (1) M1H-6A-1-HVCS-INTO-SHIFT: the HVCS runs directly into the shift. End bar = the closed 1m bar that set the extension
       extreme (final displacement bar); hvcs(dir = oe_dir, end = end bar) valid (≥ param.hvcs.min_minutes); every
       closed 1m bar after it up to as_of keeps the respected side (DOWN: high ≤ end-bar high; UP: low ≥ end-bar low).
-      No maximum indecision-bar count (none sourced, OQ-44). `hvcs_gap_bars` recorded; LVCS recorded, not a tier rule
+      No maximum indecision-bar count. Continuity reading ASSUMPTION (OQ-44, D20-4). Diagnostics only, never filters:
+      hvcs_start_time, hvcs_end_time, hvcs_extension_extreme_time, bars_between_hvcs_and_shift,
+      indecision_bars_between, continuity_state. LVCS recorded, not a tier rule
   (2) M1H-6A-2-PREV-15M-BROKEN-BY-Q: Q = 15m candle containing as_of, Q−1 = previous completed 15m candle; Q's own 5s
       bars closed by as_of take Q−1's high (SELL) / low (BUY), OR Q−1 closed in the trade direction (exception,
       E1H-023, V1H-1m_fractal_shift 00:03:23). The hour-wide extreme taking an older level doesn't count
@@ -151,7 +155,8 @@ ORDER: stop at t3.trigger_price
 
 `signal_id, model_id, variant, event, event_time_utc, hour_open_utc, direction, entry_model, parent_structure_type,
 parent_structure_time, five_second_sweep_time, five_second_shift_level, five_second_shift_time, activation_time,
-m1_hilo_armed_at_decision, hvcs_end_bar, hvcs_gap_bars, q_break_by_q, q_prev_closed_in_trade_direction, timing30_state,
+m1_hilo_armed_at_decision, hvcs_start_time, hvcs_end_time, hvcs_extension_extreme_time, bars_between_hvcs_and_shift,
+indecision_bars_between, continuity_state, raw_setup_armed, prior_setup_window_start, prior_setup_window_end, q_break_by_q, q_prev_closed_in_trade_direction, timing30_state,
 prior_setup_exists, prior_setup_count, prior_setup_latest_time, prior_setup_played_out_status,
 condition_elapsed_clock_minutes, condition_tradable_minutes, condition_missing_minutes, oe_origin, early_shift_guard,
 cond.condition, cond.c_med, cond.n_legs, cond.direction, pos_oe_extreme, er_pro, beyond_external,
@@ -166,7 +171,8 @@ Diagnostics exist so Phase 17-18 can test whether they add information. They are
 ## 8. Known simplifications (declared)
 
 1. Model selection by volume (E1H-032) is replaced by running both entry models as separate variants.
-5. Unresolved in PC1 (never silently affecting eligibility): `:30` hard veto (OQ-42); HVCS indecision limit (OQ-44).
+5. Unresolved in PC2 (never silently affecting eligibility): `:30` hard veto (OQ-42). Assumptions: HVCS continuity
+   (OQ-44), tradable-time window (OQ-40), 10 h prior lookback ending at H.t0 (OQ-05/36).
    Execution-dependent: fills, one fill per hour, final stop (Phase 14A).
 2. "Decisive / high volume" (E1H-019, OQ-08) only enters through the `min_size_atr` floor and HVCS structure; its
    richer meaning is diagnostic.

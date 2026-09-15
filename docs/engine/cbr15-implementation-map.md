@@ -87,7 +87,11 @@ OQ-38 resolved (D17-5). **CBR15 is not baseline-eligible** (`docs/governance/g11
 | M15-HTF-01 | `htf(as_of, d)` → `{"signal", "fill"}`; rule = signal state (`htf_signal_state`); `htf_fill_state` recorded, never a rule; blocker `HTF_FILL_STATE_EXECUTION_DEPENDENT` on every candidate | D18-11, D19-15 |
 | M15-TIME-01 at the trigger | `five_second_shift_time`, `trigger_mic`, `trigger_timing_state` (IN_WINDOW / TYPE3_RESOLVED_TOO_EARLY / NO_SHIFT); `TRIGGER_FIELDS` with their own causality test | D19-16 |
 | M15-LOC-04 | unchanged: Q's own extreme vs Q−1 (`q_prev_high/low` recorded); no exception for CBR15 | D19-4 |
-| condition window | CLOCK (unchanged; OQ-45) | ASSUMPTION |
+| condition window | TRADABLE via `common.condition_window` (D20-5); clock/tradable/missing minutes on candles and candidates | ASSUMPTION (OQ-45) |
 
 Eligibility blockers now: `HTF_SIGNAL_STATE_NOT_EVALUATED` (only without the hourly engine), `HTF_FILL_STATE_EXECUTION_DEPENDENT`,
 `PHASE13_PARITY_NOT_RUN`. The OQ-36 blocker is gone (resolved).
+
+**D20:** prior-setup existence uses `raw_setup_armed` (every setup rule except the recursive COND-03; hourly signal state
+not VETO) with `prior_setup_window_start/end` = [Q.t0 − 60 min, Q.t0); `M15-LOC-04` is `q_takes_prev_candle(oe)`, which
+has no Q−1 close input (no CBR1H exception by analogy).

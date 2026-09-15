@@ -1,6 +1,6 @@
 # CBR1H_BASELINE_V1: Implementation Map (Phase 12, updated for D19 / PC1)
 
-**Doc:** CBR-ENG-001H · **Version:** v2.0 (D19) · 2026-09-15 · **Code:** `src/cbr/engine/cbr1h.py` (+ `common.py`, `params.py`)
+**Doc:** CBR-ENG-001H · **Version:** v2.1 (D19, D20) · 2026-09-15 · **Code:** `src/cbr/engine/cbr1h.py` (+ `common.py`, `params.py`)
 · **Spec:** `docs/strategy/1h-cbr-machine-spec.md` + primitives rev 1.2 (D16, D17) · **Params:** `config/strategy.yaml`
 (D8 `oe_origin = HOUR_OPEN`, D9 `early_shift_guard = NONE` baseline; switches for STRICT COURSE parity) · **Price role:** STRUCTURE only
 
@@ -30,7 +30,7 @@ STRUCTURE bars (tick mid) ──require_structure──▶ run_cbr1h(s1m, s5s, s
 | §2 condition | `classify(MTF 5m swings, 8 h, as_of = H.t0, min_legs 3, window_start = condition_window(TRADABLE))` | CANON thresholds; window/min_legs ASSUMPTION OQ-02/03; basis ASSUMPTION D19-3 | clock, tradable and missing minutes recorded |
 | M1H-COND-01 / 02 | RANGE or TR required; TREND / UNDEFINED fail | CANON | hour-level |
 | M1H-COND-03 | TR with direction NONE → `TREND_DIRECTION_UNRESOLVED` | ASSUMPTION; consistent with D17-4 | hour-level `context_reason` |
-| M1H-COND-04 | ≥ 1 raw setup FORMED with decision time in [H.t0 − 10 h, H.t0) (`_apply_prior`) | CANON existence D19-1; count/lookback ASSUMPTION OQ-05/36 | `prior_setup_*` fields; played-out status UNKNOWN |
+| M1H-COND-04 | ≥ 1 setup with `raw_setup_armed` (every setup rule except the recursive COND-04) and decision time in [H.t0 − 10 h, H.t0) (`_apply_prior`) | CANON existence D19-1, D20-1/2; count/lookback ASSUMPTION OQ-05/36 | `prior_setup_window_start/end`, `prior_setup_*`; played-out status UNKNOWN |
 | M1H-LOC-01 | RANGE: `pos(oe_extreme)` ≥ 0.75 SELL / ≤ 0.25 BUY | CANON E15-015, E1H-002 | range from STRUCTURE 1m |
 | M1H-LOC-02 | TR counter: `oe_extreme` beyond last usable MTF swing in OE direction | CANON | |
 | M1H-LOC-03 | TR pro: `er(oe_extreme, last MTF leg in cond.direction) ∈ [0.50, 0.75]` | CANON | |
@@ -41,7 +41,7 @@ STRUCTURE bars (tick mid) ──require_structure──▶ run_cbr1h(s1m, s5s, s
 | M1H-OE-05 | opposite wick, size/ATR recorded | diagnostic | |
 | M1H-TIME-01 | order active in [max(sweep close, :22), :52); a shift before :22 cancels (`S5_SHIFT_BEFORE_WINDOW`) | CANON E1H-024 | |
 | M1H-TIME-02 | `_timing30` at `five_second_shift_time`: `timing30_state` PASS / QUALITY_CONCERN / NOT_APPLICABLE / UNRESOLVED | CANON timing point D19-5; veto semantics unresolved (OQ-42); push ASSUMPTION | diagnostic only, never a rule |
-| 6A (1) | `M1H-6A-1-HVCS-INTO-SHIFT` via `hvcs_into_shift`: HVCS ending at the extension-extreme bar, ≥ 4 min, indecision bars keep the respected side | CANON E1H-034, D19-6; continuity reading OQ-44 | `hvcs_end_bar`, `hvcs_gap_bars`, blocker OQ-44 |
+| 6A (1) | `M1H-6A-1-HVCS-INTO-SHIFT` via `hvcs_into_shift(bars, end, dir, as_of)`: HVCS ending at the extension-extreme bar, ≥ 4 min, bars before the shift keep the respected side; closed bars at as_of only | CANON E1H-034, D19-6; continuity ASSUMPTION (OQ-44, D20-4) | diagnostics `hvcs_start_time`, `hvcs_end_time`, `hvcs_extension_extreme_time`, `bars_between_hvcs_and_shift`, `indecision_bars_between`, `continuity_state` (never filters) |
 | 6A (2) | `M1H-6A-2-PREV-15M-BROKEN-BY-Q` via `common.prev_15m_break` (Q's closed 5s bars vs Q−1; exception Q−1 closed in trade direction) | CANON E1H-017, E1H-023; D19-4 | `q_*` fields |
 | 6A (3) | `oe_extreme_time ≥` open of the 15m candle containing the decision | CANON E1H-003 | |
 | trigger | 5s type 3 sweep in direction d (S5 k, max reversal as CBR15); stop at `t3.trigger_price` | CANON D19-2 (E1H-004, E1H-035) | `five_second_*`, `activation_time`, `m1_hilo_armed_at_decision` |
@@ -83,5 +83,5 @@ off by default (hash-identical).
 
 ## Implementation readings recorded as open questions
 
-Resolved by D19: OQ-36, OQ-39, OQ-40 (ASSUMPTION), OQ-41, OQ-42 timing, OQ-43 principle. Open: OQ-42 hard veto,
-OQ-44 HVCS indecision limit, OQ-45 CBR15 window basis.
+Resolved by D19/D20: OQ-36, OQ-39, OQ-40 (ASSUMPTION), OQ-41, OQ-42 timing, OQ-43 principle, OQ-44 (ASSUMPTION),
+OQ-45 (ASSUMPTION). Open: OQ-42 hard veto (diagnostic only).

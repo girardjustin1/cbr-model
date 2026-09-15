@@ -235,3 +235,64 @@ def test_trigger_time_fields_are_causal_at_the_shift():
         return f[t + pd.Timedelta(seconds=5) <= cut].reset_index(drop=True)
     pd.testing.assert_frame_equal(known(trunc), known(full))
     assert set(full.candidates["trigger_timing_state"]) <= {"IN_WINDOW", cbr15.TYPE3_RESOLVED_TOO_EARLY, "NO_SHIFT"}
+
+
+# ---- D19 follow-up ruling (D20) ----
+
+def test_prior_setup_formed_without_its_own_prior_requirement_cbr15():
+    """D20-8A: raw_setup_armed ignores the setup's own COND-03, so the first setup of a session still counts later."""
+    p = load_cbr15()
+    cand = pd.DataFrame([_cand("2025-10-21 00:00", "2025-10-21 00:09", raw=True),
+                         _cand("2025-10-21 00:30", "2025-10-21 00:40", raw=True)])
+    cbr15._apply_prior_rule(cand, p)
+    first, later = cand.iloc[0], cand.iloc[1]
+    assert first["rules"]["M15-COND-03"] is False and bool(first["raw_setup_armed"]) is True
+    assert later["prior_setup_count"] == 1 and later["rules"]["M15-COND-03"] is True
+    assert later["prior_setup_window_start"] == T("2025-10-20 23:30") and later["prior_setup_window_end"] == T("2025-10-21 00:30")
+
+
+def test_cbr15_q_minus_1_has_no_trade_direction_exception():
+    """D20-3: the CBR1H exception (Q−1 closed in the trade direction) must not leak into CBR15."""
+    import inspect
+
+    from cbr.structure import overextension as oe_mod
+
+    q0 = T("2025-10-21 00:15")
+    rows = [(100.0, 100.4, 99.9, 100.3), (100.3, 100.9, 100.2, 100.8)]
+    b = pd.DataFrame(rows, columns=["open", "high", "low", "close"], index=pd.date_range(q0, periods=2, freq="1min"))
+    oe = oe_mod.evaluate(b, q0, 100.0, q0 + pd.Timedelta(minutes=2), atr_1m=1.0, activation_atr=0.5, pullback_frac=0.5,
+                         two_sided_frac=0.5, prev_candle_high=101.0, prev_candle_low=99.0)
+    # SELL setup (up-extension); Q−1 (high 101.0) closed bearish = in the trade direction; Q never took 101.0
+    assert cbr15.q_takes_prev_candle(oe) is False
+    assert list(inspect.signature(cbr15.q_takes_prev_candle).parameters) == ["oe"]
+    src = inspect.getsource(cbr15)
+    assert "prev_15m_break" not in src and "q_prev_closed_in_trade_direction" not in src
+
+
+def test_cbr15_condition_window_uses_tradable_time_and_keeps_vendor_gaps():
+    """D20-5, D20-8E/F: the daily break doesn't consume the 2 h window; a vendor gap inside open time stays missing."""
+    from cbr.engine.common import condition_window
+
+    p = load_cbr15()
+    assert p.window_basis == "TRADABLE"
+    as_of = T("2025-10-21 22:30")                                         # daily break 21:00-22:00 UTC (17:00 New York, EDT)
+    full = pd.date_range(T("2025-10-21 18:00"), as_of, freq="1min", inclusive="left")
+    w = condition_window(full, as_of, p.window, p.window_basis)
+    assert w["condition_window_start"] == T("2025-10-21 19:30")
+    assert w["condition_tradable_minutes"] == 120 and w["condition_elapsed_clock_minutes"] == 180
+    assert w["condition_missing_minutes"] == 0
+    clock = condition_window(full, as_of, p.window, "CLOCK")
+    assert clock["condition_tradable_minutes"] == 60                      # the 1 h closure would have eaten 60 min
+    gap = full[(full < T("2025-10-21 20:00")) | (full >= T("2025-10-21 20:15"))]        # unexpected 15-min vendor gap
+    wg = condition_window(gap, as_of, p.window, p.window_basis)
+    assert wg["condition_window_start"] == w["condition_window_start"]   # the gap is not treated as a closure
+    assert wg["condition_tradable_minutes"] == 120 and wg["condition_missing_minutes"] == 15
+
+
+def test_cbr15_engine_records_condition_durations():
+    s1, s5 = _fixture()
+    r = cbr15.run_cbr15(s1, s5, start=FIXTURE[2], end=FIXTURE[3])
+    for frame in (r.candles, r.candidates):
+        assert {"condition_elapsed_clock_minutes", "condition_tradable_minutes", "condition_missing_minutes"} <= set(frame)
+    assert (r.candles["condition_tradable_minutes"] == 120).all()
+    assert (r.candidates["prior_setup_window_end"] == r.candidates["candle_open_utc"]).all()

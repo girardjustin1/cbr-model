@@ -1,6 +1,6 @@
 # Phase 13 Parity Protocol (proposal for owner approval)
 
-**Doc:** CBR-PROT-013 · **Version:** v0.2 · **Date:** 2026-09-15 · **Rulings:** D18-7…D18-11, D19-7…D19-14
+**Doc:** CBR-PROT-013 · **Version:** v0.3 · **Date:** 2026-09-15 · **Rulings:** D18-7…D18-11, D19-7…D19-14, D20-6…D20-11
 **Status:** APPROVED IN PRINCIPLE (D19-7): the two views, deterministic selection, mismatch taxonomy and order,
 offset-adjusted tolerance method, independent calibration days and V-1. **Numeric tolerances NOT frozen** (D19-11): they
 are computed from V-1 non-course data (§4.3) and frozen in `config/phase13_tolerances.yaml` **before** the final run,
@@ -155,6 +155,20 @@ TradingView symbol without owner approval (D19-13).
 If TradingView can't export the requested 1m history, V-1 is **not** waived (D19-14): report `DATA_LIMITATION`, propose
 alternative independent FOREXCOM historical sources, and Phase 13 stays blocked until V-1 is completed as specified or
 the owner approves a replacement fidelity test.
+
+### 6.3a Ingestion (D20-10)
+
+`python -m cbr.engine.v1_ingest status` validates what the owner has placed in `data/raw/tradingview/`: presence, SHA-256,
+1-minute spacing, UTC timestamps (unix seconds, or ISO with an offset; naive ISO is rejected), coverage of each required
+window and missing scheduled-open minutes. Screenshots go in `data/raw/tradingview/screenshots/` with `symbol` in the
+file name (symbol info / feed identity: FOREXCOM:XAUUSD) and `timezone` in the file name (chart timezone UTC). States:
+`V1_WAITING_FOR_OWNER_DATA` → `V1_FILES_INVALID` / `V1_WAITING_FOR_DUKASCOPY_CALIBRATION_DAYS` → `V1_READY_FOR_CALIBRATION`.
+Nothing is fabricated, downloaded or substituted.
+
+`python -m cbr.engine.v1_ingest calibrate` reads only the two calibration files and Dukascopy STRUCTURE 1m bars for those
+days and writes `reports/v1-calibration.{json,md}` (n, residual distribution, median and per-day offset, p95, max, proposed
+τ_p, zero-lag check) as PROPOSED. Freezing `config/phase13_tolerances.yaml` is an owner decision; course-window files are
+never compared with engine output before that (D20-11).
 
 ### 6.4 V-1 checks (data fidelity only)
 

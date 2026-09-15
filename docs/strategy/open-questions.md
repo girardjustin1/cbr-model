@@ -491,17 +491,24 @@ recordings, or the Notion journal) · `RESEARCH PARAMETER` (legitimately ambiguo
 - **Problem.** Level 1 allows indecision bars between the last HVCS bar and the shift ("it can be multiple candles",
   VP2-1m_hilo_entries 00:04:49) but gives no maximum.
 - **Handling now.** No number. Continuity is structural: every closed 1m bar after the end bar must keep the respected
-  side (DOWN: high ≤ end bar high; UP: low ≥ end bar low) up to the decision (`hvcs_gap_bars` recorded). This reading is
-  an implementation choice for owner review; CBR1H-A signals carry the blocker `HVCS_INDECISION_LIMIT_UNRESOLVED (OQ-44)`.
+  side (DOWN: high ≤ end bar high; UP: low ≥ end bar low) up to the decision.
+- **Owner ruling D20-4 (2026-09-15): RESOLVED AS ASSUMPTION.** The deterministic continuity reading is approved as an
+  ASSUMPTION (not CANON); no maximum indecision count. Diagnostics recorded, never filters: `hvcs_start_time`,
+  `hvcs_end_time`, `hvcs_extension_extreme_time`, `bars_between_hvcs_and_shift`, `indecision_bars_between`,
+  `continuity_state`. The eligibility blocker is removed. Subject to later sensitivity analysis under research governance.
 - **Constraint.** Never tuned on the course examples.
-- **Status.** `NEEDS USER DECISION` (confirm the structural-continuity reading or supply a sourced limit).
+- **Status.** `RESOLVED AS ASSUMPTION` (D20-4).
 
 ### OQ-45 · CBR15 condition window across closures (D19-3 scope)
 - **Problem.** D19-3 lists the tradable-time window change for CBR1H. The CBR15 2 h window crosses the daily break (1 h)
   and the weekend the same way.
 - **Handling now.** CBR15 `cond.window_basis = CLOCK` (unchanged, ASSUMPTION); the three duration fields are available
   from the shared helper.
-- **Status.** `NEEDS USER DECISION` (apply TRADABLE to CBR15 or keep CLOCK).
+- **Owner ruling D20-5 (2026-09-15): RESOLVED AS ASSUMPTION.** CBR15 uses tradable-market time like CBR1H: scheduled
+  closures don't consume the window; vendor outages and unverifiable gaps stay in time and remain visible in
+  `condition_missing_minutes`. The rule uses `condition_tradable_minutes`. An engineering interpretation of time
+  measurement, not a claim Tom taught closure handling; not optimized.
+- **Status.** `RESOLVED AS ASSUMPTION` (D20-5).
 
 ### OQ-31 · How does the ledger use the hindsight vendor-gap mask? (Phase 10)
 - **Problem.** At a decision time inside a DXY CFD vendor outage, a causal module can't yet tell the outage from thin
@@ -649,6 +656,7 @@ said to hold ~350 trades (P2G-37). The spoken and slide DXY figures disagree.
 | D17 | Phase 11 accepted (PASS WITH CONCERNS, G11: construction, causality, determinism); CBR15 not baseline-eligible. OQ-34 open until Phase 12 (NOT_EVALUATED neither pass nor fail). OQ-35 resolved: stop anchor = most adverse STRUCTURE extension extreme through activation/fill, fields kept separate. OQ-36 interpretation not approved; evidence package required. OQ-37 resolved: TREND_DIRECTION_UNRESOLVED context failure. OQ-38 resolved: TYPE3_RESOLVED_TOO_EARLY, no resurrection. F-3 approved. Phase 12 authorized | OQ-34…OQ-38, G11 |
 | D18 | Phase 12 accepted (PASS WITH CONCERNS, G12); Phase 13 not authorized. Evidence packages required for OQ-36, 39-43; Phase 12 tolerances and "closest to Tom" selection rejected; independent tolerances and deterministic selection to be pre-registered; D8/D9 parity classification with STRICT COURSE and BASELINE-SPEC views; M15-HTF-01 signal vs execution state (`HTF_FILL_STATE = NOT_EVALUATED`); Phase 13 readiness checklist | Phase 13 |
 | D19 | Phase 13 readiness rulings: OQ-36 C′ (prior setup existence, played-out diagnostic); OQ-39 A (5s shift = CBR1H trigger, variants A/B separate); OQ-40 tradable-time window (ASSUMPTION); OQ-41 Q−1 broken by Q (+ trade-direction exception); OQ-42 evaluated at the shift, hard veto unresolved (diagnostic); OQ-43 HVCS into the shift, no indecision count; parity protocol approved in principle (two views, deterministic selection, taxonomy, calibration method); numeric tolerances not frozen; V-1 hard gate; HTF signal/fill split; parity-candidate specs | Phase 13 |
+| D20 | D19 follow-up: D19 implementation accepted; "setup formed" = `raw_setup_armed` (every setup rule except the recursive prior-setup rule; no fill/outcome); CBR1H prior window ends at H.t0 (10 h ASSUMPTION; window fields recorded); CBR15 Q−1 has no trade-direction exception; OQ-44 continuity approved as ASSUMPTION with diagnostics, blocker removed; OQ-45 tradable-market time for CBR15 (ASSUMPTION); HTF split unchanged; PC2 specs (PC1 kept); V-1 ingestion prepared, no course scoring | Phase 13 |
 
 ## Batched questions for the user (historical; answered above)
 

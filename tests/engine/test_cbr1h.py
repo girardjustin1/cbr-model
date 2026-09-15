@@ -190,38 +190,75 @@ def test_previous_15m_candle_broken_by_q_three_cases():
     assert none_yet["q_break_by_q"] is False
 
 
-def test_hvcs_into_shift_requires_the_respected_side_to_hold_after_the_end_bar():
+def test_hvcs_continuity_is_deterministic_future_safe_and_diagnostic_only():
+    """D20-4 (OQ-44 ASSUMPTION): HVCS ends at the extension-extreme bar; bars before the shift must keep the respected side;
+    no count limit; the result depends only on bars closed at as_of."""
     rows = [(10.0, 10.3, 9.9, 10.2), (10.2, 10.5, 10.1, 10.4), (10.4, 10.7, 10.3, 10.6), (10.6, 10.9, 10.5, 10.8),
             (10.8, 11.1, 10.7, 11.0), (11.0, 11.0, 10.8, 10.85), (10.85, 10.95, 10.75, 10.8)]
     m1 = _bars(rows, "2025-10-21 01:00", "1min")
-    end = T("2025-10-21 01:04")
-    seq, gap, cont = cbr1h.hvcs_into_shift(m1, end, "UP", atr_1m=1.0, min_minutes=4, max_violations=1, lvcs_body_atr=0.3)
-    assert seq.minutes == 4 and seq.valid and gap == 2 and cont is True       # indecision bars keep lows ≥ 10.7
+    end, as_of = T("2025-10-21 01:04"), T("2025-10-21 01:07")
+    kw = {"atr_1m": 1.0, "min_minutes": 4, "max_violations": 1, "lvcs_body_atr": 0.3}
+    d = cbr1h.hvcs_into_shift(m1, end, "UP", as_of, **kw)
+    assert d["sequence"].minutes == 4 and d["sequence"].valid
+    assert d["hvcs_start_time"] == T("2025-10-21 01:01") and d["hvcs_end_time"] == end
+    assert d["bars_between_hvcs_and_shift"] == 2 and d["indecision_bars_between"] == 2
+    assert d["continuity_state"] == cbr1h.HVCS_CONTINUOUS
+    assert cbr1h.hvcs_into_shift(m1, end, "UP", as_of, **kw) == d                                  # repeatable
+    future = pd.concat([m1, _bars([(10.8, 10.8, 9.0, 9.1)], "2025-10-21 01:07", "1min")])           # not closed at as_of
+    assert cbr1h.hvcs_into_shift(future, end, "UP", as_of, **kw) == d                              # future-safe
     broken = m1.copy()
-    broken.iloc[6, broken.columns.get_loc("low")] = 10.6                        # an indecision bar breaks the respected low
-    _, _, cont2 = cbr1h.hvcs_into_shift(broken, end, "UP", atr_1m=1.0, min_minutes=4, max_violations=1, lvcs_body_atr=0.3)
-    assert cont2 is False
-    early = cbr1h.hvcs_into_shift(m1, T("2025-10-21 01:01"), "UP", atr_1m=1.0, min_minutes=4, max_violations=1,
-                                  lvcs_body_atr=0.3)
-    assert early[0].valid is False                                              # an earlier, unrelated run isn't the HVCS
+    broken.iloc[6, broken.columns.get_loc("low")] = 10.6                                            # breaks the respected low
+    assert cbr1h.hvcs_into_shift(broken, end, "UP", as_of, **kw)["continuity_state"] == cbr1h.HVCS_BROKEN
+    many = pd.concat([m1.iloc[:5], _bars([(10.9, 11.0, 10.8, 10.85)] * 25, "2025-10-21 01:05", "1min")])
+    long_gap = cbr1h.hvcs_into_shift(many, end, "UP", T("2025-10-21 01:30"), **kw)
+    assert long_gap["bars_between_hvcs_and_shift"] == 25 and long_gap["continuity_state"] == cbr1h.HVCS_CONTINUOUS
+    assert not hasattr(cbr1h, "BLOCKER_HVCS_GAP")                                                   # OQ-44 blocker removed
+
+
+def _prior_cand(h, ts, rules):
+    return {"hour_open_utc": T(h), "timestamp": T(ts), "direction": "SELL", "variant": "A",
+            "parent_structure_type": cbr1h.PARENT_HVCS, "rules": dict(rules)}
 
 
 def test_prior_setups_count_formation_in_own_lookback_never_outcomes():
     p = load_cbr1h("A")
-    def cand(h, ts, ok):
-        return {"hour_open_utc": T(h), "timestamp": T(ts), "direction": "SELL", "variant": "A",
-                "parent_structure_type": cbr1h.PARENT_HVCS, "rules": {"M1H-COND-01": ok}}
-    c = pd.DataFrame([cand("2025-10-20 14:00", "2025-10-20 14:30", True),             # 11 h before: outside 10 h
-                      cand("2025-10-20 20:00", "2025-10-20 20:30", True),
-                      cand("2025-10-20 22:00", "2025-10-20 22:40", False),
-                      cand("2025-10-21 01:00", "2025-10-21 01:25", True),             # same hour: not "prior"
-                      cand("2025-10-21 01:00", "2025-10-21 01:40", True)])
+    ok, bad = {"M1H-COND-01": True}, {"M1H-COND-01": False}
+    c = pd.DataFrame([_prior_cand("2025-10-20 14:00", "2025-10-20 14:30", ok),        # 11 h before: outside 10 h
+                      _prior_cand("2025-10-20 20:00", "2025-10-20 20:30", ok),
+                      _prior_cand("2025-10-20 22:00", "2025-10-20 22:40", bad),
+                      _prior_cand("2025-10-21 01:00", "2025-10-21 01:40", ok)])
     cbr1h._apply_prior(c, p)
     last = c.iloc[-1]
     assert last["prior_setup_count"] == 1 and last["prior_setup_latest_time"] == T("2025-10-20 20:30")
+    assert last["prior_setup_window_start"] == T("2025-10-20 15:00") and last["prior_setup_window_end"] == T("2025-10-21 01:00")
     assert last["rules"]["M1H-COND-04"] is True and last["prior_setup_played_out_status"] == "UNKNOWN"
-    assert c.iloc[0]["rules"]["M1H-COND-04"] is False
-    assert c["eligibility_blockers"].map(lambda b: cbr1h.BLOCKER_HVCS_GAP in b).all()
+    assert list(c["raw_setup_armed"]) == [True, True, False, True]
+    assert c["eligibility_blockers"].map(lambda b: b == [cbr1h.BLOCKER_PARITY]).all()
+
+
+def test_prior_setup_formed_without_its_own_prior_requirement_cbr1h():
+    """D20-8A: a setup whose only failing rule is its own prior-setup rule still counts as formed for later hours."""
+    p = load_cbr1h("A")
+    c = pd.DataFrame([_prior_cand("2025-10-21 01:00", "2025-10-21 01:30", {"M1H-COND-01": True}),   # no history at all
+                      _prior_cand("2025-10-21 03:00", "2025-10-21 03:30", {"M1H-COND-01": True})])
+    cbr1h._apply_prior(c, p)
+    first, later = c.iloc[0], c.iloc[1]
+    assert first["rules"]["M1H-COND-04"] is False and first["event"] == "REJECTED"
+    assert bool(first["raw_setup_armed"]) is True
+    assert later["prior_setup_count"] == 1 and later["rules"]["M1H-COND-04"] is True
+
+
+def test_current_hour_setups_never_satisfy_that_hours_prior_requirement():
+    """D20-8B: window end is H.t0; a setup formed at H.t0 or later in H doesn't count for H."""
+    p = load_cbr1h("A")
+    ok = {"M1H-COND-01": True}
+    c = pd.DataFrame([_prior_cand("2025-10-21 01:00", "2025-10-21 01:00:05", ok),
+                      _prior_cand("2025-10-21 01:00", "2025-10-21 01:25", ok),
+                      _prior_cand("2025-10-21 01:00", "2025-10-21 01:40", ok),
+                      _prior_cand("2025-10-21 02:00", "2025-10-21 02:10", ok)])
+    cbr1h._apply_prior(c, p)
+    assert list(c["prior_setup_count"]) == [0, 0, 0, 3]
+    assert c.iloc[:3]["rules"].map(lambda r: r["M1H-COND-04"] is False).all()
 
 
 def test_condition_window_uses_tradable_time_across_the_weekend():

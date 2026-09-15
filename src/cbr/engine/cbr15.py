@@ -42,6 +42,7 @@ from cbr.engine.common import (
     _er,
     _minutes_complete,
     anchor_at,  # noqa: F401  (re-exported for execution-layer and test use)
+    condition_window,
 )
 from cbr.engine.params import Cbr15Params, load_cbr15, spec_hash
 from cbr.structure import condition as cond_mod
@@ -68,7 +69,9 @@ DECISION_FIELDS = ["signal_id", "candle_open_utc", "timestamp", "direction", "ev
                    "entry_trigger_time", "entry_reference_price", "target_price", "stop_extension_extreme",
                    "stop_buffer_price", "extension_high", "extension_low", "range_high", "range_low", "condition",
                    "c_med", "n_legs", "cond_direction", "oe_duration_min", "oe_size", "prior_setup_count",
-                   "htf_signal_state", "sweep_bar_extreme", "sweep_beyond_oe_extreme", "q_prev_high", "q_prev_low"]
+                   "htf_signal_state", "sweep_bar_extreme", "sweep_beyond_oe_extreme", "q_prev_high", "q_prev_low",
+                   "raw_setup_armed", "prior_setup_window_start", "prior_setup_window_end",
+                   "condition_elapsed_clock_minutes", "condition_tradable_minutes", "condition_missing_minutes"]
 # Trigger-time fields: determined by data known at the 5s shift (lifecycle, compared at that time)
 TRIGGER_FIELDS = ["signal_id", "five_second_shift_time", "trigger_mic", "trigger_timing_state", "htf_fill_state"]
 
@@ -135,14 +138,23 @@ def run_cbr15(s1m: pd.DataFrame, s5s: pd.DataFrame, *, start: pd.Timestamp, end:
     return Cbr15Result(cand, candles, signals, shash)
 
 
+def q_takes_prev_candle(oe) -> bool:
+    """M15-LOC-04 (D19-4, D20-3): Q's own extension extreme takes Q−1's high (up-extension) / low (down-extension). No
+    trade-direction exception: the CBR1H exception (E1H-023) is not transferred to CBR15 without CBR15 evidence. How Q−1
+    closed is deliberately not an input."""
+    return bool(oe.prev_candle_break)
+
+
 def _evaluate_candle(q0, s1m, s5s, atr1m, sw_ltf, b15, atr15, levels, arms, p: Cbr15Params, htf):
     q_end = q0 + M15
     q_bar = s1m.loc[q0] if q0 in s1m.index else None
     q_open = float(q_bar["open"]) if q_bar is not None else None
     prev = b15.loc[q0 - M15] if (q0 - M15) in b15.index else None
     prev_complete, prev_missing = _minutes_complete(s1m.index, q0 - M15, q0)
+    win = condition_window(s1m.index, q0, p.window, p.window_basis)             # OQ-45 (D20-5): TRADABLE, ASSUMPTION
     cond = cond_mod.classify(sw_ltf, s1m, q0, p.window, min_legs=p.min_legs, range_min=p.range_min,
-                             trend_max=p.trend_max, correction_cap=p.correction_cap, aggregate=p.aggregate)
+                             trend_max=p.trend_max, correction_cap=p.correction_cap, aggregate=p.aggregate,
+                             window_start=win["condition_window_start"])
     candle_rules = {
         "M15-COND-01": cond.condition in (cond_mod.RANGE, cond_mod.TRENDING_RANGE),
         "M15-COND-02": p.min_legs <= cond.n_legs <= p.max_legs,
@@ -158,7 +170,7 @@ def _evaluate_candle(q0, s1m, s5s, atr1m, sw_ltf, b15, atr15, levels, arms, p: C
     context_reason = None if candle_rules["M15-COND-TR-DIRECTION"] else TREND_DIRECTION_UNRESOLVED
     crow = {"candle_open_utc": q0, "condition": cond.condition, "c_med": cond.c_med, "n_legs": cond.n_legs,
             "cond_direction": cond.direction, "range_high": cond.range_high, "range_low": cond.range_low,
-            "q_open": q_open, "prev_missing_minutes": prev_missing, "cond_02_reason": cond_reason,
+            "q_open": q_open, "prev_missing_minutes": prev_missing, "cond_02_reason": cond_reason, **win,
             "context_reason": context_reason,
             "candidates": 0, "rules_failed": [k for k, v in candle_rules.items() if not v]}
     rows = []
@@ -181,6 +193,8 @@ def _evaluate_candle(q0, s1m, s5s, atr1m, sw_ltf, b15, atr15, levels, arms, p: C
                                   sw_ltf, atr15, levels, p, htf)
         row["q_prev_high"] = None if prev is None else float(prev["high"])     # Q−1 (OQ-41), broken by Q's own extreme
         row["q_prev_low"] = None if prev is None else float(prev["low"])
+        row.update({k: win[k] for k in ("condition_window_basis", "condition_elapsed_clock_minutes",
+                                        "condition_tradable_minutes", "condition_missing_minutes")})
         rows.append(row)
     return crow, rows
 
@@ -215,7 +229,7 @@ def _evaluate_candidate(q0, q_end, q_open, cond, candle_rules, oe, a: Type3Arm, 
             lg = lg[lg["dir"] == want]
             er_pro = _er(oe.extreme, lg.iloc[-1]) if len(lg) else None
             rules["M15-LOC-03"] = er_pro is not None and p.pro_er_min <= er_pro <= p.pro_er_max
-    rules["M15-LOC-04"] = bool(oe.prev_candle_break)   # OQ-41 (D19-4): Q's own extreme takes Q−1; no exception sourced for CBR15
+    rules["M15-LOC-04"] = q_takes_prev_candle(oe)
     assert (oe.extreme > q_open) if d == "SELL" else (oe.extreme < q_open), "M15-LOC-05 invariant"
     if p.aoi_required:
         rules["M15-LOC-06"] = aoi_tap(levels, oe.extreme, q0, zone=p.aoi_zone_atr * (a1 or 0.0), lookback=p.aoi_lookback)
@@ -295,11 +309,15 @@ def _evaluate_candidate(q0, q_end, q_open, cond, candle_rules, oe, a: Type3Arm, 
 
 
 def _apply_prior_rule(cand: pd.DataFrame, p: Cbr15Params) -> None:
-    """M15-COND-03 (D19-1): ≥ prior.hard_min_count qualifying setups FORMED with decision time in [Q.t0 − 60 min, Q.t0);
-    the 120-min count is recorded ("3+ = good", not blocking). Formation only: outcomes are never read."""
-    cand["raw_setup"] = [all(v is True for k, v in r.items() if k not in ("M15-COND-03", "M15-HTF-01"))
-                         and r.get("M15-HTF-01") is not False for r in cand["rules"]]
-    raw = cand[cand["raw_setup"]]
+    """M15-COND-03 (D19-1, D20-1): ≥ prior.hard_min_count setups FORMED with decision time in [Q.t0 − 60 min, Q.t0);
+    the 120-min count is recorded ("3+ = good", not blocking). Formed = `raw_setup_armed`: every setup rule passes except
+    the recursive prior-setup rule itself (the hourly signal state must not be VETO; NOT_EVALUATED doesn't fail).
+    Formation only: fills, targets, stops and outcomes are never read."""
+    cand["raw_setup_armed"] = [all(v is True for k, v in r.items() if k not in ("M15-COND-03", "M15-HTF-01"))
+                               and r.get("M15-HTF-01") is not False for r in cand["rules"]]
+    raw = cand[cand["raw_setup_armed"]]
+    cand["prior_setup_window_start"] = cand["candle_open_utc"] - p.prior_hard_lookback
+    cand["prior_setup_window_end"] = cand["candle_open_utc"]
     hard, soft, latest, events, failed = [], [], [], [], []
     for _, r in cand.iterrows():
         q0 = r["candle_open_utc"]
@@ -372,6 +390,12 @@ def _signal(r: pd.Series, p: Cbr15Params, shash: str, dxy: pd.DataFrame | None) 
                           "prior_setup_exists": bool(r["prior_setup_exists"]),
                           "prior_setup_count": int(r["prior_setup_count"]),
                           "prior_setup_count_120m": int(r["prior_setup_count_120m"]),
+                          "prior_setup_window_start": r["prior_setup_window_start"].isoformat(),
+                          "prior_setup_window_end": r["prior_setup_window_end"].isoformat(),
+                          "condition_window_basis": r["condition_window_basis"],
+                          "condition_tradable_minutes": int(r["condition_tradable_minutes"]),
+                          "condition_elapsed_clock_minutes": int(r["condition_elapsed_clock_minutes"]),
+                          "condition_missing_minutes": int(r["condition_missing_minutes"]),
                           "prior_setup_played_out_status": r["prior_setup_played_out_status"],
                           "htf_signal_state": r["htf_signal_state"], "htf_fill_state": r["htf_fill_state"]},
         "dxy_state": dxy_state,
