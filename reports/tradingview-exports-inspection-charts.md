@@ -1,6 +1,6 @@
 # TradingView Exports: Inspection and V-1 Coverage
 
-Generated 2026-09-15T12:51:54+00:00 by `python -m cbr.engine.v1_ingest inspect references/charts --report`. File and metadata inspection only: no prices reproduced, no engine output, no comparison with course examples.
+Generated 2026-09-15T13:08:25+00:00 by `python -m cbr.engine.v1_ingest inspect references/charts --report`. File and metadata inspection only: no prices reproduced, no engine output, no comparison with course examples.
 
 **V-1 state: `V1_SYMBOL_MISMATCH`** · usable as V-1: none
 

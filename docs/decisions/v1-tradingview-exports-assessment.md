@@ -2,8 +2,8 @@
 
 **Doc:** CBR-V1-ASSESS-001 · **Date:** 2026-09-15 · **Ruling:** D22 (D21 follow-up) · **Status:** FOR OWNER DECISION
 File and metadata inspection only. No prices reproduced, no engine output, no comparison with course examples, no
-calibration run. Generated matrices: `reports/tradingview-exports-inspection.{md,json}`
-(`python -m cbr.engine.v1_ingest inspect references/charts --report`).
+calibration run. Generated matrices: `reports/tradingview-exports-inspection-charts.{md,json}`
+(`python -m cbr.engine.v1_ingest inspect references/charts --report`). **Update D23:** `references/tom-chart-data` holds FOREXCOM:XAUUSD exports; see `docs/decisions/v1-tom-chart-data-assessment.md`.
 
 ## 1. Files found
 

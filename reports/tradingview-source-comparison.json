@@ -1,0 +1,186 @@
+{
+  "decision": "D23",
+  "note": "V-1 course and calibration windows excluded; source-identity evidence only",
+  "comparisons": [
+    {
+      "a": "TVC_DXY, 1.csv",
+      "b": "TVC_DXY, 1.csv",
+      "overlap_bars": 6222,
+      "first": "2026-09-08 20:31:00+00:00",
+      "last": "2026-09-15 11:55:00+00:00",
+      "identical_fraction": {
+        "open": 1.0,
+        "high": 0.9998392799742848,
+        "low": 1.0,
+        "close": 0.9998392799742848
+      },
+      "close_abs_diff_median": 0.0,
+      "close_abs_diff_max": 0.000999999999990564
+    },
+    {
+      "a": "TVC_DXY, 5.csv",
+      "b": "TVC_DXY, 5.csv",
+      "overlap_bars": 6275,
+      "first": "2026-08-13 06:05:00+00:00",
+      "last": "2026-09-15 11:55:00+00:00",
+      "identical_fraction": {
+        "open": 1.0,
+        "high": 0.9998406374501992,
+        "low": 1.0,
+        "close": 0.9998406374501992
+      },
+      "close_abs_diff_median": 0.0,
+      "close_abs_diff_max": 0.0030000000000001137
+    },
+    {
+      "a": "TVC_DXY, 15.csv",
+      "b": "TVC_DXY, 15.csv",
+      "overlap_bars": 6283,
+      "first": "2026-06-10 05:45:00+00:00",
+      "last": "2026-09-15 11:45:00+00:00",
+      "identical_fraction": {
+        "open": 1.0,
+        "high": 0.999840840362884,
+        "low": 1.0,
+        "close": 0.999840840362884
+      },
+      "close_abs_diff_median": 0.0,
+      "close_abs_diff_max": 0.0020000000000095497
+    },
+    {
+      "a": "TVC_DXY, 60.csv",
+      "b": "TVC_DXY, 60.csv",
+      "overlap_bars": 6188,
+      "first": "2025-09-08 17:00:00+00:00",
+      "last": "2026-09-15 11:00:00+00:00",
+      "identical_fraction": {
+        "open": 1.0,
+        "high": 1.0,
+        "low": 1.0,
+        "close": 0.9998383968972204
+      },
+      "close_abs_diff_median": 0.0,
+      "close_abs_diff_max": 0.0030000000000001137
+    },
+    {
+      "a": "TVC_DXY, 240.csv",
+      "b": "TVC_DXY, 240.csv",
+      "overlap_bars": 6252,
+      "first": "2022-10-13 03:00:00+00:00",
+      "last": "2026-09-15 11:00:00+00:00",
+      "identical_fraction": {
+        "open": 1.0,
+        "high": 0.9998400511836213,
+        "low": 0.9998400511836213,
+        "close": 0.9998400511836213
+      },
+      "close_abs_diff_median": 0.0,
+      "close_abs_diff_max": 0.03499999999999659
+    },
+    {
+      "a": "TVC_DXY, 1D.csv",
+      "b": "TVC_DXY, 1D.csv",
+      "overlap_bars": 6262,
+      "first": "2001-11-30 00:00:00+00:00",
+      "last": "2026-09-14 23:00:00+00:00",
+      "identical_fraction": {
+        "open": 1.0,
+        "high": 1.0,
+        "low": 1.0,
+        "close": 0.9998403066113063
+      },
+      "close_abs_diff_median": 0.0,
+      "close_abs_diff_max": 0.025000000000005684
+    },
+    {
+      "a": "FOREXCOM_XAUUSD, 1.csv",
+      "b": "FX_XAUUSD, 1.csv",
+      "overlap_bars": 6195,
+      "first": "2026-09-09 00:20:00+00:00",
+      "last": "2026-09-15 11:54:00+00:00",
+      "identical_fraction": {
+        "open": 0.00258272800645682,
+        "high": 0.0022598870056497176,
+        "low": 0.0022598870056497176,
+        "close": 0.00258272800645682
+      },
+      "close_abs_diff_median": 0.1500000000005457,
+      "close_abs_diff_max": 1.5599999999994907
+    },
+    {
+      "a": "FOREXCOM_XAUUSD, 5.csv",
+      "b": "FX_XAUUSD, 5.csv",
+      "overlap_bars": 6251,
+      "first": "2026-08-13 16:15:00+00:00",
+      "last": "2026-09-15 11:50:00+00:00",
+      "identical_fraction": {
+        "open": 0.003199488081906895,
+        "high": 0.008638617821148616,
+        "low": 0.0012797952327627579,
+        "close": 0.003199488081906895
+      },
+      "close_abs_diff_median": 0.15499999999974534,
+      "close_abs_diff_max": 2.194999999999709
+    },
+    {
+      "a": "FOREXCOM_XAUUSD, 15.csv",
+      "b": "FX_XAUUSD, 15.csv",
+      "overlap_bars": 6259,
+      "first": "2026-06-10 19:45:00+00:00",
+      "last": "2026-09-15 11:45:00+00:00",
+      "identical_fraction": {
+        "open": 0.0033551685572775205,
+        "high": 0.009426425946636842,
+        "low": 0.0015976993129892955,
+        "close": 0.0033551685572775205
+      },
+      "close_abs_diff_median": 0.15500000000065484,
+      "close_abs_diff_max": 4.894999999999982
+    },
+    {
+      "a": "FOREXCOM_XAUUSD, 60.csv",
+      "b": "FX_XAUUSD, 60.csv",
+      "overlap_bars": 6179,
+      "first": "2025-08-22 11:00:00+00:00",
+      "last": "2026-09-15 11:00:00+00:00",
+      "identical_fraction": {
+        "open": 0.004045962129794465,
+        "high": 0.007606408804013595,
+        "low": 0.0009710309111506716,
+        "close": 0.004045962129794465
+      },
+      "close_abs_diff_median": 0.18500000000040018,
+      "close_abs_diff_max": 33.9399999999996
+    },
+    {
+      "a": "FOREXCOM_XAUUSD, 240.csv",
+      "b": "FX_XAUUSD, 240.csv",
+      "overlap_bars": 6251,
+      "first": "2022-08-23 02:00:00+00:00",
+      "last": "2026-09-15 10:00:00+00:00",
+      "identical_fraction": {
+        "open": 0.003199488081906895,
+        "high": 0.0035194368900975845,
+        "low": 0.00031994880819068947,
+        "close": 0.003199488081906895
+      },
+      "close_abs_diff_median": 0.1799999999998363,
+      "close_abs_diff_max": 33.9399999999996
+    },
+    {
+      "a": "FOREXCOM_XAUUSD, 1D.csv",
+      "b": "FX_XAUUSD, 1D.csv",
+      "overlap_bars": 6252,
+      "first": "2002-06-18 22:00:00+00:00",
+      "last": "2026-09-14 22:00:00+00:00",
+      "identical_fraction": {
+        "open": 0.004158669225847729,
+        "high": 0.013275751759436981,
+        "low": 0.010396673064619322,
+        "close": 0.005438259756877799
+      },
+      "close_abs_diff_median": 0.35999999999989996,
+      "close_abs_diff_max": 109.96000000000004
+    }
+  ]
+}

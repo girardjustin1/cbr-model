@@ -173,9 +173,46 @@ def test_inspection_report_has_gold_and_dxy_matrices(tmp_path, v1dir, monkeypatc
     src.mkdir()
     _write(src / "FX_XAUUSD, 1.csv", "2026-09-08 08:15", "2026-09-09 00:00")
     _write(src / "TVC_DXY, 60.csv", "2025-09-08 00:00", "2025-11-20 00:00", freq="1h")
-    monkeypatch.setattr(v1_ingest, "INSPECTION_JSON", tmp_path / "i.json")
-    monkeypatch.setattr(v1_ingest, "INSPECTION_MD", tmp_path / "i.md")
+    monkeypatch.setattr(v1_ingest, "REPORTS_DIR", tmp_path)
     v1_ingest.write_inspection_report(src)
-    md = (tmp_path / "i.md").read_text()
+    md = (tmp_path / "tradingview-exports-inspection-exp.md").read_text()
     assert "## Gold (XAUUSD)" in md and "## DXY (informational)" in md and "V1_SYMBOL_MISMATCH" in md
     assert "ONE_MINUTE_HISTORY_INSUFFICIENT" in md and "CAL 10/22" in md
+
+
+def test_identity_purpose_comparison_and_source_manifest(tmp_path, v1dir, monkeypatch):
+    tom, owner = tmp_path / "tom", tmp_path / "owner"
+    tom.mkdir()
+    owner.mkdir()
+    _write(tom / "FOREXCOM_XAUUSD, 1.csv", "2026-09-09 00:20", "2026-09-15 13:00")           # right symbol, short 1m
+    _write(tom / "FOREXCOM_XAUUSD, 60.csv", "2025-08-22 00:00", "2025-11-20 00:00", freq="1h")
+    _write(tom / "TVC_DXY, 1.csv", "2026-09-09 00:00", "2026-09-10 00:00")
+    _write(owner / "TVC_DXY, 1.csv", "2026-09-09 00:00", "2026-09-10 00:00")
+    _write(owner / "FX_XAUUSD, 1.csv", "2026-09-09 00:00", "2026-09-10 00:00")
+    info = {r["file"]: r for r in v1_ingest.inspect_exports(tom)["exports"]}
+    assert v1_ingest.identity_class(info["FOREXCOM_XAUUSD, 1.csv"], False) == "PROBABLE_FOREXCOM"
+    assert v1_ingest.identity_class(info["FOREXCOM_XAUUSD, 1.csv"], True) == "CONFIRMED_FOREXCOM"
+    assert v1_ingest.identity_class(info["TVC_DXY, 1.csv"], False) == "PROBABLE_TVC_DXY"
+    assert v1_ingest.purposes(info["FOREXCOM_XAUUSD, 1.csv"]) == ["INSUFFICIENT_COVERAGE", "MULTITIMEFRAME_REFERENCE"]
+    assert v1_ingest.purposes(info["FOREXCOM_XAUUSD, 60.csv"]) == ["MULTITIMEFRAME_REFERENCE"]
+    assert "TRADINGVIEW_REFERENCE_FIXTURE; TRADINGVIEW_REFERENCE_FIXTURE" not in info["FOREXCOM_XAUUSD, 60.csv"]["classification"]
+    same = v1_ingest.compare_exports(tom / "TVC_DXY, 1.csv", owner / "TVC_DXY, 1.csv")
+    assert same["overlap_bars"] == 1440 and same["identical_fraction"]["close"] == 1.0
+    fx = next(r for r in v1_ingest.inspect_exports(owner)["exports"] if r["file"] == "FX_XAUUSD, 1.csv")
+    assert v1_ingest.identity_class(fx, False) == "DIFFERENT_SOURCE" and v1_ingest.purposes(fx) == ["REFERENCE_ONLY"]
+    monkeypatch.setattr(v1_ingest, "SOURCE_MANIFEST", tmp_path / "m.json")
+    before = (tom / "FOREXCOM_XAUUSD, 1.csv").read_bytes()
+    m = v1_ingest.build_source_manifest({"A": tom, "B": owner})
+    assert len(m["records"]) == 5 and (tom / "FOREXCOM_XAUUSD, 1.csv").read_bytes() == before
+    rec = next(r for r in m["records"] if r["filename"] == "FOREXCOM_XAUUSD, 1.csv")
+    assert {"source_path", "sha256", "symbol", "provider", "timeframe", "start", "end", "timezone", "row_count",
+            "classification", "purpose", "identity", "derived_slices"} <= set(rec)
+
+
+def test_compare_exports_excludes_v1_windows_by_default(tmp_path):
+    a, b = tmp_path / "A_X, 60.csv", tmp_path / "B_X, 60.csv"
+    _write(a, "2025-10-20 00:00", "2025-10-26 00:00", freq="1h")
+    _write(b, "2025-10-20 00:00", "2025-10-26 00:00", freq="1h")
+    out = v1_ingest.compare_exports(a, b)
+    assert out["overlap_bars"] == 144 - 12 - 24 - 12            # CX-LT1-1 12 h, CAL 10/22 24 h, CX-TE1-1 12 h excluded
+    assert v1_ingest.compare_exports(a, b, exclude_windows=False)["overlap_bars"] == 144

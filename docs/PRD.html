@@ -248,6 +248,7 @@ footer{border-top:1px solid var(--rule);padding-top:18px;font-size:.84rem;color:
           <tr><td class="id">D20</td><td>D19 follow-up</td><td>Setup formed means armed without its own prior-setup rule; hourly prior window ends at the hour open; no 15m Q−1 exception; HVCS continuity and the 15m tradable-time window adopted as assumptions; PC2 specs frozen (PC1 kept); V-1 ingestion ready; supplied charts are FX:XAUUSD with 1m history from 2026-09-08 only, so V-1 is still missing</td></tr>
           <tr><td class="id">D21</td><td>V-1 preparation only</td><td>Dukascopy ticks for 2025-11-11 fetched and validated; both calibration days pass integrity, rebuild and hash checks; FOREXCOM exports and screenshots still needed; calibration values will be proposed, never frozen automatically</td></tr>
           <tr><td class="id">D22</td><td>TradingView exports inspected</td><td>Calibration tool completed; supplied gold exports are FX:XAUUSD, not FOREXCOM, and their 1-minute history starts 2026-09-08, so V-1 state is symbol mismatch; hourly and daily files kept as reference fixtures; TVC:DXY matches the DXY feed on Tom’s charts; options A/B/C await the owner</td></tr>
+          <tr><td class="id">D23</td><td>Tom chart data inspected</td><td>FOREXCOM:XAUUSD and TVC:DXY exports at 1-minute to daily; the right gold feed is now present, but 1-minute history starts 2026-09-09, so none of the five V-1 windows is covered at 1 minute; hourly bars cover all five; no DXY 1-minute overlap with stored Dukascopy data</td></tr>
         </tbody>
       </table></div>
     </section>
@@ -456,7 +457,7 @@ footer{border-top:1px solid var(--rule);padding-top:18px;font-size:.84rem;color:
         <li><strong>OQ-25 resolved (D16).</strong> Tick mid is the STRUCTURE price and tick bid/ask the EXECUTION price, with access guards.</li>
         <li><strong>Phase 11 accepted (D17, G11).</strong> CBR15 is not fully baseline-eligible while the hourly veto's fill component is execution-dependent.</li>
         <li><strong>Phase 12 accepted (D18, G12).</strong> Its parity tolerances and candidate selection were rejected and aren't evidence.</li>
-        <li><strong>D22: V-1 symbol mismatch; Phase 13 not ready.</strong> The Dukascopy side is ready for both calibration days. The supplied TradingView gold exports are FX:XAUUSD (not FOREXCOM:XAUUSD) and their 1-minute history starts 2026-09-08, 301–322 days after the V-1 windows. Shortest path without changing the protocol: FOREXCOM:XAUUSD 1-minute exports for the five windows. 502 tests pass.</li>
+        <li><strong>D23: right feed, not enough 1-minute history; Phase 13 not ready.</strong> The Tom chart-data exports are FOREXCOM:XAUUSD (probable, pending a symbol screenshot) and TVC:DXY. Their 1-minute gold history starts 2026-09-09, 302–323 days after the V-1 windows; hourly bars cover all five windows. The Dukascopy side is ready. 504 tests pass.</li>
         <li><strong>Blocked:</strong> Trader.dev MCP returns 502 on every path. Commits are local only, not pushed.</li>
       </ul>
     </section>

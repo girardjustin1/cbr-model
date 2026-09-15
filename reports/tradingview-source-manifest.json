@@ -1,0 +1,719 @@
+{
+  "generated_utc": "2026-09-15T13:08:26+00:00",
+  "decision": "D23",
+  "families": {
+    "A_TOM_CHART_DATA": "/Users/girardjustin/Documents/trade/cbr-model/references/tom-chart-data",
+    "B_OWNER_TRADINGVIEW_REFERENCE": "/Users/girardjustin/Documents/trade/cbr-model/references/charts"
+  },
+  "records": [
+    {
+      "family": "A_TOM_CHART_DATA",
+      "source_path": "references/tom-chart-data/FOREXCOM_XAUUSD, 1.csv",
+      "filename": "FOREXCOM_XAUUSD, 1.csv",
+      "sha256": "5fb0a1b5d1ca717e2c03989eae6a138bfd2ede9494c82b106a4576abfd945e28",
+      "symbol": "FOREXCOM:XAUUSD",
+      "provider": "FOREXCOM",
+      "instrument": "GOLD",
+      "timeframe": "1",
+      "start": "2026-09-09 00:20:00+00:00",
+      "end": "2026-09-15 13:01:00+00:00",
+      "timezone": "UTC",
+      "timestamp_basis": "unix epoch seconds (UTC by definition; chart timezone setting doesn't alter them)",
+      "row_count": 6281,
+      "volume_non_null": 0,
+      "identity": "PROBABLE_FOREXCOM",
+      "classification": "TRADINGVIEW_REFERENCE_FIXTURE",
+      "purpose": [
+        "INSUFFICIENT_COVERAGE",
+        "MULTITIMEFRAME_REFERENCE"
+      ],
+      "v1_window_coverage": {
+        "v1_CX-LT1-1.csv": "NONE",
+        "v1_CX-TE1-1.csv": "NONE",
+        "v1_CX-LT3-2.csv": "NONE",
+        "v1_cal_2025-10-22.csv": "NONE",
+        "v1_cal_2025-11-11.csv": "NONE"
+      },
+      "derived_slices": []
+    },
+    {
+      "family": "A_TOM_CHART_DATA",
+      "source_path": "references/tom-chart-data/FOREXCOM_XAUUSD, 15.csv",
+      "filename": "FOREXCOM_XAUUSD, 15.csv",
+      "sha256": "69b731582a2e161cbdd06590a281bf894b7692969a5cbca0c4f3ce3bec018a68",
+      "symbol": "FOREXCOM:XAUUSD",
+      "provider": "FOREXCOM",
+      "instrument": "GOLD",
+      "timeframe": "15",
+      "start": "2026-06-10 19:45:00+00:00",
+      "end": "2026-09-15 13:00:00+00:00",
+      "timezone": "UTC",
+      "timestamp_basis": "unix epoch seconds (UTC by definition; chart timezone setting doesn't alter them)",
+      "row_count": 6280,
+      "volume_non_null": 0,
+      "identity": "PROBABLE_FOREXCOM",
+      "classification": "TRADINGVIEW_REFERENCE_FIXTURE",
+      "purpose": [
+        "MULTITIMEFRAME_REFERENCE"
+      ],
+      "v1_window_coverage": {
+        "v1_CX-LT1-1.csv": "NONE",
+        "v1_CX-TE1-1.csv": "NONE",
+        "v1_CX-LT3-2.csv": "NONE",
+        "v1_cal_2025-10-22.csv": "NONE",
+        "v1_cal_2025-11-11.csv": "NONE"
+      },
+      "derived_slices": []
+    },
+    {
+      "family": "A_TOM_CHART_DATA",
+      "source_path": "references/tom-chart-data/FOREXCOM_XAUUSD, 1D.csv",
+      "filename": "FOREXCOM_XAUUSD, 1D.csv",
+      "sha256": "891c30eb69cc230472a4b71e6b6af700e3fe09a516c38a72bf4a8416459f431b",
+      "symbol": "FOREXCOM:XAUUSD",
+      "provider": "FOREXCOM",
+      "instrument": "GOLD",
+      "timeframe": "1D",
+      "start": "2002-06-18 22:00:00+00:00",
+      "end": "2026-09-14 22:00:00+00:00",
+      "timezone": "UTC",
+      "timestamp_basis": "unix epoch seconds (UTC by definition; chart timezone setting doesn't alter them)",
+      "row_count": 6280,
+      "volume_non_null": 0,
+      "identity": "PROBABLE_FOREXCOM",
+      "classification": "TRADINGVIEW_REFERENCE_FIXTURE",
+      "purpose": [
+        "MULTITIMEFRAME_REFERENCE"
+      ],
+      "v1_window_coverage": {
+        "v1_CX-LT1-1.csv": "SPAN",
+        "v1_CX-TE1-1.csv": "SPAN",
+        "v1_CX-LT3-2.csv": "SPAN",
+        "v1_cal_2025-10-22.csv": "SPAN",
+        "v1_cal_2025-11-11.csv": "SPAN"
+      },
+      "derived_slices": []
+    },
+    {
+      "family": "A_TOM_CHART_DATA",
+      "source_path": "references/tom-chart-data/FOREXCOM_XAUUSD, 240.csv",
+      "filename": "FOREXCOM_XAUUSD, 240.csv",
+      "sha256": "a83531dd6fd32a55123ad2355b23a4eff54e5f246044116a1c10bd198915d55a",
+      "symbol": "FOREXCOM:XAUUSD",
+      "provider": "FOREXCOM",
+      "instrument": "GOLD",
+      "timeframe": "240",
+      "start": "2022-08-23 02:00:00+00:00",
+      "end": "2026-09-15 10:00:00+00:00",
+      "timezone": "UTC",
+      "timestamp_basis": "unix epoch seconds (UTC by definition; chart timezone setting doesn't alter them)",
+      "row_count": 6280,
+      "volume_non_null": 0,
+      "identity": "PROBABLE_FOREXCOM",
+      "classification": "TRADINGVIEW_REFERENCE_FIXTURE",
+      "purpose": [
+        "MULTITIMEFRAME_REFERENCE"
+      ],
+      "v1_window_coverage": {
+        "v1_CX-LT1-1.csv": "SPAN",
+        "v1_CX-TE1-1.csv": "SPAN",
+        "v1_CX-LT3-2.csv": "SPAN",
+        "v1_cal_2025-10-22.csv": "SPAN",
+        "v1_cal_2025-11-11.csv": "SPAN"
+      },
+      "derived_slices": []
+    },
+    {
+      "family": "A_TOM_CHART_DATA",
+      "source_path": "references/tom-chart-data/FOREXCOM_XAUUSD, 5.csv",
+      "filename": "FOREXCOM_XAUUSD, 5.csv",
+      "sha256": "5d8f2d185eec39bbe272a6b2e8281cb0021b5f115807ff47648c3924f09c38a2",
+      "symbol": "FOREXCOM:XAUUSD",
+      "provider": "FOREXCOM",
+      "instrument": "GOLD",
+      "timeframe": "5",
+      "start": "2026-08-13 16:15:00+00:00",
+      "end": "2026-09-15 13:00:00+00:00",
+      "timezone": "UTC",
+      "timestamp_basis": "unix epoch seconds (UTC by definition; chart timezone setting doesn't alter them)",
+      "row_count": 6280,
+      "volume_non_null": 0,
+      "identity": "PROBABLE_FOREXCOM",
+      "classification": "TRADINGVIEW_REFERENCE_FIXTURE",
+      "purpose": [
+        "MULTITIMEFRAME_REFERENCE"
+      ],
+      "v1_window_coverage": {
+        "v1_CX-LT1-1.csv": "NONE",
+        "v1_CX-TE1-1.csv": "NONE",
+        "v1_CX-LT3-2.csv": "NONE",
+        "v1_cal_2025-10-22.csv": "NONE",
+        "v1_cal_2025-11-11.csv": "NONE"
+      },
+      "derived_slices": []
+    },
+    {
+      "family": "A_TOM_CHART_DATA",
+      "source_path": "references/tom-chart-data/FOREXCOM_XAUUSD, 60.csv",
+      "filename": "FOREXCOM_XAUUSD, 60.csv",
+      "sha256": "dd7814e2227d0f3dd62ca420aac2a9d74f90516fee9fcb081ed4a31c45daf299",
+      "symbol": "FOREXCOM:XAUUSD",
+      "provider": "FOREXCOM",
+      "instrument": "GOLD",
+      "timeframe": "60",
+      "start": "2025-08-22 11:00:00+00:00",
+      "end": "2026-09-15 13:00:00+00:00",
+      "timezone": "UTC",
+      "timestamp_basis": "unix epoch seconds (UTC by definition; chart timezone setting doesn't alter them)",
+      "row_count": 6280,
+      "volume_non_null": 0,
+      "identity": "PROBABLE_FOREXCOM",
+      "classification": "TRADINGVIEW_REFERENCE_FIXTURE",
+      "purpose": [
+        "MULTITIMEFRAME_REFERENCE"
+      ],
+      "v1_window_coverage": {
+        "v1_CX-LT1-1.csv": "FULL",
+        "v1_CX-TE1-1.csv": "FULL",
+        "v1_CX-LT3-2.csv": "FULL",
+        "v1_cal_2025-10-22.csv": "FULL",
+        "v1_cal_2025-11-11.csv": "FULL"
+      },
+      "derived_slices": []
+    },
+    {
+      "family": "A_TOM_CHART_DATA",
+      "source_path": "references/tom-chart-data/TVC_DXY, 1.csv",
+      "filename": "TVC_DXY, 1.csv",
+      "sha256": "e839f89ad852e7cb273274afe6411c5211fe59abefbf5cd07e5b25802b57b32e",
+      "symbol": "TVC:DXY",
+      "provider": "TVC",
+      "instrument": "DXY",
+      "timeframe": "1",
+      "start": "2026-09-08 20:31:00+00:00",
+      "end": "2026-09-15 13:02:00+00:00",
+      "timezone": "UTC",
+      "timestamp_basis": "unix epoch seconds (UTC by definition; chart timezone setting doesn't alter them)",
+      "row_count": 6289,
+      "volume_non_null": 0,
+      "identity": "PROBABLE_TVC_DXY",
+      "classification": "TRADINGVIEW_REFERENCE_FIXTURE (informational)",
+      "purpose": [
+        "DXY_REFERENCE",
+        "MULTITIMEFRAME_REFERENCE"
+      ],
+      "v1_window_coverage": {
+        "v1_CX-LT1-1.csv": "NONE",
+        "v1_CX-TE1-1.csv": "NONE",
+        "v1_CX-LT3-2.csv": "NONE",
+        "v1_cal_2025-10-22.csv": "NONE",
+        "v1_cal_2025-11-11.csv": "NONE"
+      },
+      "derived_slices": []
+    },
+    {
+      "family": "A_TOM_CHART_DATA",
+      "source_path": "references/tom-chart-data/TVC_DXY, 15.csv",
+      "filename": "TVC_DXY, 15.csv",
+      "sha256": "aa09004f9f3e60018239ad63dc49eb94a074aa8f565ed7c2214eef3961bfccc4",
+      "symbol": "TVC:DXY",
+      "provider": "TVC",
+      "instrument": "DXY",
+      "timeframe": "15",
+      "start": "2026-06-10 05:45:00+00:00",
+      "end": "2026-09-15 13:00:00+00:00",
+      "timezone": "UTC",
+      "timestamp_basis": "unix epoch seconds (UTC by definition; chart timezone setting doesn't alter them)",
+      "row_count": 6288,
+      "volume_non_null": 0,
+      "identity": "PROBABLE_TVC_DXY",
+      "classification": "TRADINGVIEW_REFERENCE_FIXTURE (informational)",
+      "purpose": [
+        "DXY_REFERENCE",
+        "MULTITIMEFRAME_REFERENCE"
+      ],
+      "v1_window_coverage": {
+        "v1_CX-LT1-1.csv": "NONE",
+        "v1_CX-TE1-1.csv": "NONE",
+        "v1_CX-LT3-2.csv": "NONE",
+        "v1_cal_2025-10-22.csv": "NONE",
+        "v1_cal_2025-11-11.csv": "NONE"
+      },
+      "derived_slices": []
+    },
+    {
+      "family": "A_TOM_CHART_DATA",
+      "source_path": "references/tom-chart-data/TVC_DXY, 1D.csv",
+      "filename": "TVC_DXY, 1D.csv",
+      "sha256": "8d77090ca4e334cd72ec4084c017efff0627c803273f59315f09b3b5fd8f6ccb",
+      "symbol": "TVC:DXY",
+      "provider": "TVC",
+      "instrument": "DXY",
+      "timeframe": "1D",
+      "start": "2001-11-11 22:00:00+00:00",
+      "end": "2026-09-14 23:00:00+00:00",
+      "timezone": "UTC",
+      "timestamp_basis": "unix epoch seconds (UTC by definition; chart timezone setting doesn't alter them)",
+      "row_count": 6280,
+      "volume_non_null": 0,
+      "identity": "PROBABLE_TVC_DXY",
+      "classification": "TRADINGVIEW_REFERENCE_FIXTURE (informational)",
+      "purpose": [
+        "DXY_REFERENCE",
+        "MULTITIMEFRAME_REFERENCE"
+      ],
+      "v1_window_coverage": {
+        "v1_CX-LT1-1.csv": "SPAN",
+        "v1_CX-TE1-1.csv": "SPAN",
+        "v1_CX-LT3-2.csv": "SPAN",
+        "v1_cal_2025-10-22.csv": "SPAN",
+        "v1_cal_2025-11-11.csv": "SPAN"
+      },
+      "derived_slices": []
+    },
+    {
+      "family": "A_TOM_CHART_DATA",
+      "source_path": "references/tom-chart-data/TVC_DXY, 240.csv",
+      "filename": "TVC_DXY, 240.csv",
+      "sha256": "b5b801d7218afc1313a987dbef38639881683ed23efc5fe24ef8471d8eec2d82",
+      "symbol": "TVC:DXY",
+      "provider": "TVC",
+      "instrument": "DXY",
+      "timeframe": "240",
+      "start": "2022-10-10 23:00:00+00:00",
+      "end": "2026-09-15 11:00:00+00:00",
+      "timezone": "UTC",
+      "timestamp_basis": "unix epoch seconds (UTC by definition; chart timezone setting doesn't alter them)",
+      "row_count": 6288,
+      "volume_non_null": 0,
+      "identity": "PROBABLE_TVC_DXY",
+      "classification": "TRADINGVIEW_REFERENCE_FIXTURE (informational)",
+      "purpose": [
+        "DXY_REFERENCE",
+        "MULTITIMEFRAME_REFERENCE"
+      ],
+      "v1_window_coverage": {
+        "v1_CX-LT1-1.csv": "SPAN",
+        "v1_CX-TE1-1.csv": "SPAN",
+        "v1_CX-LT3-2.csv": "SPAN",
+        "v1_cal_2025-10-22.csv": "SPAN",
+        "v1_cal_2025-11-11.csv": "SPAN"
+      },
+      "derived_slices": []
+    },
+    {
+      "family": "A_TOM_CHART_DATA",
+      "source_path": "references/tom-chart-data/TVC_DXY, 5.csv",
+      "filename": "TVC_DXY, 5.csv",
+      "sha256": "ec616d90026c4ac5e2acae08b85175f01e09ddfa73a27dfdc36d5ad4d9e61acf",
+      "symbol": "TVC:DXY",
+      "provider": "TVC",
+      "instrument": "DXY",
+      "timeframe": "5",
+      "start": "2026-08-13 06:05:00+00:00",
+      "end": "2026-09-15 13:00:00+00:00",
+      "timezone": "UTC",
+      "timestamp_basis": "unix epoch seconds (UTC by definition; chart timezone setting doesn't alter them)",
+      "row_count": 6288,
+      "volume_non_null": 0,
+      "identity": "PROBABLE_TVC_DXY",
+      "classification": "TRADINGVIEW_REFERENCE_FIXTURE (informational)",
+      "purpose": [
+        "DXY_REFERENCE",
+        "MULTITIMEFRAME_REFERENCE"
+      ],
+      "v1_window_coverage": {
+        "v1_CX-LT1-1.csv": "NONE",
+        "v1_CX-TE1-1.csv": "NONE",
+        "v1_CX-LT3-2.csv": "NONE",
+        "v1_cal_2025-10-22.csv": "NONE",
+        "v1_cal_2025-11-11.csv": "NONE"
+      },
+      "derived_slices": []
+    },
+    {
+      "family": "A_TOM_CHART_DATA",
+      "source_path": "references/tom-chart-data/TVC_DXY, 60.csv",
+      "filename": "TVC_DXY, 60.csv",
+      "sha256": "1602a763e7c5269e1d6642454097f2f0497aa6fb90382e64b4f9d5aac946a2a5",
+      "symbol": "TVC:DXY",
+      "provider": "TVC",
+      "instrument": "DXY",
+      "timeframe": "60",
+      "start": "2025-09-08 06:00:00+00:00",
+      "end": "2026-09-15 13:00:00+00:00",
+      "timezone": "UTC",
+      "timestamp_basis": "unix epoch seconds (UTC by definition; chart timezone setting doesn't alter them)",
+      "row_count": 6288,
+      "volume_non_null": 0,
+      "identity": "PROBABLE_TVC_DXY",
+      "classification": "TRADINGVIEW_REFERENCE_FIXTURE (informational)",
+      "purpose": [
+        "DXY_REFERENCE",
+        "MULTITIMEFRAME_REFERENCE"
+      ],
+      "v1_window_coverage": {
+        "v1_CX-LT1-1.csv": "FULL",
+        "v1_CX-TE1-1.csv": "FULL",
+        "v1_CX-LT3-2.csv": "FULL",
+        "v1_cal_2025-10-22.csv": "FULL",
+        "v1_cal_2025-11-11.csv": "FULL"
+      },
+      "derived_slices": []
+    },
+    {
+      "family": "B_OWNER_TRADINGVIEW_REFERENCE",
+      "source_path": "references/charts/FX_XAUUSD, 1.csv",
+      "filename": "FX_XAUUSD, 1.csv",
+      "sha256": "4d4aadd7f710d5fa8e1ef896fb80e293c550c043614859cc341baf81828f8993",
+      "symbol": "FX:XAUUSD",
+      "provider": "FX",
+      "instrument": "GOLD",
+      "timeframe": "1",
+      "start": "2026-09-08 08:15:00+00:00",
+      "end": "2026-09-15 11:54:00+00:00",
+      "timezone": "UTC",
+      "timestamp_basis": "unix epoch seconds (UTC by definition; chart timezone setting doesn't alter them)",
+      "row_count": 7099,
+      "volume_non_null": 7099,
+      "identity": "DIFFERENT_SOURCE",
+      "classification": "REFERENCE_ONLY",
+      "purpose": [
+        "REFERENCE_ONLY"
+      ],
+      "v1_window_coverage": {
+        "v1_CX-LT1-1.csv": "NONE",
+        "v1_CX-TE1-1.csv": "NONE",
+        "v1_CX-LT3-2.csv": "NONE",
+        "v1_cal_2025-10-22.csv": "NONE",
+        "v1_cal_2025-11-11.csv": "NONE"
+      },
+      "derived_slices": []
+    },
+    {
+      "family": "B_OWNER_TRADINGVIEW_REFERENCE",
+      "source_path": "references/charts/FX_XAUUSD, 15.csv",
+      "filename": "FX_XAUUSD, 15.csv",
+      "sha256": "a0662450fdbd6b4f26d32c4805965d3963eb02ec2a8604f45d37e1a55ff55c81",
+      "symbol": "FX:XAUUSD",
+      "provider": "FX",
+      "instrument": "GOLD",
+      "timeframe": "15",
+      "start": "2026-05-29 12:15:00+00:00",
+      "end": "2026-09-15 11:45:00+00:00",
+      "timezone": "UTC",
+      "timestamp_basis": "unix epoch seconds (UTC by definition; chart timezone setting doesn't alter them)",
+      "row_count": 7047,
+      "volume_non_null": 7047,
+      "identity": "DIFFERENT_SOURCE",
+      "classification": "REFERENCE_ONLY; TRADINGVIEW_REFERENCE_FIXTURE",
+      "purpose": [
+        "REFERENCE_ONLY"
+      ],
+      "v1_window_coverage": {
+        "v1_CX-LT1-1.csv": "NONE",
+        "v1_CX-TE1-1.csv": "NONE",
+        "v1_CX-LT3-2.csv": "NONE",
+        "v1_cal_2025-10-22.csv": "NONE",
+        "v1_cal_2025-11-11.csv": "NONE"
+      },
+      "derived_slices": []
+    },
+    {
+      "family": "B_OWNER_TRADINGVIEW_REFERENCE",
+      "source_path": "references/charts/FX_XAUUSD, 1D.csv",
+      "filename": "FX_XAUUSD, 1D.csv",
+      "sha256": "8310d22fe5348aad8176ebb8199d9935c992b8641df56c98cdceb8217e6d2896",
+      "symbol": "FX:XAUUSD",
+      "provider": "FX",
+      "instrument": "GOLD",
+      "timeframe": "1D",
+      "start": "1999-07-06 22:00:00+00:00",
+      "end": "2026-09-14 22:00:00+00:00",
+      "timezone": "UTC",
+      "timestamp_basis": "unix epoch seconds (UTC by definition; chart timezone setting doesn't alter them)",
+      "row_count": 7047,
+      "volume_non_null": 7047,
+      "identity": "DIFFERENT_SOURCE",
+      "classification": "REFERENCE_ONLY; TRADINGVIEW_REFERENCE_FIXTURE",
+      "purpose": [
+        "REFERENCE_ONLY"
+      ],
+      "v1_window_coverage": {
+        "v1_CX-LT1-1.csv": "SPAN",
+        "v1_CX-TE1-1.csv": "SPAN",
+        "v1_CX-LT3-2.csv": "SPAN",
+        "v1_cal_2025-10-22.csv": "SPAN",
+        "v1_cal_2025-11-11.csv": "SPAN"
+      },
+      "derived_slices": []
+    },
+    {
+      "family": "B_OWNER_TRADINGVIEW_REFERENCE",
+      "source_path": "references/charts/FX_XAUUSD, 240.csv",
+      "filename": "FX_XAUUSD, 240.csv",
+      "sha256": "b6d78625663278d7d8220f2e18c1506233c8c8cafb41874a38a79ee3c4bbb346",
+      "symbol": "FX:XAUUSD",
+      "provider": "FX",
+      "instrument": "GOLD",
+      "timeframe": "240",
+      "start": "2022-02-23 11:00:00+00:00",
+      "end": "2026-09-15 10:00:00+00:00",
+      "timezone": "UTC",
+      "timestamp_basis": "unix epoch seconds (UTC by definition; chart timezone setting doesn't alter them)",
+      "row_count": 7047,
+      "volume_non_null": 7047,
+      "identity": "DIFFERENT_SOURCE",
+      "classification": "REFERENCE_ONLY; TRADINGVIEW_REFERENCE_FIXTURE",
+      "purpose": [
+        "REFERENCE_ONLY"
+      ],
+      "v1_window_coverage": {
+        "v1_CX-LT1-1.csv": "SPAN",
+        "v1_CX-TE1-1.csv": "SPAN",
+        "v1_CX-LT3-2.csv": "SPAN",
+        "v1_cal_2025-10-22.csv": "SPAN",
+        "v1_cal_2025-11-11.csv": "SPAN"
+      },
+      "derived_slices": []
+    },
+    {
+      "family": "B_OWNER_TRADINGVIEW_REFERENCE",
+      "source_path": "references/charts/FX_XAUUSD, 5.csv",
+      "filename": "FX_XAUUSD, 5.csv",
+      "sha256": "c4368991e8e375864fd101b84ad3c0bb68f88584ba8fef9191afa05f525b6d88",
+      "symbol": "FX:XAUUSD",
+      "provider": "FX",
+      "instrument": "GOLD",
+      "timeframe": "5",
+      "start": "2026-08-10 22:25:00+00:00",
+      "end": "2026-09-15 11:50:00+00:00",
+      "timezone": "UTC",
+      "timestamp_basis": "unix epoch seconds (UTC by definition; chart timezone setting doesn't alter them)",
+      "row_count": 7047,
+      "volume_non_null": 7047,
+      "identity": "DIFFERENT_SOURCE",
+      "classification": "REFERENCE_ONLY; TRADINGVIEW_REFERENCE_FIXTURE",
+      "purpose": [
+        "REFERENCE_ONLY"
+      ],
+      "v1_window_coverage": {
+        "v1_CX-LT1-1.csv": "NONE",
+        "v1_CX-TE1-1.csv": "NONE",
+        "v1_CX-LT3-2.csv": "NONE",
+        "v1_cal_2025-10-22.csv": "NONE",
+        "v1_cal_2025-11-11.csv": "NONE"
+      },
+      "derived_slices": []
+    },
+    {
+      "family": "B_OWNER_TRADINGVIEW_REFERENCE",
+      "source_path": "references/charts/FX_XAUUSD, 60.csv",
+      "filename": "FX_XAUUSD, 60.csv",
+      "sha256": "5789336298f88a37e32a504f67378f222f5c7f4e31c1fcc7777a395607a5eaf7",
+      "symbol": "FX:XAUUSD",
+      "provider": "FX",
+      "instrument": "GOLD",
+      "timeframe": "60",
+      "start": "2025-07-08 05:00:00+00:00",
+      "end": "2026-09-15 11:00:00+00:00",
+      "timezone": "UTC",
+      "timestamp_basis": "unix epoch seconds (UTC by definition; chart timezone setting doesn't alter them)",
+      "row_count": 7047,
+      "volume_non_null": 7047,
+      "identity": "DIFFERENT_SOURCE",
+      "classification": "REFERENCE_ONLY; TRADINGVIEW_REFERENCE_FIXTURE",
+      "purpose": [
+        "REFERENCE_ONLY"
+      ],
+      "v1_window_coverage": {
+        "v1_CX-LT1-1.csv": "FULL",
+        "v1_CX-TE1-1.csv": "FULL",
+        "v1_CX-LT3-2.csv": "FULL",
+        "v1_cal_2025-10-22.csv": "FULL",
+        "v1_cal_2025-11-11.csv": "FULL"
+      },
+      "derived_slices": []
+    },
+    {
+      "family": "B_OWNER_TRADINGVIEW_REFERENCE",
+      "source_path": "references/charts/TVC_DXY, 1.csv",
+      "filename": "TVC_DXY, 1.csv",
+      "sha256": "9e51a104b02f56776dfa977aa46fde8a31189e03cb656a30b6aac218f0f1d4b5",
+      "symbol": "TVC:DXY",
+      "provider": "TVC",
+      "instrument": "DXY",
+      "timeframe": "1",
+      "start": "2026-09-08 19:22:00+00:00",
+      "end": "2026-09-15 11:55:00+00:00",
+      "timezone": "UTC",
+      "timestamp_basis": "unix epoch seconds (UTC by definition; chart timezone setting doesn't alter them)",
+      "row_count": 6291,
+      "volume_non_null": 0,
+      "identity": "PROBABLE_TVC_DXY",
+      "classification": "TRADINGVIEW_REFERENCE_FIXTURE (informational)",
+      "purpose": [
+        "DXY_REFERENCE",
+        "MULTITIMEFRAME_REFERENCE"
+      ],
+      "v1_window_coverage": {
+        "v1_CX-LT1-1.csv": "NONE",
+        "v1_CX-TE1-1.csv": "NONE",
+        "v1_CX-LT3-2.csv": "NONE",
+        "v1_cal_2025-10-22.csv": "NONE",
+        "v1_cal_2025-11-11.csv": "NONE"
+      },
+      "derived_slices": []
+    },
+    {
+      "family": "B_OWNER_TRADINGVIEW_REFERENCE",
+      "source_path": "references/charts/TVC_DXY, 15.csv",
+      "filename": "TVC_DXY, 15.csv",
+      "sha256": "dbe59f95c3a97536bb9c22b2dcff8c02fb161be9bfb16168ec223a4febf7cef2",
+      "symbol": "TVC:DXY",
+      "provider": "TVC",
+      "instrument": "DXY",
+      "timeframe": "15",
+      "start": "2026-06-10 03:45:00+00:00",
+      "end": "2026-09-15 11:45:00+00:00",
+      "timezone": "UTC",
+      "timestamp_basis": "unix epoch seconds (UTC by definition; chart timezone setting doesn't alter them)",
+      "row_count": 6291,
+      "volume_non_null": 0,
+      "identity": "PROBABLE_TVC_DXY",
+      "classification": "TRADINGVIEW_REFERENCE_FIXTURE (informational)",
+      "purpose": [
+        "DXY_REFERENCE",
+        "MULTITIMEFRAME_REFERENCE"
+      ],
+      "v1_window_coverage": {
+        "v1_CX-LT1-1.csv": "NONE",
+        "v1_CX-TE1-1.csv": "NONE",
+        "v1_CX-LT3-2.csv": "NONE",
+        "v1_cal_2025-10-22.csv": "NONE",
+        "v1_cal_2025-11-11.csv": "NONE"
+      },
+      "derived_slices": []
+    },
+    {
+      "family": "B_OWNER_TRADINGVIEW_REFERENCE",
+      "source_path": "references/charts/TVC_DXY, 1D.csv",
+      "filename": "TVC_DXY, 1D.csv",
+      "sha256": "dcf45641acea19a9e75cdd1440c4621ccda9c81246aaa4da2f3d3f5c5626ad20",
+      "symbol": "TVC:DXY",
+      "provider": "TVC",
+      "instrument": "DXY",
+      "timeframe": "1D",
+      "start": "2001-11-30 00:00:00+00:00",
+      "end": "2026-09-14 23:00:00+00:00",
+      "timezone": "UTC",
+      "timestamp_basis": "unix epoch seconds (UTC by definition; chart timezone setting doesn't alter them)",
+      "row_count": 6267,
+      "volume_non_null": 0,
+      "identity": "PROBABLE_TVC_DXY",
+      "classification": "TRADINGVIEW_REFERENCE_FIXTURE (informational)",
+      "purpose": [
+        "DXY_REFERENCE",
+        "MULTITIMEFRAME_REFERENCE"
+      ],
+      "v1_window_coverage": {
+        "v1_CX-LT1-1.csv": "SPAN",
+        "v1_CX-TE1-1.csv": "SPAN",
+        "v1_CX-LT3-2.csv": "SPAN",
+        "v1_cal_2025-10-22.csv": "SPAN",
+        "v1_cal_2025-11-11.csv": "SPAN"
+      },
+      "derived_slices": []
+    },
+    {
+      "family": "B_OWNER_TRADINGVIEW_REFERENCE",
+      "source_path": "references/charts/TVC_DXY, 240.csv",
+      "filename": "TVC_DXY, 240.csv",
+      "sha256": "d606cb938645fbd7ac2a0bb503b39e412ca4f19664775987911c1842bc47d847",
+      "symbol": "TVC:DXY",
+      "provider": "TVC",
+      "instrument": "DXY",
+      "timeframe": "240",
+      "start": "2022-10-13 03:00:00+00:00",
+      "end": "2026-09-15 11:00:00+00:00",
+      "timezone": "UTC",
+      "timestamp_basis": "unix epoch seconds (UTC by definition; chart timezone setting doesn't alter them)",
+      "row_count": 6275,
+      "volume_non_null": 0,
+      "identity": "PROBABLE_TVC_DXY",
+      "classification": "TRADINGVIEW_REFERENCE_FIXTURE (informational)",
+      "purpose": [
+        "DXY_REFERENCE",
+        "MULTITIMEFRAME_REFERENCE"
+      ],
+      "v1_window_coverage": {
+        "v1_CX-LT1-1.csv": "SPAN",
+        "v1_CX-TE1-1.csv": "SPAN",
+        "v1_CX-LT3-2.csv": "SPAN",
+        "v1_cal_2025-10-22.csv": "SPAN",
+        "v1_cal_2025-11-11.csv": "SPAN"
+      },
+      "derived_slices": []
+    },
+    {
+      "family": "B_OWNER_TRADINGVIEW_REFERENCE",
+      "source_path": "references/charts/TVC_DXY, 5.csv",
+      "filename": "TVC_DXY, 5.csv",
+      "sha256": "1304040e9935d01f0c0e93e02b7e21fffda61dec28b8273cd1dc8c93f8293f8e",
+      "symbol": "TVC:DXY",
+      "provider": "TVC",
+      "instrument": "DXY",
+      "timeframe": "5",
+      "start": "2026-08-13 04:45:00+00:00",
+      "end": "2026-09-15 11:55:00+00:00",
+      "timezone": "UTC",
+      "timestamp_basis": "unix epoch seconds (UTC by definition; chart timezone setting doesn't alter them)",
+      "row_count": 6291,
+      "volume_non_null": 0,
+      "identity": "PROBABLE_TVC_DXY",
+      "classification": "TRADINGVIEW_REFERENCE_FIXTURE (informational)",
+      "purpose": [
+        "DXY_REFERENCE",
+        "MULTITIMEFRAME_REFERENCE"
+      ],
+      "v1_window_coverage": {
+        "v1_CX-LT1-1.csv": "NONE",
+        "v1_CX-TE1-1.csv": "NONE",
+        "v1_CX-LT3-2.csv": "NONE",
+        "v1_cal_2025-10-22.csv": "NONE",
+        "v1_cal_2025-11-11.csv": "NONE"
+      },
+      "derived_slices": []
+    },
+    {
+      "family": "B_OWNER_TRADINGVIEW_REFERENCE",
+      "source_path": "references/charts/TVC_DXY, 60.csv",
+      "filename": "TVC_DXY, 60.csv",
+      "sha256": "0357f52a926cc8ed06c0e760780050007d5827048fb77cf1abf88d2fbb3da18d",
+      "symbol": "TVC:DXY",
+      "provider": "TVC",
+      "instrument": "DXY",
+      "timeframe": "60",
+      "start": "2025-09-08 17:00:00+00:00",
+      "end": "2026-09-15 11:00:00+00:00",
+      "timezone": "UTC",
+      "timestamp_basis": "unix epoch seconds (UTC by definition; chart timezone setting doesn't alter them)",
+      "row_count": 6275,
+      "volume_non_null": 0,
+      "identity": "PROBABLE_TVC_DXY",
+      "classification": "TRADINGVIEW_REFERENCE_FIXTURE (informational)",
+      "purpose": [
+        "DXY_REFERENCE",
+        "MULTITIMEFRAME_REFERENCE"
+      ],
+      "v1_window_coverage": {
+        "v1_CX-LT1-1.csv": "FULL",
+        "v1_CX-TE1-1.csv": "FULL",
+        "v1_CX-LT3-2.csv": "FULL",
+        "v1_cal_2025-10-22.csv": "FULL",
+        "v1_cal_2025-11-11.csv": "FULL"
+      },
+      "derived_slices": []
+    }
+  ]
+}

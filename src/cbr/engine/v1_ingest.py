@@ -180,7 +180,7 @@ def inspect_export(path: Path) -> dict:
         out["v1_eligible"] = not reasons
         out["classification"] = ("V1_SOURCE" if not reasons else
                                  "REFERENCE_ONLY" if any(REQUIRED_MISSING in r for r in reasons) else "TRADINGVIEW_REFERENCE_FIXTURE")
-        if meta["timeframe"] != REQUIRED_TIMEFRAME:
+        if meta["timeframe"] != REQUIRED_TIMEFRAME and "TRADINGVIEW_REFERENCE_FIXTURE" not in out["classification"]:
             out["classification"] += "; TRADINGVIEW_REFERENCE_FIXTURE"
     else:
         out["v1_eligible"] = False
@@ -214,8 +214,7 @@ def v1_state(exports: list[dict], st: dict) -> str:
     return WAITING
 
 
-INSPECTION_JSON = ROOT / "reports" / "tradingview-exports-inspection.json"
-INSPECTION_MD = ROOT / "reports" / "tradingview-exports-inspection.md"
+REPORTS_DIR = ROOT / "reports"
 _SHORT = {"v1_cal_2025-10-22.csv": "CAL 10/22", "v1_cal_2025-11-11.csv": "CAL 11/11", "v1_CX-LT1-1.csv": "CX-LT1-1",
           "v1_CX-TE1-1.csv": "CX-TE1-1", "v1_CX-LT3-2.csv": "CX-LT3-2"}
 
@@ -226,7 +225,8 @@ def write_inspection_report(directory: Path) -> dict:
 
     d = inspect_exports(directory)
     d["generated_utc"] = datetime.now(UTC).replace(microsecond=0).isoformat()
-    INSPECTION_JSON.write_text(json.dumps(d, indent=2, default=str) + "\n")
+    stem = f"tradingview-exports-inspection-{Path(directory).name}"
+    (REPORTS_DIR / f"{stem}.json").write_text(json.dumps(d, indent=2, default=str) + "\n")
     cols = list(_SHORT)
     head = "| File | Symbol | TF | Rows | Start (UTC) | End (UTC) | " + " | ".join(_SHORT[c] for c in cols)
     L = ["# TradingView Exports: Inspection and V-1 Coverage", "",
@@ -255,8 +255,94 @@ def write_inspection_report(directory: Path) -> dict:
             L += [f"- {r['file']}: earliest {r['first']}, latest {r['last']}; days short of each window start: "
                   + ", ".join(f"{_SHORT[k]} {v}" for k, v in r["one_minute_days_short"].items()) for r in short]
         L.append("")
-    INSPECTION_MD.write_text("\n".join(L))
+    (REPORTS_DIR / f"{stem}.md").write_text("\n".join(L))
     return d
+
+
+# ------------------------------------------------------------------ source families and identity (D23)
+
+SOURCE_MANIFEST = ROOT / "reports" / "tradingview-source-manifest.json"
+FAMILY_TOM, FAMILY_OWNER = "A_TOM_CHART_DATA", "B_OWNER_TRADINGVIEW_REFERENCE"
+
+
+def identity_class(info: dict, screenshots_complete: bool) -> str:
+    """Identity standard (D23). TradingView names exports from the chart symbol, but a CSV carries no symbol field:
+    the file name alone gives PROBABLE_<source>; CONFIRMED needs independent identity evidence (symbol-info screenshot).
+    Another symbol → DIFFERENT_SOURCE; no parseable symbol → SOURCE_UNVERIFIABLE."""
+    sym = info.get("tradingview_symbol")
+    if not sym:
+        return "SOURCE_UNVERIFIABLE"
+    expected = {"GOLD": REQUIRED_SYMBOL, "DXY": "TVC:DXY"}.get(info.get("instrument"))
+    if expected is None:
+        return "SOURCE_UNVERIFIABLE"
+    label = "FOREXCOM" if info["instrument"] == "GOLD" else "TVC_DXY"
+    if sym != expected:
+        return "DIFFERENT_SOURCE"
+    return f"CONFIRMED_{label}" if screenshots_complete else f"PROBABLE_{label}"
+
+
+def purposes(info: dict) -> list[str]:
+    """Allowed uses by coverage and identity. Calibration windows and course windows are listed separately and never
+    share a purpose: course-window data can't set tolerances (D23-7)."""
+    out = []
+    windows = info.get("v1_windows", {})
+    if info.get("instrument") == "GOLD":
+        if info.get("tradingview_symbol") != REQUIRED_SYMBOL:
+            return ["REFERENCE_ONLY"]
+        if info.get("timeframe") == REQUIRED_TIMEFRAME:
+            cal = [n for n, (_, _, k) in WINDOWS.items() if k == "calibration" and windows[n]["coverage"] == "FULL"]
+            course = [n for n, (_, _, k) in WINDOWS.items() if k == "course" and windows[n]["coverage"] == "FULL"]
+            out += (["V1_CALIBRATION"] if cal else []) + (["COURSE_PARITY"] if course else [])
+            if len(cal) + len(course) < len(WINDOWS):
+                out.append("INSUFFICIENT_COVERAGE")
+        out.append("MULTITIMEFRAME_REFERENCE")
+    elif info.get("instrument") == "DXY":
+        out += ["DXY_REFERENCE", "MULTITIMEFRAME_REFERENCE"]
+    return out
+
+
+def compare_exports(a: Path, b: Path, *, exclude_windows: bool = True) -> dict:
+    """Bar-by-bar agreement of two exports on overlapping timestamps (source-identity evidence only). V-1 course and
+    calibration windows are excluded by default."""
+    x, y = parity.load_tradingview_csv(a), parity.load_tradingview_csv(b)
+    j = x.join(y, how="inner", lsuffix="_a", rsuffix="_b")
+    if exclude_windows:
+        keep = pd.Series(True, index=j.index)
+        for s0, e0, _ in WINDOWS.values():
+            keep &= ~((j.index >= s0) & (j.index < e0))
+        j = j[keep.to_numpy()]
+    if not len(j):
+        return {"a": a.name, "b": b.name, "overlap_bars": 0}
+    diff = (j["close_a"] - j["close_b"]).abs()
+    return {"a": a.name, "b": b.name, "overlap_bars": len(j), "first": str(j.index.min()), "last": str(j.index.max()),
+            "identical_fraction": {f: float((j[f"{f}_a"].round(6) == j[f"{f}_b"].round(6)).mean())
+                                   for f in ("open", "high", "low", "close")},
+            "close_abs_diff_median": float(diff.median()), "close_abs_diff_max": float(diff.max())}
+
+
+def build_source_manifest(families: dict[str, Path]) -> dict:
+    """Immutable-source manifest (D23-8): one record per original export, never modifying it."""
+    from datetime import UTC, datetime
+
+    shots = screenshots()["complete"]
+    records = []
+    for family, directory in families.items():
+        for path in sorted(Path(directory).glob("*.csv")):
+            info = inspect_export(path)
+            records.append({
+                "family": family, "source_path": str(path.relative_to(ROOT)) if path.is_relative_to(ROOT) else str(path),
+                "filename": path.name, "sha256": info["sha256"], "symbol": info.get("tradingview_symbol"),
+                "provider": info.get("exchange"), "instrument": info.get("instrument"), "timeframe": info.get("timeframe"),
+                "start": info.get("first"), "end": info.get("last"), "timezone": info.get("timezone"),
+                "timestamp_basis": info.get("timestamp_basis"), "row_count": info.get("rows"),
+                "volume_non_null": info.get("volume_non_null"), "identity": identity_class(info, shots),
+                "classification": info.get("classification"), "purpose": purposes(info),
+                "v1_window_coverage": {n: c["coverage"] for n, c in info.get("v1_windows", {}).items()},
+                "derived_slices": []})
+    out = {"generated_utc": datetime.now(UTC).replace(microsecond=0).isoformat(), "decision": "D23",
+           "families": {k: str(v) for k, v in families.items()}, "records": records}
+    SOURCE_MANIFEST.write_text(json.dumps(out, indent=2, default=str) + "\n")
+    return out
 
 
 # ------------------------------------------------------------------ deterministic slicing (D22-8)
@@ -455,6 +541,12 @@ def main(argv: list[str] | None = None) -> None:
         out = write_inspection_report(target) if "--report" in args else inspect_exports(target)
         print(json.dumps({"state": out["state"], "usable_as_v1": out["usable_as_v1"],
                           "exports": {r["file"]: r.get("classification") for r in out["exports"]}}, indent=2))
+    elif cmd == "sources":
+        args = argv or sys.argv[1:]
+        fams = dict(x.split("=", 1) for x in args[1:]) or {FAMILY_TOM: "references/tom-chart-data",
+                                                            FAMILY_OWNER: "references/charts"}
+        out = build_source_manifest({k: ROOT / v for k, v in fams.items()})
+        print(json.dumps([[r["family"], r["filename"], r["identity"], r["purpose"]] for r in out["records"]], indent=1))
     elif cmd == "slice":
         args = argv or sys.argv[1:]
         print(json.dumps(derive_slices(Path(args[1])), indent=2))
