@@ -54,7 +54,7 @@ and Dukascopy calibration days are preserved as supporting evidence.
 | # | Item | Status | Reference |
 |---|---|---|---|
 | 29 | [x] Behavioral-parity run protocol and decisions P-1…P-8 approved | D25: approved; P-5 option B as the D25-P5 standard; run spec `config/phase13_behavioral_run.yaml` | `docs/governance/d25-phase13-run-approval.md` |
-| 30 | [ ] Protocol frozen (hash) and run code committed with tests | not started | CBR-PROT-013B §8 |
+| 30 | [x] Protocol frozen (hash) and run code committed with tests | frozen at commit `36e096c` (527 passed, 1 skipped; ruff clean); recent Dukascopy absent at freeze | `reports/phase13-freeze-manifest.json` |
 | 31 | [ ] Recent feed comparison complete (Dukascopy for the P-2 days fetched and validated; agreement rates and feed band reported) | not started | CBR-ACC-013 G; CBR-PROT-013B §7.1 |
 | 32 | [ ] Higher-timeframe fidelity (FOREXCOM 1h/4h/1D; TVC:DXY 1h) reported | not started | CBR-ACC-013 F; §7.2 |
 | 33 | [ ] Behavioral-parity runs executed twice with identical result hashes (gate A) | not started | §2 |
