@@ -1,7 +1,7 @@
 # CBR Model: PRD Summary
 
-**Doc:** CBR-PRD-001 · **Version:** v1.0 · 2026-09-14 · **Status:** Active (Phase 9 PASS WITH CONCERNS · G1 approved with conditions · Phase 10 authorized) · **Instruments:** XAUUSD + DXY
-**Branch:** `main` · Full version: `docs/PRD.html`
+**Doc:** CBR-PRD-001 · **Version:** v1.0 · status updated 2026-09-15 · **Status:** Active · **Current phase:** 13 — Strategy Fidelity / Behavioral Parity (run approved D25; Phases 9-12 accepted with concerns) · **Instruments:** XAUUSD + DXY
+**Repository:** `main` = `origin/main` at `5d05cce` (pushed); Phase 13 work on local branch `cbr-work_091526-4pm` (not pushed) · Full version: `docs/PRD.html`
 
 ---
 
@@ -178,7 +178,7 @@ Research-derived variables carry `classification: RESEARCH-DERIVED`.
 - **10 DXY context module: PASS WITH CONCERNS, accepted (D15, G10)** (CBR-ACC-010, `reports/phase10-dxy-context.md`). Causal quote + last-closed/forming 15m and 1h direction with state, confidence and reason codes; missing stays missing; hindsight vendor-gap mask kept separate (OQ-31); no DXY rule or filter. 
 - **11 CBR15 Python reference engine: PASS WITH CONCERNS, accepted (D17, G11); not baseline-eligible** (`src/cbr/engine/cbr15.py`, `docs/engine/cbr15-implementation-map.md`, `reports/phase11-cbr15-engine.md`). STRUCTURE bars only; causal and deterministic; every candidate's rule outcomes in the ledger. Rulings D17: OQ-35/37/38 resolved; OQ-34 open until Phase 12; OQ-36 interpretation not approved (evidence package required)
 - **12 CBR1H Python reference engine: PASS WITH CONCERNS, accepted (D18, G12)** (`src/cbr/engine/cbr1h.py`, `docs/engine/cbr1h-implementation-map.md`, `reports/phase12-cbr1h-parity.md`). Causal hourly state exposed for M15-HTF-01. Phase 12 parity tolerances and selection were rejected (D18) and aren't evidence. Model B reproduces none
-- **13 Strategy fidelity and behavioral parity: NOT READY** (D24; gate `docs/acceptance/phase13-acceptance-criteria.md`; checklist `docs/governance/phase13-readiness.md`: mandatory 20/28, V-1 supporting 1/8). Run protocol CBR-PROT-013B **proposed**, awaiting owner approval of P-1…P-8: behavioral dimensions on CX-LT1-1, CX-TE1-1, CX-LT3-2 with frozen PC2 on Dukascopy; FOREXCOM 1h/4h/1D higher-timeframe fidelity; recent FOREXCOM-vs-Dukascopy 1m feed study. V-1 (historical FOREXCOM 1m) is supporting only: unavailable because of TradingView history limits.
+- **13 Strategy fidelity and behavioral parity: CURRENT PHASE, run approved (D25)** (D24; gate `docs/acceptance/phase13-acceptance-criteria.md`; checklist `docs/governance/phase13-readiness.md`: mandatory 20/28, V-1 supporting 1/8). Run protocol CBR-PROT-013B **approved (D25)** with P-1…P-8 settled and a pre-declared dimension-by-dimension acceptance standard: behavioral dimensions on CX-LT1-1, CX-TE1-1, CX-LT3-2 with frozen PC2 on Dukascopy; FOREXCOM 1h/4h/1D higher-timeframe fidelity; recent FOREXCOM-vs-Dukascopy 1m feed study. V-1 (historical FOREXCOM 1m) is supporting only: unavailable because of TradingView history limits.
 
 ### C. Untouched baselines: phases 14-16
 - **Before 14:** define the canonical historical OHLC source for swings, range extremes, extension extremes, stops and sweeps (OQ-25, hard precondition, D12-5); complete the DXY DST/reopen availability diagnostic (OQ-27); freeze the baseline data feed (OQ-24: spot / futures / hybrid) on fidelity, signal agreement, structure agreement, availability, execution realism, 5s feasibility, reproducibility and known distortions, **never profitability**. If futures are chosen, the cross-feed signal-agreement requirement (G2b) must pass; if spot, AC-11B must be complete.
@@ -246,15 +246,15 @@ The Python reference engine is authoritative. LuxAlgo Quant may assist with Pine
 
 ## Current status
 
-_As of 2026-09-14, after owner ruling D12 and the Phase 9 acceptance rerun (`reports/phase9-data-acceptance.md`, CBR-ACC-009 v2.1)._
+_Metrics as of 2026-09-15 (tests and open questions recounted; other rows unchanged since 2026-09-14). Phase history below._
 
 | Metric | Value |
 |---|---|
 | Course videos ingested | 73 (~15.2 h) |
 | Core evidence records | 151 |
 | Candidate records | 258 |
-| Tests passing | 460 (+1 skipped until Phase 14A) |
-| Open questions tracked | 43 |
+| Tests passing | 504 (+1 skipped until Phase 14A) |
+| Open questions tracked | 44 |
 | Data spend | $66.44 (Databento) |
 
 ### Phase 9: **PASS WITH CONCERNS** · G1 approved with conditions
@@ -288,12 +288,12 @@ recomputation, determinism, reference flags. Last-closed direction agreement vs 
 (00:00-01:00 UTC) has no DXY context because the CFD doesn't quote 18:00-20:00 New York; thinner 2018-2019 coverage;
 IMPL thresholds validated on 24 days only; no DXY extremes (OQ-25).
 
-**Phase 10 accepted (D15, G10: `docs/governance/g10-approval.md`). OQ-25 resolved (D16): STRUCTURE = tick mid, EXECUTION = tick bid/ask; guards in `src/cbr/data/price_series.py`. Phase 11 accepted (D17, G11); CBR15 not baseline-eligible (OQ-36 evidence package, hourly veto). Phase 12 accepted (D18, G12). D19-D23 rulings implemented; PC2 parity-candidate specs frozen. D24: Phase 13 redefined as Strategy Fidelity and Behavioral Parity; V-1 is supporting only. Phase 13 NOT READY: behavioral-parity run proposed (CBR-PROT-013B), awaiting owner approval.** Full tick history deferred (OQ-33). Phase 14 is
+**Phase 10 accepted (D15, G10: `docs/governance/g10-approval.md`). OQ-25 resolved (D16): STRUCTURE = tick mid, EXECUTION = tick bid/ask; guards in `src/cbr/data/price_series.py`. Phase 11 accepted (D17, G11); CBR15 not baseline-eligible (OQ-36 evidence package, hourly veto). Phase 12 accepted (D18, G12). D19-D23 rulings implemented; PC2 parity-candidate specs frozen. D24: Phase 13 redefined as Strategy Fidelity and Behavioral Parity; V-1 is supporting only. D25: CBR-PROT-013B approved; Phase 13 behavioral-parity run authorized after the freeze; no Phase 14 before the owner reviews the Phase 13 report.** Full tick history deferred (OQ-33). Phase 14 is
 planned only (`docs/architecture/phase14-execution-architecture.md`). Not authorized: baseline profitability testing,
 OQ-24 via performance, holdout P&L, Phase 17, Backtesting.py implementation.
 
-- **Commits:** local only, not pushed
-- **Blocked:** Trader.dev MCP server returns 502 on every path
+- **Repository:** `main` is pushed (`origin/main` = `5d05cce`); Phase 13 commits are on the local branch `cbr-work_091526-4pm`, not pushed
+- **Trader.dev:** MCP server unavailable (502 on every path). Not blocking: Phase 14A's custom simulator and Backtesting.py are the planned local backtesting architecture
 
 ---
 

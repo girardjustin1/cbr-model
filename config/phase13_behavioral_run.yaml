@@ -1,0 +1,258 @@
+# CBR-RUN-013B-1: frozen execution specification of the Phase 13 behavioral-parity run.
+# Protocol CBR-PROT-013B (approved, owner ruling D25). Frozen by `python -m cbr.engine.phase13_behavioral freeze`
+# (hash in reports/phase13-freeze-manifest.json) BEFORE Dukascopy data for the recent days is fetched and BEFORE any
+# Phase 13 engine run. Never edited after the freeze: a change is a new run id and a new freeze.
+# Nothing here is a strategy rule; PC2 parameters are read from the pinned spec files, never from this file.
+
+run_id: CBR-RUN-013B-1
+protocol: docs/governance/phase13-behavioral-parity-protocol.md
+ruling: docs/governance/d25-phase13-run-approval.md
+acceptance_criteria: docs/acceptance/phase13-acceptance-criteria.md
+spec_under_test:
+  model: CBR1H_BASELINE_V1
+  record: docs/strategy/parity-candidates/CBR1H_BASELINE_V1-PC2.yaml
+  spec_hash: 4dadc8b99cc4134888e5778704c0863d269d6f43ef9a5e47b1ba07fcb1b663b2
+variants: [A, B]
+views:                              # protocol §2; STRICT_COURSE runs one pre-registered D8/D9 alternative at a time
+  BASELINE_SPEC: [null]
+  STRICT_COURSE: [{oe_origin: LAST_RESET}, {early_shift_guard: FINAL_PUSH}, {early_shift_guard: ALIGN_15M}]
+engine_run_repeats: 2               # protocol §2.4: decision, trigger and result hashes identical
+complete_run_repeats: 2             # D25-E6: the whole run repeated from the same frozen inputs
+
+# ------------------------------------------------------------------ course examples (protocol §3; D25-P6, D25-P7)
+course_truth: research/examples/course_examples.jsonl
+examples:
+  CX-LT1-1:
+    role: POSITIVE
+    hour_utc: "2025-10-21T01:00:00+00:00"
+    data_span_utc: ["2025-10-20T00:00:00+00:00", "2025-10-21T03:00:00+00:00"]   # earliest contiguous stored day → H + 2 h
+    direction: BUY
+    extension_direction: DOWN
+    accepted_conditions: [{condition: RANGE}, {condition: TRENDING_RANGE}]
+    trending_range_direction: null                       # range example: dimension 4 not applicable
+    tom_time_utc: ["2025-10-21T01:39:15+00:00", "2025-10-21T01:39:15+00:00"]
+    tom_time_source: position-tool hover with seconds
+    time_tolerance_s: 15                                 # D19-12: with seconds ±15 s
+    entry_15m_candle_utc: "2025-10-21T01:30:00+00:00"
+    target_concept: FIFTY_PERCENT_OF_MOVE                # "Targeting 50% of this previous low timeframe move"
+    tom_prices: {entry: 4340.13, stop: 4332.96, target: 4351.59}
+    dxy_note: {text: "DXY still bullish at entry, into highs", compare_field: dxy_1h_forming_direction, direction: UP}
+  CX-TE1-1:
+    role: POSITIVE
+    hour_utc: "2025-10-24T04:00:00+00:00"
+    data_span_utc: ["2025-10-20T00:00:00+00:00", "2025-10-24T06:00:00+00:00"]
+    direction: BUY
+    extension_direction: DOWN
+    accepted_conditions: [{condition: TRENDING_RANGE, direction: DOWN}, {condition: RANGE}]
+    trending_range_direction: DOWN                       # "a bearish trending range"
+    tom_time_utc: ["2025-10-24T04:37:00+00:00", "2025-10-24T04:39:00+00:00"]   # minute-level journal / discussion
+    tom_time_source: journal row and discussion, minute level
+    time_tolerance_s: 60                                 # D19-12: without seconds ±60 s around the interval
+    entry_15m_candle_utc: "2025-10-24T04:30:00+00:00"
+    target_concept: FIFTY_PERCENT_OF_MOVE                # "50% of the previous move"
+    tom_prices: {entry: 4105.58, stop: 4102.80, target: 4109.71}
+    dxy_note: {text: "DXY range bound; hourly candle opened and pushed bullish into highs", compare_field: dxy_1h_forming_direction, direction: UP}
+  CX-LT3-2:
+    role: POSITIVE
+    hour_utc: "2025-11-10T01:00:00+00:00"
+    data_span_utc: ["2025-11-07T00:00:00+00:00", "2025-11-10T03:00:00+00:00"]
+    direction: SELL
+    extension_direction: UP
+    accepted_conditions: [{condition: TRENDING_RANGE, direction: UP}]   # D25-P6: TREND alone is not equivalent
+    trending_range_direction: UP
+    tom_time_utc: ["2025-11-10T01:40:00+00:00", "2025-11-10T01:40:00+00:00"]
+    tom_time_source: position-tool x-axis with seconds
+    time_tolerance_s: 15
+    entry_15m_candle_utc: "2025-11-10T01:30:00+00:00"
+    target_concept: NEARER_DISCRETIONARY                 # initial TP at a nearer level; 50% of extension = most aggressive
+    tom_prices: {entry: 4050.71, stop: 4053.30, target: 4043.80}
+    dxy_note: {text: "DXY bearish at the start; shifted bullish at entry", compare_field: dxy_15m_forming_direction, direction: UP}
+  CX-LT3-1:
+    role: NEGATIVE_CONTROL
+    hour_utc: "2025-11-10T01:00:00+00:00"
+    data_span_utc: ["2025-11-07T00:00:00+00:00", "2025-11-10T03:00:00+00:00"]   # same engine runs as CX-LT3-2
+    rejected_setup_direction: SELL
+    control_window_utc: ["2025-11-10T01:28:00+00:00", "2025-11-10T01:36:00+00:00"]   # D25 O-2
+    control_window_derivation: >-
+      video clock 00:00:00 = 12:23:41 UTC+11 (01:23:41 UTC); discussion 00:07:47-00:09:16 = 01:31:28-01:32:57 UTC;
+      D25-P3 3-minute allowance each side = 01:28:28-01:35:57; widened outward to whole minutes
+    eligible_canonical_signal: ARMED BASELINE_SPEC candidate, variant A or B, five_second_shift_time in control_window_utc
+    expected: NO_ELIGIBLE_CANONICAL_SIGNAL
+    tom_reasons:
+      - {reason: "shift too small", quote: "technically you took out but not big enough shit for me to care", ts: "00:08:40-00:08:52"}
+      - {reason: "shift not clean", quote: "not really clean shift at all", ts: "00:08:25-00:08:40"}
+      - {reason: "pushing off a 5m/15m candle open", quote: "I'm not the biggest fan of immediately pushing bearish off a 5 or 15 minute candle open", ts: "00:08:04-00:08:09"}
+      - {reason: "gold spread and DXY moving together (out of scope, D7)", quote: "we have gold spread and DXY both moving the same direction", ts: "00:08:56-00:09:16"}
+    classification_if_signal: >-
+      OWNER_BASELINE_CHOICE if the signal is absent under one D8/D9 alternative; else UNRESOLVED_SPEC_AMBIGUITY (OQ-08:
+      shift size and cleanliness are unquantified in PC2) with secondary OUT_OF_SCOPE_INSTRUMENT (gold spread, D7);
+      IMPLEMENTATION_BUG only with a failing unit test
+
+# ------------------------------------------------------------------ candidate selection (pinned in PC2)
+candidate_selection:
+  code: src/cbr/engine/parity.py            # select_candidate / selection_key, D19-10; no course input
+  order: [SELECTED_ARMED, DIAGNOSTIC_ONLY, DIAGNOSTIC_FIRST_IN_ORDER]   # protocol §2.3
+  per: [variant, view]
+  scored_variant: >-
+    D25 O-3: the first variant in order A, B whose BASELINE_SPEC evaluated candidate meets all four hard dimensions;
+    otherwise the variant meeting the most hard dimensions (ties → A). Both variants always reported in full
+  candidate_identity_across_views: [variant, direction, five_second_sweep_time, five_second_shift_level]
+
+# ------------------------------------------------------------------ structural event match (D25-P3)
+structural_event_match:
+  same_event_kind: 5s type 3 shift
+  same_direction: true
+  same_15m_candle_as_tom_entry: true
+  max_abs_time_difference_minutes: 3        # distance from the engine shift time to Tom's time interval
+  bar_tolerance: 1                          # ±1 bar of the tier, where a bar comparison applies (recent feed study)
+  never_used_for_selection: true
+
+# ------------------------------------------------------------------ feed band (D25-P4)
+feed_band:
+  implementation: parity.calibrate          # pooled median close offset δ; residual |FX − DK − δ| over high/low/close
+  floor_usd: 0.02
+  residual_percentile: 95
+  round_up_to_usd: 0.05
+  also_report_percentile: 99
+  lag_range_minutes: 3
+  role: descriptive; used only in the protocol §6 materiality (margin) test; never an equality tolerance or strategy parameter
+
+# ------------------------------------------------------------------ recent feed comparison (protocol §7.1; D25-P2)
+recent_feed_comparison:
+  days: ["2026-09-09", "2026-09-10", "2026-09-11", "2026-09-14"]
+  start_utc: "2026-09-09T01:00:00+00:00"
+  comparison_minutes: scheduled-open minutes (sessions.expected_closed_mask) of those UTC days, from start_utc
+  restrict_both_feeds_to_comparison_minutes: true
+  forexcom_files:
+    "1m": "references/tom-chart-data/FOREXCOM_XAUUSD, 1.csv"
+    "5m": "references/tom-chart-data/FOREXCOM_XAUUSD, 5.csv"
+    "15m": "references/tom-chart-data/FOREXCOM_XAUUSD, 15.csv"
+  dukascopy: STRUCTURE 1m tick-mid bars built from ticks fetched for the four days (D16 canonical)
+  roll_ups: clock-aligned from 1m on both feeds (5m, 15m, 1h); exports checked against the 1m roll-ups
+  swings: {LTF: {bars: 1m, k: PC2 primitives.swing.LTF.k}, MTF: {bars: 5m, k: PC2 primitives.swing.MTF.k}, atr_length: PC2}
+  swing_match: same kind, extreme bar within ±1 bar, one-to-one in time order
+  membership_rate: matched / (matched + forexcom_only + dukascopy_only)
+  count_window: events with extreme/event time in [start_utc + 2 h, last comparison minute + 1 min − 2 h)
+  takes_15m: every 15m candle Q whose Q and Q−1 minutes are all present on both feeds; high take and low take pooled
+  hourly_evaluation_minutes: [25, 35, 45]
+  hour_eligibility: >-
+    all scheduled-open minutes of [H, H+1h) present on both feeds; tradable condition-window start ≥ start_utc;
+    ATR(1h) defined on both feeds at the evaluation time
+  hour_level_rules: [M1H-COND-01, M1H-COND-02, M1H-COND-03, M1H-LOC-01, M1H-LOC-02, M1H-LOC-03, M1H-OE-01, M1H-OE-02,
+                     M1H-OE-04a, M1H-OE-04b, M1H-6A-2-PREV-15M-BROKEN-BY-Q, M1H-6A-3-NEW-EXTREME-IN-Q]
+  hour_level_membership: every evaluated hour-level rule passes (the setup would be eligible for a 5s trigger)
+  type3: 1m type 3 BREAK events on LTF swings (PC2 max_reversal LTF, latest_pair_only), same direction, end bar ±1
+  hilo: 1m HILO events (shifts.hilo), same direction and kind, bar ±1
+  five_second: DATA_LIMITATION (no FOREXCOM 5s)
+  interval: Wilson 95% (z = 1.96)
+
+criterion_9:                        # D25 O-1 (Research Engineer operationalization; owner may reject)
+  core_concepts: [ltf_swing_membership, mtf_swing_membership, takes_15m, hour_extension_direction,
+                  condition_at_hour_open, type3_1m, hour_level_membership]
+  fail_evidence_if_rate_below: 0.50
+  concern_if_rate_below: 0.80
+  basis: point estimate (Wilson 95% interval reported alongside)
+
+# ------------------------------------------------------------------ higher-timeframe fidelity (protocol §7.2)
+higher_timeframe:
+  forexcom_files:
+    "1h": "references/tom-chart-data/FOREXCOM_XAUUSD, 60.csv"
+    "4h": "references/tom-chart-data/FOREXCOM_XAUUSD, 240.csv"
+    "1D": "references/tom-chart-data/FOREXCOM_XAUUSD, 1D.csv"
+  dxy_file: "references/tom-chart-data/TVC_DXY, 60.csv"
+  course_hours_pm: 3                  # 1h bars in [H − 3 h, H + 3 h]
+  course_4h_pm_hours: 12              # 4h bars whose interval intersects [H − 12 h, H + 12 h)
+  course_1d_bars: [containing H, previous]
+  bar_interval: "[export time, next export time) capped at the nominal length"
+  dukascopy_fields_only_with_full_coverage: true
+  hour_offset_delta_h: mean(FOREXCOM open − Dukascopy open, FOREXCOM close − Dukascopy close) of the example hour
+  dxy: TVC:DXY 1h vs Dukascopy DXY CFD 1m candles rolled to 1h (open/close only; descriptive)
+
+# ------------------------------------------------------------------ dimensions (protocol §4; D25-P5)
+dimensions:
+  1: {name: model, hard: model_family, match: an evaluated CBR1H 5s-shift candidate exists in H (variant reported)}
+  2: {name: direction, hard: direction, match: candidate direction == example direction}
+  3: {name: condition, match: hour condition (and TR direction where the accepted set states one) in accepted_conditions}
+  4: {name: tr_direction, match: cond_direction == trending_range_direction; not applicable when null}
+  5: {name: extension_direction, hard: extension_direction, match: oe_dir == extension_direction}
+  6: {name: extension_timing, match: oe_duration_min >= PC2 oe.min_minutes and oe_extreme_time < shift (or decision) time}
+  7: {name: previous_15m_take, match: q_break_by_q is true at the decision (exception flag reported)}
+  8: {name: shift_type, match: 5s type 3 in the example direction whose shift completed (five_second_shift_time set)}
+  9: {name: shift_time, match: shift time within tom_time_utc ± time_tolerance_s; FEED_DIFFERENCE when outside but D25-P3 equivalent}
+  10: {name: stop_anchor, match: anchor at the shift is the extension extreme and (Tom stop − δ_h) lies beyond it on the protective side}
+  11: {name: target_concept, match: target_concept FIFTY_PERCENT_OF_MOVE (engine 50% of the hour extension); NEARER_DISCRETIONARY → CANON_MISMATCH}
+  12: {name: dxy, descriptive: true, excluded_from_verdict: true}
+  core_structural_trigger: dimension 8 MATCH and dimension 9 MATCH or FEED_DIFFERENCE        # D25 O-4
+  price_dimensions_class: prices differing beyond display rounding (0.01) with the concept matched → FEED_DIFFERENCE
+
+# ------------------------------------------------------------------ classification (protocol §5, §6; CBR-ACC-013 §5)
+classification:
+  order: [DATA_LIMITATION, FEED_DIFFERENCE, FEED_DEPENDENT_SIGNAL_DIFFERENCE, EXECUTION_DEPENDENT, OWNER_BASELINE_CHOICE,
+          UNRESOLVED_SPEC_AMBIGUITY, IMPLEMENTATION_BUG, CANON_MISMATCH]
+  implementation_bug_requires: a failing unit test reproducing a contradiction of PC2 (always flagged)
+  owner_baseline_choice: the mismatch disappears in at least one single-alternative STRICT_COURSE run (same candidate identity for rules; evaluated candidate for dimensions)
+  feed_dependent_margin_test: >-
+    |Dukascopy margin| ≤ τ → FEED_DEPENDENT_SIGNAL_DIFFERENCE; FOREXCOM evidence at the needed (intrahour) resolution
+    doesn't exist for the course windows → tagged UNVERIFIED + DATA_LIMITATION; |margin| > τ → classify normally
+  margin_rules: [M1H-LOC-01, M1H-LOC-02, M1H-LOC-03, M1H-OE-02, M1H-OE-04a, M1H-OE-04b, M1H-6A-2-PREV-15M-BROKEN-BY-Q,
+                 M1H-6A-3-NEW-EXTREME-IN-Q, extension_direction]
+  open_questions:                   # rule → open question / assumption (UNRESOLVED_SPEC_AMBIGUITY); from PC2 labels
+    M1H-COND-01: {when_condition: UNDEFINED, oq: [OQ-02, OQ-03, OQ-40]}
+    M1H-COND-02: {when_condition: UNDEFINED, oq: [OQ-02, OQ-03, OQ-40]}
+    M1H-COND-03: {oq: [OQ-02]}
+    M1H-COND-04: {oq: [OQ-05, OQ-36]}
+    M1H-OE-04a: {oq: [OQ-08]}
+    M1H-OE-04b: {oq: [OQ-08]}
+    M1H-6A-1-HVCS-INTO-SHIFT: {oq: [OQ-44, OQ-08]}
+    NT_ROLLOVER: {oq: [OQ-16]}
+    condition_direction: {oq: [OQ-01, OQ-02]}           # TR direction differs from the course or is NONE
+    condition_class_boundary: {oq: [OQ-02, OQ-03]}      # RANGE vs TRENDING_RANGE differs from the accepted set
+    condition_trend: {class: CANON_MISMATCH, evidence: [E1H-007, E1H-046]}   # protocol §4 dim 3, D25-P6
+    shift_not_completed:                                # by engine cancel reason
+      S5_T3_TIMEOUT: {oq: [OQ-09]}
+      S5_T3_NEW_SWING: {oq: [OQ-01]}
+      OE_PULLBACK: {obc: oe_origin, else_evidence: [E1H-018]}
+      WINDOW_END: {evidence: [E1H-024]}
+      S5_SHIFT_BEFORE_WINDOW: {evidence: [E1H-024]}
+      FRACTAL_PULLBACK_INVALID: {evidence: [E1H-031]}
+  data_limitation_rules: [NT_INCOMPLETE_H, NT_INCOMPLETE_H_OPEN]
+  canon_evidence:                   # cited when no earlier class applies
+    M1H-COND-01: [E1H-007, E1H-008]
+    M1H-COND-02: [E1H-007, E1H-046]
+    M1H-LOC-01: [E15-015, E1H-002]
+    M1H-LOC-02: [E1H-017]
+    M1H-LOC-03: [E1H-012, E15-015]
+    M1H-OE-01: [E1H-018, E1H-002]
+    M1H-OE-02: [E1H-018]
+    M1H-6A-2-PREV-15M-BROKEN-BY-Q: [E1H-017, E1H-023]
+    M1H-6A-3-NEW-EXTREME-IN-Q: [E1H-021]
+    M1H-6B-1-T3-AFTER-OE: [E1H-031]
+    M1H-6B-3-PULLBACK: [E1H-031]
+    M1H-TIME-01: [E1H-024]
+    NT_SYDNEY: [EP1-015, EP1-017]
+    IMPL-REWARD: [M1H-TP-01]
+    target_concept: [M1H-TP-01]
+    stop_anchor: [E1H-036]
+    shift: [E1H-021, E1H-022]
+  example_verdict_order: [IMPLEMENTATION_BUG, FEED_DEPENDENT_SIGNAL_DIFFERENCE, CANON_MISMATCH, UNRESOLVED_SPEC_AMBIGUITY,
+                          OWNER_BASELINE_CHOICE, BEHAVIORAL_MATCH_WITH_FEED_DIFFERENCE, BEHAVIORAL_MATCH]
+  data_limitation_aggregates_as: UNRESOLVED_SPEC_AMBIGUITY
+  execution_dependent_aggregates_as: UNRESOLVED_SPEC_AMBIGUITY
+  failed_acceptance_rules_count_in_example_verdict: true
+
+# ------------------------------------------------------------------ overall verdict (D25-P5-V with O-5, O-6)
+verdict:
+  FAIL:
+    - a complete-run repeat or an engine-run repeat is not identical (gate A)
+    - the PC2 spec hash or a pinned file changed (gate B)
+    - a hard dimension fails in a positive example with a class other than OWNER_BASELINE_CHOICE
+    - an open IMPLEMENTATION_BUG affects signal membership (examples or negative control)
+    - criterion 9 FAIL evidence
+  OWNER_DETERMINATION_REQUIRED:
+    - a hard dimension fails only with OWNER_BASELINE_CHOICE (D25 O-5)
+  PASS:
+    - no FAIL or OWNER_DETERMINATION_REQUIRED condition
+    - every non-DXY dimension of the scored variants BEHAVIORAL_MATCH and every positive example ARMED
+    - negative control has no eligible canonical signal
+    - criterion 9 met without concern
+  PASS_WITH_CONCERNS: otherwise

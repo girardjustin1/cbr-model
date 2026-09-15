@@ -1,7 +1,7 @@
 # Phase 13 Readiness Checklist
 
 **Doc:** CBR-READY-013 · **Created:** 2026-09-15 (owner ruling D18-12) · **Updated:** 2026-09-15 (D24, fidelity revision) ·
-**Status:** NOT READY
+**Status:** RUN APPROVED (D25); freeze and execution in progress
 
 Phase 13 is now **STRATEGY FIDELITY AND BEHAVIORAL PARITY** (D24; gate CBR-ACC-013). It may not run while any
 mandatory item in sections A or C is unchecked. Section B (V-1) is **supporting feed-fidelity validation** and no longer
@@ -53,7 +53,7 @@ and Dukascopy calibration days are preserved as supporting evidence.
 
 | # | Item | Status | Reference |
 |---|---|---|---|
-| 29 | [ ] Behavioral-parity run protocol and decisions P-1…P-8 approved | proposed | `docs/governance/phase13-behavioral-parity-protocol.md` |
+| 29 | [x] Behavioral-parity run protocol and decisions P-1…P-8 approved | D25: approved; P-5 option B as the D25-P5 standard; run spec `config/phase13_behavioral_run.yaml` | `docs/governance/d25-phase13-run-approval.md` |
 | 30 | [ ] Protocol frozen (hash) and run code committed with tests | not started | CBR-PROT-013B §8 |
 | 31 | [ ] Recent feed comparison complete (Dukascopy for the P-2 days fetched and validated; agreement rates and feed band reported) | not started | CBR-ACC-013 G; CBR-PROT-013B §7.1 |
 | 32 | [ ] Higher-timeframe fidelity (FOREXCOM 1h/4h/1D; TVC:DXY 1h) reported | not started | CBR-ACC-013 F; §7.2 |
