@@ -37,14 +37,6 @@ def test_engine_refuses_non_structure_bars():
                         end=T("2025-10-21 00:30"))
 
 
-def _row(**kw):
-    base = {"direction": "SELL", "entry_trigger_time": T("2025-10-21 00:08"), "cancel_time": T("2025-10-21 00:15"),
-            "entry_reference_price": 99.9, "stop_extension_extreme": 101.0, "stop_buffer_price": 0.1,
-            "target_price": 99.0}
-    base.update(kw)
-    return pd.Series(base)
-
-
 def _bars5(rows, start="2025-10-21 00:08"):
     idx = pd.date_range(T(start), periods=len(rows), freq="5s")
     b = pd.DataFrame(rows, columns=["open", "high", "low", "close"], index=idx)
@@ -52,34 +44,48 @@ def _bars5(rows, start="2025-10-21 00:08"):
     return b
 
 
-def test_structure_outcome_touch_then_target_and_stop_first_on_same_bar():
-    p = load_cbr15()
-    target_first = _bars5([(100, 100, 99.85, 99.9), (99.9, 99.95, 99.5, 99.6), (99.6, 99.6, 98.9, 99.0)])
-    assert cbr15._structure_outcome(_row(), target_first, p)[0] == "TARGET"
-    both = _bars5([(100, 100, 99.85, 99.9), (99.9, 101.2, 98.9, 99.0)])
-    assert cbr15._structure_outcome(_row(), both, p)[0] == "STOP"          # same bar: stop first (spec §8 IMPL)
-    never = _bars5([(100, 100.2, 99.95, 100.1)] * 3)
-    assert cbr15._structure_outcome(_row(), never, p)[0] == "NO_TOUCH"
+def _cand(q, ts, raw, htf=True, outcome=None):
+    rules = {"M15-COND-01": raw, "M15-HTF-01": htf}
+    return {"candle_open_utc": T(q), "timestamp": T(ts), "direction": "SELL", "variant": "base", "rules": rules,
+            "raw_outcome": outcome}
 
 
-def test_prior_rule_counts_only_setups_resolved_before_candle_open():
+def test_prior_rule_counts_setups_formed_in_the_last_hour_never_outcomes():
+    """D19-1 (OQ-36 C′): formation only. A setup that never reached target still counts; one formed before the 60-min
+    window, after Q.t0, failing another rule, or vetoed by the hourly signal state doesn't."""
     p = load_cbr15()
-    q = T("2025-10-21 01:00")
-    ok_rules = {"M15-COND-01": True}
     cand = pd.DataFrame([
-        {"candle_open_utc": T("2025-10-21 00:15"), "timestamp": T("2025-10-21 00:20"), "direction": "SELL",
-         "variant": "base", "rules": dict(ok_rules), "raw_setup": True, "raw_outcome": "TARGET",
-         "raw_resolved_utc": T("2025-10-21 00:40")},
-        {"candle_open_utc": T("2025-10-21 00:30"), "timestamp": T("2025-10-21 00:35"), "direction": "SELL",
-         "variant": "base", "rules": dict(ok_rules), "raw_setup": True, "raw_outcome": "TARGET",
-         "raw_resolved_utc": T("2025-10-21 01:05")},                   # resolves after Q opens: not known yet
-        {"candle_open_utc": q, "timestamp": T("2025-10-21 01:09"), "direction": "BUY", "variant": "base",
-         "rules": dict(ok_rules), "raw_setup": False, "raw_outcome": None, "raw_resolved_utc": pd.NaT},
+        _cand("2025-10-20 23:45", "2025-10-20 23:52", raw=True),                  # 68 min before Q: outside the hour
+        _cand("2025-10-21 00:15", "2025-10-21 00:20", raw=True, outcome="STOP"),  # formed; outcome irrelevant
+        _cand("2025-10-21 00:30", "2025-10-21 00:35", raw=False),                 # not a qualifying setup
+        _cand("2025-10-21 00:45", "2025-10-21 00:50", raw=True, htf=False),       # hourly VETO: not qualifying
+        _cand("2025-10-21 01:00", "2025-10-21 01:09", raw=True),                  # the candidate itself (Q = 01:00)
+        _cand("2025-10-21 01:15", "2025-10-21 01:20", raw=True),
     ])
-    cand["raw_resolved_utc"] = pd.to_datetime(cand["raw_resolved_utc"], utc=True)
     cbr15._apply_prior_rule(cand, p)
-    last = cand.iloc[-1]
-    assert last["prior_played_out_60m"] == 1 and last["rules"]["M15-COND-03"] is True and last["event"] == "ARMED"
+    q = cand.iloc[4]
+    assert q["prior_setup_count"] == 1 and bool(q["prior_setup_exists"]) and q["rules"]["M15-COND-03"] is True
+    assert q["prior_setup_latest_time"] == T("2025-10-21 00:20") and q["prior_setup_count_120m"] == 2
+    assert (cand["prior_setup_played_out_status"] == cbr15.PLAYED_OUT_UNKNOWN).all()
+    assert "raw_outcome" not in {k for r in cand["rules"] for k in r}
+    first = cand.iloc[0]
+    assert first["prior_setup_count"] == 0 and first["rules"]["M15-COND-03"] is False and first["event"] == "REJECTED"
+    assert cand.iloc[5]["prior_setup_count"] == 2                               # 00:20 and 01:09 (00:50 vetoed)
+
+
+def test_q_minus_1_must_be_broken_by_q_itself():
+    """D19-4 (OQ-41): the previous candle's high must be taken by Q's own extension; an older candle's level doesn't do."""
+    from cbr.structure import overextension as oe_mod
+
+    q0 = T("2025-10-21 00:15")
+    rows = [(100.0, 100.4, 99.9, 100.3), (100.3, 100.9, 100.2, 100.8), (100.8, 101.2, 100.7, 101.1)]
+    b = pd.DataFrame(rows, columns=["open", "high", "low", "close"], index=pd.date_range(q0, periods=3, freq="1min"))
+    kw = {"atr_1m": 1.0, "activation_atr": 0.5, "pullback_frac": 0.5, "two_sided_frac": 0.5}
+    breaks = oe_mod.evaluate(b, q0, 100.0, q0 + pd.Timedelta(minutes=3), prev_candle_high=101.0, prev_candle_low=99.0, **kw)
+    assert breaks.prev_candle_break is True                                   # Q (high 101.2) takes Q−1's 101.0
+    older_only = oe_mod.evaluate(b, q0, 100.0, q0 + pd.Timedelta(minutes=3), prev_candle_high=101.5,
+                                 prev_candle_low=99.0, **kw)
+    assert older_only.prev_candle_break is False                              # Q−2's 101.1 is irrelevant: Q−1 = 101.5
 
 
 def _fixture():
@@ -126,7 +132,7 @@ def test_every_rejection_is_explained_and_armed_rows_fail_nothing():
               "M15-OE-03a", "M15-OE-03b", "M15-LOC-04", "M15-TIME-01", "M15-HTF-01", "NT_SYDNEY", "NT_ROLLOVER",
               "NT_INCOMPLETE_Q", "IMPL-REWARD"}
     assert all(needed <= set(rules) for rules in c["rules"])
-    assert (c["htf_state"] == "NOT_EVALUATED").all()                  # Phase 12 dependency (OQ-34)
+    assert (c["htf_signal_state"] == "NOT_EVALUATED").all() and (c["htf_fill_state"] == "NOT_EVALUATED").all()
 
 
 def test_signal_contract_shape_with_prior_rule_relaxed_for_shape_only():
@@ -194,4 +200,38 @@ def test_htf_not_evaluated_is_neither_pass_nor_fail_and_blocks_eligibility():
     assert not c["rules_failed"].map(lambda f: "M15-HTF-01" in f).any()
     assert c["rules_not_evaluated"].map(lambda f: "M15-HTF-01" in f).all()
     assert (~c["baseline_eligible"]).all()
-    assert c["eligibility_blockers"].map(lambda b: cbr15.BLOCKER_HTF in b and cbr15.BLOCKER_OQ36 in b).all()
+    assert c["eligibility_blockers"].map(lambda b: cbr15.BLOCKER_HTF in b and cbr15.BLOCKER_HTF_FILL in b).all()
+
+
+# ---- owner ruling D19 (Phase 13 readiness) ----
+
+def test_htf_signal_state_and_fill_state_are_separate():
+    """D19-15: fill state NOT_EVALUATED never rejects nor enters the signal rule; a signal VETO does reject."""
+    s1, s5 = _fixture()
+    fill_unknown = cbr15.run_cbr15(s1, s5, start=FIXTURE[2], end=FIXTURE[3],
+                                   htf=lambda _t, _d: {"signal": "CLEAR", "fill": "NOT_EVALUATED"}).candidates
+    base = cbr15.run_cbr15(s1, s5, start=FIXTURE[2], end=FIXTURE[3],
+                           htf=lambda _t, _d: {"signal": "CLEAR", "fill": "NOT_REQUIRED"}).candidates
+    assert fill_unknown["rules"].map(lambda r: r["M15-HTF-01"] is True).all()
+    assert list(fill_unknown["event"]) == list(base["event"])                  # fill state doesn't touch signals
+    assert fill_unknown["eligibility_blockers"].map(lambda b: cbr15.BLOCKER_HTF_FILL in b).all()
+    veto = cbr15.run_cbr15(s1, s5, start=FIXTURE[2], end=FIXTURE[3],
+                           htf=lambda _t, _d: {"signal": "VETO", "fill": "NOT_REQUIRED"}).candidates
+    assert (veto["event"] == "REJECTED").all() and veto["rules_failed"].map(lambda f: "M15-HTF-01" in f).all()
+
+
+def test_trigger_time_fields_are_causal_at_the_shift():
+    s1, s5 = _fixture()
+    full = cbr15.run_cbr15(s1, s5, start=FIXTURE[2], end=FIXTURE[3])
+    shifts = full.candidates["five_second_shift_time"].dropna()
+    assert len(shifts) > 0
+    cut = shifts.iloc[0] + pd.Timedelta(seconds=25)                            # mid-minute: the 1m bar isn't closed
+    k1, k5 = s1[s1.index + pd.Timedelta(minutes=1) <= cut], s5[s5.index + pd.Timedelta(seconds=5) <= cut]
+    trunc = cbr15.run_cbr15(k1, k5, start=FIXTURE[2], end=FIXTURE[3])
+
+    def known(r):
+        f = cbr15.trigger_frame(r)
+        t = pd.to_datetime(f["five_second_shift_time"], utc=True)
+        return f[t + pd.Timedelta(seconds=5) <= cut].reset_index(drop=True)
+    pd.testing.assert_frame_equal(known(trunc), known(full))
+    assert set(full.candidates["trigger_timing_state"]) <= {"IN_WINDOW", cbr15.TYPE3_RESOLVED_TOO_EARLY, "NO_SHIFT"}

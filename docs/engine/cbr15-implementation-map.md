@@ -78,3 +78,16 @@ candle enforcement (Phase 14A execution layer; EXECUTION bars). The engine never
 
 OQ-34 open until Phase 12 · OQ-35 resolved (D17-2) · OQ-36 open, evidence package required · OQ-37 resolved (D17-4) ·
 OQ-38 resolved (D17-5). **CBR15 is not baseline-eligible** (`docs/governance/g11-approval.md`).
+
+## D19 update (Phase 13 readiness, parity-candidate PC1)
+
+| Spec rule | Implementation | Evidence / label |
+|---|---|---|
+| M15-COND-03 | `_apply_prior_rule`: raw setups (every rule except COND-03; hourly signal state not VETO) FORMED with decision time in [Q.t0 − 60 min, Q.t0); `prior_setup_exists`, `prior_setup_count`, `prior_setup_count_120m`, `prior_setup_latest_time`, `prior_setup_played_out_status = UNKNOWN`. Raw-setup outcome resolution (`_resolve_raw_outcomes`, `_structure_outcome`) removed | CANON E15-049; D19-1 (OQ-36 C′) |
+| M15-HTF-01 | `htf(as_of, d)` → `{"signal", "fill"}`; rule = signal state (`htf_signal_state`); `htf_fill_state` recorded, never a rule; blocker `HTF_FILL_STATE_EXECUTION_DEPENDENT` on every candidate | D18-11, D19-15 |
+| M15-TIME-01 at the trigger | `five_second_shift_time`, `trigger_mic`, `trigger_timing_state` (IN_WINDOW / TYPE3_RESOLVED_TOO_EARLY / NO_SHIFT); `TRIGGER_FIELDS` with their own causality test | D19-16 |
+| M15-LOC-04 | unchanged: Q's own extreme vs Q−1 (`q_prev_high/low` recorded); no exception for CBR15 | D19-4 |
+| condition window | CLOCK (unchanged; OQ-45) | ASSUMPTION |
+
+Eligibility blockers now: `HTF_SIGNAL_STATE_NOT_EVALUATED` (only without the hourly engine), `HTF_FILL_STATE_EXECUTION_DEPENDENT`,
+`PHASE13_PARITY_NOT_RUN`. The OQ-36 blocker is gone (resolved).

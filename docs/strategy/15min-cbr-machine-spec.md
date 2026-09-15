@@ -1,7 +1,11 @@
 # CBR15_BASELINE_V1: Machine Specification
 
 **Model id:** `CBR15_BASELINE_V1` · **Primitives:** `CBR_PRIMITIVES_V1` · **Parameters:**
-`config/strategy.yaml → models.CBR15_BASELINE_V1` · **Status:** draft for review · **Date:** 2026-09-14 (price roles D16, 2026-09-15)
+`config/strategy.yaml → models.CBR15_BASELINE_V1` · **Status:** PARITY-CANDIDATE `PC1` (not a validated strategy spec) · **Date:** 2026-09-14 (price roles D16; D19 rulings 2026-09-15)
+
+**D19 changes.** Prior-setup EXISTENCE (OQ-36 C′); M15-HTF-01 signal state separate from fill state (D18-11, D19-15);
+trigger-time fields (D19-16); Q−1 broken by Q confirmed (OQ-41). Condition window stays CLOCK pending OQ-45. Frozen
+record: `docs/strategy/parity-candidates/CBR15_BASELINE_V1-PC1.yaml`.
 
 **Price roles (D16).** All rules in §2-§7 read STRUCTURE (tick-mid) bars; fills and stop/target touches belong to the execution layer (EXECUTION bid/ask bars). The engine never reads bid/ask.
 
@@ -38,7 +42,7 @@ cond = condition_classifier(tier=LTF, W=param.cond.window_hours, as_of=Q.t0)
 |---|---|---|---|
 | M15-COND-01 | CBR15-COND-003 | `cond.condition ∈ {RANGE, TRENDING_RANGE}`; `TREND/UNDEFINED` → BLOCKED | CANON |
 | M15-COND-02 | CBR15-COND-002 | `param.cond.min_legs (3) ≤ cond.n_legs ≤ param.cond.max_legs (6)`; `< 3` → BLOCKED(RANGE_TOO_BIG); `> 6` → BLOCKED(LOWER_TF_RANGE) | CANON (E15-048) |
-| M15-COND-03 | CBR15-COND-004 | `prior_played_out(lookback = param.prior.hard_lookback_min = 60) ≥ 1`; else BLOCKED(NO_SETUPS_LAST_HOUR). `prior_played_out(120 min)` recorded (slide: "3+ = good") | CANON rule (E15-049); raw-setup definition as in 1h spec §2. **Interpretation of "played out" NOT approved (D17-3, OQ-36): implemented unchanged, every candidate carries an eligibility blocker until the evidence package resolves it** |
+| M15-COND-03 | CBR15-COND-004 | `prior_setup_count ≥ param.prior.hard_min_count (1)` where `prior_setup_count` = qualifying CBR15 setups **FORMED** (raw setups: every rule except COND-03 passes and the hourly signal state isn't VETO) with decision time in `[Q.t0 − 60 min, Q.t0)`; else BLOCKED(NO_SETUPS_LAST_HOUR). `prior_setup_count_120m` recorded (slide: "3+ = good"). No outcome is read; `prior_setup_played_out_status = UNKNOWN` (diagnostic) | CANON (E15-049); formation reading owner ruling D19-1 (OQ-36 C′) |
 | M15-COND-04 | CBR15-COND-005 | current leg index `cond.n_legs + 1 ≥ 3` (not leg 1 or 2). Upper bound "leg 5" recorded, not filtered (range start undefined) | CANON lower bound; upper diag (OQ-06) |
 | M15-COND-05 | CBR15-COND-006/007 | recorded only (hourly setups present? / clarity) | diagnostic |
 | M15-COND-06 | D17-4 (OQ-37) | `TRENDING_RANGE` whose direction the classifier can't determine → context failure `TREND_DIRECTION_UNRESOLVED` (no inferred direction) | owner ruling |
@@ -52,7 +56,7 @@ cond = condition_classifier(tier=LTF, W=param.cond.window_hours, as_of=Q.t0)
 | M15-LOC-01 | CBR15-LOC-001 | `RANGE`: SELL `pos(oe_extreme) ≥ 0.75`; BUY `≤ 0.25` | CANON |
 | M15-LOC-02 | CBR15-LOC-002 (counter) | `TRENDING_RANGE`, `d` counter: `oe_extreme` beyond the most recent **LTF** swing in OE direction ("sells only after taking out highs") | CANON |
 | M15-LOC-03 | CBR15-LOC-002 (pro) | `TRENDING_RANGE`, `d` pro: `er(oe_extreme, last LTF leg in cond.direction) ∈ [0.50, 0.75]` | CANON |
-| M15-LOC-04 | CBR15-LOC-003 | `oe_prev_candle_break` (extension takes out the previous 15m candle's high/low) | CANON (E15-034) |
+| M15-LOC-04 | CBR15-LOC-003 | `oe_prev_candle_break`: Q's own extension extreme takes Q−1's high/low (Q−1 = previous completed 15m candle; an older candle's level doesn't count). No trade-direction exception for CBR15 (not sourced for this model) | CANON (E15-034); D19-4 |
 | M15-LOC-05 | CBR15-LOC-005 | SELL above `Q.open`, BUY below | CANON (OQ-14 reading). Satisfied by construction of `oe_dir`; asserted as an invariant test |
 | M15-LOC-06 | OQ-07 variant | if `aoi_required`: `aoi_tap(Q)` | variant |
 
@@ -69,7 +73,7 @@ cond = condition_classifier(tier=LTF, W=param.cond.window_hours, as_of=Q.t0)
 
 | Rule id | Written rule | Logic | Label |
 |---|---|---|---|
-| M15-TIME-01 | CBR15-TIME-003 | fill at `param.timing.start_mic (7.5) ≤ mic < 15`; orders cancelled at candle close. A type 3 that resolves (breaks) before mic 7.5 is not a valid entry and is cancelled at the break (`TYPE3_RESOLVED_TOO_EARLY`); a later, independent type 3 is evaluated normally (D17-5, OQ-38) | CANON (E15-027); owner ruling |
+| M15-TIME-01 | CBR15-TIME-003 | fill at `param.timing.start_mic (7.5) ≤ mic < 15`; orders cancelled at candle close. Evaluated at the actual 5s shift (D19-16): `five_second_shift_time`, `trigger_mic`, `trigger_timing_state` ∈ {IN_WINDOW, TYPE3_RESOLVED_TOO_EARLY, NO_SHIFT}. A type 3 that resolves before mic 7.5 is not a valid entry and is cancelled at the break; a later, independent type 3 is evaluated normally (D17-5, OQ-38) | CANON (E15-027); owner ruling |
 | M15-TIME-02 | CBR15-TIME-001 | no session filter beyond canonical no-trade windows | CANON (E15-026) + D3 |
 | M15-TIME-03 | CBR15-TIME-004/005 | `mih` anchor (:07/:22/:37/:52), "new 5m candle created the break" flag recorded | diagnostic |
 
@@ -77,7 +81,7 @@ cond = condition_classifier(tier=LTF, W=param.cond.window_hours, as_of=Q.t0)
 
 | Rule id | Written rule | Logic | Label |
 |---|---|---|---|
-| M15-HTF-01 | CBR15-HTF-001 | **Veto** if, in the current hour `H`, a raw `CBR1H_BASELINE_V1-A` setup is ARMED or FILLED with direction opposite to `d` at `as_of` ("don't trade 15m CBR against an active hourly CBR"). Until the hourly state is available the rule is `NOT_EVALUATED`: neither pass nor fail, never the sole rejection reason, and signals are not baseline-eligible (D17-1, OQ-34) | CANON rule; "active hourly CBR" operationalised by the hourly machine spec (IMPL) |
+| M15-HTF-01 | CBR15-HTF-001 | Split (D18-11, D19-15). **SIGNAL state** (the rule): VETO if, in the current hour `H`, a raw `CBR1H_BASELINE_V1-A` setup with direction opposite to `d` is ACTIVE or PENDING at `as_of`; CLEAR otherwise; `NOT_EVALUATED` without the hourly engine (neither pass nor fail). **FILL state** (`htf_fill_state`): `NOT_EVALUATED` when such a setup's 5s shift already triggered (a FILLED hourly trade needs Phase 14A), else `NOT_REQUIRED`. The fill component is `EXECUTION_DEPENDENT`: never a rejection, never part of signal-detection parity; signals carry the blocker `HTF_FILL_STATE_EXECUTION_DEPENDENT` until it is resolved (D17-1, OQ-34) | CANON rule; "active hourly CBR" operationalised by the hourly machine spec (IMPL) |
 
 ## 7. Entry, stop, target
 

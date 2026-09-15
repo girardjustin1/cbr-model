@@ -41,13 +41,15 @@ def _direction(known: pd.DataFrame) -> str:
 
 def classify(swings: pd.DataFrame, bars_1m: pd.DataFrame, as_of: pd.Timestamp, window: pd.Timedelta, *,
              min_legs: int, range_min: float, trend_max: float, correction_cap: float,
-             aggregate: str = "median") -> Condition:
+             aggregate: str = "median", window_start: pd.Timestamp | None = None) -> Condition:
+    """`window_start` overrides the clock window start `as_of − window` (tradable-time basis, OQ-40)."""
+    start = as_of - window if window_start is None else window_start
     known = usable(swings, as_of)
     window_legs = legs(known)
-    window_legs = window_legs[window_legs["t_start"] >= as_of - window]
+    window_legs = window_legs[window_legs["t_start"] >= start]
     n = len(window_legs)
 
-    in_window = bars_1m[(bars_1m.index >= as_of - window) & (bars_1m.index + pd.Timedelta(minutes=1) <= as_of)]
+    in_window = bars_1m[(bars_1m.index >= start) & (bars_1m.index + pd.Timedelta(minutes=1) <= as_of)]
     r_high = float(in_window["high"].max()) if len(in_window) else None
     r_low = float(in_window["low"].min()) if len(in_window) else None
     direction = _direction(known)

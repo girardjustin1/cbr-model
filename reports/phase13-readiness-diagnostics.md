@@ -1,5 +1,8 @@
 # Phase 13 Readiness Diagnostics
 
+> **Historical (D19).** Generated at commit `3e45fc8` by `src/cbr/engine/readiness_diagnostics.py`, which D19 retired: it evaluated at Tom's entry time or selected candidates near it, and it ran the pre-D19 engine semantics. Not regenerated; not evidence for Phase 13 parity.
+
+
 Generated 2026-09-15T10:03:58.460686+00:00 by `src/cbr/engine/readiness_diagnostics.py`. STRUCTURE facts only; no fills, outcomes or P&L. Tom's entry time is only the evaluation point; nothing is selected by it.
 
 ## CX-LT1-1 (BUY, entry 2025-10-21 01:39:15+00:00)

@@ -36,7 +36,7 @@ WINDOWS = {
 }
 SHOW = ["signal_id", "timestamp", "direction", "event", "rules_failed", "rules_not_evaluated", "condition", "n_legs",
         "c_med", "oe_duration_min", "oe_size", "oe_extreme", "sweep_bar_extreme", "sweep_beyond_oe_extreme",
-        "t3_extreme_before_end", "entry_reference_price", "target_price", "prior_played_out_60m", "cancel_reason",
+        "t3_extreme_before_end", "entry_reference_price", "target_price", "prior_setup_count", "cancel_reason",
         "structure_trigger_touch_time"]
 
 
@@ -88,7 +88,7 @@ def render(r: dict) -> str:
             L.append(f"| {c['timestamp'][11:19]} | {c['direction']} | {c['event']} | {', '.join(c['rules_failed']) or '—'} | "
                      f"{', '.join(c['rules_not_evaluated'])} | {c['oe_duration_min']:.0f} | {c['oe_extreme']:.3f} | "
                      f"{c['sweep_bar_extreme']:.3f} | {c['sweep_beyond_oe_extreme']} | {c['entry_reference_price']:.3f} | "
-                     f"{c['target_price']:.3f} | {c['prior_played_out_60m']} | {c['cancel_reason']} |")
+                     f"{c['target_price']:.3f} | {c['prior_setup_count']} | {c['cancel_reason']} |")
         L += ["", f"Rule failure counts: {w['rule_failures']}", f"ARMED signals: {len(w['armed_signals'])}", ""]
     return "\n".join(L)
 

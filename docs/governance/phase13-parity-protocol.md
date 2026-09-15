@@ -1,8 +1,11 @@
 # Phase 13 Parity Protocol (proposal for owner approval)
 
-**Doc:** CBR-PROT-013 · **Version:** v0.1 PROPOSED · **Date:** 2026-09-15 · **Ruling:** D18-7…D18-11
-**Status:** NOT FROZEN. Nothing here takes effect until the owner approves it. Numeric tolerance values are set from V-1
-non-course data (§4.3) **before** the final parity run, never from engine output on the course examples.
+**Doc:** CBR-PROT-013 · **Version:** v0.2 · **Date:** 2026-09-15 · **Rulings:** D18-7…D18-11, D19-7…D19-14
+**Status:** APPROVED IN PRINCIPLE (D19-7): the two views, deterministic selection, mismatch taxonomy and order,
+offset-adjusted tolerance method, independent calibration days and V-1. **Numeric tolerances NOT frozen** (D19-11): they
+are computed from V-1 non-course data (§4.3) and frozen in `config/phase13_tolerances.yaml` **before** the final run,
+never from engine output on the course examples. The exact selection algorithm (§5) is frozen with the parity-candidate
+specs. Implementation: `src/cbr/engine/parity.py` (the final run refuses to start while blockers remain).
 
 ---
 
@@ -25,13 +28,15 @@ Rules:
 - Only settings already declared in `config/strategy.yaml → ablations` (research_range) may appear in STRICT COURSE PARITY.
 - These runs are parity diagnostics on the course windows only (no outcomes). They do **not** execute the Phase 17/18
   experiments and don't change the baseline.
-- **Not yet implemented.** The engines don't have these switches today. They must be added (off by default, baseline
-  `spec_hash` unchanged) before STRICT COURSE PARITY can run: readiness item 18.
+- **Implemented (D19).** CBR1H `oe_origin` and `early_shift_guard` switches, off by default (a run with the baseline
+  values is hash-identical to the default run); `parity.view_params` accepts exactly one pre-registered alternative.
+- Scores of the two views are never merged; an `OWNER_BASELINE_CHOICE` mismatch is still reported (D19-9).
 
 ## 3. Mismatch classification (D18-7)
 
-Every comparison dimension that doesn't match gets exactly one class. The first applicable class in this order wins, and
-the evidence for it is recorded.
+Every comparison dimension that doesn't match gets exactly one primary class: the first applicable class in this order
+(approved D19-8). Other applicable classes are recorded as secondary tags; a reproduced implementation defect is always
+flagged and blocks the gate even when an earlier class is primary.
 
 | Order | Class | Assign when |
 |---|---|---|
@@ -78,29 +83,36 @@ context only and **don't set any tolerance**.
   - `FEED_NEAR` band = `3 × τ_p` (reported, never counted as a match).
 - **Bar alignment** check: best lag of 1m close-to-close returns between FOREXCOM and Dukascopy on non-course minutes
   must be 0 minutes. Otherwise V-1 fails and parity doesn't start.
-- **Time tolerance** `τ_t`:
-  - 1m-resolution events (extension extreme bar, HVCS/HILO bars): same bar, i.e. ±0 bars, after lag check;
-  - Tom's position-tool entry times: ±60 s (minute rows) or ±15 s where the tool shows seconds, fixed per example from
-    its recorded source type, not from engine output.
+- **Time tolerance** `τ_t` (approved D19-12):
+  - 1m structural events (extension extreme bar, HVCS bars): same canonical 1m bar, after the lag check;
+  - Tom-labelled timestamps without seconds: ±60 s; with explicit seconds: ±15 s; fixed per example from its recorded
+    source type, not from engine output;
+  - a consistent feed timestamp offset found in calibration is reported, never absorbed by widening the tolerance.
+- **Before freezing** (D19-11): document sample count, residual distribution, median offset (and per day), p95, max and
+  zero-lag confirmation. The percentile and rounding rule can't change after course-example parity is inspected.
 - **Structure point match**: same kind (H/L), extreme bar within ±1 bar of its tier, price within `τ_p`.
 
 The computed values, the calibration days and their data hashes are written into this document and the readiness
 checklist item 8 is checked **before** the final parity run. After that they can't change.
 
-## 5. Candidate selection (D18-9)
+## 5. Candidate selection (D18-9, D19-10)
 
 The engine may emit several candidates per hour or 15m candle. Parity compares the course example with **one**
-engine-selected candidate, chosen only from engine-available information:
+engine-selected candidate per variant, chosen only from engine information (`parity.select_candidate`, which takes no
+course argument):
 
-1. **Eligible set:** candidates with event `ARMED` in the view being scored (§2), for the example's model and its
-   canonical variant(s) (CBR1H: each variant scored separately, never merged).
-2. **Ordering:** earliest decision time; ties by earliest order activation time; then the spec's primary HILO tier
-   (1m before 5m); then `prior` before `same`; then `signal_id`.
-3. **Selected candidate:** the first in that order. This mirrors the specs' "at most one filled trade per hourly candle" (1h spec §1) and "one position per model" (primitives §8): the first valid order is the one that would be live. The Phase 9 parity notes (F-2) recorded the same V1 reading ("V1 takes the first valid signal").
-4. **No eligible candidate:** the example is scored "no signal" (acceptance mismatch). As a diagnostic, the report also
-   shows the first candidate, in the same ordering, whose failed rules all carry classes 1-5 of §3. It's labelled
-   `DIAGNOSTIC_ONLY` and never counts as a match.
-5. Tom's entry time, price or outcome is **never** an input to selection.
+1. **Eligible set:** candidates with event `ARMED` in the view being scored (§2), per model and variant (CBR1H variants
+   A and B are scored separately, never merged).
+2. **Ordering (frozen key `parity.selection_key`):** earliest canonical **5s shift time** (`five_second_shift_time`;
+   candidates whose shift never completed come last); then earliest decision time; then activation time; then structural
+   tier (5s before 1m before 5m, where a tier exists); then prior before same (where relevant); then `signal_id`.
+3. **Selected candidate:** the first in that order, mirroring "at most one filled trade per candle" (1h spec §1) and
+   "one position per model" (primitives §8).
+4. **No eligible candidate:** the example is scored "no signal" (acceptance mismatch). The report also shows the first
+   candidate, in the same order, whose failed rules all fall in classes 1-5 (`parity.rule_class`), labelled
+   `DIAGNOSTIC_ONLY`; it never counts as a match.
+5. Tom's entry time, price or outcome is **never** an input to selection. The Phase 12 "closest to Tom" runner was removed
+   (D19-10).
 
 ## 6. V-1 acquisition (D18-10)
 
@@ -137,7 +149,12 @@ before today. If 1m history doesn't reach these dates:
 - record `DATA_LIMITATION` for 1m-only checks;
 - tell the owner. The requirement stays hard; this may block Phase 13.
 
-Place files in `data/raw/tradingview/` (gitignored). No TradingView data is committed.
+Place files in `data/raw/tradingview/` (gitignored). No TradingView data is committed. Don't substitute another
+TradingView symbol without owner approval (D19-13).
+
+If TradingView can't export the requested 1m history, V-1 is **not** waived (D19-14): report `DATA_LIMITATION`, propose
+alternative independent FOREXCOM historical sources, and Phase 13 stays blocked until V-1 is completed as specified or
+the owner approves a replacement fidelity test.
 
 ### 6.4 V-1 checks (data fidelity only)
 

@@ -25,11 +25,18 @@ class Overextension:
     opposite_wick: float           # opposite excursion before the extreme, as a fraction of size
     two_sided: bool
     prev_candle_break: bool | None
+    origin_time: pd.Timestamp | None = None      # start of the measured push (candle open unless LAST_RESET reset it)
 
 
 def evaluate(bars_1m: pd.DataFrame, candle_open_time: pd.Timestamp, candle_open: float, as_of: pd.Timestamp, *,
              atr_1m: float, activation_atr: float, pullback_frac: float, two_sided_frac: float,
-             prev_candle_high: float | None = None, prev_candle_low: float | None = None) -> Overextension:
+             prev_candle_high: float | None = None, prev_candle_low: float | None = None,
+             origin: str = "HOUR_OPEN") -> Overextension:
+    """origin HOUR_OPEN (V1 baseline, D8): duration and no-pullback measured from the candle open. LAST_RESET (the D8
+    ablation, OQ-22): a ≥ 50% pullback restarts the count from its most adverse price, so duration runs from the start of
+    the last push; direction, extreme, size, wick and the previous-candle break stay measured from the candle open."""
+    if origin not in ("HOUR_OPEN", "LAST_RESET"):
+        raise ValueError(f"unknown oe origin {origin!r}")
     inside = bars_1m[(bars_1m.index >= candle_open_time) & (bars_1m.index + ONE_MINUTE <= as_of)]
     if inside.empty:
         return Overextension("NONE", None, None, 0.0, 0.0, False, 0.0, False, None)
@@ -47,13 +54,18 @@ def evaluate(bars_1m: pd.DataFrame, candle_open_time: pd.Timestamp, candle_open:
 
     # 50% pullback test along the path to the extreme. For each bar, compare its adverse price with the running
     # extreme *before* the bar updates it (OHLC has no intrabar order; IMPL).
-    no_pullback, running = True, candle_open
+    no_pullback, running, base, origin_time = True, candle_open, candle_open, candle_open_time
+    reset = False
     activation = activation_atr * atr_1m
     for t in inside.loc[:extreme_time].index:
-        ext_so_far = sign * (running - candle_open)
+        if reset and sign * (base - against.loc[t]) > 0:           # the pullback keeps extending: the push hasn't started
+            base, running, origin_time = float(against.loc[t]), float(against.loc[t]), t
+        ext_so_far = sign * (running - base)
         if ext_so_far >= activation and sign * (running - against.loc[t]) >= pullback_frac * ext_so_far:
-            no_pullback = False
-            break
+            if origin == "HOUR_OPEN":
+                no_pullback = False
+                break
+            base, running, origin_time, reset = float(against.loc[t]), float(against.loc[t]), t, True
         if sign * (favour.loc[t] - running) > 0:
             running = float(favour.loc[t])
 
@@ -70,7 +82,7 @@ def evaluate(bars_1m: pd.DataFrame, candle_open_time: pd.Timestamp, candle_open:
 
     return Overextension(
         direction=direction, extreme=extreme, extreme_time=extreme_time, size=size,
-        duration_min=(extreme_time - candle_open_time) / ONE_MINUTE,
+        duration_min=(extreme_time - origin_time) / ONE_MINUTE,
         no_pullback=no_pullback, opposite_wick=opposite_wick,
-        two_sided=size > 0 and opposite >= two_sided_frac * size, prev_candle_break=prev_break,
+        two_sided=size > 0 and opposite >= two_sided_frac * size, prev_candle_break=prev_break, origin_time=origin_time,
     )

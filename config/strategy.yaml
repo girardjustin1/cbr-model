@@ -60,18 +60,23 @@ models:
   CBR1H_BASELINE_V1:
     spec: docs/strategy/1h-cbr-machine-spec.md
     variants:
-      A:     {entry_model: HVCS_HILO,  aoi_required: false}
-      B:     {entry_model: FRACTAL_1M, aoi_required: false}
-      A-AOI: {entry_model: HVCS_HILO,  aoi_required: true}
-      B-AOI: {entry_model: FRACTAL_1M, aoi_required: true}
+      # D19-2 (OQ-39): the canonical entry trigger of both variants is a 5-second type 3 shift; the variants differ in
+      # their parent setup structure (A: HVCS leading into the shift; B: 1m type 3 -> >= 50% pullback).
+      A:     {entry_model: HVCS_S5_SHIFT,        aoi_required: false}
+      B:     {entry_model: FRACTAL_1M_S5_SHIFT,  aoi_required: false}
+      A-AOI: {entry_model: HVCS_S5_SHIFT,        aoi_required: true}
+      B-AOI: {entry_model: FRACTAL_1M_S5_SHIFT,  aoi_required: true}
     cond:
       tier: MTF
       window_hours:   {value: 8,  label: ASSUMPTION, source: [OQ-03], research_range: [5, 8, 12],
                        note: "canonical window is 5-12+ h (E1H-005); a point value inside it is an assumption"}
+      window_basis:   {value: TRADABLE, label: ASSUMPTION, source: [OQ-40], research_range: [TRADABLE, CLOCK],
+                       note: "D19-3: scheduled closures don't consume the window; vendor gaps inside scheduled-open time do"}
       min_legs:       {value: 3,  label: ASSUMPTION, source: [OQ-02], research_range: [3, 4]}
     prior:
       min_count:      {value: 1,  label: ASSUMPTION, source: [OQ-05], research_range: [1, 2]}
-      lookback_hours: {value: 10, label: ASSUMPTION, source: [OQ-05], research_range: [5, 10]}
+      lookback_hours: {value: 10, label: ASSUMPTION, source: [OQ-05, OQ-36], research_range: [5, 10],
+                       note: "D19-1: CBR1H's own lookback, [H.t0 - lookback, H.t0); counts setups FORMED, never outcomes"}
     loc:
       range_extreme:  {value: 0.75, label: CANON, source: [E15-015, E1H-002]}
       pro_er_min:     {value: 0.50, label: CANON, source: [E1H-012, E1H-015, E15-015]}
@@ -83,7 +88,8 @@ models:
     timing:
       start_min:      {value: 22, label: CANON, source: [E1H-024]}
       end_min:        {value: 52, label: CANON, source: [E1H-024]}
-      q30_push_atr:   {value: 0.25, label: ASSUMPTION, source: [OQ-08], research_range: [0.1, 0.25, 0.5]}
+      q30_push_atr:   {value: 0.25, label: ASSUMPTION, source: [OQ-08], research_range: [0.1, 0.25, 0.5],
+                       note: "D19-5: timing30_state diagnostic only, evaluated at the 5s shift; never rejects a signal"}
     fractal:
       pullback_min:   {value: 0.50, label: CANON, source: [E1H-031]}
 
@@ -96,11 +102,14 @@ models:
       tier: LTF
       window_hours:   {value: 2.0, label: ASSUMPTION, source: [OQ-03], research_range: [1.5, 2.0, 2.5],
                        note: "canonical window is 1.5-2.5 h (E15-003, E15-004)"}
+      window_basis:   {value: CLOCK, label: ASSUMPTION, source: [OQ-45], research_range: [CLOCK, TRADABLE],
+                       note: "D19-3 lists the tradable-time change for CBR1H only; CBR15 unchanged pending OQ-45"}
       min_legs:       {value: 3, label: CANON, source: [E15-048]}
       max_legs:       {value: 6, label: CANON, source: [E15-048]}
       min_leg_index:  {value: 3, label: CANON, source: [E15-050]}
     prior:
-      hard_lookback_min: {value: 60,  label: CANON, source: [E15-049]}
+      hard_lookback_min: {value: 60,  label: CANON, source: [E15-049],
+                          note: "D19-1 (OQ-36 C'): >= 1 qualifying setup FORMED in [Q.t0 - 60 min, Q.t0); outcome never used"}
       hard_min_count:    {value: 1,   label: CANON, source: [E15-049]}
       soft_lookback_min: {value: 120, label: CANON, source: [E15-049]}
     loc:

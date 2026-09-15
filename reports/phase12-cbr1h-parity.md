@@ -1,5 +1,8 @@
 # Phase 12: CBR1H Course-Example Parity
 
+> **Historical (D19).** Generated at commit `95da789` by `src/cbr/engine/phase12_run.py`, which D19 retired: it evaluated at Tom's entry time or selected candidates near it, and it ran the pre-D19 engine semantics. Not regenerated; not evidence for Phase 13 parity.
+
+
 Generated 2026-09-15T05:13:36.832624+00:00 by `src/cbr/engine/phase12_run.py`. Implementation parity only: no fills, trade outcomes or P&L. Tolerances: price MATCH ≤ $0.50, FEED_NEAR ≤ $2.00, entry time MATCH ≤ 2 min (**not pre-registered**: set after an exploratory look at engine output on these windows).
 
 ## CX-LT1-1 · variant A

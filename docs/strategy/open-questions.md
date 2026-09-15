@@ -340,7 +340,10 @@ recordings, or the Notion journal) · `RESEARCH PARAMETER` (legitimately ambiguo
 - **Owner ruling D18-11 (2026-09-15).** Separate SIGNAL-STATE parity (veto from ARMED hourly signals on STRUCTURE) from
   EXECUTION-STATE parity. The FILLED component is `EXECUTION_DEPENDENT` with `HTF_FILL_STATE = NOT_EVALUATED`; no
   fabricated fills. CBR15 isn't fully eligible until resolved (readiness item 16).
-- **Status.** `OPEN` (signal/execution split pending implementation).
+- **Implemented (D19-15).** `htf_signal_state` (the rule, from ARMED/PENDING hourly setups) and `htf_fill_state`
+  (`NOT_EVALUATED` when an opposite hourly 5s shift already triggered) are separate fields; the fill state never rejects
+  and carries the eligibility blocker `HTF_FILL_STATE_EXECUTION_DEPENDENT`.
+- **Status.** `OPEN` (execution-dependent fill component; resolves with Phase 14A). CBR15 not fully baseline-eligible.
 
 ### OQ-35 · Stop anchor instant and granularity for CBR15 (and OE extreme at 5s)
 - **Problem.** Three spec statements disagree: M15-SL-01 "stop beyond `oe_extreme`" (no instant); M1H-SL-01
@@ -379,7 +382,14 @@ recordings, or the Notion journal) · `RESEARCH PARAMETER` (legitimately ambiguo
   examples. No P&L, no choice by signal count. Insufficient evidence → reported unresolved for owner decision.
 - **Evidence package (D18-1).** `docs/decisions/oq36-prior-setup-evidence.md`. "Played out" isn't defined in Level 1
   evidence; the hard clause is "zero setups in the last hour". Unresolved on evidence; candidate owner assumption C′.
-- **Status.** `NEEDS USER DECISION` (package delivered). CBR15 not baseline-eligible.
+- **Owner ruling D19-1 (2026-09-15): RESOLVED (reading C′).** The hard requirement is the EXISTENCE of a qualifying
+  same-model prior setup FORMED in the model's lookback, never whether it played out, reached target, resolved, touched
+  a level or filled. Implemented: a qualifying setup = a raw setup (every rule except the prior rule passes; CBR15: hourly
+  signal state not VETO) with decision time in CBR15 `[Q.t0 − 60 min, Q.t0)` / CBR1H `[H.t0 − 10 h, H.t0)` (CBR1H
+  lookback ASSUMPTION, own config). Fields `prior_setup_exists`, `prior_setup_count`, `prior_setup_latest_time`,
+  `prior_setup_played_out_status = UNKNOWN` (non-blocking). The candle-geometry reading A (needs a reversal-size
+  threshold, i.e. a level touch) was not used.
+- **Status.** `RESOLVED` (D19-1).
 
 ### OQ-37 · CBR15 location in a trending range without a direction
 - **Problem.** M15-LOC-02/03 need `cond.direction` (UP/DOWN). When the LTF swings give `NONE`, the CBR15 spec is silent.
@@ -416,7 +426,12 @@ recordings, or the Notion journal) · `RESEARCH PARAMETER` (legitimately ambiguo
 - **Evidence package (D18).** `docs/decisions/oq39-hourly-entry-evidence.md`: Level 1 evidence is strong that the 5s
   shift **is** the CBR1H trigger in both setups (HVCS→HILO/5s shift; 1m T3 → 50% → 5s shift), with the 1m HILO as a
   declared equivalent; kept as distinct variants. Canonical rule unchanged pending owner.
-- **Status.** `NEEDS USER DECISION` before Phase 13 parity.
+- **Owner ruling D19-2 (2026-09-15): RESOLVED (reading A).** The 5-second structure shift is the canonical CBR1H entry
+  trigger; variants A (HVCS → 5s shift) and B (1m type 3 → ≥ 50% pullback → 5s shift) stay distinct. A 1m HILO is an
+  observable equivalent only. Implemented: candidates are 5s type 3 sweeps; fields `entry_model`, `parent_structure_type`,
+  `parent_structure_time`, `five_second_shift_time`, `five_second_shift_level`, `activation_time`; the 6A HILO-tier rule
+  is removed (LVCS recorded as diagnostic); a 1m parent is used only after its bar close.
+- **Status.** `RESOLVED` (D19-2).
 
 ### OQ-40 · Condition window across market closures (CBR1H 8 h, CBR15 2 h)
 - **Problem.** `condition.classify` measures its window in clock hours. On CX-LT3-2 (Monday 01:00 UTC) the 8 h window
@@ -428,7 +443,12 @@ recordings, or the Notion journal) · `RESEARCH PARAMETER` (legitimately ambiguo
   walkthroughs are consistent with tradable time / contiguous bars; no support for session segments or a reopen block.
   `CONDITION_WINDOW_UNRESOLVED`; B is the assumption candidate. No reading makes CX-LT3-2 eligible (B/C →
   `TREND_DIRECTION_UNRESOLVED`).
-- **Status.** `NEEDS USER DECISION` before Phase 13.
+- **Owner ruling D19-3 (2026-09-15): ASSUMPTION recorded.** Scheduled closures don't consume the condition window; it
+  advances only in scheduled-tradable time; unexpected vendor gaps stay in the timeline as missing data. CBR1H
+  `cond.window_basis = TRADABLE` (ASSUMPTION, research range CLOCK/TRADABLE, sensitivity only under the approved research
+  process). Fields `condition_elapsed_clock_minutes`, `condition_tradable_minutes`, `condition_missing_minutes`. No other
+  rule changed for CX-LT3-2. CBR15: see OQ-45.
+- **Status.** `RESOLVED AS ASSUMPTION` (D19-3).
 
 ### OQ-41 · Reference candle for `oe_prev_candle_break` in CBR1H
 - **Reading implemented.** The 15m candle before the one containing the decision time (a decision on a 15m boundary
@@ -437,7 +457,12 @@ recordings, or the Notion journal) · `RESEARCH PARAMETER` (legitimately ambiguo
 - **Evidence package (D18).** Same package. Strong for Q−1 relative to the current 15m candle, **broken by that candle**
   (the implemented check uses the hour's OE extreme and can pass without it); exception when Q−1 closed in the trade
   direction. No effect on the three examples.
-- **Status.** `NEEDS USER DECISION`.
+- **Owner ruling D19-4 (2026-09-15): RESOLVED.** Q−1 = the previous completed 15m candle; the break must be made by the
+  current candle Q itself. CBR1H 6A: `M1H-6A-2-PREV-15M-BROKEN-BY-Q` = Q's closed 5s bars take Q−1's high/low before the
+  decision, or Q−1 closed in the trade direction (exception, E1H-023 and V1H-1m_fractal_shift 00:03:23). CBR15
+  `M15-LOC-04` already tests Q's own extreme against Q−1; no CBR15 exception is encoded (the 15m-course quote at
+  V15-hourly_cb_structure 00:05:05 concerns the previous hourly candle in an excluded model).
+- **Status.** `RESOLVED` (D19-4).
 
 ### OQ-42 · M1H-TIME-02 (:30 candle veto): fill time vs decision time
 - **Reading implemented.** The spec conditions on "the fill occurs in the 15m candle opening at :30". Fills are execution
@@ -446,7 +471,10 @@ recordings, or the Notion journal) · `RESEARCH PARAMETER` (legitimately ambiguo
 - **Evidence package (D18).** Same package. Moderate: signal eligibility judged by how the shift forms, at the structure
   break; the implemented activation-time reading is unsupported. A true-fill reading would be `EXECUTION_DEPENDENT`.
   Hard veto vs quality downgrade ambiguous. No effect on the three examples.
-- **Status.** `NEEDS USER DECISION`.
+- **Owner ruling D19-5 (2026-09-15): timing RESOLVED; hard veto UNRESOLVED.** Evaluated at the 5s shift time, never at
+  arm time. Until veto semantics are approved it is the diagnostic `timing30_state` (PASS / QUALITY_CONCERN /
+  NOT_APPLICABLE / UNRESOLVED) and never rejects a signal; `M1H-TIME-02` is removed from the rule set.
+- **Status.** `PARTIALLY RESOLVED` (hard veto vs quality downgrade open).
 
 ### OQ-43 · HVCS "end_bar ≤ as_of" (6A condition 1)
 - **Reading implemented.** Valid when the longest HVCS in the extension direction ending at any closed 1m bar of the hour
@@ -454,7 +482,26 @@ recordings, or the Notion journal) · `RESEARCH PARAMETER` (legitimately ambiguo
 - **Evidence package (D18).** `docs/decisions/oq39-hourly-entry-evidence.md` §OQ-43. Moderate: the HVCS runs directly
   into the shift (last displacement bar, indecision gap bars allowed, no source number for the limit); "anywhere in the
   hour" unsupported. Material: adjacent readings make the HVCS invalid on CX-TE1-1 and CX-LT3-2.
-- **Status.** `NEEDS USER DECISION`.
+- **Owner ruling D19-6 (2026-09-15): principle RESOLVED.** The HVCS runs directly into the shift; it ends at the final
+  displacement bar (implemented: the closed 1m bar that set the extension extreme); indecision bars may follow only while
+  they don't break the side the sequence respected. No indecision count (see OQ-44).
+- **Status.** `RESOLVED` (principle); count → OQ-44.
+
+### OQ-44 · HVCS indecision bars between the displacement and the shift (D19-6)
+- **Problem.** Level 1 allows indecision bars between the last HVCS bar and the shift ("it can be multiple candles",
+  VP2-1m_hilo_entries 00:04:49) but gives no maximum.
+- **Handling now.** No number. Continuity is structural: every closed 1m bar after the end bar must keep the respected
+  side (DOWN: high ≤ end bar high; UP: low ≥ end bar low) up to the decision (`hvcs_gap_bars` recorded). This reading is
+  an implementation choice for owner review; CBR1H-A signals carry the blocker `HVCS_INDECISION_LIMIT_UNRESOLVED (OQ-44)`.
+- **Constraint.** Never tuned on the course examples.
+- **Status.** `NEEDS USER DECISION` (confirm the structural-continuity reading or supply a sourced limit).
+
+### OQ-45 · CBR15 condition window across closures (D19-3 scope)
+- **Problem.** D19-3 lists the tradable-time window change for CBR1H. The CBR15 2 h window crosses the daily break (1 h)
+  and the weekend the same way.
+- **Handling now.** CBR15 `cond.window_basis = CLOCK` (unchanged, ASSUMPTION); the three duration fields are available
+  from the shared helper.
+- **Status.** `NEEDS USER DECISION` (apply TRADABLE to CBR15 or keep CLOCK).
 
 ### OQ-31 · How does the ledger use the hindsight vendor-gap mask? (Phase 10)
 - **Problem.** At a decision time inside a DXY CFD vendor outage, a causal module can't yet tell the outage from thin
@@ -601,6 +648,7 @@ said to hold ~350 trades (P2G-37). The spoken and slide DXY figures disagree.
 | D16 | OQ-25 resolved: STRUCTURE = tick mid, EXECUTION = tick bid/ask, never one series for both, access guards + STRUCTURE/EXECUTION labels in schemas/manifests/reports. V-1 required before Phase 13 passes (reopen OQ-25 on material differences). Full tick history deferred (OQ-33). Phase 11 approved on downloaded tick days. Candle files and GC not canonical for extremes | OQ-25, OQ-33, Phases 11/13 |
 | D17 | Phase 11 accepted (PASS WITH CONCERNS, G11: construction, causality, determinism); CBR15 not baseline-eligible. OQ-34 open until Phase 12 (NOT_EVALUATED neither pass nor fail). OQ-35 resolved: stop anchor = most adverse STRUCTURE extension extreme through activation/fill, fields kept separate. OQ-36 interpretation not approved; evidence package required. OQ-37 resolved: TREND_DIRECTION_UNRESOLVED context failure. OQ-38 resolved: TYPE3_RESOLVED_TOO_EARLY, no resurrection. F-3 approved. Phase 12 authorized | OQ-34…OQ-38, G11 |
 | D18 | Phase 12 accepted (PASS WITH CONCERNS, G12); Phase 13 not authorized. Evidence packages required for OQ-36, 39-43; Phase 12 tolerances and "closest to Tom" selection rejected; independent tolerances and deterministic selection to be pre-registered; D8/D9 parity classification with STRICT COURSE and BASELINE-SPEC views; M15-HTF-01 signal vs execution state (`HTF_FILL_STATE = NOT_EVALUATED`); Phase 13 readiness checklist | Phase 13 |
+| D19 | Phase 13 readiness rulings: OQ-36 C′ (prior setup existence, played-out diagnostic); OQ-39 A (5s shift = CBR1H trigger, variants A/B separate); OQ-40 tradable-time window (ASSUMPTION); OQ-41 Q−1 broken by Q (+ trade-direction exception); OQ-42 evaluated at the shift, hard veto unresolved (diagnostic); OQ-43 HVCS into the shift, no indecision count; parity protocol approved in principle (two views, deterministic selection, taxonomy, calibration method); numeric tolerances not frozen; V-1 hard gate; HTF signal/fill split; parity-candidate specs | Phase 13 |
 
 ## Batched questions for the user (historical; answered above)
 

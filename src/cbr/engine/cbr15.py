@@ -11,10 +11,15 @@ Causality: all rule inputs at a candidate's decision time `timestamp` (close of 
 closed at or before it. Lifecycle fields (`cancel_time`, `cancel_reason`, `structure_trigger_touch_time`) describe
 what happened later and are kept apart from decision fields (`DECISION_FIELDS`).
 
-M15-COND-03 needs "prior setups that played out". Raw setups (candidates passing every rule except COND-03 and the
-HTF veto when it is not evaluated) are resolved on STRUCTURE 5s bars: trigger touch, then target vs stop touch, stop
-first on the same bar (OQ-05 reading, recorded in OQ-36). Only outcomes resolved before Q's open are counted. These
-per-setup outcomes are rule inputs only; no aggregate outcome statistic is produced.
+Owner ruling D19:
+  * M15-COND-03 (OQ-36 C′): ≥ 1 qualifying CBR15 setup FORMED with decision time in [Q.t0 − 60 min, Q.t0). A qualifying
+    setup is a raw setup: every rule except COND-03 passes (HTF signal state not VETO). No target, stop, touch,
+    structure resolution or fill is read; "played out" is a diagnostic (`prior_setup_played_out_status` = UNKNOWN).
+  * M15-HTF-01 (D18-11, D19-15): SIGNAL state (`htf_signal_state`, the rule) is kept apart from FILL state
+    (`htf_fill_state`). A fill-dependent component is EXECUTION_DEPENDENT: NOT_EVALUATED until Phase 14A, never a
+    rejection and never part of signal-detection parity; CBR15 stays not baseline-eligible while it is unresolved.
+  * Timing at the trigger (D19-16): the 5s shift time and its minute-in-candle are recorded with
+    `trigger_timing_state` (IN_WINDOW / TYPE3_RESOLVED_TOO_EARLY / NO_SHIFT).
 """
 
 from __future__ import annotations
@@ -36,7 +41,7 @@ from cbr.engine.common import (
     _atr_at,
     _er,
     _minutes_complete,
-    anchor_at,
+    anchor_at,  # noqa: F401  (re-exported for execution-layer and test use)
 )
 from cbr.engine.params import Cbr15Params, load_cbr15, spec_hash
 from cbr.structure import condition as cond_mod
@@ -52,15 +57,20 @@ TYPE3_RESOLVED_TOO_EARLY = "TYPE3_RESOLVED_TOO_EARLY"
 STOP_ANCHOR_SOURCE = "STRUCTURE_TICK_MID_5S_EXTENSION_EXTREME"
 REASONS = {"M15-COND-TR-DIRECTION": TREND_DIRECTION_UNRESOLVED, "M15-COND-02": "COND_LEGS_OUT_OF_RANGE"}
 # Eligibility blockers (D17): signals are not baseline-eligible while any applies.
-BLOCKER_HTF = "HTF_NOT_EVALUATED (OQ-34)"
-BLOCKER_OQ36 = "COND03_INTERPRETATION_UNAPPROVED (OQ-36)"
+BLOCKER_HTF = "HTF_SIGNAL_STATE_NOT_EVALUATED (OQ-34)"
+BLOCKER_HTF_FILL = "HTF_FILL_STATE_EXECUTION_DEPENDENT (M15-HTF-01, D19-15)"
+BLOCKER_PARITY = "PHASE13_PARITY_NOT_RUN"
+FILL_NOT_EVALUATED, FILL_NOT_REQUIRED = "NOT_EVALUATED", "NOT_REQUIRED"
+PLAYED_OUT_UNKNOWN = "UNKNOWN"
 
 # Decision fields: fully determined by data known at `timestamp` (causality tests compare these).
 DECISION_FIELDS = ["signal_id", "candle_open_utc", "timestamp", "direction", "event", "rules_failed",
                    "entry_trigger_time", "entry_reference_price", "target_price", "stop_extension_extreme",
                    "stop_buffer_price", "extension_high", "extension_low", "range_high", "range_low", "condition",
-                   "c_med", "n_legs", "cond_direction", "oe_duration_min", "oe_size", "prior_played_out_60m",
-                   "htf_state", "sweep_bar_extreme", "sweep_beyond_oe_extreme"]
+                   "c_med", "n_legs", "cond_direction", "oe_duration_min", "oe_size", "prior_setup_count",
+                   "htf_signal_state", "sweep_bar_extreme", "sweep_beyond_oe_extreme", "q_prev_high", "q_prev_low"]
+# Trigger-time fields: determined by data known at the 5s shift (lifecycle, compared at that time)
+TRIGGER_FIELDS = ["signal_id", "five_second_shift_time", "trigger_mic", "trigger_timing_state", "htf_fill_state"]
 
 
 @dataclass(frozen=True)
@@ -73,17 +83,17 @@ class Cbr15Result:
 
 def run_cbr15(s1m: pd.DataFrame, s5s: pd.DataFrame, *, start: pd.Timestamp, end: pd.Timestamp,
               variant: str = "base", params: Cbr15Params | None = None,
-              htf: Callable[[pd.Timestamp, str], str] | None = None,
+              htf: Callable[[pd.Timestamp, str], dict] | None = None,
               dxy_context: pd.DataFrame | None = None) -> Cbr15Result:
     """Evaluate 15m candles opening in [start, end). Bars before `start` serve as warm-up (ATR, swings, prior setups).
 
-    htf(as_of, direction) → CLEAR / VETO / NOT_EVALUATED implements M15-HTF-01; it needs the Phase 12 CBR1H engine
-    (OQ-34), so the default is NOT_EVALUATED. dxy_context: Phase 10 causal context indexed by decision time
+    htf(as_of, direction) → {"signal": CLEAR | VETO | NOT_EVALUATED, "fill": NOT_REQUIRED | NOT_EVALUATED} implements
+    M15-HTF-01 (`cbr1h.htf_provider`); without it both states are NOT_EVALUATED. dxy_context: Phase 10 causal context indexed by decision time
     (diagnostic only; CBR15 V1 excludes DXY rules)."""
     require_structure(s1m)
     require_structure(s5s)
     p = params or load_cbr15(variant)
-    htf = htf or (lambda _t, _d: HTF_NOT_EVALUATED)
+    htf = htf or (lambda _t, _d: {"signal": HTF_NOT_EVALUATED, "fill": FILL_NOT_EVALUATED})
 
     atr1m = atr(s1m, p.atr_length)
     sw_ltf = zigzag(s1m, atr1m, p.k_ltf, M1)
@@ -114,7 +124,6 @@ def run_cbr15(s1m: pd.DataFrame, s5s: pd.DataFrame, *, start: pd.Timestamp, end:
 
     cand = pd.DataFrame(cand_rows)
     if len(cand):
-        _resolve_raw_outcomes(cand, s5s, p)
         _apply_prior_rule(cand, p)
         cand = cand[cand["candle_open_utc"] >= start].reset_index(drop=True)
     candles = pd.DataFrame(candle_rows)
@@ -168,8 +177,11 @@ def _evaluate_candle(q0, s1m, s5s, atr1m, sw_ltf, b15, atr15, levels, arms, p: C
         if a.direction != d:
             continue                                   # not a candidate: shift in the extension's direction
         crow["candidates"] += 1
-        rows.append(_evaluate_candidate(q0, q_end, q_open, cond, candle_rules, oe, a, as_of, a1, d, s1m, s5s, atr1m,
-                                        sw_ltf, atr15, levels, p, htf))
+        row = _evaluate_candidate(q0, q_end, q_open, cond, candle_rules, oe, a, as_of, a1, d, s1m, s5s, atr1m,
+                                  sw_ltf, atr15, levels, p, htf)
+        row["q_prev_high"] = None if prev is None else float(prev["high"])     # Q−1 (OQ-41), broken by Q's own extreme
+        row["q_prev_low"] = None if prev is None else float(prev["low"])
+        rows.append(row)
     return crow, rows
 
 
@@ -203,7 +215,7 @@ def _evaluate_candidate(q0, q_end, q_open, cond, candle_rules, oe, a: Type3Arm, 
             lg = lg[lg["dir"] == want]
             er_pro = _er(oe.extreme, lg.iloc[-1]) if len(lg) else None
             rules["M15-LOC-03"] = er_pro is not None and p.pro_er_min <= er_pro <= p.pro_er_max
-    rules["M15-LOC-04"] = bool(oe.prev_candle_break)
+    rules["M15-LOC-04"] = bool(oe.prev_candle_break)   # OQ-41 (D19-4): Q's own extreme takes Q−1; no exception sourced for CBR15
     assert (oe.extreme > q_open) if d == "SELL" else (oe.extreme < q_open), "M15-LOC-05 invariant"
     if p.aoi_required:
         rules["M15-LOC-06"] = aoi_tap(levels, oe.extreme, q0, zone=p.aoi_zone_atr * (a1 or 0.0), lookback=p.aoi_lookback)
@@ -214,7 +226,8 @@ def _evaluate_candidate(q0, q_end, q_open, cond, candle_rules, oe, a: Type3Arm, 
     # decision rules (known at as_of)
     rules["M15-TIME-01"] = active_from < q_end                         # fill window 7.5 <= mic < 15 still open
     htf_state = htf(as_of, d)
-    rules["M15-HTF-01"] = None if htf_state == HTF_NOT_EVALUATED else htf_state == HTF_CLEAR
+    htf_signal, htf_fill = htf_state["signal"], htf_state["fill"]
+    rules["M15-HTF-01"] = None if htf_signal == HTF_NOT_EVALUATED else htf_signal == HTF_CLEAR   # signal state only
     rules["NT_SYDNEY"] = not (in_sydney_session(active_from) or in_sydney_session(q_end - S5))
     rules["NT_ROLLOVER"] = not any(in_rollover(t, pre_min=p.rollover_pre_min, post_min=p.rollover_post_min)
                                    for t in (active_from, q_end - S5))
@@ -229,6 +242,7 @@ def _evaluate_candidate(q0, q_end, q_open, cond, candle_rules, oe, a: Type3Arm, 
         cancel_time, cancel_reason = touch_time, TYPE3_RESOLVED_TOO_EARLY          # OQ-38 ruling D17-5
     if a.end in ("TIMEOUT", "NEW_SWING") and a.end_time is not None and a.end_time < cancel_time:
         cancel_time, cancel_reason = a.end_time, f"T3_{a.end}"
+    shift_time = touch_time if (touch_time is not None and window_start <= touch_time < q_end) else None
     horizon = min(cancel_time, touch_time) if touch_time is not None else cancel_time
     for t in pd.date_range(as_of.floor("1min") + M1, horizon, freq="1min", inclusive="both"):
         later = oe_mod.evaluate(s1m, q0, q_open, t, atr_1m=_atr_at(atr1m, M1, t) or 0.0,
@@ -238,6 +252,10 @@ def _evaluate_candidate(q0, q_end, q_open, cond, candle_rules, oe, a: Type3Arm, 
             if t < cancel_time:
                 cancel_time, cancel_reason = t, "OE_PULLBACK"
             break
+    if shift_time is not None and shift_time >= cancel_time:
+        shift_time = None
+    trigger_state = ("IN_WINDOW" if shift_time is not None
+                     else TYPE3_RESOLVED_TOO_EARLY if cancel_reason == TYPE3_RESOLVED_TOO_EARLY else "NO_SHIFT")
 
     buffer_price = p.buffer_atr * (a1 or 0.0)
     # OQ-35 ruling (D17-2): stop anchor = most adverse STRUCTURE extreme of the extension observed up to entry
@@ -267,79 +285,45 @@ def _evaluate_candidate(q0, q_end, q_open, cond, candle_rules, oe, a: Type3Arm, 
         "extension_high": max(oe.extreme, q_open), "extension_low": min(oe.extreme, q_open),
         "cancel_time": cancel_time, "cancel_reason": cancel_reason, "structure_trigger_touch_time": touch_time,
         "t3_extreme_before_end": a.extreme_before_end,                # lifecycle: sweep extreme up to the break (OQ-35)
-        "htf_state": htf_state, "q_missing_minutes": q_missing,
+        "htf_signal_state": htf_signal, "htf_fill_state": htf_fill, "q_missing_minutes": q_missing,
+        "five_second_shift_time": shift_time, "trigger_timing_state": trigger_state,
+        "trigger_mic": ((shift_time - q0) / M1) if shift_time is not None else None,
         "hvcs_minutes": hv.minutes if hv else None, "hvcs_body_atr": hv.body_atr if hv else None,
         "mic_structure_touch": ((touch_time - q0) / M1) if touch_time is not None else None,
         "s5_break_size_atr1m": (abs(a.broken_price - a.trigger_price) / a1) if a1 else None,
     }
 
 
-def _resolve_raw_outcomes(cand: pd.DataFrame, s5s: pd.DataFrame, p: Cbr15Params) -> None:
-    """Raw setups (every rule true except COND-03; HTF true or not evaluated) resolved on STRUCTURE 5s bars."""
-    outcome, resolved = [], []
-    for _, r in cand.iterrows():
-        rules = {k: v for k, v in r["rules"].items() if k not in ("M15-COND-03", "M15-HTF-01")}
-        raw = all(v is True for v in rules.values()) and r["rules"].get("M15-HTF-01") is not False
-        if not raw:
-            outcome.append(None)
-            resolved.append(pd.NaT)
-            continue
-        o, t = _structure_outcome(r, s5s, p)
-        outcome.append(o)
-        resolved.append(t)
-    cand["raw_setup"] = [o is not None for o in outcome]
-    cand["raw_outcome"] = outcome
-    cand["raw_resolved_utc"] = pd.to_datetime(pd.Series(resolved, index=cand.index, dtype="object"), utc=True)
-
-
-def _structure_outcome(r, s5s: pd.DataFrame, p: Cbr15Params) -> tuple[str, pd.Timestamp | None]:
-    sell = r["direction"] == "SELL"
-    win = s5s[(s5s.index >= r["entry_trigger_time"]) & (s5s.index < r["cancel_time"])]
-    hit = win.index[(win["low"] <= r["entry_reference_price"]) if sell else (win["high"] >= r["entry_reference_price"])]
-    if not len(hit):
-        return "NO_TOUCH", r["cancel_time"]
-    anchor = anchor_at(r, hit[0]) if "stop_anchor_path" in r else r["stop_extension_extreme"]
-    anchor = r["stop_extension_extreme"] if anchor is None else anchor
-    stop = anchor + (r["stop_buffer_price"] if sell else -r["stop_buffer_price"])   # anchor through the touch (D17-2)
-    after = s5s[s5s.index >= hit[0]]
-    for t, row in after.iterrows():
-        ny_flat = in_rollover(t, pre_min=p.rollover_flat_before_min, post_min=0)
-        if (row["high"] >= stop) if sell else (row["low"] <= stop):
-            return "STOP", t + S5
-        if (row["low"] <= r["target_price"]) if sell else (row["high"] >= r["target_price"]):
-            return "TARGET", t + S5
-        if ny_flat:
-            return "FORCED_FLAT", t + S5
-    return "UNRESOLVED", None
-
-
 def _apply_prior_rule(cand: pd.DataFrame, p: Cbr15Params) -> None:
-    """M15-COND-03: ≥ 1 raw setup with signal time in [Q.t0 − 60 min, Q.t0) that reached TARGET before Q.t0."""
-    raw = cand[cand["raw_setup"] & (cand["raw_outcome"] == "TARGET")]
-    hard, soft, events, failed = [], [], [], []
-    def count(q0: pd.Timestamp, lookback: pd.Timedelta) -> int:
-        return int(((raw["timestamp"] >= q0 - lookback) & (raw["timestamp"] < q0) & (raw["raw_resolved_utc"] <= q0)).sum())
-
+    """M15-COND-03 (D19-1): ≥ prior.hard_min_count qualifying setups FORMED with decision time in [Q.t0 − 60 min, Q.t0);
+    the 120-min count is recorded ("3+ = good", not blocking). Formation only: outcomes are never read."""
+    cand["raw_setup"] = [all(v is True for k, v in r.items() if k not in ("M15-COND-03", "M15-HTF-01"))
+                         and r.get("M15-HTF-01") is not False for r in cand["rules"]]
+    raw = cand[cand["raw_setup"]]
+    hard, soft, latest, events, failed = [], [], [], [], []
     for _, r in cand.iterrows():
         q0 = r["candle_open_utc"]
-        h = count(q0, p.prior_hard_lookback)
-        hard.append(h)
-        soft.append(count(q0, p.prior_soft_lookback))
-        rules = dict(r["rules"])
-        rules["M15-COND-03"] = h >= p.prior_hard_min
-        r["rules"].update(rules)
-        bad = sorted(k for k, v in rules.items() if v is False)
+        in_hard = raw[(raw["timestamp"] >= q0 - p.prior_hard_lookback) & (raw["timestamp"] < q0)]
+        hard.append(len(in_hard))
+        soft.append(int(((raw["timestamp"] >= q0 - p.prior_soft_lookback) & (raw["timestamp"] < q0)).sum()))
+        latest.append(in_hard["timestamp"].max() if len(in_hard) else pd.NaT)
+        r["rules"]["M15-COND-03"] = len(in_hard) >= p.prior_hard_min
+        bad = sorted(k for k, v in r["rules"].items() if v is False)
         failed.append(bad)
         events.append("ARMED" if not bad else "REJECTED")
-    cand["prior_played_out_60m"] = hard
-    cand["prior_played_out_120m"] = soft
+    cand["prior_setup_count"] = hard
+    cand["prior_setup_exists"] = [n >= 1 for n in hard]
+    cand["prior_setup_count_120m"] = soft
+    cand["prior_setup_latest_time"] = pd.to_datetime(pd.Series(latest, index=cand.index, dtype="object"), utc=True)
+    cand["prior_setup_played_out_status"] = PLAYED_OUT_UNKNOWN
     cand["rules_failed"] = failed
     cand["rules_not_evaluated"] = [sorted(k for k, v in r.items() if v is None) for r in cand["rules"]]
     cand["event"] = events
     cand["reject_reasons"] = [sorted({REASONS.get(k, k) for k in f}) for f in failed]
     cand["eligibility_blockers"] = [
-        ([BLOCKER_HTF] if rules.get("M15-HTF-01") is None else []) + [BLOCKER_OQ36] for rules in cand["rules"]]
-    cand["baseline_eligible"] = False                                  # D17: not eligible until the blockers clear
+        ([BLOCKER_HTF] if rules.get("M15-HTF-01") is None else []) + [BLOCKER_HTF_FILL, BLOCKER_PARITY]
+        for rules in cand["rules"]]
+    cand["baseline_eligible"] = False                                  # not eligible until the blockers clear
     seq = cand.groupby(["candle_open_utc", "direction"]).cumcount()
     cand["signal_id"] = [f"CBR15_BASELINE_V1/{r['variant']}/{r['candle_open_utc']:%Y%m%dT%H%M}/{r['direction']}/{s}"
                          for (_, r), s in zip(cand.iterrows(), seq, strict=True)]
@@ -357,7 +341,7 @@ def _signal(r: pd.Series, p: Cbr15Params, shash: str, dxy: pd.DataFrame | None) 
                          "direction_15m": row["dxy_15m_last_direction"] if isinstance(row["dxy_15m_last_direction"], str) else None,
                          "direction_1h": row["dxy_1h_last_direction"] if isinstance(row["dxy_1h_last_direction"], str) else None,
                          "reason_codes": [c for c in str(row["dxy_reason_codes"]).split(";") if c and c != "nan"]}
-    reasons = ["HTF_NOT_EVALUATED"] if r["htf_state"] == HTF_NOT_EVALUATED else []
+    reasons = ["HTF_NOT_EVALUATED"] if r["htf_signal_state"] == HTF_NOT_EVALUATED else []
     return {
         "signal_id": r["signal_id"], "model": p.model, "variant": p.variant, "price_role": "STRUCTURE",
         "timestamp": r["timestamp"].isoformat(), "direction": "LONG" if long else "SHORT",
@@ -385,8 +369,11 @@ def _signal(r: pd.Series, p: Cbr15Params, shash: str, dxy: pd.DataFrame | None) 
         "context_state": {"condition": r["condition"], "c_med": r["c_med"], "n_legs": r["n_legs"],
                           "cond_direction": r["cond_direction"], "pos_oe_extreme": r["pos_oe_extreme"],
                           "er_pro": r["er_pro"], "oe_duration_min": r["oe_duration_min"], "oe_size": r["oe_size"],
-                          "prior_played_out_60m": int(r["prior_played_out_60m"]),
-                          "prior_played_out_120m": int(r["prior_played_out_120m"])},
+                          "prior_setup_exists": bool(r["prior_setup_exists"]),
+                          "prior_setup_count": int(r["prior_setup_count"]),
+                          "prior_setup_count_120m": int(r["prior_setup_count_120m"]),
+                          "prior_setup_played_out_status": r["prior_setup_played_out_status"],
+                          "htf_signal_state": r["htf_signal_state"], "htf_fill_state": r["htf_fill_state"]},
         "dxy_state": dxy_state,
         "session_state": {"nt_sydney": False, "nt_rollover": False},
         "source_feed": {"feed_id": "dukascopy_ticks:xauusd", "manifest_hash": None},
@@ -395,7 +382,10 @@ def _signal(r: pd.Series, p: Cbr15Params, shash: str, dxy: pd.DataFrame | None) 
         "reason_code": "ARMED", "spec_hash": shash,
         "lifecycle": {"cancel_time": r["cancel_time"].isoformat(), "cancel_reason": r["cancel_reason"],
                       "structure_trigger_touch_time": None if pd.isna(r["structure_trigger_touch_time"])
-                      else r["structure_trigger_touch_time"].isoformat()},
+                      else r["structure_trigger_touch_time"].isoformat(),
+                      "five_second_shift_time": None if pd.isna(r["five_second_shift_time"])
+                      else r["five_second_shift_time"].isoformat(),
+                      "trigger_timing_state": r["trigger_timing_state"], "htf_fill_state": r["htf_fill_state"]},
         "diagnostics": {"sweep_bar_extreme": r["sweep_bar_extreme"], "sweep_beyond_oe_extreme": bool(r["sweep_beyond_oe_extreme"]),
                         "hvcs_minutes": r["hvcs_minutes"], "oe_opposite_wick": r["oe_opposite_wick"],
                         "mic_structure_touch": r["mic_structure_touch"], "t3_end": r["t3_end"]},
@@ -411,8 +401,16 @@ def decision_frame(result: Cbr15Result) -> pd.DataFrame:
     return out
 
 
+def trigger_frame(result: Cbr15Result) -> pd.DataFrame:
+    c = result.candidates
+    if not len(c):
+        return pd.DataFrame(columns=TRIGGER_FIELDS)
+    return c[TRIGGER_FIELDS].copy()
+
+
 def result_hash(result: Cbr15Result) -> str:
     payload = json.dumps({"candidates": decision_frame(result).astype(str).to_dict("records"),
+                          "triggers": trigger_frame(result).astype(str).to_dict("records"),
                           "signals": result.signals}, sort_keys=True, default=str)
     return hashlib.sha256(payload.encode()).hexdigest()
 

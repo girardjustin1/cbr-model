@@ -1,0 +1,27 @@
+# Phase 13 parity tolerances (CBR-PROT-013 §4; owner ruling D19-11/12).
+# METHOD approved in principle (D19-11). VALUES are computed from V-1 NON-course calibration days only and frozen here
+# BEFORE the final parity run; they are never changed after looking at course-example parity.
+status: NOT_FROZEN            # NOT_FROZEN -> FROZEN (owner approval of the calibration report)
+final_run_authorized: false   # owner authorization of the final Phase 13 run
+
+method:
+  calibration_files: [v1_cal_2025-10-22.csv, v1_cal_2025-11-11.csv]     # data/raw/tradingview/ (gitignored)
+  offset: median(FOREXCOM close - Dukascopy tick-mid close), non-course minutes
+  price_floor: 0.02            # quote-resolution floor (USD)
+  residual_percentile: 95      # pre-registered; not altered after course parity
+  round_up_to: 0.05            # USD
+  feed_near_multiple: 3        # FEED_NEAR band = 3 x tau_price (reported, never a match)
+  lag_check: best lag of 1m close-to-close returns must be 0 minutes; otherwise V-1 fails
+  time:
+    one_minute_structure_events: same canonical 1m bar
+    tom_timestamp_without_seconds_s: 60
+    tom_timestamp_with_seconds_s: 15
+    consistent_feed_time_offset: report it; never widen the tolerance
+  report_before_freeze: [sample count, residual distribution, median offset, per-day offsets, p95, max, zero-lag confirmation]
+
+values:                        # filled from the calibration report, then status -> FROZEN
+  delta_median_offset: null
+  tau_price: null
+  feed_near: null
+  calibration_report: null
+  data_hashes: null
