@@ -1,7 +1,7 @@
 # Phase 13 Readiness Checklist
 
 **Doc:** CBR-READY-013 · **Created:** 2026-09-15 (owner ruling D18-12) · **Updated:** 2026-09-15 (D24, fidelity revision) ·
-**Status:** RUN APPROVED (D25); freeze and execution in progress
+**Status:** RUN EXECUTED (CBR-RUN-013B-2); report returned: FAIL under the frozen rules; awaiting owner verdict
 
 Phase 13 is now **STRATEGY FIDELITY AND BEHAVIORAL PARITY** (D24; gate CBR-ACC-013). It may not run while any
 mandatory item in sections A or C is unchecked. Section B (V-1) is **supporting feed-fidelity validation** and no longer
@@ -55,12 +55,12 @@ and Dukascopy calibration days are preserved as supporting evidence.
 |---|---|---|---|
 | 29 | [x] Behavioral-parity run protocol and decisions P-1…P-8 approved | D25: approved; P-5 option B as the D25-P5 standard; run spec `config/phase13_behavioral_run.yaml` | `docs/governance/d25-phase13-run-approval.md` |
 | 30 | [x] Protocol frozen (hash) and run code committed with tests | frozen at commit `36e096c` (527 passed, 1 skipped; ruff clean); recent Dukascopy absent at freeze | `reports/phase13-freeze-manifest.json` |
-| 31 | [ ] Recent feed comparison complete (Dukascopy for the P-2 days fetched and validated; agreement rates and feed band reported) | not started | CBR-ACC-013 G; CBR-PROT-013B §7.1 |
-| 32 | [ ] Higher-timeframe fidelity (FOREXCOM 1h/4h/1D; TVC:DXY 1h) reported | not started | CBR-ACC-013 F; §7.2 |
-| 33 | [ ] Behavioral-parity runs executed twice with identical result hashes (gate A) | not started | §2 |
-| 34 | [ ] Every mismatch classified; no unexplained or open implementation mismatch (gates B, D, E) | not started | §5 |
-| 35 | [ ] Feed differences documented (gate F) and gate G assessed under the P-5 rule | not started | §6, §7.1 |
-| 36 | [ ] Owner Phase 13 verdict issued (PASS / PASS WITH CONCERNS / FAIL) | not issued | CBR-ACC-013 §7 |
+| 31 | [x] Recent feed comparison complete (Dukascopy for the P-2 days fetched and validated; agreement rates and feed band reported) | 4 days ready, 0 vendor gaps; zero lag; δ $0.00; τ $0.20; `reports/phase13-feed-comparison.md` | CBR-ACC-013 G; CBR-PROT-013B §7.1 |
+| 32 | [x] Higher-timeframe fidelity (FOREXCOM 1h/4h/1D; TVC:DXY 1h) reported | `reports/phase13-higher-timeframe-fidelity.md` | CBR-ACC-013 F; §7.2 |
+| 33 | [x] Behavioral-parity runs executed twice with identical result hashes (gate A) | CBR-RUN-013B-2: `f3905430…d063` both runs; spot-check defect 1 recorded in the post-run review | §2 |
+| 34 | [x] Every mismatch classified; no unexplained or open implementation mismatch (gates B, D, E) | all classified; no IMPLEMENTATION_BUG in PC2; checking-code defects 2-3 recorded | `reports/phase13-post-run-review.md` §5 |
+| 35 | [x] Feed differences documented (gate F) and gate G assessed under the P-5 rule | criterion 9 MET (O-1 reading) | §6, §7.1 |
+| 36 | [ ] Owner Phase 13 verdict issued (PASS / PASS WITH CONCERNS / FAIL) | Research Engineer report: **FAIL** (frozen rules); awaiting owner review | CBR-ACC-013 §7 |
 
 **Current status (2026-09-15): NOT READY.** Mandatory: 20 of 28 checked (A 20/20; C 0/8). Supporting V-1: 1 of 8
 checked. Next step: owner approval of CBR-PROT-013B and P-1…P-8.

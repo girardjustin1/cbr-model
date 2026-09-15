@@ -151,7 +151,7 @@ footer{border-top:1px solid var(--rule);padding-top:18px;font-size:.84rem;color:
       <div class="meta">
         <div><span class="eyebrow">Doc</span><b>CBR-PRD-001</b></div>
         <div><span class="eyebrow">Version</span><b>v1.1 · 2026-09-14</b></div>
-        <div><span class="eyebrow">Current phase</span><b>13 · Strategy fidelity / behavioral parity (run approved, D25)</b></div>
+        <div><span class="eyebrow">Current phase</span><b>13 · Strategy fidelity / behavioral parity (run executed: report FAIL, awaiting owner verdict)</b></div>
         <div><span class="eyebrow">Instruments</span><b class="ticker"><span class="x">XAUUSD</span>+<span class="d">DXY</span></b></div>
         <div><span class="eyebrow">Repo</span><b>main pushed at 5d05cce · Phase 13 on local branch cbr-work_091526-4pm</b></div>
       </div>
@@ -368,7 +368,7 @@ footer{border-top:1px solid var(--rule);padding-top:18px;font-size:.84rem;color:
           <tr><td class="id">10</td><td>DXY context module</td><td>Causal quote + last-closed/forming 15m and 1h direction with state, confidence, reason codes; hindsight mask separate; no DXY rule or filter</td><td><span class="chip concern">Accepted with concerns · G10</span></td></tr>
           <tr><td class="id">11</td><td>CBR15 Python reference engine</td><td>STRUCTURE-only, causal, deterministic; every candidate's rule outcomes; stop anchor through activation (D17); not baseline-eligible (OQ-36)</td><td><span class="chip concern">Accepted with concerns · G11</span></td></tr>
           <tr><td class="id">12</td><td>CBR1H Python reference engine</td><td>Variants A/B; causal hourly state for the 15m veto; course-example parity without outcomes</td><td><span class="chip concern">Accepted with concerns · G12</span></td></tr>
-          <tr><td class="id">13</td><td>Strategy fidelity and behavioral parity</td><td>Behavioral agreement with the three hourly course examples on frozen PC2 and Dukascopy; every mismatch classified; feed differences documented; recent FOREXCOM feed study; V-1 supporting only (D24)</td><td><span class="chip concern">Current · run approved (D25)</span></td></tr>
+          <tr><td class="id">13</td><td>Strategy fidelity and behavioral parity</td><td>Behavioral agreement with the three hourly course examples on frozen PC2 and Dukascopy; every mismatch classified; feed differences documented; recent FOREXCOM feed study; V-1 supporting only (D24)</td><td><span class="chip block">Current · report FAIL, owner review</span></td></tr>
           <tr class="stage"><td colspan="4">C · Untouched baselines</td></tr>
           <tr><td class="id">pre-14</td><td>Canonical extremes source (OQ-25) · DXY availability diagnostic (OQ-27) · baseline feed frozen (OQ-24)</td><td>Gates G2b, G2c, G2d; never chosen by profitability</td><td><span class="chip block">Hard preconditions</span></td></tr>
           <tr><td class="id">14A</td><td>Authoritative custom execution simulator</td><td>Frozen signals in; bid/ask fills, spread, slippage, costs, rollover, missing data, same-bar and gap rules; gross/net R; ledger; holdout lock</td><td><span class="chip todo">Pending · G14A</span></td></tr>

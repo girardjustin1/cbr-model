@@ -56,7 +56,7 @@ def write_reports() -> dict:
                 "run_spec_sha256": freeze["files"]["config/phase13_behavioral_run.yaml"],
                 "ruling_sha256": freeze["files"]["docs/governance/d25-phase13-run-approval.md"],
                 "frozen_files": freeze["files"], "pc2": freeze["pc2"], "forexcom_exports": freeze["forexcom_exports"],
-                "pre_execution_tests": freeze["pre_execution_tests"], "frozen_utc": freeze["frozen_utc"],
+                "pre_execution_tests": freeze["pre_execution_tests"], "lint": freeze.get("lint"), "frozen_utc": freeze["frozen_utc"],
                 "data_hashes": pl["data_hashes"], "result_hashes": {"run-1": r1["result_hash"], "run-2": r2["result_hash"]},
                 "run_generated_utc": {"run-1": r1["generated_utc"], "run-2": r2["generated_utc"]},
                 "deterministic_rerun": r1["result_hash"] == r2["result_hash"], "verdict": v["verdict"]}
@@ -219,10 +219,12 @@ def render_parity(p: dict, m: dict, feed: dict, spec: dict) -> str:
           "class. D25 O-1…O-8 (criterion 9 reading, control window, variants, trigger, approved explanations, concerns, "
           "negative-control classification, DXY) are Research Engineer operationalizations frozen before the run."), "",
           "## 1-3. Frozen inputs and hashes", "", "| Item | SHA-256 |", "|---|---|",
-          f"| Protocol CBR-PROT-013B | `{m['protocol_sha256']}` |", f"| Run specification CBR-RUN-013B-1 | `{m['run_spec_sha256']}` |",
+          f"| Protocol CBR-PROT-013B | `{m['protocol_sha256']}` |", f"| Run specification {p['run_id']} | `{m['run_spec_sha256']}` |",
           f"| Ruling D25 | `{m['ruling_sha256']}` |", f"| PC2 spec hash (CBR1H) | `{m['pc2']['spec_hash']}` |",
           f"| Freeze commit | `{m['freeze_commit']}` (frozen {m['frozen_utc']}) |", "",
-          f"Pre-execution tests at the freeze: {m['pre_execution_tests']}. All frozen files: `reports/phase13-run-manifest.json`.", "",
+          (f"Pre-execution tests at the freeze: {m['pre_execution_tests']}; lint at the freeze: {m.get('lint')}. All frozen files: "
+          "`reports/phase13-run-manifest.json`. Superseded run CBR-RUN-013B-1 stopped before any result "
+          "(`docs/governance/phase13-run-incident-1.md`). Research Engineer post-run review: `reports/phase13-post-run-review.md`."), "",
           "| Data | Files | Hash check |", "|---|---|---|"]
     dh = m["data_hashes"]
     L += [(f"| Course STRUCTURE bars | {len(dh['course_structure_bars'])} | all match canonical manifest: "

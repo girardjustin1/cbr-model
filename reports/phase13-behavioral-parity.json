@@ -1,0 +1,4964 @@
+{
+ "run_id": "CBR-RUN-013B-2",
+ "generated_utc": "2026-09-15T22:27:59+00:00",
+ "ruling": "D25",
+ "freeze_commit": "eb1a9f372d9a30514ab130e7902b9793c2b70450",
+ "verdict": {
+  "verdict": "FAIL",
+  "criteria": {
+   "1_model_family_3of3": true,
+   "2_direction_3of3": true,
+   "3_extension_direction_3of3": true,
+   "4_core_structural_trigger_3of3": false,
+   "5_negative_control_clean": true,
+   "6_no_open_implementation_bug": true,
+   "7_no_unexplained_canon_mismatch": true,
+   "8_every_mismatch_classified": true,
+   "9_feed_study": "MET"
+  },
+  "fail_reasons": [
+   "gate A: a truncation / future-mutation spot check differed",
+   "CX-LT3-2 core_structural_trigger: not met (CANON_MISMATCH)",
+   "CX-TE1-1 core_structural_trigger: not met (CANON_MISMATCH)"
+  ],
+  "owner_determination": [
+   "CX-LT1-1 core_structural_trigger: failed with OWNER_BASELINE_CHOICE only"
+  ],
+  "concerns": [
+   "CX-LT1-1 dim 6 extension_timing: CANON_MISMATCH",
+   "CX-LT1-1 dim 8 shift_type: OWNER_BASELINE_CHOICE",
+   "CX-LT1-1 dim 9 shift_time: OWNER_BASELINE_CHOICE",
+   "CX-LT1-1 dim 10 stop_anchor: FEED_DIFFERENCE",
+   "CX-LT1-1 dim 11 target_concept: FEED_DIFFERENCE",
+   "CX-LT1-1: engine candidate REJECTED (failed: IMPL-REWARD=CANON_MISMATCH, M1H-COND-04=UNRESOLVED_SPEC_AMBIGUITY, M1H-LOC-01=CANON_MISMATCH, M1H-OE-01=CANON_MISMATCH, M1H-OE-02=OWNER_BASELINE_CHOICE, M1H-OE-04a=FEED_DEPENDENT_SIGNAL_DIFFERENCE, M1H-OE-04b=UNRESOLVED_SPEC_AMBIGUITY)",
+   "CX-LT3-2 dim 3 condition: UNRESOLVED_SPEC_AMBIGUITY",
+   "CX-LT3-2 dim 4 tr_direction: UNRESOLVED_SPEC_AMBIGUITY",
+   "CX-LT3-2 dim 7 previous_15m_take: CANON_MISMATCH",
+   "CX-LT3-2 dim 9 shift_time: CANON_MISMATCH",
+   "CX-LT3-2 dim 10 stop_anchor: FEED_DIFFERENCE",
+   "CX-LT3-2 dim 11 target_concept: CANON_MISMATCH",
+   "CX-LT3-2: engine candidate REJECTED (failed: M1H-6A-1-HVCS-INTO-SHIFT=UNRESOLVED_SPEC_AMBIGUITY, M1H-6A-2-PREV-15M-BROKEN-BY-Q=CANON_MISMATCH, M1H-6A-3-NEW-EXTREME-IN-Q=CANON_MISMATCH, M1H-COND-03=UNRESOLVED_SPEC_AMBIGUITY, M1H-COND-04=UNRESOLVED_SPEC_AMBIGUITY, M1H-OE-02=OWNER_BASELINE_CHOICE)",
+   "CX-TE1-1 dim 4 tr_direction: UNRESOLVED_SPEC_AMBIGUITY",
+   "CX-TE1-1 dim 9 shift_time: CANON_MISMATCH",
+   "CX-TE1-1 dim 10 stop_anchor: FEED_DIFFERENCE",
+   "CX-TE1-1 dim 11 target_concept: FEED_DIFFERENCE",
+   "CX-TE1-1: engine candidate REJECTED (failed: M1H-COND-04=UNRESOLVED_SPEC_AMBIGUITY, M1H-OE-02=OWNER_BASELINE_CHOICE)"
+  ],
+  "deterministic_rerun": true,
+  "result_hashes": [
+   "f39054300808e2c4b11d074b4a8a4eeff4526a0707d5e63a9e1c4bb5cf10d063",
+   "f39054300808e2c4b11d074b4a8a4eeff4526a0707d5e63a9e1c4bb5cf10d063"
+  ]
+ },
+ "examples": {
+  "CX-LT1-1": {
+   "course_record_sha256": "c3d6fd0fd8fcec25d4d026a3403d814d4388d482c5e10ca0b311b911b6a56c8a",
+   "direction": "BUY",
+   "example_id": "CX-LT1-1",
+   "example_verdict": "FEED_DEPENDENT_SIGNAL_DIFFERENCE",
+   "hard_met": {
+    "core_structural_trigger": {
+     "class": "OWNER_BASELINE_CHOICE",
+     "met": false
+    },
+    "direction": {
+     "class": "BEHAVIORAL_MATCH",
+     "met": true
+    },
+    "extension_direction": {
+     "class": "BEHAVIORAL_MATCH",
+     "met": true
+    },
+    "model_family": {
+     "class": "BEHAVIORAL_MATCH",
+     "met": true
+    }
+   },
+   "hour_utc": "2025-10-21T01:00:00+00:00",
+   "scored_variant": "A",
+   "variants": {
+    "A": {
+     "acceptance": {
+      "event": "REJECTED",
+      "failed_rules": [
+       {
+        "classification": {
+         "blocks_gate": false,
+         "evidence": {
+          "canon_evidence": "PC2 rule IMPL-REWARD (M1H-TP-01); engine value from STRUCTURE bars; course: CX-LT1-1 mtf_model: range (spoken); journal row for the matching Oct 21 12:39 PM trade says 'TRR CT' / 'Ranging' (00:07:07-00:07:12)"
+         },
+         "implementation_bug": false,
+         "margin_usd": null,
+         "primary": "CANON_MISMATCH",
+         "secondary": [],
+         "tags": []
+        },
+        "rule": "IMPL-REWARD"
+       },
+       {
+        "classification": {
+         "blocks_gate": false,
+         "evidence": {
+          "canon_evidence": "PC2 rule M1H-COND-04 (1h-cbr-machine-spec.md); engine value from STRUCTURE bars; course: CX-LT1-1 mtf_model: range (spoken); journal row for the matching Oct 21 12:39 PM trade says 'TRR CT' / 'Ranging' (00:07:07-00:07:12)",
+          "open_question": "M1H-COND-04 governed by OQ-05, OQ-36"
+         },
+         "implementation_bug": false,
+         "margin_usd": null,
+         "primary": "UNRESOLVED_SPEC_AMBIGUITY",
+         "secondary": [],
+         "tags": []
+        },
+        "rule": "M1H-COND-04"
+       },
+       {
+        "classification": {
+         "blocks_gate": false,
+         "evidence": {
+          "canon_evidence": "PC2 rule M1H-LOC-01 (E15-015, E1H-002); engine value from STRUCTURE bars; course: CX-LT1-1 mtf_model: range (spoken); journal row for the matching Oct 21 12:39 PM trade says 'TRR CT' / 'Ranging' (00:07:07-00:07:12)"
+         },
+         "implementation_bug": false,
+         "margin_usd": -13.27099999999973,
+         "primary": "CANON_MISMATCH",
+         "secondary": [],
+         "tags": []
+        },
+        "rule": "M1H-LOC-01"
+       },
+       {
+        "classification": {
+         "blocks_gate": false,
+         "evidence": {
+          "canon_evidence": "PC2 rule M1H-OE-01 (E1H-018, E1H-002); engine value from STRUCTURE bars; course: CX-LT1-1 mtf_model: range (spoken); journal row for the matching Oct 21 12:39 PM trade says 'TRR CT' / 'Ranging' (00:07:07-00:07:12)"
+         },
+         "implementation_bug": false,
+         "margin_usd": null,
+         "primary": "CANON_MISMATCH",
+         "secondary": [],
+         "tags": []
+        },
+        "rule": "M1H-OE-01"
+       },
+       {
+        "classification": {
+         "blocks_gate": false,
+         "evidence": {
+          "canon_evidence": "PC2 rule M1H-OE-02 (E1H-018); engine value from STRUCTURE bars; course: CX-LT1-1 mtf_model: range (spoken); journal row for the matching Oct 21 12:39 PM trade says 'TRR CT' / 'Ranging' (00:07:07-00:07:12)",
+          "owner_baseline_choice": "M1H-OE-02 passes under STRICT_COURSE:oe_origin=LAST_RESET (same candidate identity)"
+         },
+         "implementation_bug": false,
+         "margin_usd": -4.832499999999072,
+         "primary": "OWNER_BASELINE_CHOICE",
+         "secondary": [],
+         "tags": []
+        },
+        "rule": "M1H-OE-02"
+       },
+       {
+        "classification": {
+         "blocks_gate": false,
+         "evidence": {
+          "canon_evidence": "PC2 rule M1H-OE-04a (1h-cbr-machine-spec.md); engine value from STRUCTURE bars; course: CX-LT1-1 mtf_model: range (spoken); journal row for the matching Oct 21 12:39 PM trade says 'TRR CT' / 'Ranging' (00:07:07-00:07:12)",
+          "feed_dependent": "M1H-OE-04a: Dukascopy margin -0.0592 within feed band \u03c4 = 0.2",
+          "open_question": "M1H-OE-04a governed by OQ-08"
+         },
+         "implementation_bug": false,
+         "margin_usd": -0.05924999999842884,
+         "primary": "FEED_DEPENDENT_SIGNAL_DIFFERENCE",
+         "secondary": [
+          "UNRESOLVED_SPEC_AMBIGUITY",
+          "CANON_MISMATCH"
+         ],
+         "tags": [
+          "UNVERIFIED",
+          "DATA_LIMITATION"
+         ]
+        },
+        "rule": "M1H-OE-04a"
+       },
+       {
+        "classification": {
+         "blocks_gate": false,
+         "evidence": {
+          "canon_evidence": "PC2 rule M1H-OE-04b (1h-cbr-machine-spec.md); engine value from STRUCTURE bars; course: CX-LT1-1 mtf_model: range (spoken); journal row for the matching Oct 21 12:39 PM trade says 'TRR CT' / 'Ranging' (00:07:07-00:07:12)",
+          "open_question": "M1H-OE-04b governed by OQ-08"
+         },
+         "implementation_bug": false,
+         "margin_usd": -4.214914842398548,
+         "primary": "UNRESOLVED_SPEC_AMBIGUITY",
+         "secondary": [],
+         "tags": []
+        },
+        "rule": "M1H-OE-04b"
+       }
+      ]
+     },
+     "armed_in_hour": 0,
+     "candidates_in_hour": 9,
+     "causality": {
+      "all_identical": true,
+      "checked": true,
+      "decision": {
+       "cut": "2025-10-21T01:07:32+00:00",
+       "future_mutation": {
+        "decision_identical": true,
+        "decision_rows": 1,
+        "trigger_identical": true,
+        "trigger_rows": 0
+       },
+       "truncation": {
+        "decision_identical": true,
+        "decision_rows": 1,
+        "trigger_identical": true,
+        "trigger_rows": 0
+       }
+      }
+     },
+     "dimensions": [
+      {
+       "class": "BEHAVIORAL_MATCH",
+       "classification": null,
+       "course": "CBR1H 5s shift",
+       "dim": 1,
+       "engine": {
+        "entry_model": "HVCS_S5_SHIFT",
+        "parent": "HVCS",
+        "variant": "A"
+       },
+       "name": "model",
+       "status": "MATCH"
+      },
+      {
+       "class": "BEHAVIORAL_MATCH",
+       "classification": null,
+       "course": "BUY",
+       "dim": 2,
+       "engine": "BUY",
+       "name": "direction",
+       "status": "MATCH"
+      },
+      {
+       "class": "BEHAVIORAL_MATCH",
+       "classification": null,
+       "course": [
+        {
+         "condition": "RANGE"
+        },
+        {
+         "condition": "TRENDING_RANGE"
+        }
+       ],
+       "dim": 3,
+       "engine": {
+        "c_med": 0.8126784180292626,
+        "cond_direction": "NONE",
+        "condition": "RANGE",
+        "n_legs": 3
+       },
+       "name": "condition",
+       "status": "MATCH"
+      },
+      {
+       "class": "NOT_APPLICABLE",
+       "classification": null,
+       "course": null,
+       "dim": 4,
+       "engine": "NONE",
+       "name": "tr_direction",
+       "status": "NOT_APPLICABLE"
+      },
+      {
+       "class": "BEHAVIORAL_MATCH",
+       "classification": null,
+       "course": "DOWN",
+       "dim": 5,
+       "engine": "DOWN",
+       "margin_usd": 3.4915000000019063,
+       "name": "extension_direction",
+       "status": "MATCH"
+      },
+      {
+       "class": "CANON_MISMATCH",
+       "classification": {
+        "blocks_gate": false,
+        "evidence": {
+         "canon_evidence": "E1H-018, E1H-002; course CX-LT1-1 overextension: Hour candle opened and pushed bearish into the low of the larger range; duration not stated (00:00:09-00:00:18)"
+        },
+        "implementation_bug": false,
+        "primary": "CANON_MISMATCH",
+        "secondary": [],
+        "tags": []
+       },
+       "course": "duration \u2265 20 min, extreme before the shift",
+       "dim": 6,
+       "engine": {
+        "oe_duration_min": 6.0,
+        "oe_extreme_time": "2025-10-21T01:06:00+00:00",
+        "oe_no_pullback": false,
+        "reference_time": "2025-10-21T01:07:00+00:00"
+       },
+       "name": "extension_timing",
+       "status": "MISMATCH"
+      },
+      {
+       "class": "BEHAVIORAL_MATCH",
+       "classification": null,
+       "course": "15m candle over-extended bearish and broke the low before the ~37-39 min shift",
+       "dim": 7,
+       "engine": {
+        "q_break_by_q": true,
+        "q_open_utc": "2025-10-21T01:00:00+00:00",
+        "q_prev_closed_in_trade_direction": false
+       },
+       "margin_usd": 2.8299999999999272,
+       "name": "previous_15m_take",
+       "status": "MATCH"
+      },
+      {
+       "class": "OWNER_BASELINE_CHOICE",
+       "classification": {
+        "blocks_gate": false,
+        "evidence": {
+         "canon_evidence": "E1H-018; cancel OE_PULLBACK; course CX-LT1-1 entry_model: seconds shift (5-second chart: low then take out a high) (00:02:47-00:02:56)",
+         "owner_baseline_choice": "a completed shift in the course direction under ['STRICT_COURSE:oe_origin=LAST_RESET']"
+        },
+        "implementation_bug": false,
+        "primary": "OWNER_BASELINE_CHOICE",
+        "secondary": [],
+        "tags": []
+       },
+       "course": "seconds shift (5-second chart: low then take out a high)",
+       "dim": 8,
+       "engine": {
+        "cancel_reason": "OE_PULLBACK",
+        "m1_hilo_armed_at_decision": true,
+        "s5_type3_direction": "BUY",
+        "shift_completed": false
+       },
+       "name": "shift_type",
+       "status": "MISMATCH"
+      },
+      {
+       "class": "OWNER_BASELINE_CHOICE",
+       "classification": {
+        "blocks_gate": false,
+        "evidence": {
+         "canon_evidence": "E1H-018; cancel OE_PULLBACK; course CX-LT1-1 entry_model: seconds shift (5-second chart: low then take out a high) (00:02:47-00:02:56)",
+         "owner_baseline_choice": "a completed shift in the course direction under ['STRICT_COURSE:oe_origin=LAST_RESET']"
+        },
+        "implementation_bug": false,
+        "primary": "OWNER_BASELINE_CHOICE",
+        "secondary": [],
+        "tags": []
+       },
+       "course": {
+        "tolerance_s": 15,
+        "tom_interval": [
+         "2025-10-21T01:39:15+00:00",
+         "2025-10-21T01:39:15+00:00"
+        ]
+       },
+       "dim": 9,
+       "engine": null,
+       "name": "shift_time",
+       "p3": {
+        "equivalent": false,
+        "reason": "no completed shift"
+       },
+       "status": "MISMATCH"
+      },
+      {
+       "adjusted_minus_engine": -25.624249999998938,
+       "class": "FEED_DIFFERENCE",
+       "classification": null,
+       "course": {
+        "delta_h": 0.06925,
+        "tom_stop": 4332.96,
+        "tom_stop_minus_delta_h": 4332.8907500000005
+       },
+       "dim": 10,
+       "engine": {
+        "anchor_at_shift": 4358.514999999999,
+        "buffer_price": 0.2726986464631361,
+        "source": "STRUCTURE_TICK_MID_5S_EXTENSION_EXTREME"
+       },
+       "name": "stop_anchor",
+       "status": "FEED_DIFFERENCE",
+       "tom_minus_engine": -25.55499999999938
+      },
+      {
+       "adjusted_minus_engine": -12.099999999999454,
+       "class": "FEED_DIFFERENCE",
+       "classification": null,
+       "course": {
+        "concept": "FIFTY_PERCENT_OF_MOVE",
+        "tom_target": 4351.59
+       },
+       "dim": 11,
+       "engine": {
+        "concept": "50% of extension from H.open",
+        "target_at_shift": 4363.62075
+       },
+       "name": "target_concept",
+       "status": "FEED_DIFFERENCE",
+       "tom_minus_engine": -12.030749999999898
+      },
+      {
+       "class": "BEHAVIORAL_MATCH",
+       "classification": null,
+       "course": {
+        "compare_field": "dxy_1h_forming_direction",
+        "direction": "UP",
+        "text": "DXY still bullish at entry, into highs"
+       },
+       "descriptive": true,
+       "dim": 12,
+       "engine": {
+        "dxy_15m_forming_direction": "UP",
+        "dxy_15m_forming_state": "OK",
+        "dxy_15m_last_direction": "UP",
+        "dxy_1h_forming_direction": "UP",
+        "dxy_1h_forming_state": "OK",
+        "dxy_1h_last_direction": "DOWN",
+        "dxy_confidence": "FULL",
+        "dxy_reason_codes": "",
+        "field": "dxy_1h_forming_direction",
+        "time": "2025-10-21T01:07:00+00:00",
+        "tvc_hour_direction": "UP",
+        "tvc_note": "TVC:DXY 1h bar final direction (hour close; hindsight, descriptive)",
+        "value": "UP"
+       },
+       "name": "dxy",
+       "status": "MATCH"
+      }
+     ],
+     "engine": {
+      "activation_time": "2025-10-21T01:22:00+00:00",
+      "atr_1h": 22.632829684798434,
+      "atr_1m": 2.7269864646313606,
+      "beyond_external": null,
+      "c_med": 0.8126784180292626,
+      "cancel_reason": "OE_PULLBACK",
+      "cancel_time": "2025-10-21T01:08:00+00:00",
+      "cond_direction": "NONE",
+      "condition": "RANGE",
+      "condition_missing_minutes": 0,
+      "condition_tradable_minutes": 480,
+      "continuity_state": "CONTINUOUS",
+      "direction": "BUY",
+      "entry_model": "HVCS_S5_SHIFT",
+      "er_pro": null,
+      "event": "REJECTED",
+      "ext_extreme_at_decision": 4361.625,
+      "five_second_broken_price": 4366.805,
+      "five_second_shift_level": 4366.8150000000005,
+      "five_second_shift_time": null,
+      "five_second_sweep_time": "2025-10-21T01:06:55+00:00",
+      "five_second_swept_price": 4361.9935000000005,
+      "h_missing_minutes": 0,
+      "h_open": 4368.726500000001,
+      "hvcs_minutes": 5,
+      "m1_hilo_armed_at_decision": true,
+      "n_legs": 3,
+      "oe_dir": "DOWN",
+      "oe_duration_min": 6.0,
+      "oe_extreme_time": "2025-10-21T01:06:00+00:00",
+      "oe_no_pullback": false,
+      "oe_opposite_wick": 0.5083433077516614,
+      "oe_origin_time": "2025-10-21T01:00:00+00:00",
+      "oe_size": 7.101500000000669,
+      "oe_size_atr1h": 0.31376986876592206,
+      "oe_two_sided": true,
+      "parent_structure_type": "HVCS",
+      "pos_oe_extreme": 0.549774113395078,
+      "prior_setup_count": 0,
+      "q_break_by_q": true,
+      "q_open_utc": "2025-10-21T01:00:00+00:00",
+      "q_prev_closed_in_trade_direction": false,
+      "q_prev_high": 4370.9865,
+      "q_prev_low": 4364.455,
+      "range_high": 4381.5565,
+      "range_low": 4337.2865,
+      "rules": {
+       "IMPL-REWARD": false,
+       "M1H-6A-1-HVCS-INTO-SHIFT": true,
+       "M1H-6A-2-PREV-15M-BROKEN-BY-Q": true,
+       "M1H-6A-3-NEW-EXTREME-IN-Q": true,
+       "M1H-COND-01": true,
+       "M1H-COND-02": true,
+       "M1H-COND-03": true,
+       "M1H-COND-04": false,
+       "M1H-LOC-01": false,
+       "M1H-OE-01": false,
+       "M1H-OE-02": false,
+       "M1H-OE-04a": false,
+       "M1H-OE-04b": false,
+       "M1H-TIME-01": true,
+       "NT_INCOMPLETE_H": true,
+       "NT_INCOMPLETE_H_OPEN": true,
+       "NT_ROLLOVER": true,
+       "NT_SYDNEY": true
+      },
+      "rules_failed": [
+       "IMPL-REWARD",
+       "M1H-COND-04",
+       "M1H-LOC-01",
+       "M1H-OE-01",
+       "M1H-OE-02",
+       "M1H-OE-04a",
+       "M1H-OE-04b"
+      ],
+      "rules_not_evaluated": [],
+      "s5_t3_end": "NEW_SWING",
+      "signal_id": "CBR1H_BASELINE_V1/A/20251021T0100/BUY/0",
+      "stop_anchor_at_shift": 4358.514999999999,
+      "stop_anchor_time": "2025-10-21T01:07:10+00:00",
+      "stop_buffer_price": 0.2726986464631361,
+      "structure_stop_anchor": 4358.514999999999,
+      "sweep_bar_extreme": 4361.625,
+      "target_at_activation": 4363.62075,
+      "target_at_decision": 4365.17575,
+      "target_at_shift": 4363.62075,
+      "timestamp": "2025-10-21T01:07:00+00:00",
+      "timing30_state": "NOT_APPLICABLE",
+      "valid_until": "2025-10-21T01:52:00+00:00",
+      "variant": "A"
+     },
+     "example_verdict": "FEED_DEPENDENT_SIGNAL_DIFFERENCE",
+     "hard": {
+      "core_structural_trigger": {
+       "class": "OWNER_BASELINE_CHOICE",
+       "met": false
+      },
+      "direction": {
+       "class": "BEHAVIORAL_MATCH",
+       "met": true
+      },
+      "extension_direction": {
+       "class": "BEHAVIORAL_MATCH",
+       "met": true
+      },
+      "model_family": {
+       "class": "BEHAVIORAL_MATCH",
+       "met": true
+      }
+     },
+     "how_selected": "DIAGNOSTIC_FIRST_IN_ORDER",
+     "margins_usd": {
+      "M1H-6A-2-PREV-15M-BROKEN-BY-Q": 2.8299999999999272,
+      "M1H-6A-3-NEW-EXTREME-IN-Q": null,
+      "M1H-LOC-01": -13.27099999999973,
+      "M1H-LOC-02": null,
+      "M1H-LOC-03": null,
+      "M1H-OE-02": -4.832499999999072,
+      "M1H-OE-04a": -0.05924999999842884,
+      "M1H-OE-04b": -4.214914842398548,
+      "extension_direction": 3.4915000000019063
+     },
+     "strict_course": {
+      "STRICT_COURSE:early_shift_guard=ALIGN_15M": {
+       "dimensions": [
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": "CBR1H 5s shift",
+         "dim": 1,
+         "engine": {
+          "entry_model": "HVCS_S5_SHIFT",
+          "parent": "HVCS",
+          "variant": "A"
+         },
+         "name": "model",
+         "status": "MATCH"
+        },
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": "BUY",
+         "dim": 2,
+         "engine": "BUY",
+         "name": "direction",
+         "status": "MATCH"
+        },
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": [
+          {
+           "condition": "RANGE"
+          },
+          {
+           "condition": "TRENDING_RANGE"
+          }
+         ],
+         "dim": 3,
+         "engine": {
+          "c_med": 0.8126784180292626,
+          "cond_direction": "NONE",
+          "condition": "RANGE",
+          "n_legs": 3
+         },
+         "name": "condition",
+         "status": "MATCH"
+        },
+        {
+         "class": "NOT_APPLICABLE",
+         "classification": null,
+         "course": null,
+         "dim": 4,
+         "engine": "NONE",
+         "name": "tr_direction",
+         "status": "NOT_APPLICABLE"
+        },
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": "DOWN",
+         "dim": 5,
+         "engine": "DOWN",
+         "margin_usd": 3.4915000000019063,
+         "name": "extension_direction",
+         "status": "MATCH"
+        },
+        {
+         "class": "CANON_MISMATCH",
+         "classification": {
+          "blocks_gate": false,
+          "evidence": {
+           "canon_evidence": "E1H-018, E1H-002; course CX-LT1-1 overextension: Hour candle opened and pushed bearish into the low of the larger range; duration not stated (00:00:09-00:00:18)"
+          },
+          "implementation_bug": false,
+          "primary": "CANON_MISMATCH",
+          "secondary": [],
+          "tags": []
+         },
+         "course": "duration \u2265 20 min, extreme before the shift",
+         "dim": 6,
+         "engine": {
+          "oe_duration_min": 6.0,
+          "oe_extreme_time": "2025-10-21T01:06:00+00:00",
+          "oe_no_pullback": false,
+          "reference_time": "2025-10-21T01:07:00+00:00"
+         },
+         "name": "extension_timing",
+         "status": "MISMATCH"
+        },
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": "15m candle over-extended bearish and broke the low before the ~37-39 min shift",
+         "dim": 7,
+         "engine": {
+          "q_break_by_q": true,
+          "q_open_utc": "2025-10-21T01:00:00+00:00",
+          "q_prev_closed_in_trade_direction": false
+         },
+         "margin_usd": 2.8299999999999272,
+         "name": "previous_15m_take",
+         "status": "MATCH"
+        },
+        {
+         "class": "CANON_MISMATCH",
+         "classification": {
+          "blocks_gate": false,
+          "evidence": {
+           "canon_evidence": "E1H-018; cancel OE_PULLBACK; course CX-LT1-1 entry_model: seconds shift (5-second chart: low then take out a high) (00:02:47-00:02:56)"
+          },
+          "implementation_bug": false,
+          "primary": "CANON_MISMATCH",
+          "secondary": [],
+          "tags": []
+         },
+         "course": "seconds shift (5-second chart: low then take out a high)",
+         "dim": 8,
+         "engine": {
+          "cancel_reason": "OE_PULLBACK",
+          "m1_hilo_armed_at_decision": true,
+          "s5_type3_direction": "BUY",
+          "shift_completed": false
+         },
+         "name": "shift_type",
+         "status": "MISMATCH"
+        },
+        {
+         "class": "CANON_MISMATCH",
+         "classification": {
+          "blocks_gate": false,
+          "evidence": {
+           "canon_evidence": "E1H-018; cancel OE_PULLBACK; course CX-LT1-1 entry_model: seconds shift (5-second chart: low then take out a high) (00:02:47-00:02:56)"
+          },
+          "implementation_bug": false,
+          "primary": "CANON_MISMATCH",
+          "secondary": [],
+          "tags": []
+         },
+         "course": {
+          "tolerance_s": 15,
+          "tom_interval": [
+           "2025-10-21T01:39:15+00:00",
+           "2025-10-21T01:39:15+00:00"
+          ]
+         },
+         "dim": 9,
+         "engine": null,
+         "name": "shift_time",
+         "p3": {
+          "equivalent": false,
+          "reason": "no completed shift"
+         },
+         "status": "MISMATCH"
+        },
+        {
+         "adjusted_minus_engine": -25.624249999998938,
+         "class": "FEED_DIFFERENCE",
+         "classification": null,
+         "course": {
+          "delta_h": 0.06925,
+          "tom_stop": 4332.96,
+          "tom_stop_minus_delta_h": 4332.8907500000005
+         },
+         "dim": 10,
+         "engine": {
+          "anchor_at_shift": 4358.514999999999,
+          "buffer_price": 0.2726986464631361,
+          "source": "STRUCTURE_TICK_MID_5S_EXTENSION_EXTREME"
+         },
+         "name": "stop_anchor",
+         "status": "FEED_DIFFERENCE",
+         "tom_minus_engine": -25.55499999999938
+        },
+        {
+         "adjusted_minus_engine": -12.099999999999454,
+         "class": "FEED_DIFFERENCE",
+         "classification": null,
+         "course": {
+          "concept": "FIFTY_PERCENT_OF_MOVE",
+          "tom_target": 4351.59
+         },
+         "dim": 11,
+         "engine": {
+          "concept": "50% of extension from H.open",
+          "target_at_shift": 4363.62075
+         },
+         "name": "target_concept",
+         "status": "FEED_DIFFERENCE",
+         "tom_minus_engine": -12.030749999999898
+        }
+       ],
+       "engine": {
+        "activation_time": "2025-10-21T01:22:00+00:00",
+        "atr_1h": 22.632829684798434,
+        "atr_1m": 2.7269864646313606,
+        "beyond_external": null,
+        "c_med": 0.8126784180292626,
+        "cancel_reason": "OE_PULLBACK",
+        "cancel_time": "2025-10-21T01:08:00+00:00",
+        "cond_direction": "NONE",
+        "condition": "RANGE",
+        "condition_missing_minutes": 0,
+        "condition_tradable_minutes": 480,
+        "continuity_state": "CONTINUOUS",
+        "direction": "BUY",
+        "entry_model": "HVCS_S5_SHIFT",
+        "er_pro": null,
+        "event": "REJECTED",
+        "ext_extreme_at_decision": 4361.625,
+        "five_second_broken_price": 4366.805,
+        "five_second_shift_level": 4366.8150000000005,
+        "five_second_shift_time": null,
+        "five_second_sweep_time": "2025-10-21T01:06:55+00:00",
+        "five_second_swept_price": 4361.9935000000005,
+        "h_missing_minutes": 0,
+        "h_open": 4368.726500000001,
+        "hvcs_minutes": 5,
+        "m1_hilo_armed_at_decision": true,
+        "n_legs": 3,
+        "oe_dir": "DOWN",
+        "oe_duration_min": 6.0,
+        "oe_extreme_time": "2025-10-21T01:06:00+00:00",
+        "oe_no_pullback": false,
+        "oe_opposite_wick": 0.5083433077516614,
+        "oe_origin_time": "2025-10-21T01:00:00+00:00",
+        "oe_size": 7.101500000000669,
+        "oe_size_atr1h": 0.31376986876592206,
+        "oe_two_sided": true,
+        "parent_structure_type": "HVCS",
+        "pos_oe_extreme": 0.549774113395078,
+        "prior_setup_count": 0,
+        "q_break_by_q": true,
+        "q_open_utc": "2025-10-21T01:00:00+00:00",
+        "q_prev_closed_in_trade_direction": false,
+        "q_prev_high": 4370.9865,
+        "q_prev_low": 4364.455,
+        "range_high": 4381.5565,
+        "range_low": 4337.2865,
+        "rules": {
+         "ABL-D9-ALIGN-15M": true,
+         "IMPL-REWARD": false,
+         "M1H-6A-1-HVCS-INTO-SHIFT": true,
+         "M1H-6A-2-PREV-15M-BROKEN-BY-Q": true,
+         "M1H-6A-3-NEW-EXTREME-IN-Q": true,
+         "M1H-COND-01": true,
+         "M1H-COND-02": true,
+         "M1H-COND-03": true,
+         "M1H-COND-04": false,
+         "M1H-LOC-01": false,
+         "M1H-OE-01": false,
+         "M1H-OE-02": false,
+         "M1H-OE-04a": false,
+         "M1H-OE-04b": false,
+         "M1H-TIME-01": true,
+         "NT_INCOMPLETE_H": true,
+         "NT_INCOMPLETE_H_OPEN": true,
+         "NT_ROLLOVER": true,
+         "NT_SYDNEY": true
+        },
+        "rules_failed": [
+         "IMPL-REWARD",
+         "M1H-COND-04",
+         "M1H-LOC-01",
+         "M1H-OE-01",
+         "M1H-OE-02",
+         "M1H-OE-04a",
+         "M1H-OE-04b"
+        ],
+        "rules_not_evaluated": [],
+        "s5_t3_end": "NEW_SWING",
+        "signal_id": "CBR1H_BASELINE_V1/A/20251021T0100/BUY/0",
+        "stop_anchor_at_shift": 4358.514999999999,
+        "stop_anchor_time": "2025-10-21T01:07:10+00:00",
+        "stop_buffer_price": 0.2726986464631361,
+        "structure_stop_anchor": 4358.514999999999,
+        "sweep_bar_extreme": 4361.625,
+        "target_at_activation": 4363.62075,
+        "target_at_decision": 4365.17575,
+        "target_at_shift": 4363.62075,
+        "timestamp": "2025-10-21T01:07:00+00:00",
+        "timing30_state": "NOT_APPLICABLE",
+        "valid_until": "2025-10-21T01:52:00+00:00",
+        "variant": "A"
+       },
+       "hard": {
+        "core_structural_trigger": {
+         "class": "CANON_MISMATCH",
+         "met": false
+        },
+        "direction": {
+         "class": "BEHAVIORAL_MATCH",
+         "met": true
+        },
+        "extension_direction": {
+         "class": "BEHAVIORAL_MATCH",
+         "met": true
+        },
+        "model_family": {
+         "class": "BEHAVIORAL_MATCH",
+         "met": true
+        }
+       },
+       "how": "DIAGNOSTIC_FIRST_IN_ORDER"
+      },
+      "STRICT_COURSE:early_shift_guard=FINAL_PUSH": {
+       "dimensions": [
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": "CBR1H 5s shift",
+         "dim": 1,
+         "engine": {
+          "entry_model": "HVCS_S5_SHIFT",
+          "parent": "HVCS",
+          "variant": "A"
+         },
+         "name": "model",
+         "status": "MATCH"
+        },
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": "BUY",
+         "dim": 2,
+         "engine": "BUY",
+         "name": "direction",
+         "status": "MATCH"
+        },
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": [
+          {
+           "condition": "RANGE"
+          },
+          {
+           "condition": "TRENDING_RANGE"
+          }
+         ],
+         "dim": 3,
+         "engine": {
+          "c_med": 0.8126784180292626,
+          "cond_direction": "NONE",
+          "condition": "RANGE",
+          "n_legs": 3
+         },
+         "name": "condition",
+         "status": "MATCH"
+        },
+        {
+         "class": "NOT_APPLICABLE",
+         "classification": null,
+         "course": null,
+         "dim": 4,
+         "engine": "NONE",
+         "name": "tr_direction",
+         "status": "NOT_APPLICABLE"
+        },
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": "DOWN",
+         "dim": 5,
+         "engine": "DOWN",
+         "margin_usd": 3.4915000000019063,
+         "name": "extension_direction",
+         "status": "MATCH"
+        },
+        {
+         "class": "CANON_MISMATCH",
+         "classification": {
+          "blocks_gate": false,
+          "evidence": {
+           "canon_evidence": "E1H-018, E1H-002; course CX-LT1-1 overextension: Hour candle opened and pushed bearish into the low of the larger range; duration not stated (00:00:09-00:00:18)"
+          },
+          "implementation_bug": false,
+          "primary": "CANON_MISMATCH",
+          "secondary": [],
+          "tags": []
+         },
+         "course": "duration \u2265 20 min, extreme before the shift",
+         "dim": 6,
+         "engine": {
+          "oe_duration_min": 6.0,
+          "oe_extreme_time": "2025-10-21T01:06:00+00:00",
+          "oe_no_pullback": false,
+          "reference_time": "2025-10-21T01:07:00+00:00"
+         },
+         "name": "extension_timing",
+         "status": "MISMATCH"
+        },
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": "15m candle over-extended bearish and broke the low before the ~37-39 min shift",
+         "dim": 7,
+         "engine": {
+          "q_break_by_q": true,
+          "q_open_utc": "2025-10-21T01:00:00+00:00",
+          "q_prev_closed_in_trade_direction": false
+         },
+         "margin_usd": 2.8299999999999272,
+         "name": "previous_15m_take",
+         "status": "MATCH"
+        },
+        {
+         "class": "CANON_MISMATCH",
+         "classification": {
+          "blocks_gate": false,
+          "evidence": {
+           "canon_evidence": "E1H-018; cancel OE_PULLBACK; course CX-LT1-1 entry_model: seconds shift (5-second chart: low then take out a high) (00:02:47-00:02:56)"
+          },
+          "implementation_bug": false,
+          "primary": "CANON_MISMATCH",
+          "secondary": [],
+          "tags": []
+         },
+         "course": "seconds shift (5-second chart: low then take out a high)",
+         "dim": 8,
+         "engine": {
+          "cancel_reason": "OE_PULLBACK",
+          "m1_hilo_armed_at_decision": true,
+          "s5_type3_direction": "BUY",
+          "shift_completed": false
+         },
+         "name": "shift_type",
+         "status": "MISMATCH"
+        },
+        {
+         "class": "CANON_MISMATCH",
+         "classification": {
+          "blocks_gate": false,
+          "evidence": {
+           "canon_evidence": "E1H-018; cancel OE_PULLBACK; course CX-LT1-1 entry_model: seconds shift (5-second chart: low then take out a high) (00:02:47-00:02:56)"
+          },
+          "implementation_bug": false,
+          "primary": "CANON_MISMATCH",
+          "secondary": [],
+          "tags": []
+         },
+         "course": {
+          "tolerance_s": 15,
+          "tom_interval": [
+           "2025-10-21T01:39:15+00:00",
+           "2025-10-21T01:39:15+00:00"
+          ]
+         },
+         "dim": 9,
+         "engine": null,
+         "name": "shift_time",
+         "p3": {
+          "equivalent": false,
+          "reason": "no completed shift"
+         },
+         "status": "MISMATCH"
+        },
+        {
+         "adjusted_minus_engine": -25.624249999998938,
+         "class": "FEED_DIFFERENCE",
+         "classification": null,
+         "course": {
+          "delta_h": 0.06925,
+          "tom_stop": 4332.96,
+          "tom_stop_minus_delta_h": 4332.8907500000005
+         },
+         "dim": 10,
+         "engine": {
+          "anchor_at_shift": 4358.514999999999,
+          "buffer_price": 0.2726986464631361,
+          "source": "STRUCTURE_TICK_MID_5S_EXTENSION_EXTREME"
+         },
+         "name": "stop_anchor",
+         "status": "FEED_DIFFERENCE",
+         "tom_minus_engine": -25.55499999999938
+        },
+        {
+         "adjusted_minus_engine": -12.099999999999454,
+         "class": "FEED_DIFFERENCE",
+         "classification": null,
+         "course": {
+          "concept": "FIFTY_PERCENT_OF_MOVE",
+          "tom_target": 4351.59
+         },
+         "dim": 11,
+         "engine": {
+          "concept": "50% of extension from H.open",
+          "target_at_shift": 4363.62075
+         },
+         "name": "target_concept",
+         "status": "FEED_DIFFERENCE",
+         "tom_minus_engine": -12.030749999999898
+        }
+       ],
+       "engine": {
+        "activation_time": "2025-10-21T01:22:00+00:00",
+        "atr_1h": 22.632829684798434,
+        "atr_1m": 2.7269864646313606,
+        "beyond_external": null,
+        "c_med": 0.8126784180292626,
+        "cancel_reason": "OE_PULLBACK",
+        "cancel_time": "2025-10-21T01:08:00+00:00",
+        "cond_direction": "NONE",
+        "condition": "RANGE",
+        "condition_missing_minutes": 0,
+        "condition_tradable_minutes": 480,
+        "continuity_state": "CONTINUOUS",
+        "direction": "BUY",
+        "entry_model": "HVCS_S5_SHIFT",
+        "er_pro": null,
+        "event": "REJECTED",
+        "ext_extreme_at_decision": 4361.625,
+        "five_second_broken_price": 4366.805,
+        "five_second_shift_level": 4366.8150000000005,
+        "five_second_shift_time": null,
+        "five_second_sweep_time": "2025-10-21T01:06:55+00:00",
+        "five_second_swept_price": 4361.9935000000005,
+        "h_missing_minutes": 0,
+        "h_open": 4368.726500000001,
+        "hvcs_minutes": 5,
+        "m1_hilo_armed_at_decision": true,
+        "n_legs": 3,
+        "oe_dir": "DOWN",
+        "oe_duration_min": 6.0,
+        "oe_extreme_time": "2025-10-21T01:06:00+00:00",
+        "oe_no_pullback": false,
+        "oe_opposite_wick": 0.5083433077516614,
+        "oe_origin_time": "2025-10-21T01:00:00+00:00",
+        "oe_size": 7.101500000000669,
+        "oe_size_atr1h": 0.31376986876592206,
+        "oe_two_sided": true,
+        "parent_structure_type": "HVCS",
+        "pos_oe_extreme": 0.549774113395078,
+        "prior_setup_count": 0,
+        "q_break_by_q": true,
+        "q_open_utc": "2025-10-21T01:00:00+00:00",
+        "q_prev_closed_in_trade_direction": false,
+        "q_prev_high": 4370.9865,
+        "q_prev_low": 4364.455,
+        "range_high": 4381.5565,
+        "range_low": 4337.2865,
+        "rules": {
+         "ABL-D9-FINAL-PUSH": true,
+         "IMPL-REWARD": false,
+         "M1H-6A-1-HVCS-INTO-SHIFT": true,
+         "M1H-6A-2-PREV-15M-BROKEN-BY-Q": true,
+         "M1H-6A-3-NEW-EXTREME-IN-Q": true,
+         "M1H-COND-01": true,
+         "M1H-COND-02": true,
+         "M1H-COND-03": true,
+         "M1H-COND-04": false,
+         "M1H-LOC-01": false,
+         "M1H-OE-01": false,
+         "M1H-OE-02": false,
+         "M1H-OE-04a": false,
+         "M1H-OE-04b": false,
+         "M1H-TIME-01": true,
+         "NT_INCOMPLETE_H": true,
+         "NT_INCOMPLETE_H_OPEN": true,
+         "NT_ROLLOVER": true,
+         "NT_SYDNEY": true
+        },
+        "rules_failed": [
+         "IMPL-REWARD",
+         "M1H-COND-04",
+         "M1H-LOC-01",
+         "M1H-OE-01",
+         "M1H-OE-02",
+         "M1H-OE-04a",
+         "M1H-OE-04b"
+        ],
+        "rules_not_evaluated": [],
+        "s5_t3_end": "NEW_SWING",
+        "signal_id": "CBR1H_BASELINE_V1/A/20251021T0100/BUY/0",
+        "stop_anchor_at_shift": 4358.514999999999,
+        "stop_anchor_time": "2025-10-21T01:07:10+00:00",
+        "stop_buffer_price": 0.2726986464631361,
+        "structure_stop_anchor": 4358.514999999999,
+        "sweep_bar_extreme": 4361.625,
+        "target_at_activation": 4363.62075,
+        "target_at_decision": 4365.17575,
+        "target_at_shift": 4363.62075,
+        "timestamp": "2025-10-21T01:07:00+00:00",
+        "timing30_state": "NOT_APPLICABLE",
+        "valid_until": "2025-10-21T01:52:00+00:00",
+        "variant": "A"
+       },
+       "hard": {
+        "core_structural_trigger": {
+         "class": "CANON_MISMATCH",
+         "met": false
+        },
+        "direction": {
+         "class": "BEHAVIORAL_MATCH",
+         "met": true
+        },
+        "extension_direction": {
+         "class": "BEHAVIORAL_MATCH",
+         "met": true
+        },
+        "model_family": {
+         "class": "BEHAVIORAL_MATCH",
+         "met": true
+        }
+       },
+       "how": "DIAGNOSTIC_FIRST_IN_ORDER"
+      },
+      "STRICT_COURSE:oe_origin=LAST_RESET": {
+       "dimensions": [
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": "CBR1H 5s shift",
+         "dim": 1,
+         "engine": {
+          "entry_model": "HVCS_S5_SHIFT",
+          "parent": "HVCS",
+          "variant": "A"
+         },
+         "name": "model",
+         "status": "MATCH"
+        },
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": "BUY",
+         "dim": 2,
+         "engine": "BUY",
+         "name": "direction",
+         "status": "MATCH"
+        },
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": [
+          {
+           "condition": "RANGE"
+          },
+          {
+           "condition": "TRENDING_RANGE"
+          }
+         ],
+         "dim": 3,
+         "engine": {
+          "c_med": 0.8126784180292626,
+          "cond_direction": "NONE",
+          "condition": "RANGE",
+          "n_legs": 3
+         },
+         "name": "condition",
+         "status": "MATCH"
+        },
+        {
+         "class": "NOT_APPLICABLE",
+         "classification": null,
+         "course": null,
+         "dim": 4,
+         "engine": "NONE",
+         "name": "tr_direction",
+         "status": "NOT_APPLICABLE"
+        },
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": "DOWN",
+         "dim": 5,
+         "engine": "DOWN",
+         "margin_usd": 15.646500000001652,
+         "name": "extension_direction",
+         "status": "MATCH"
+        },
+        {
+         "class": "CANON_MISMATCH",
+         "classification": {
+          "blocks_gate": false,
+          "evidence": {
+           "canon_evidence": "E1H-018, E1H-002; course CX-LT1-1 overextension: Hour candle opened and pushed bearish into the low of the larger range; duration not stated (00:00:09-00:00:18)"
+          },
+          "implementation_bug": false,
+          "primary": "CANON_MISMATCH",
+          "secondary": [],
+          "tags": []
+         },
+         "course": "duration \u2265 20 min, extreme before the shift",
+         "dim": 6,
+         "engine": {
+          "oe_duration_min": 3.0,
+          "oe_extreme_time": "2025-10-21T01:26:00+00:00",
+          "oe_no_pullback": true,
+          "reference_time": "2025-10-21T01:29:05+00:00"
+         },
+         "name": "extension_timing",
+         "status": "MISMATCH"
+        },
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": "15m candle over-extended bearish and broke the low before the ~37-39 min shift",
+         "dim": 7,
+         "engine": {
+          "q_break_by_q": true,
+          "q_open_utc": "2025-10-21T01:15:00+00:00",
+          "q_prev_closed_in_trade_direction": false
+         },
+         "margin_usd": 8.899999999999636,
+         "name": "previous_15m_take",
+         "status": "MATCH"
+        },
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": "seconds shift (5-second chart: low then take out a high)",
+         "dim": 8,
+         "engine": {
+          "cancel_reason": "S5_SHIFT_TRIGGERED",
+          "m1_hilo_armed_at_decision": true,
+          "s5_type3_direction": "BUY",
+          "shift_completed": true
+         },
+         "name": "shift_type",
+         "status": "MATCH"
+        },
+        {
+         "class": "CANON_MISMATCH",
+         "classification": {
+          "blocks_gate": false,
+          "evidence": {
+           "canon_evidence": "E1H-021, E1H-022; frozen selection D19-10 takes the first shift; course CX-LT1-1 cb_hour_timing: 39 minutes into the hour (00:02:41-00:02:47)"
+          },
+          "implementation_bug": false,
+          "primary": "CANON_MISMATCH",
+          "secondary": [],
+          "tags": []
+         },
+         "course": {
+          "tolerance_s": 15,
+          "tom_interval": [
+           "2025-10-21T01:39:15+00:00",
+           "2025-10-21T01:39:15+00:00"
+          ]
+         },
+         "dim": 9,
+         "engine": "2025-10-21T01:29:05+00:00",
+         "name": "shift_time",
+         "p3": {
+          "direction_agrees": true,
+          "distance_to_tom_interval_s": 610.0,
+          "equivalent": false,
+          "same_15m_candle": false
+         },
+         "status": "MISMATCH"
+        },
+        {
+         "adjusted_minus_engine": -16.579249999999774,
+         "class": "FEED_DIFFERENCE",
+         "classification": null,
+         "course": {
+          "delta_h": 0.06925,
+          "tom_stop": 4332.96,
+          "tom_stop_minus_delta_h": 4332.8907500000005
+         },
+         "dim": 10,
+         "engine": {
+          "anchor_at_shift": 4349.47,
+          "buffer_price": 0.30776467295025994,
+          "source": "STRUCTURE_TICK_MID_5S_EXTENSION_EXTREME"
+         },
+         "name": "stop_anchor",
+         "status": "FEED_DIFFERENCE",
+         "tom_minus_engine": -16.51000000000022
+        },
+        {
+         "adjusted_minus_engine": -7.577500000000327,
+         "class": "FEED_DIFFERENCE",
+         "classification": null,
+         "course": {
+          "concept": "FIFTY_PERCENT_OF_MOVE",
+          "tom_target": 4351.59
+         },
+         "dim": 11,
+         "engine": {
+          "concept": "50% of extension from H.open",
+          "target_at_shift": 4359.098250000001
+         },
+         "name": "target_concept",
+         "status": "FEED_DIFFERENCE",
+         "tom_minus_engine": -7.508250000000771
+        }
+       ],
+       "engine": {
+        "activation_time": "2025-10-21T01:28:55+00:00",
+        "atr_1h": 22.632829684798434,
+        "atr_1m": 3.0776467295025993,
+        "beyond_external": null,
+        "c_med": 0.8126784180292626,
+        "cancel_reason": "S5_SHIFT_TRIGGERED",
+        "cancel_time": "2025-10-21T01:29:05+00:00",
+        "cond_direction": "NONE",
+        "condition": "RANGE",
+        "condition_missing_minutes": 0,
+        "condition_tradable_minutes": 480,
+        "continuity_state": "SIDE_BROKEN",
+        "direction": "BUY",
+        "entry_model": "HVCS_S5_SHIFT",
+        "er_pro": null,
+        "event": "REJECTED",
+        "ext_extreme_at_decision": 4349.47,
+        "five_second_broken_price": 4352.6,
+        "five_second_shift_level": 4352.610000000001,
+        "five_second_shift_time": "2025-10-21T01:29:05+00:00",
+        "five_second_sweep_time": "2025-10-21T01:28:50+00:00",
+        "five_second_swept_price": 4350.21,
+        "h_missing_minutes": 0,
+        "h_open": 4368.726500000001,
+        "hvcs_minutes": 0,
+        "m1_hilo_armed_at_decision": true,
+        "n_legs": 3,
+        "oe_dir": "DOWN",
+        "oe_duration_min": 3.0,
+        "oe_extreme_time": "2025-10-21T01:26:00+00:00",
+        "oe_no_pullback": true,
+        "oe_opposite_wick": 0.1874691662554818,
+        "oe_origin_time": "2025-10-21T01:23:00+00:00",
+        "oe_size": 19.256500000000415,
+        "oe_size_atr1h": 0.8508215838753135,
+        "oe_two_sided": false,
+        "parent_structure_type": "HVCS",
+        "pos_oe_extreme": 0.27520894510956007,
+        "prior_setup_count": 0,
+        "q_break_by_q": true,
+        "q_open_utc": "2025-10-21T01:15:00+00:00",
+        "q_prev_closed_in_trade_direction": false,
+        "q_prev_high": 4372.336499999999,
+        "q_prev_low": 4358.37,
+        "range_high": 4381.5565,
+        "range_low": 4337.2865,
+        "rules": {
+         "IMPL-REWARD": true,
+         "M1H-6A-1-HVCS-INTO-SHIFT": false,
+         "M1H-6A-2-PREV-15M-BROKEN-BY-Q": true,
+         "M1H-6A-3-NEW-EXTREME-IN-Q": true,
+         "M1H-COND-01": true,
+         "M1H-COND-02": true,
+         "M1H-COND-03": true,
+         "M1H-COND-04": false,
+         "M1H-LOC-01": false,
+         "M1H-OE-01": false,
+         "M1H-OE-02": true,
+         "M1H-OE-04a": true,
+         "M1H-OE-04b": true,
+         "M1H-TIME-01": true,
+         "NT_INCOMPLETE_H": true,
+         "NT_INCOMPLETE_H_OPEN": true,
+         "NT_ROLLOVER": true,
+         "NT_SYDNEY": true
+        },
+        "rules_failed": [
+         "M1H-6A-1-HVCS-INTO-SHIFT",
+         "M1H-COND-04",
+         "M1H-LOC-01",
+         "M1H-OE-01"
+        ],
+        "rules_not_evaluated": [],
+        "s5_t3_end": "BREAK",
+        "signal_id": "CBR1H_BASELINE_V1/A/20251021T0100/BUY/3",
+        "stop_anchor_at_shift": 4349.47,
+        "stop_anchor_time": "2025-10-21T01:26:30+00:00",
+        "stop_buffer_price": 0.30776467295025994,
+        "structure_stop_anchor": 4349.47,
+        "sweep_bar_extreme": 4350.09,
+        "target_at_activation": 4359.098250000001,
+        "target_at_decision": 4359.098250000001,
+        "target_at_shift": 4359.098250000001,
+        "timestamp": "2025-10-21T01:28:55+00:00",
+        "timing30_state": "NOT_APPLICABLE",
+        "valid_until": "2025-10-21T01:52:00+00:00",
+        "variant": "A"
+       },
+       "hard": {
+        "core_structural_trigger": {
+         "class": "CANON_MISMATCH",
+         "met": false
+        },
+        "direction": {
+         "class": "BEHAVIORAL_MATCH",
+         "met": true
+        },
+        "extension_direction": {
+         "class": "BEHAVIORAL_MATCH",
+         "met": true
+        },
+        "model_family": {
+         "class": "BEHAVIORAL_MATCH",
+         "met": true
+        }
+       },
+       "how": "DIAGNOSTIC_FIRST_IN_ORDER"
+      }
+     }
+    },
+    "B": {
+     "acceptance": {
+      "event": null,
+      "failed_rules": []
+     },
+     "armed_in_hour": 0,
+     "candidates_in_hour": 0,
+     "causality": {
+      "checked": false
+     },
+     "dimensions": [
+      {
+       "class": "CANON_MISMATCH",
+       "classification": {
+        "blocks_gate": false,
+        "evidence": {
+         "canon_evidence": "E1H-021, E1H-022; course CX-LT1-1 entry_model: seconds shift (5-second chart: low then take out a high) (00:02:47-00:02:56)"
+        },
+        "implementation_bug": false,
+        "primary": "CANON_MISMATCH",
+        "secondary": [],
+        "tags": []
+       },
+       "course": "CBR1H 5s-shift candidate in H",
+       "dim": 1,
+       "engine": null,
+       "name": "model",
+       "status": "MISMATCH"
+      }
+     ],
+     "engine": null,
+     "example_verdict": "CANON_MISMATCH",
+     "hard": {
+      "core_structural_trigger": {
+       "class": "CANON_MISMATCH",
+       "met": false
+      },
+      "direction": {
+       "class": "CANON_MISMATCH",
+       "met": false
+      },
+      "extension_direction": {
+       "class": "CANON_MISMATCH",
+       "met": false
+      },
+      "model_family": {
+       "class": "CANON_MISMATCH",
+       "met": false
+      }
+     },
+     "how_selected": "NO_CANDIDATE",
+     "margins_usd": {},
+     "strict_course": {
+      "STRICT_COURSE:early_shift_guard=ALIGN_15M": {
+       "dimensions": [
+        {
+         "class": "CANON_MISMATCH",
+         "classification": {
+          "blocks_gate": false,
+          "evidence": {
+           "canon_evidence": "E1H-021, E1H-022; course CX-LT1-1 entry_model: seconds shift (5-second chart: low then take out a high) (00:02:47-00:02:56)"
+          },
+          "implementation_bug": false,
+          "primary": "CANON_MISMATCH",
+          "secondary": [],
+          "tags": []
+         },
+         "course": "CBR1H 5s-shift candidate in H",
+         "dim": 1,
+         "engine": null,
+         "name": "model",
+         "status": "MISMATCH"
+        }
+       ],
+       "engine": null,
+       "hard": {
+        "core_structural_trigger": {
+         "class": "CANON_MISMATCH",
+         "met": false
+        },
+        "direction": {
+         "class": "CANON_MISMATCH",
+         "met": false
+        },
+        "extension_direction": {
+         "class": "CANON_MISMATCH",
+         "met": false
+        },
+        "model_family": {
+         "class": "CANON_MISMATCH",
+         "met": false
+        }
+       },
+       "how": "NO_CANDIDATE"
+      },
+      "STRICT_COURSE:early_shift_guard=FINAL_PUSH": {
+       "dimensions": [
+        {
+         "class": "CANON_MISMATCH",
+         "classification": {
+          "blocks_gate": false,
+          "evidence": {
+           "canon_evidence": "E1H-021, E1H-022; course CX-LT1-1 entry_model: seconds shift (5-second chart: low then take out a high) (00:02:47-00:02:56)"
+          },
+          "implementation_bug": false,
+          "primary": "CANON_MISMATCH",
+          "secondary": [],
+          "tags": []
+         },
+         "course": "CBR1H 5s-shift candidate in H",
+         "dim": 1,
+         "engine": null,
+         "name": "model",
+         "status": "MISMATCH"
+        }
+       ],
+       "engine": null,
+       "hard": {
+        "core_structural_trigger": {
+         "class": "CANON_MISMATCH",
+         "met": false
+        },
+        "direction": {
+         "class": "CANON_MISMATCH",
+         "met": false
+        },
+        "extension_direction": {
+         "class": "CANON_MISMATCH",
+         "met": false
+        },
+        "model_family": {
+         "class": "CANON_MISMATCH",
+         "met": false
+        }
+       },
+       "how": "NO_CANDIDATE"
+      },
+      "STRICT_COURSE:oe_origin=LAST_RESET": {
+       "dimensions": [
+        {
+         "class": "CANON_MISMATCH",
+         "classification": {
+          "blocks_gate": false,
+          "evidence": {
+           "canon_evidence": "E1H-021, E1H-022; course CX-LT1-1 entry_model: seconds shift (5-second chart: low then take out a high) (00:02:47-00:02:56)"
+          },
+          "implementation_bug": false,
+          "primary": "CANON_MISMATCH",
+          "secondary": [],
+          "tags": []
+         },
+         "course": "CBR1H 5s-shift candidate in H",
+         "dim": 1,
+         "engine": null,
+         "name": "model",
+         "status": "MISMATCH"
+        }
+       ],
+       "engine": null,
+       "hard": {
+        "core_structural_trigger": {
+         "class": "CANON_MISMATCH",
+         "met": false
+        },
+        "direction": {
+         "class": "CANON_MISMATCH",
+         "met": false
+        },
+        "extension_direction": {
+         "class": "CANON_MISMATCH",
+         "met": false
+        },
+        "model_family": {
+         "class": "CANON_MISMATCH",
+         "met": false
+        }
+       },
+       "how": "NO_CANDIDATE"
+      }
+     }
+    }
+   }
+  },
+  "CX-LT3-2": {
+   "course_record_sha256": "4e87fb490db4b84231beb8187dddb393eb1262c56f4fc01701d42c89e586b902",
+   "direction": "SELL",
+   "example_id": "CX-LT3-2",
+   "example_verdict": "CANON_MISMATCH",
+   "hard_met": {
+    "core_structural_trigger": {
+     "class": "CANON_MISMATCH",
+     "met": false
+    },
+    "direction": {
+     "class": "BEHAVIORAL_MATCH",
+     "met": true
+    },
+    "extension_direction": {
+     "class": "BEHAVIORAL_MATCH",
+     "met": true
+    },
+    "model_family": {
+     "class": "BEHAVIORAL_MATCH",
+     "met": true
+    }
+   },
+   "hour_utc": "2025-11-10T01:00:00+00:00",
+   "scored_variant": "A",
+   "variants": {
+    "A": {
+     "acceptance": {
+      "event": "REJECTED",
+      "failed_rules": [
+       {
+        "classification": {
+         "blocks_gate": false,
+         "evidence": {
+          "canon_evidence": "PC2 rule M1H-6A-1-HVCS-INTO-SHIFT (1h-cbr-machine-spec.md); engine value from STRUCTURE bars; course: CX-LT3-2 mtf_model: unclear (strongly bullish / 'a little bit trendy'; counter-direction reversal in a condition he dislikes) (00:01:07-00:01:20)",
+          "open_question": "M1H-6A-1-HVCS-INTO-SHIFT governed by OQ-44, OQ-08"
+         },
+         "implementation_bug": false,
+         "margin_usd": null,
+         "primary": "UNRESOLVED_SPEC_AMBIGUITY",
+         "secondary": [],
+         "tags": []
+        },
+        "rule": "M1H-6A-1-HVCS-INTO-SHIFT"
+       },
+       {
+        "classification": {
+         "blocks_gate": false,
+         "evidence": {
+          "canon_evidence": "PC2 rule M1H-6A-2-PREV-15M-BROKEN-BY-Q (E1H-017, E1H-023); engine value from STRUCTURE bars; course: CX-LT3-2 mtf_model: unclear (strongly bullish / 'a little bit trendy'; counter-direction reversal in a condition he dislikes) (00:01:07-00:01:20)"
+         },
+         "implementation_bug": false,
+         "margin_usd": -0.5850000000000364,
+         "primary": "CANON_MISMATCH",
+         "secondary": [],
+         "tags": []
+        },
+        "rule": "M1H-6A-2-PREV-15M-BROKEN-BY-Q"
+       },
+       {
+        "classification": {
+         "blocks_gate": false,
+         "evidence": {
+          "canon_evidence": "PC2 rule M1H-6A-3-NEW-EXTREME-IN-Q (E1H-021); engine value from STRUCTURE bars; course: CX-LT3-2 mtf_model: unclear (strongly bullish / 'a little bit trendy'; counter-direction reversal in a condition he dislikes) (00:01:07-00:01:20)"
+         },
+         "implementation_bug": false,
+         "margin_usd": -0.5850000000000364,
+         "primary": "CANON_MISMATCH",
+         "secondary": [],
+         "tags": []
+        },
+        "rule": "M1H-6A-3-NEW-EXTREME-IN-Q"
+       },
+       {
+        "classification": {
+         "blocks_gate": false,
+         "evidence": {
+          "canon_evidence": "PC2 rule M1H-COND-03 (1h-cbr-machine-spec.md); engine value from STRUCTURE bars; course: CX-LT3-2 mtf_model: unclear (strongly bullish / 'a little bit trendy'; counter-direction reversal in a condition he dislikes) (00:01:07-00:01:20)",
+          "open_question": "M1H-COND-03 governed by OQ-02"
+         },
+         "implementation_bug": false,
+         "margin_usd": null,
+         "primary": "UNRESOLVED_SPEC_AMBIGUITY",
+         "secondary": [],
+         "tags": []
+        },
+        "rule": "M1H-COND-03"
+       },
+       {
+        "classification": {
+         "blocks_gate": false,
+         "evidence": {
+          "canon_evidence": "PC2 rule M1H-COND-04 (1h-cbr-machine-spec.md); engine value from STRUCTURE bars; course: CX-LT3-2 mtf_model: unclear (strongly bullish / 'a little bit trendy'; counter-direction reversal in a condition he dislikes) (00:01:07-00:01:20)",
+          "open_question": "M1H-COND-04 governed by OQ-05, OQ-36"
+         },
+         "implementation_bug": false,
+         "margin_usd": null,
+         "primary": "UNRESOLVED_SPEC_AMBIGUITY",
+         "secondary": [],
+         "tags": []
+        },
+        "rule": "M1H-COND-04"
+       },
+       {
+        "classification": {
+         "blocks_gate": false,
+         "evidence": {
+          "canon_evidence": "PC2 rule M1H-OE-02 (E1H-018); engine value from STRUCTURE bars; course: CX-LT3-2 mtf_model: unclear (strongly bullish / 'a little bit trendy'; counter-direction reversal in a condition he dislikes) (00:01:07-00:01:20)",
+          "owner_baseline_choice": "M1H-OE-02 passes under STRICT_COURSE:oe_origin=LAST_RESET (same candidate identity)"
+         },
+         "implementation_bug": false,
+         "margin_usd": -3.3899999999998727,
+         "primary": "OWNER_BASELINE_CHOICE",
+         "secondary": [],
+         "tags": []
+        },
+        "rule": "M1H-OE-02"
+       }
+      ]
+     },
+     "armed_in_hour": 0,
+     "candidates_in_hour": 9,
+     "causality": {
+      "all_identical": true,
+      "checked": true,
+      "decision": {
+       "cut": "2025-11-10T01:50:32+00:00",
+       "future_mutation": {
+        "decision_identical": true,
+        "decision_rows": 9,
+        "trigger_identical": true,
+        "trigger_rows": 0
+       },
+       "truncation": {
+        "decision_identical": true,
+        "decision_rows": 9,
+        "trigger_identical": true,
+        "trigger_rows": 0
+       }
+      },
+      "shift": {
+       "cut": "2025-11-10T01:51:12+00:00",
+       "future_mutation": {
+        "decision_identical": true,
+        "decision_rows": 9,
+        "trigger_identical": true,
+        "trigger_rows": 1
+       },
+       "truncation": {
+        "decision_identical": true,
+        "decision_rows": 9,
+        "trigger_identical": true,
+        "trigger_rows": 1
+       }
+      }
+     },
+     "dimensions": [
+      {
+       "class": "BEHAVIORAL_MATCH",
+       "classification": null,
+       "course": "CBR1H 5s shift",
+       "dim": 1,
+       "engine": {
+        "entry_model": "HVCS_S5_SHIFT",
+        "parent": "HVCS",
+        "variant": "A"
+       },
+       "name": "model",
+       "status": "MATCH"
+      },
+      {
+       "class": "BEHAVIORAL_MATCH",
+       "classification": null,
+       "course": "SELL",
+       "dim": 2,
+       "engine": "SELL",
+       "name": "direction",
+       "status": "MATCH"
+      },
+      {
+       "class": "UNRESOLVED_SPEC_AMBIGUITY",
+       "classification": {
+        "blocks_gate": false,
+        "evidence": {
+         "open_question": "trending-range direction governed by OQ-01, OQ-02"
+        },
+        "implementation_bug": false,
+        "primary": "UNRESOLVED_SPEC_AMBIGUITY",
+        "secondary": [],
+        "tags": []
+       },
+       "course": [
+        {
+         "condition": "TRENDING_RANGE",
+         "direction": "UP"
+        }
+       ],
+       "dim": 3,
+       "engine": {
+        "c_med": 0.6780091432032203,
+        "cond_direction": "NONE",
+        "condition": "TRENDING_RANGE",
+        "n_legs": 3
+       },
+       "name": "condition",
+       "status": "MISMATCH"
+      },
+      {
+       "class": "UNRESOLVED_SPEC_AMBIGUITY",
+       "classification": {
+        "blocks_gate": false,
+        "evidence": {
+         "open_question": "direction governed by OQ-01, OQ-02; NONE = TREND_DIRECTION_UNRESOLVED (D17-4)"
+        },
+        "implementation_bug": false,
+        "primary": "UNRESOLVED_SPEC_AMBIGUITY",
+        "secondary": [],
+        "tags": []
+       },
+       "course": "UP",
+       "dim": 4,
+       "engine": "NONE",
+       "name": "tr_direction",
+       "status": "MISMATCH"
+      },
+      {
+       "class": "BEHAVIORAL_MATCH",
+       "classification": null,
+       "course": "UP",
+       "dim": 5,
+       "engine": "UP",
+       "margin_usd": 31.74499999999989,
+       "name": "extension_direction",
+       "status": "MATCH"
+      },
+      {
+       "class": "BEHAVIORAL_MATCH",
+       "classification": null,
+       "course": "duration \u2265 20 min, extreme before the shift",
+       "dim": 6,
+       "engine": {
+        "oe_duration_min": 37.0,
+        "oe_extreme_time": "2025-11-10T01:37:00+00:00",
+        "oe_no_pullback": false,
+        "reference_time": "2025-11-10T01:50:40+00:00"
+       },
+       "name": "extension_timing",
+       "status": "MATCH"
+      },
+      {
+       "class": "CANON_MISMATCH",
+       "classification": {
+        "blocks_gate": false,
+        "evidence": {
+         "canon_evidence": "E1H-017, E1H-023; course CX-LT3-2 fifteen_min_cb: Waited for the :30 15m candle to push bullish and take out the previous high before shifting (achieved at 36 min) (00:08:10-00:08:25)"
+        },
+        "implementation_bug": false,
+        "primary": "CANON_MISMATCH",
+        "secondary": [],
+        "tags": []
+       },
+       "course": "Waited for the :30 15m candle to push bullish and take out the previous high before shifting (achieved at 36 min)",
+       "dim": 7,
+       "engine": {
+        "q_break_by_q": false,
+        "q_open_utc": "2025-11-10T01:45:00+00:00",
+        "q_prev_closed_in_trade_direction": false
+       },
+       "margin_usd": -0.5850000000000364,
+       "name": "previous_15m_take",
+       "status": "MISMATCH"
+      },
+      {
+       "class": "BEHAVIORAL_MATCH",
+       "classification": null,
+       "course": "seconds shift with correlation (DXY shift bullish + gold spread shift bearish + take out low)",
+       "dim": 8,
+       "engine": {
+        "cancel_reason": "S5_SHIFT_TRIGGERED",
+        "m1_hilo_armed_at_decision": true,
+        "s5_type3_direction": "SELL",
+        "shift_completed": true
+       },
+       "name": "shift_type",
+       "status": "MATCH"
+      },
+      {
+       "class": "CANON_MISMATCH",
+       "classification": {
+        "blocks_gate": false,
+        "evidence": {
+         "canon_evidence": "E1H-021, E1H-022; frozen selection D19-10 takes the first shift; course CX-LT3-2 cb_hour_timing: previous high taken at 36 min; entry ~38-40 min (00:12:24-00:15:11)"
+        },
+        "implementation_bug": false,
+        "primary": "CANON_MISMATCH",
+        "secondary": [],
+        "tags": []
+       },
+       "course": {
+        "tolerance_s": 15,
+        "tom_interval": [
+         "2025-11-10T01:40:00+00:00",
+         "2025-11-10T01:40:00+00:00"
+        ]
+       },
+       "dim": 9,
+       "engine": "2025-11-10T01:50:40+00:00",
+       "name": "shift_time",
+       "p3": {
+        "direction_agrees": true,
+        "distance_to_tom_interval_s": 640.0,
+        "equivalent": false,
+        "same_15m_candle": false
+       },
+       "status": "MISMATCH"
+      },
+      {
+       "adjusted_minus_engine": -0.16249999999990905,
+       "class": "FEED_DIFFERENCE",
+       "classification": null,
+       "course": {
+        "delta_h": 0.0375,
+        "tom_stop": 4053.3,
+        "tom_stop_minus_delta_h": 4053.2625000000003
+       },
+       "dim": 10,
+       "engine": {
+        "anchor_at_shift": 4053.425,
+        "buffer_price": 0.2405893769514883,
+        "source": "STRUCTURE_TICK_MID_5S_EXTENSION_EXTREME"
+       },
+       "name": "stop_anchor",
+       "status": "FEED_DIFFERENCE",
+       "tom_minus_engine": -0.125
+      },
+      {
+       "adjusted_minus_engine": 6.837500000000091,
+       "class": "CANON_MISMATCH",
+       "classification": {
+        "blocks_gate": false,
+        "evidence": {
+         "canon_evidence": "M1H-TP-01 50% of the hour extension; course discretion: CX-LT3-2 target_description: initial TP at a nearer level; next target below the low; 50% of the extension described as the most aggressive TP (00:17:07-00:29:10)"
+        },
+        "implementation_bug": false,
+        "primary": "CANON_MISMATCH",
+        "secondary": [],
+        "tags": []
+       },
+       "course": {
+        "concept": "NEARER_DISCRETIONARY",
+        "tom_target": 4043.8
+       },
+       "dim": 11,
+       "engine": {
+        "concept": "50% of extension from H.open",
+        "target_at_shift": 4036.925
+       },
+       "name": "target_concept",
+       "status": "MISMATCH",
+       "tom_minus_engine": 6.875
+      },
+      {
+       "class": "CANON_MISMATCH",
+       "classification": {
+        "blocks_gate": false,
+        "evidence": {
+         "canon_evidence": "no DXY rule in CBR1H V1 (D25-P8); course DXY bearish at the start; shifted bullish at entry"
+        },
+        "implementation_bug": false,
+        "primary": "CANON_MISMATCH",
+        "secondary": [],
+        "tags": []
+       },
+       "course": {
+        "compare_field": "dxy_15m_forming_direction",
+        "direction": "UP",
+        "text": "DXY bearish at the start; shifted bullish at entry"
+       },
+       "descriptive": true,
+       "dim": 12,
+       "engine": {
+        "dxy_15m_forming_direction": "DOWN",
+        "dxy_15m_forming_state": "OK",
+        "dxy_15m_last_direction": "UP",
+        "dxy_1h_forming_direction": "DOWN",
+        "dxy_1h_forming_state": "OK",
+        "dxy_1h_last_direction": null,
+        "dxy_confidence": "FULL",
+        "dxy_reason_codes": "1h_last:DXY_CFD_MISSING_WHILE_DX_ACTIVE",
+        "field": "dxy_15m_forming_direction",
+        "time": "2025-11-10T01:50:40+00:00",
+        "tvc_hour_direction": "DOWN",
+        "tvc_note": "TVC:DXY 1h bar final direction (hour close; hindsight, descriptive)",
+        "value": "DOWN"
+       },
+       "name": "dxy",
+       "status": "MISMATCH"
+      }
+     ],
+     "engine": {
+      "activation_time": "2025-11-10T01:50:00+00:00",
+      "atr_1h": 13.012080548946088,
+      "atr_1m": 2.4058937695148828,
+      "beyond_external": null,
+      "c_med": 0.6780091432032203,
+      "cancel_reason": "S5_SHIFT_TRIGGERED",
+      "cancel_time": "2025-11-10T01:50:40+00:00",
+      "cond_direction": "NONE",
+      "condition": "TRENDING_RANGE",
+      "condition_missing_minutes": 0,
+      "condition_tradable_minutes": 480,
+      "continuity_state": "SIDE_BROKEN",
+      "direction": "SELL",
+      "entry_model": "HVCS_S5_SHIFT",
+      "er_pro": null,
+      "event": "REJECTED",
+      "ext_extreme_at_decision": 4053.425,
+      "five_second_broken_price": 4050.9700000000003,
+      "five_second_shift_level": 4050.96,
+      "five_second_shift_time": "2025-11-10T01:50:40+00:00",
+      "five_second_sweep_time": "2025-11-10T01:49:55+00:00",
+      "five_second_swept_price": 4052.8,
+      "h_missing_minutes": 0,
+      "h_open": 4020.425,
+      "hvcs_minutes": 0,
+      "m1_hilo_armed_at_decision": true,
+      "n_legs": 3,
+      "oe_dir": "UP",
+      "oe_duration_min": 37.0,
+      "oe_extreme_time": "2025-11-10T01:37:00+00:00",
+      "oe_no_pullback": false,
+      "oe_opposite_wick": 0.038030303030306335,
+      "oe_origin_time": "2025-11-10T01:00:00+00:00",
+      "oe_size": 33.0,
+      "oe_size_atr1h": 2.53610480475183,
+      "oe_two_sided": false,
+      "parent_structure_type": "HVCS",
+      "pos_oe_extreme": 1.6914140739751777,
+      "prior_setup_count": 0,
+      "q_break_by_q": false,
+      "q_open_utc": "2025-11-10T01:45:00+00:00",
+      "q_prev_closed_in_trade_direction": false,
+      "q_prev_high": 4053.425,
+      "q_prev_low": 4045.635,
+      "range_high": 4027.535,
+      "range_low": 3990.09,
+      "rules": {
+       "IMPL-REWARD": true,
+       "M1H-6A-1-HVCS-INTO-SHIFT": false,
+       "M1H-6A-2-PREV-15M-BROKEN-BY-Q": false,
+       "M1H-6A-3-NEW-EXTREME-IN-Q": false,
+       "M1H-COND-01": true,
+       "M1H-COND-02": true,
+       "M1H-COND-03": false,
+       "M1H-COND-04": false,
+       "M1H-OE-01": true,
+       "M1H-OE-02": false,
+       "M1H-OE-04a": true,
+       "M1H-OE-04b": true,
+       "M1H-TIME-01": true,
+       "NT_INCOMPLETE_H": true,
+       "NT_INCOMPLETE_H_OPEN": true,
+       "NT_ROLLOVER": true,
+       "NT_SYDNEY": true
+      },
+      "rules_failed": [
+       "M1H-6A-1-HVCS-INTO-SHIFT",
+       "M1H-6A-2-PREV-15M-BROKEN-BY-Q",
+       "M1H-6A-3-NEW-EXTREME-IN-Q",
+       "M1H-COND-03",
+       "M1H-COND-04",
+       "M1H-OE-02"
+      ],
+      "rules_not_evaluated": [],
+      "s5_t3_end": "BREAK",
+      "signal_id": "CBR1H_BASELINE_V1/A/20251110T0100/SELL/8",
+      "stop_anchor_at_shift": 4053.425,
+      "stop_anchor_time": "2025-11-10T01:37:40+00:00",
+      "stop_buffer_price": 0.2405893769514883,
+      "structure_stop_anchor": 4053.425,
+      "sweep_bar_extreme": 4052.84,
+      "target_at_activation": 4036.925,
+      "target_at_decision": 4036.925,
+      "target_at_shift": 4036.925,
+      "timestamp": "2025-11-10T01:50:00+00:00",
+      "timing30_state": "NOT_APPLICABLE",
+      "valid_until": "2025-11-10T01:52:00+00:00",
+      "variant": "A"
+     },
+     "example_verdict": "CANON_MISMATCH",
+     "hard": {
+      "core_structural_trigger": {
+       "class": "CANON_MISMATCH",
+       "met": false
+      },
+      "direction": {
+       "class": "BEHAVIORAL_MATCH",
+       "met": true
+      },
+      "extension_direction": {
+       "class": "BEHAVIORAL_MATCH",
+       "met": true
+      },
+      "model_family": {
+       "class": "BEHAVIORAL_MATCH",
+       "met": true
+      }
+     },
+     "how_selected": "DIAGNOSTIC_FIRST_IN_ORDER",
+     "margins_usd": {
+      "M1H-6A-2-PREV-15M-BROKEN-BY-Q": -0.5850000000000364,
+      "M1H-6A-3-NEW-EXTREME-IN-Q": -0.5850000000000364,
+      "M1H-LOC-01": null,
+      "M1H-LOC-02": null,
+      "M1H-LOC-03": null,
+      "M1H-OE-02": -3.3899999999998727,
+      "M1H-OE-04a": 15.24499999999989,
+      "M1H-OE-04b": 26.493959725526956,
+      "extension_direction": 31.74499999999989
+     },
+     "strict_course": {
+      "STRICT_COURSE:early_shift_guard=ALIGN_15M": {
+       "dimensions": [
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": "CBR1H 5s shift",
+         "dim": 1,
+         "engine": {
+          "entry_model": "HVCS_S5_SHIFT",
+          "parent": "HVCS",
+          "variant": "A"
+         },
+         "name": "model",
+         "status": "MATCH"
+        },
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": "SELL",
+         "dim": 2,
+         "engine": "SELL",
+         "name": "direction",
+         "status": "MATCH"
+        },
+        {
+         "class": "UNRESOLVED_SPEC_AMBIGUITY",
+         "classification": {
+          "blocks_gate": false,
+          "evidence": {
+           "open_question": "trending-range direction governed by OQ-01, OQ-02"
+          },
+          "implementation_bug": false,
+          "primary": "UNRESOLVED_SPEC_AMBIGUITY",
+          "secondary": [],
+          "tags": []
+         },
+         "course": [
+          {
+           "condition": "TRENDING_RANGE",
+           "direction": "UP"
+          }
+         ],
+         "dim": 3,
+         "engine": {
+          "c_med": 0.6780091432032203,
+          "cond_direction": "NONE",
+          "condition": "TRENDING_RANGE",
+          "n_legs": 3
+         },
+         "name": "condition",
+         "status": "MISMATCH"
+        },
+        {
+         "class": "UNRESOLVED_SPEC_AMBIGUITY",
+         "classification": {
+          "blocks_gate": false,
+          "evidence": {
+           "open_question": "direction governed by OQ-01, OQ-02; NONE = TREND_DIRECTION_UNRESOLVED (D17-4)"
+          },
+          "implementation_bug": false,
+          "primary": "UNRESOLVED_SPEC_AMBIGUITY",
+          "secondary": [],
+          "tags": []
+         },
+         "course": "UP",
+         "dim": 4,
+         "engine": "NONE",
+         "name": "tr_direction",
+         "status": "MISMATCH"
+        },
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": "UP",
+         "dim": 5,
+         "engine": "UP",
+         "margin_usd": 31.74499999999989,
+         "name": "extension_direction",
+         "status": "MATCH"
+        },
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": "duration \u2265 20 min, extreme before the shift",
+         "dim": 6,
+         "engine": {
+          "oe_duration_min": 37.0,
+          "oe_extreme_time": "2025-11-10T01:37:00+00:00",
+          "oe_no_pullback": false,
+          "reference_time": "2025-11-10T01:50:40+00:00"
+         },
+         "name": "extension_timing",
+         "status": "MATCH"
+        },
+        {
+         "class": "CANON_MISMATCH",
+         "classification": {
+          "blocks_gate": false,
+          "evidence": {
+           "canon_evidence": "E1H-017, E1H-023; course CX-LT3-2 fifteen_min_cb: Waited for the :30 15m candle to push bullish and take out the previous high before shifting (achieved at 36 min) (00:08:10-00:08:25)"
+          },
+          "implementation_bug": false,
+          "primary": "CANON_MISMATCH",
+          "secondary": [],
+          "tags": []
+         },
+         "course": "Waited for the :30 15m candle to push bullish and take out the previous high before shifting (achieved at 36 min)",
+         "dim": 7,
+         "engine": {
+          "q_break_by_q": false,
+          "q_open_utc": "2025-11-10T01:45:00+00:00",
+          "q_prev_closed_in_trade_direction": false
+         },
+         "margin_usd": -0.5850000000000364,
+         "name": "previous_15m_take",
+         "status": "MISMATCH"
+        },
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": "seconds shift with correlation (DXY shift bullish + gold spread shift bearish + take out low)",
+         "dim": 8,
+         "engine": {
+          "cancel_reason": "S5_SHIFT_TRIGGERED",
+          "m1_hilo_armed_at_decision": true,
+          "s5_type3_direction": "SELL",
+          "shift_completed": true
+         },
+         "name": "shift_type",
+         "status": "MATCH"
+        },
+        {
+         "class": "CANON_MISMATCH",
+         "classification": {
+          "blocks_gate": false,
+          "evidence": {
+           "canon_evidence": "E1H-021, E1H-022; frozen selection D19-10 takes the first shift; course CX-LT3-2 cb_hour_timing: previous high taken at 36 min; entry ~38-40 min (00:12:24-00:15:11)"
+          },
+          "implementation_bug": false,
+          "primary": "CANON_MISMATCH",
+          "secondary": [],
+          "tags": []
+         },
+         "course": {
+          "tolerance_s": 15,
+          "tom_interval": [
+           "2025-11-10T01:40:00+00:00",
+           "2025-11-10T01:40:00+00:00"
+          ]
+         },
+         "dim": 9,
+         "engine": "2025-11-10T01:50:40+00:00",
+         "name": "shift_time",
+         "p3": {
+          "direction_agrees": true,
+          "distance_to_tom_interval_s": 640.0,
+          "equivalent": false,
+          "same_15m_candle": false
+         },
+         "status": "MISMATCH"
+        },
+        {
+         "adjusted_minus_engine": -0.16249999999990905,
+         "class": "FEED_DIFFERENCE",
+         "classification": null,
+         "course": {
+          "delta_h": 0.0375,
+          "tom_stop": 4053.3,
+          "tom_stop_minus_delta_h": 4053.2625000000003
+         },
+         "dim": 10,
+         "engine": {
+          "anchor_at_shift": 4053.425,
+          "buffer_price": 0.2405893769514883,
+          "source": "STRUCTURE_TICK_MID_5S_EXTENSION_EXTREME"
+         },
+         "name": "stop_anchor",
+         "status": "FEED_DIFFERENCE",
+         "tom_minus_engine": -0.125
+        },
+        {
+         "adjusted_minus_engine": 6.837500000000091,
+         "class": "CANON_MISMATCH",
+         "classification": {
+          "blocks_gate": false,
+          "evidence": {
+           "canon_evidence": "M1H-TP-01 50% of the hour extension; course discretion: CX-LT3-2 target_description: initial TP at a nearer level; next target below the low; 50% of the extension described as the most aggressive TP (00:17:07-00:29:10)"
+          },
+          "implementation_bug": false,
+          "primary": "CANON_MISMATCH",
+          "secondary": [],
+          "tags": []
+         },
+         "course": {
+          "concept": "NEARER_DISCRETIONARY",
+          "tom_target": 4043.8
+         },
+         "dim": 11,
+         "engine": {
+          "concept": "50% of extension from H.open",
+          "target_at_shift": 4036.925
+         },
+         "name": "target_concept",
+         "status": "MISMATCH",
+         "tom_minus_engine": 6.875
+        }
+       ],
+       "engine": {
+        "activation_time": "2025-11-10T01:50:00+00:00",
+        "atr_1h": 13.012080548946088,
+        "atr_1m": 2.4058937695148828,
+        "beyond_external": null,
+        "c_med": 0.6780091432032203,
+        "cancel_reason": "S5_SHIFT_TRIGGERED",
+        "cancel_time": "2025-11-10T01:50:40+00:00",
+        "cond_direction": "NONE",
+        "condition": "TRENDING_RANGE",
+        "condition_missing_minutes": 0,
+        "condition_tradable_minutes": 480,
+        "continuity_state": "SIDE_BROKEN",
+        "direction": "SELL",
+        "entry_model": "HVCS_S5_SHIFT",
+        "er_pro": null,
+        "event": "REJECTED",
+        "ext_extreme_at_decision": 4053.425,
+        "five_second_broken_price": 4050.9700000000003,
+        "five_second_shift_level": 4050.96,
+        "five_second_shift_time": "2025-11-10T01:50:40+00:00",
+        "five_second_sweep_time": "2025-11-10T01:49:55+00:00",
+        "five_second_swept_price": 4052.8,
+        "h_missing_minutes": 0,
+        "h_open": 4020.425,
+        "hvcs_minutes": 0,
+        "m1_hilo_armed_at_decision": true,
+        "n_legs": 3,
+        "oe_dir": "UP",
+        "oe_duration_min": 37.0,
+        "oe_extreme_time": "2025-11-10T01:37:00+00:00",
+        "oe_no_pullback": false,
+        "oe_opposite_wick": 0.038030303030306335,
+        "oe_origin_time": "2025-11-10T01:00:00+00:00",
+        "oe_size": 33.0,
+        "oe_size_atr1h": 2.53610480475183,
+        "oe_two_sided": false,
+        "parent_structure_type": "HVCS",
+        "pos_oe_extreme": 1.6914140739751777,
+        "prior_setup_count": 0,
+        "q_break_by_q": false,
+        "q_open_utc": "2025-11-10T01:45:00+00:00",
+        "q_prev_closed_in_trade_direction": false,
+        "q_prev_high": 4053.425,
+        "q_prev_low": 4045.635,
+        "range_high": 4027.535,
+        "range_low": 3990.09,
+        "rules": {
+         "ABL-D9-ALIGN-15M": false,
+         "IMPL-REWARD": true,
+         "M1H-6A-1-HVCS-INTO-SHIFT": false,
+         "M1H-6A-2-PREV-15M-BROKEN-BY-Q": false,
+         "M1H-6A-3-NEW-EXTREME-IN-Q": false,
+         "M1H-COND-01": true,
+         "M1H-COND-02": true,
+         "M1H-COND-03": false,
+         "M1H-COND-04": false,
+         "M1H-OE-01": true,
+         "M1H-OE-02": false,
+         "M1H-OE-04a": true,
+         "M1H-OE-04b": true,
+         "M1H-TIME-01": true,
+         "NT_INCOMPLETE_H": true,
+         "NT_INCOMPLETE_H_OPEN": true,
+         "NT_ROLLOVER": true,
+         "NT_SYDNEY": true
+        },
+        "rules_failed": [
+         "ABL-D9-ALIGN-15M",
+         "M1H-6A-1-HVCS-INTO-SHIFT",
+         "M1H-6A-2-PREV-15M-BROKEN-BY-Q",
+         "M1H-6A-3-NEW-EXTREME-IN-Q",
+         "M1H-COND-03",
+         "M1H-COND-04",
+         "M1H-OE-02"
+        ],
+        "rules_not_evaluated": [],
+        "s5_t3_end": "BREAK",
+        "signal_id": "CBR1H_BASELINE_V1/A/20251110T0100/SELL/8",
+        "stop_anchor_at_shift": 4053.425,
+        "stop_anchor_time": "2025-11-10T01:37:40+00:00",
+        "stop_buffer_price": 0.2405893769514883,
+        "structure_stop_anchor": 4053.425,
+        "sweep_bar_extreme": 4052.84,
+        "target_at_activation": 4036.925,
+        "target_at_decision": 4036.925,
+        "target_at_shift": 4036.925,
+        "timestamp": "2025-11-10T01:50:00+00:00",
+        "timing30_state": "NOT_APPLICABLE",
+        "valid_until": "2025-11-10T01:52:00+00:00",
+        "variant": "A"
+       },
+       "hard": {
+        "core_structural_trigger": {
+         "class": "CANON_MISMATCH",
+         "met": false
+        },
+        "direction": {
+         "class": "BEHAVIORAL_MATCH",
+         "met": true
+        },
+        "extension_direction": {
+         "class": "BEHAVIORAL_MATCH",
+         "met": true
+        },
+        "model_family": {
+         "class": "BEHAVIORAL_MATCH",
+         "met": true
+        }
+       },
+       "how": "DIAGNOSTIC_FIRST_IN_ORDER"
+      },
+      "STRICT_COURSE:early_shift_guard=FINAL_PUSH": {
+       "dimensions": [
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": "CBR1H 5s shift",
+         "dim": 1,
+         "engine": {
+          "entry_model": "HVCS_S5_SHIFT",
+          "parent": "HVCS",
+          "variant": "A"
+         },
+         "name": "model",
+         "status": "MATCH"
+        },
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": "SELL",
+         "dim": 2,
+         "engine": "SELL",
+         "name": "direction",
+         "status": "MATCH"
+        },
+        {
+         "class": "UNRESOLVED_SPEC_AMBIGUITY",
+         "classification": {
+          "blocks_gate": false,
+          "evidence": {
+           "open_question": "trending-range direction governed by OQ-01, OQ-02"
+          },
+          "implementation_bug": false,
+          "primary": "UNRESOLVED_SPEC_AMBIGUITY",
+          "secondary": [],
+          "tags": []
+         },
+         "course": [
+          {
+           "condition": "TRENDING_RANGE",
+           "direction": "UP"
+          }
+         ],
+         "dim": 3,
+         "engine": {
+          "c_med": 0.6780091432032203,
+          "cond_direction": "NONE",
+          "condition": "TRENDING_RANGE",
+          "n_legs": 3
+         },
+         "name": "condition",
+         "status": "MISMATCH"
+        },
+        {
+         "class": "UNRESOLVED_SPEC_AMBIGUITY",
+         "classification": {
+          "blocks_gate": false,
+          "evidence": {
+           "open_question": "direction governed by OQ-01, OQ-02; NONE = TREND_DIRECTION_UNRESOLVED (D17-4)"
+          },
+          "implementation_bug": false,
+          "primary": "UNRESOLVED_SPEC_AMBIGUITY",
+          "secondary": [],
+          "tags": []
+         },
+         "course": "UP",
+         "dim": 4,
+         "engine": "NONE",
+         "name": "tr_direction",
+         "status": "MISMATCH"
+        },
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": "UP",
+         "dim": 5,
+         "engine": "UP",
+         "margin_usd": 31.74499999999989,
+         "name": "extension_direction",
+         "status": "MATCH"
+        },
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": "duration \u2265 20 min, extreme before the shift",
+         "dim": 6,
+         "engine": {
+          "oe_duration_min": 37.0,
+          "oe_extreme_time": "2025-11-10T01:37:00+00:00",
+          "oe_no_pullback": false,
+          "reference_time": "2025-11-10T01:50:40+00:00"
+         },
+         "name": "extension_timing",
+         "status": "MATCH"
+        },
+        {
+         "class": "CANON_MISMATCH",
+         "classification": {
+          "blocks_gate": false,
+          "evidence": {
+           "canon_evidence": "E1H-017, E1H-023; course CX-LT3-2 fifteen_min_cb: Waited for the :30 15m candle to push bullish and take out the previous high before shifting (achieved at 36 min) (00:08:10-00:08:25)"
+          },
+          "implementation_bug": false,
+          "primary": "CANON_MISMATCH",
+          "secondary": [],
+          "tags": []
+         },
+         "course": "Waited for the :30 15m candle to push bullish and take out the previous high before shifting (achieved at 36 min)",
+         "dim": 7,
+         "engine": {
+          "q_break_by_q": false,
+          "q_open_utc": "2025-11-10T01:45:00+00:00",
+          "q_prev_closed_in_trade_direction": false
+         },
+         "margin_usd": -0.5850000000000364,
+         "name": "previous_15m_take",
+         "status": "MISMATCH"
+        },
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": "seconds shift with correlation (DXY shift bullish + gold spread shift bearish + take out low)",
+         "dim": 8,
+         "engine": {
+          "cancel_reason": "S5_SHIFT_TRIGGERED",
+          "m1_hilo_armed_at_decision": true,
+          "s5_type3_direction": "SELL",
+          "shift_completed": true
+         },
+         "name": "shift_type",
+         "status": "MATCH"
+        },
+        {
+         "class": "CANON_MISMATCH",
+         "classification": {
+          "blocks_gate": false,
+          "evidence": {
+           "canon_evidence": "E1H-021, E1H-022; frozen selection D19-10 takes the first shift; course CX-LT3-2 cb_hour_timing: previous high taken at 36 min; entry ~38-40 min (00:12:24-00:15:11)"
+          },
+          "implementation_bug": false,
+          "primary": "CANON_MISMATCH",
+          "secondary": [],
+          "tags": []
+         },
+         "course": {
+          "tolerance_s": 15,
+          "tom_interval": [
+           "2025-11-10T01:40:00+00:00",
+           "2025-11-10T01:40:00+00:00"
+          ]
+         },
+         "dim": 9,
+         "engine": "2025-11-10T01:50:40+00:00",
+         "name": "shift_time",
+         "p3": {
+          "direction_agrees": true,
+          "distance_to_tom_interval_s": 640.0,
+          "equivalent": false,
+          "same_15m_candle": false
+         },
+         "status": "MISMATCH"
+        },
+        {
+         "adjusted_minus_engine": -0.16249999999990905,
+         "class": "FEED_DIFFERENCE",
+         "classification": null,
+         "course": {
+          "delta_h": 0.0375,
+          "tom_stop": 4053.3,
+          "tom_stop_minus_delta_h": 4053.2625000000003
+         },
+         "dim": 10,
+         "engine": {
+          "anchor_at_shift": 4053.425,
+          "buffer_price": 0.2405893769514883,
+          "source": "STRUCTURE_TICK_MID_5S_EXTENSION_EXTREME"
+         },
+         "name": "stop_anchor",
+         "status": "FEED_DIFFERENCE",
+         "tom_minus_engine": -0.125
+        },
+        {
+         "adjusted_minus_engine": 6.837500000000091,
+         "class": "CANON_MISMATCH",
+         "classification": {
+          "blocks_gate": false,
+          "evidence": {
+           "canon_evidence": "M1H-TP-01 50% of the hour extension; course discretion: CX-LT3-2 target_description: initial TP at a nearer level; next target below the low; 50% of the extension described as the most aggressive TP (00:17:07-00:29:10)"
+          },
+          "implementation_bug": false,
+          "primary": "CANON_MISMATCH",
+          "secondary": [],
+          "tags": []
+         },
+         "course": {
+          "concept": "NEARER_DISCRETIONARY",
+          "tom_target": 4043.8
+         },
+         "dim": 11,
+         "engine": {
+          "concept": "50% of extension from H.open",
+          "target_at_shift": 4036.925
+         },
+         "name": "target_concept",
+         "status": "MISMATCH",
+         "tom_minus_engine": 6.875
+        }
+       ],
+       "engine": {
+        "activation_time": "2025-11-10T01:50:00+00:00",
+        "atr_1h": 13.012080548946088,
+        "atr_1m": 2.4058937695148828,
+        "beyond_external": null,
+        "c_med": 0.6780091432032203,
+        "cancel_reason": "S5_SHIFT_TRIGGERED",
+        "cancel_time": "2025-11-10T01:50:40+00:00",
+        "cond_direction": "NONE",
+        "condition": "TRENDING_RANGE",
+        "condition_missing_minutes": 0,
+        "condition_tradable_minutes": 480,
+        "continuity_state": "SIDE_BROKEN",
+        "direction": "SELL",
+        "entry_model": "HVCS_S5_SHIFT",
+        "er_pro": null,
+        "event": "REJECTED",
+        "ext_extreme_at_decision": 4053.425,
+        "five_second_broken_price": 4050.9700000000003,
+        "five_second_shift_level": 4050.96,
+        "five_second_shift_time": "2025-11-10T01:50:40+00:00",
+        "five_second_sweep_time": "2025-11-10T01:49:55+00:00",
+        "five_second_swept_price": 4052.8,
+        "h_missing_minutes": 0,
+        "h_open": 4020.425,
+        "hvcs_minutes": 0,
+        "m1_hilo_armed_at_decision": true,
+        "n_legs": 3,
+        "oe_dir": "UP",
+        "oe_duration_min": 37.0,
+        "oe_extreme_time": "2025-11-10T01:37:00+00:00",
+        "oe_no_pullback": false,
+        "oe_opposite_wick": 0.038030303030306335,
+        "oe_origin_time": "2025-11-10T01:00:00+00:00",
+        "oe_size": 33.0,
+        "oe_size_atr1h": 2.53610480475183,
+        "oe_two_sided": false,
+        "parent_structure_type": "HVCS",
+        "pos_oe_extreme": 1.6914140739751777,
+        "prior_setup_count": 0,
+        "q_break_by_q": false,
+        "q_open_utc": "2025-11-10T01:45:00+00:00",
+        "q_prev_closed_in_trade_direction": false,
+        "q_prev_high": 4053.425,
+        "q_prev_low": 4045.635,
+        "range_high": 4027.535,
+        "range_low": 3990.09,
+        "rules": {
+         "ABL-D9-FINAL-PUSH": false,
+         "IMPL-REWARD": true,
+         "M1H-6A-1-HVCS-INTO-SHIFT": false,
+         "M1H-6A-2-PREV-15M-BROKEN-BY-Q": false,
+         "M1H-6A-3-NEW-EXTREME-IN-Q": false,
+         "M1H-COND-01": true,
+         "M1H-COND-02": true,
+         "M1H-COND-03": false,
+         "M1H-COND-04": false,
+         "M1H-OE-01": true,
+         "M1H-OE-02": false,
+         "M1H-OE-04a": true,
+         "M1H-OE-04b": true,
+         "M1H-TIME-01": true,
+         "NT_INCOMPLETE_H": true,
+         "NT_INCOMPLETE_H_OPEN": true,
+         "NT_ROLLOVER": true,
+         "NT_SYDNEY": true
+        },
+        "rules_failed": [
+         "ABL-D9-FINAL-PUSH",
+         "M1H-6A-1-HVCS-INTO-SHIFT",
+         "M1H-6A-2-PREV-15M-BROKEN-BY-Q",
+         "M1H-6A-3-NEW-EXTREME-IN-Q",
+         "M1H-COND-03",
+         "M1H-COND-04",
+         "M1H-OE-02"
+        ],
+        "rules_not_evaluated": [],
+        "s5_t3_end": "BREAK",
+        "signal_id": "CBR1H_BASELINE_V1/A/20251110T0100/SELL/8",
+        "stop_anchor_at_shift": 4053.425,
+        "stop_anchor_time": "2025-11-10T01:37:40+00:00",
+        "stop_buffer_price": 0.2405893769514883,
+        "structure_stop_anchor": 4053.425,
+        "sweep_bar_extreme": 4052.84,
+        "target_at_activation": 4036.925,
+        "target_at_decision": 4036.925,
+        "target_at_shift": 4036.925,
+        "timestamp": "2025-11-10T01:50:00+00:00",
+        "timing30_state": "NOT_APPLICABLE",
+        "valid_until": "2025-11-10T01:52:00+00:00",
+        "variant": "A"
+       },
+       "hard": {
+        "core_structural_trigger": {
+         "class": "CANON_MISMATCH",
+         "met": false
+        },
+        "direction": {
+         "class": "BEHAVIORAL_MATCH",
+         "met": true
+        },
+        "extension_direction": {
+         "class": "BEHAVIORAL_MATCH",
+         "met": true
+        },
+        "model_family": {
+         "class": "BEHAVIORAL_MATCH",
+         "met": true
+        }
+       },
+       "how": "DIAGNOSTIC_FIRST_IN_ORDER"
+      },
+      "STRICT_COURSE:oe_origin=LAST_RESET": {
+       "dimensions": [
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": "CBR1H 5s shift",
+         "dim": 1,
+         "engine": {
+          "entry_model": "HVCS_S5_SHIFT",
+          "parent": "HVCS",
+          "variant": "A"
+         },
+         "name": "model",
+         "status": "MATCH"
+        },
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": "SELL",
+         "dim": 2,
+         "engine": "SELL",
+         "name": "direction",
+         "status": "MATCH"
+        },
+        {
+         "class": "UNRESOLVED_SPEC_AMBIGUITY",
+         "classification": {
+          "blocks_gate": false,
+          "evidence": {
+           "open_question": "trending-range direction governed by OQ-01, OQ-02"
+          },
+          "implementation_bug": false,
+          "primary": "UNRESOLVED_SPEC_AMBIGUITY",
+          "secondary": [],
+          "tags": []
+         },
+         "course": [
+          {
+           "condition": "TRENDING_RANGE",
+           "direction": "UP"
+          }
+         ],
+         "dim": 3,
+         "engine": {
+          "c_med": 0.6780091432032203,
+          "cond_direction": "NONE",
+          "condition": "TRENDING_RANGE",
+          "n_legs": 3
+         },
+         "name": "condition",
+         "status": "MISMATCH"
+        },
+        {
+         "class": "UNRESOLVED_SPEC_AMBIGUITY",
+         "classification": {
+          "blocks_gate": false,
+          "evidence": {
+           "open_question": "direction governed by OQ-01, OQ-02; NONE = TREND_DIRECTION_UNRESOLVED (D17-4)"
+          },
+          "implementation_bug": false,
+          "primary": "UNRESOLVED_SPEC_AMBIGUITY",
+          "secondary": [],
+          "tags": []
+         },
+         "course": "UP",
+         "dim": 4,
+         "engine": "NONE",
+         "name": "tr_direction",
+         "status": "MISMATCH"
+        },
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": "UP",
+         "dim": 5,
+         "engine": "UP",
+         "margin_usd": 31.74499999999989,
+         "name": "extension_direction",
+         "status": "MATCH"
+        },
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": "duration \u2265 20 min, extreme before the shift",
+         "dim": 6,
+         "engine": {
+          "oe_duration_min": 28.0,
+          "oe_extreme_time": "2025-11-10T01:37:00+00:00",
+          "oe_no_pullback": true,
+          "reference_time": "2025-11-10T01:50:40+00:00"
+         },
+         "name": "extension_timing",
+         "status": "MATCH"
+        },
+        {
+         "class": "CANON_MISMATCH",
+         "classification": {
+          "blocks_gate": false,
+          "evidence": {
+           "canon_evidence": "E1H-017, E1H-023; course CX-LT3-2 fifteen_min_cb: Waited for the :30 15m candle to push bullish and take out the previous high before shifting (achieved at 36 min) (00:08:10-00:08:25)"
+          },
+          "implementation_bug": false,
+          "primary": "CANON_MISMATCH",
+          "secondary": [],
+          "tags": []
+         },
+         "course": "Waited for the :30 15m candle to push bullish and take out the previous high before shifting (achieved at 36 min)",
+         "dim": 7,
+         "engine": {
+          "q_break_by_q": false,
+          "q_open_utc": "2025-11-10T01:45:00+00:00",
+          "q_prev_closed_in_trade_direction": false
+         },
+         "margin_usd": -0.5850000000000364,
+         "name": "previous_15m_take",
+         "status": "MISMATCH"
+        },
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": "seconds shift with correlation (DXY shift bullish + gold spread shift bearish + take out low)",
+         "dim": 8,
+         "engine": {
+          "cancel_reason": "S5_SHIFT_TRIGGERED",
+          "m1_hilo_armed_at_decision": true,
+          "s5_type3_direction": "SELL",
+          "shift_completed": true
+         },
+         "name": "shift_type",
+         "status": "MATCH"
+        },
+        {
+         "class": "CANON_MISMATCH",
+         "classification": {
+          "blocks_gate": false,
+          "evidence": {
+           "canon_evidence": "E1H-021, E1H-022; frozen selection D19-10 takes the first shift; course CX-LT3-2 cb_hour_timing: previous high taken at 36 min; entry ~38-40 min (00:12:24-00:15:11)"
+          },
+          "implementation_bug": false,
+          "primary": "CANON_MISMATCH",
+          "secondary": [],
+          "tags": []
+         },
+         "course": {
+          "tolerance_s": 15,
+          "tom_interval": [
+           "2025-11-10T01:40:00+00:00",
+           "2025-11-10T01:40:00+00:00"
+          ]
+         },
+         "dim": 9,
+         "engine": "2025-11-10T01:50:40+00:00",
+         "name": "shift_time",
+         "p3": {
+          "direction_agrees": true,
+          "distance_to_tom_interval_s": 640.0,
+          "equivalent": false,
+          "same_15m_candle": false
+         },
+         "status": "MISMATCH"
+        },
+        {
+         "adjusted_minus_engine": -0.16249999999990905,
+         "class": "FEED_DIFFERENCE",
+         "classification": null,
+         "course": {
+          "delta_h": 0.0375,
+          "tom_stop": 4053.3,
+          "tom_stop_minus_delta_h": 4053.2625000000003
+         },
+         "dim": 10,
+         "engine": {
+          "anchor_at_shift": 4053.425,
+          "buffer_price": 0.2405893769514883,
+          "source": "STRUCTURE_TICK_MID_5S_EXTENSION_EXTREME"
+         },
+         "name": "stop_anchor",
+         "status": "FEED_DIFFERENCE",
+         "tom_minus_engine": -0.125
+        },
+        {
+         "adjusted_minus_engine": 6.837500000000091,
+         "class": "CANON_MISMATCH",
+         "classification": {
+          "blocks_gate": false,
+          "evidence": {
+           "canon_evidence": "M1H-TP-01 50% of the hour extension; course discretion: CX-LT3-2 target_description: initial TP at a nearer level; next target below the low; 50% of the extension described as the most aggressive TP (00:17:07-00:29:10)"
+          },
+          "implementation_bug": false,
+          "primary": "CANON_MISMATCH",
+          "secondary": [],
+          "tags": []
+         },
+         "course": {
+          "concept": "NEARER_DISCRETIONARY",
+          "tom_target": 4043.8
+         },
+         "dim": 11,
+         "engine": {
+          "concept": "50% of extension from H.open",
+          "target_at_shift": 4036.925
+         },
+         "name": "target_concept",
+         "status": "MISMATCH",
+         "tom_minus_engine": 6.875
+        }
+       ],
+       "engine": {
+        "activation_time": "2025-11-10T01:50:00+00:00",
+        "atr_1h": 13.012080548946088,
+        "atr_1m": 2.4058937695148828,
+        "beyond_external": null,
+        "c_med": 0.6780091432032203,
+        "cancel_reason": "S5_SHIFT_TRIGGERED",
+        "cancel_time": "2025-11-10T01:50:40+00:00",
+        "cond_direction": "NONE",
+        "condition": "TRENDING_RANGE",
+        "condition_missing_minutes": 0,
+        "condition_tradable_minutes": 480,
+        "continuity_state": "SIDE_BROKEN",
+        "direction": "SELL",
+        "entry_model": "HVCS_S5_SHIFT",
+        "er_pro": null,
+        "event": "REJECTED",
+        "ext_extreme_at_decision": 4053.425,
+        "five_second_broken_price": 4050.9700000000003,
+        "five_second_shift_level": 4050.96,
+        "five_second_shift_time": "2025-11-10T01:50:40+00:00",
+        "five_second_sweep_time": "2025-11-10T01:49:55+00:00",
+        "five_second_swept_price": 4052.8,
+        "h_missing_minutes": 0,
+        "h_open": 4020.425,
+        "hvcs_minutes": 0,
+        "m1_hilo_armed_at_decision": true,
+        "n_legs": 3,
+        "oe_dir": "UP",
+        "oe_duration_min": 28.0,
+        "oe_extreme_time": "2025-11-10T01:37:00+00:00",
+        "oe_no_pullback": true,
+        "oe_opposite_wick": 0.038030303030306335,
+        "oe_origin_time": "2025-11-10T01:09:00+00:00",
+        "oe_size": 33.0,
+        "oe_size_atr1h": 2.53610480475183,
+        "oe_two_sided": false,
+        "parent_structure_type": "HVCS",
+        "pos_oe_extreme": 1.6914140739751777,
+        "prior_setup_count": 0,
+        "q_break_by_q": false,
+        "q_open_utc": "2025-11-10T01:45:00+00:00",
+        "q_prev_closed_in_trade_direction": false,
+        "q_prev_high": 4053.425,
+        "q_prev_low": 4045.635,
+        "range_high": 4027.535,
+        "range_low": 3990.09,
+        "rules": {
+         "IMPL-REWARD": true,
+         "M1H-6A-1-HVCS-INTO-SHIFT": false,
+         "M1H-6A-2-PREV-15M-BROKEN-BY-Q": false,
+         "M1H-6A-3-NEW-EXTREME-IN-Q": false,
+         "M1H-COND-01": true,
+         "M1H-COND-02": true,
+         "M1H-COND-03": false,
+         "M1H-COND-04": false,
+         "M1H-OE-01": true,
+         "M1H-OE-02": true,
+         "M1H-OE-04a": true,
+         "M1H-OE-04b": true,
+         "M1H-TIME-01": true,
+         "NT_INCOMPLETE_H": true,
+         "NT_INCOMPLETE_H_OPEN": true,
+         "NT_ROLLOVER": true,
+         "NT_SYDNEY": true
+        },
+        "rules_failed": [
+         "M1H-6A-1-HVCS-INTO-SHIFT",
+         "M1H-6A-2-PREV-15M-BROKEN-BY-Q",
+         "M1H-6A-3-NEW-EXTREME-IN-Q",
+         "M1H-COND-03",
+         "M1H-COND-04"
+        ],
+        "rules_not_evaluated": [],
+        "s5_t3_end": "BREAK",
+        "signal_id": "CBR1H_BASELINE_V1/A/20251110T0100/SELL/8",
+        "stop_anchor_at_shift": 4053.425,
+        "stop_anchor_time": "2025-11-10T01:37:40+00:00",
+        "stop_buffer_price": 0.2405893769514883,
+        "structure_stop_anchor": 4053.425,
+        "sweep_bar_extreme": 4052.84,
+        "target_at_activation": 4036.925,
+        "target_at_decision": 4036.925,
+        "target_at_shift": 4036.925,
+        "timestamp": "2025-11-10T01:50:00+00:00",
+        "timing30_state": "NOT_APPLICABLE",
+        "valid_until": "2025-11-10T01:52:00+00:00",
+        "variant": "A"
+       },
+       "hard": {
+        "core_structural_trigger": {
+         "class": "CANON_MISMATCH",
+         "met": false
+        },
+        "direction": {
+         "class": "BEHAVIORAL_MATCH",
+         "met": true
+        },
+        "extension_direction": {
+         "class": "BEHAVIORAL_MATCH",
+         "met": true
+        },
+        "model_family": {
+         "class": "BEHAVIORAL_MATCH",
+         "met": true
+        }
+       },
+       "how": "DIAGNOSTIC_FIRST_IN_ORDER"
+      }
+     }
+    },
+    "B": {
+     "acceptance": {
+      "event": null,
+      "failed_rules": []
+     },
+     "armed_in_hour": 0,
+     "candidates_in_hour": 0,
+     "causality": {
+      "checked": false
+     },
+     "dimensions": [
+      {
+       "class": "CANON_MISMATCH",
+       "classification": {
+        "blocks_gate": false,
+        "evidence": {
+         "canon_evidence": "E1H-021, E1H-022; course CX-LT3-2 entry_model: seconds shift with correlation (DXY shift bullish + gold spread shift bearish + take out low) (00:15:20-00:15:30)"
+        },
+        "implementation_bug": false,
+        "primary": "CANON_MISMATCH",
+        "secondary": [],
+        "tags": []
+       },
+       "course": "CBR1H 5s-shift candidate in H",
+       "dim": 1,
+       "engine": null,
+       "name": "model",
+       "status": "MISMATCH"
+      }
+     ],
+     "engine": null,
+     "example_verdict": "CANON_MISMATCH",
+     "hard": {
+      "core_structural_trigger": {
+       "class": "CANON_MISMATCH",
+       "met": false
+      },
+      "direction": {
+       "class": "CANON_MISMATCH",
+       "met": false
+      },
+      "extension_direction": {
+       "class": "CANON_MISMATCH",
+       "met": false
+      },
+      "model_family": {
+       "class": "CANON_MISMATCH",
+       "met": false
+      }
+     },
+     "how_selected": "NO_CANDIDATE",
+     "margins_usd": {},
+     "strict_course": {
+      "STRICT_COURSE:early_shift_guard=ALIGN_15M": {
+       "dimensions": [
+        {
+         "class": "CANON_MISMATCH",
+         "classification": {
+          "blocks_gate": false,
+          "evidence": {
+           "canon_evidence": "E1H-021, E1H-022; course CX-LT3-2 entry_model: seconds shift with correlation (DXY shift bullish + gold spread shift bearish + take out low) (00:15:20-00:15:30)"
+          },
+          "implementation_bug": false,
+          "primary": "CANON_MISMATCH",
+          "secondary": [],
+          "tags": []
+         },
+         "course": "CBR1H 5s-shift candidate in H",
+         "dim": 1,
+         "engine": null,
+         "name": "model",
+         "status": "MISMATCH"
+        }
+       ],
+       "engine": null,
+       "hard": {
+        "core_structural_trigger": {
+         "class": "CANON_MISMATCH",
+         "met": false
+        },
+        "direction": {
+         "class": "CANON_MISMATCH",
+         "met": false
+        },
+        "extension_direction": {
+         "class": "CANON_MISMATCH",
+         "met": false
+        },
+        "model_family": {
+         "class": "CANON_MISMATCH",
+         "met": false
+        }
+       },
+       "how": "NO_CANDIDATE"
+      },
+      "STRICT_COURSE:early_shift_guard=FINAL_PUSH": {
+       "dimensions": [
+        {
+         "class": "CANON_MISMATCH",
+         "classification": {
+          "blocks_gate": false,
+          "evidence": {
+           "canon_evidence": "E1H-021, E1H-022; course CX-LT3-2 entry_model: seconds shift with correlation (DXY shift bullish + gold spread shift bearish + take out low) (00:15:20-00:15:30)"
+          },
+          "implementation_bug": false,
+          "primary": "CANON_MISMATCH",
+          "secondary": [],
+          "tags": []
+         },
+         "course": "CBR1H 5s-shift candidate in H",
+         "dim": 1,
+         "engine": null,
+         "name": "model",
+         "status": "MISMATCH"
+        }
+       ],
+       "engine": null,
+       "hard": {
+        "core_structural_trigger": {
+         "class": "CANON_MISMATCH",
+         "met": false
+        },
+        "direction": {
+         "class": "CANON_MISMATCH",
+         "met": false
+        },
+        "extension_direction": {
+         "class": "CANON_MISMATCH",
+         "met": false
+        },
+        "model_family": {
+         "class": "CANON_MISMATCH",
+         "met": false
+        }
+       },
+       "how": "NO_CANDIDATE"
+      },
+      "STRICT_COURSE:oe_origin=LAST_RESET": {
+       "dimensions": [
+        {
+         "class": "CANON_MISMATCH",
+         "classification": {
+          "blocks_gate": false,
+          "evidence": {
+           "canon_evidence": "E1H-021, E1H-022; course CX-LT3-2 entry_model: seconds shift with correlation (DXY shift bullish + gold spread shift bearish + take out low) (00:15:20-00:15:30)"
+          },
+          "implementation_bug": false,
+          "primary": "CANON_MISMATCH",
+          "secondary": [],
+          "tags": []
+         },
+         "course": "CBR1H 5s-shift candidate in H",
+         "dim": 1,
+         "engine": null,
+         "name": "model",
+         "status": "MISMATCH"
+        }
+       ],
+       "engine": null,
+       "hard": {
+        "core_structural_trigger": {
+         "class": "CANON_MISMATCH",
+         "met": false
+        },
+        "direction": {
+         "class": "CANON_MISMATCH",
+         "met": false
+        },
+        "extension_direction": {
+         "class": "CANON_MISMATCH",
+         "met": false
+        },
+        "model_family": {
+         "class": "CANON_MISMATCH",
+         "met": false
+        }
+       },
+       "how": "NO_CANDIDATE"
+      }
+     }
+    }
+   }
+  },
+  "CX-TE1-1": {
+   "course_record_sha256": "889f63facff33a24fc1f0b0a59b383801d1a71e888068eb22fe9487b8911de04",
+   "direction": "BUY",
+   "example_id": "CX-TE1-1",
+   "example_verdict": "CANON_MISMATCH",
+   "hard_met": {
+    "core_structural_trigger": {
+     "class": "CANON_MISMATCH",
+     "met": false
+    },
+    "direction": {
+     "class": "BEHAVIORAL_MATCH",
+     "met": true
+    },
+    "extension_direction": {
+     "class": "BEHAVIORAL_MATCH",
+     "met": true
+    },
+    "model_family": {
+     "class": "BEHAVIORAL_MATCH",
+     "met": true
+    }
+   },
+   "hour_utc": "2025-10-24T04:00:00+00:00",
+   "scored_variant": "A",
+   "variants": {
+    "A": {
+     "acceptance": {
+      "event": "REJECTED",
+      "failed_rules": [
+       {
+        "classification": {
+         "blocks_gate": false,
+         "evidence": {
+          "canon_evidence": "PC2 rule M1H-COND-04 (1h-cbr-machine-spec.md); engine value from STRUCTURE bars; course: CX-TE1-1 mtf_model: trending range counter (journal: MTF model 'TRR CT', condition 'Ranging') (00:01:46-00:01:57)",
+          "open_question": "M1H-COND-04 governed by OQ-05, OQ-36"
+         },
+         "implementation_bug": false,
+         "margin_usd": null,
+         "primary": "UNRESOLVED_SPEC_AMBIGUITY",
+         "secondary": [],
+         "tags": []
+        },
+        "rule": "M1H-COND-04"
+       },
+       {
+        "classification": {
+         "blocks_gate": false,
+         "evidence": {
+          "canon_evidence": "PC2 rule M1H-OE-02 (E1H-018); engine value from STRUCTURE bars; course: CX-TE1-1 mtf_model: trending range counter (journal: MTF model 'TRR CT', condition 'Ranging') (00:01:46-00:01:57)",
+          "owner_baseline_choice": "M1H-OE-02 passes under STRICT_COURSE:oe_origin=LAST_RESET (same candidate identity)"
+         },
+         "implementation_bug": false,
+         "margin_usd": -0.5874999999996362,
+         "primary": "OWNER_BASELINE_CHOICE",
+         "secondary": [],
+         "tags": []
+        },
+        "rule": "M1H-OE-02"
+       }
+      ]
+     },
+     "armed_in_hour": 0,
+     "candidates_in_hour": 13,
+     "causality": {
+      "all_identical": false,
+      "checked": true,
+      "decision": {
+       "cut": "2025-10-24T04:24:47+00:00",
+       "future_mutation": {
+        "decision_identical": true,
+        "decision_rows": 8,
+        "trigger_identical": true,
+        "trigger_rows": 1
+       },
+       "truncation": {
+        "decision_identical": true,
+        "decision_rows": 8,
+        "trigger_identical": false,
+        "trigger_rows": 1
+       }
+      },
+      "shift": {
+       "cut": "2025-10-24T04:25:17+00:00",
+       "future_mutation": {
+        "decision_identical": true,
+        "decision_rows": 9,
+        "trigger_identical": false,
+        "trigger_rows": 1
+       },
+       "truncation": {
+        "decision_identical": true,
+        "decision_rows": 9,
+        "trigger_identical": true,
+        "trigger_rows": 1
+       }
+      }
+     },
+     "dimensions": [
+      {
+       "class": "BEHAVIORAL_MATCH",
+       "classification": null,
+       "course": "CBR1H 5s shift",
+       "dim": 1,
+       "engine": {
+        "entry_model": "HVCS_S5_SHIFT",
+        "parent": "HVCS",
+        "variant": "A"
+       },
+       "name": "model",
+       "status": "MATCH"
+      },
+      {
+       "class": "BEHAVIORAL_MATCH",
+       "classification": null,
+       "course": "BUY",
+       "dim": 2,
+       "engine": "BUY",
+       "name": "direction",
+       "status": "MATCH"
+      },
+      {
+       "class": "BEHAVIORAL_MATCH",
+       "classification": null,
+       "course": [
+        {
+         "condition": "TRENDING_RANGE",
+         "direction": "DOWN"
+        },
+        {
+         "condition": "RANGE"
+        }
+       ],
+       "dim": 3,
+       "engine": {
+        "c_med": 1.0587606202839743,
+        "cond_direction": "UP",
+        "condition": "RANGE",
+        "n_legs": 4
+       },
+       "name": "condition",
+       "status": "MATCH"
+      },
+      {
+       "class": "UNRESOLVED_SPEC_AMBIGUITY",
+       "classification": {
+        "blocks_gate": false,
+        "evidence": {
+         "open_question": "direction governed by OQ-01, OQ-02"
+        },
+        "implementation_bug": false,
+        "primary": "UNRESOLVED_SPEC_AMBIGUITY",
+        "secondary": [],
+        "tags": []
+       },
+       "course": "DOWN",
+       "dim": 4,
+       "engine": "UP",
+       "name": "tr_direction",
+       "status": "MISMATCH"
+      },
+      {
+       "class": "BEHAVIORAL_MATCH",
+       "classification": null,
+       "course": "DOWN",
+       "dim": 5,
+       "engine": "DOWN",
+       "margin_usd": 13.975000000000364,
+       "name": "extension_direction",
+       "status": "MATCH"
+      },
+      {
+       "class": "BEHAVIORAL_MATCH",
+       "classification": null,
+       "course": "duration \u2265 20 min, extreme before the shift; course 20-30 min",
+       "dim": 6,
+       "engine": {
+        "oe_duration_min": 23.0,
+        "oe_extreme_time": "2025-10-24T04:23:00+00:00",
+        "oe_no_pullback": false,
+        "reference_time": "2025-10-24T04:24:45+00:00"
+       },
+       "name": "extension_timing",
+       "status": "MATCH"
+      },
+      {
+       "class": "BEHAVIORAL_MATCH",
+       "classification": null,
+       "course": "The :30 15m candle opened and pushed bearish for its first half (~7.5 min), taking out the previous 15m low",
+       "dim": 7,
+       "engine": {
+        "q_break_by_q": true,
+        "q_open_utc": "2025-10-24T04:15:00+00:00",
+        "q_prev_closed_in_trade_direction": false
+       },
+       "margin_usd": 8.269999999998618,
+       "name": "previous_15m_take",
+       "status": "MATCH"
+      },
+      {
+       "class": "BEHAVIORAL_MATCH",
+       "classification": null,
+       "course": "seconds shift (break of the seconds-chart high; he also calls it 'a bit of a high low entry')",
+       "dim": 8,
+       "engine": {
+        "cancel_reason": "S5_SHIFT_TRIGGERED",
+        "m1_hilo_armed_at_decision": true,
+        "s5_type3_direction": "BUY",
+        "shift_completed": true
+       },
+       "name": "shift_type",
+       "status": "MATCH"
+      },
+      {
+       "class": "CANON_MISMATCH",
+       "classification": {
+        "blocks_gate": false,
+        "evidence": {
+         "canon_evidence": "E1H-021, E1H-022; frozen selection D19-10 takes the first shift; course CX-TE1-1 cb_hour_timing: ~37 minutes into the hour; labelled a '30m Reversal' (30-45 min window) (00:11:31-00:11:47)"
+        },
+        "implementation_bug": false,
+        "primary": "CANON_MISMATCH",
+        "secondary": [],
+        "tags": []
+       },
+       "course": {
+        "tolerance_s": 60,
+        "tom_interval": [
+         "2025-10-24T04:37:00+00:00",
+         "2025-10-24T04:39:00+00:00"
+        ]
+       },
+       "dim": 9,
+       "engine": "2025-10-24T04:24:45+00:00",
+       "name": "shift_time",
+       "p3": {
+        "direction_agrees": true,
+        "distance_to_tom_interval_s": 735.0,
+        "equivalent": false,
+        "same_15m_candle": false
+       },
+       "status": "MISMATCH"
+      },
+      {
+       "adjusted_minus_engine": -4.298500000000786,
+       "class": "FEED_DIFFERENCE",
+       "classification": null,
+       "course": {
+        "delta_h": 0.015,
+        "tom_stop": 4102.8,
+        "tom_stop_minus_delta_h": 4102.785
+       },
+       "dim": 10,
+       "engine": {
+        "anchor_at_shift": 4107.083500000001,
+        "buffer_price": 0.16422989492096496,
+        "source": "STRUCTURE_TICK_MID_5S_EXTENSION_EXTREME"
+       },
+       "name": "stop_anchor",
+       "status": "FEED_DIFFERENCE",
+       "tom_minus_engine": -4.283500000000458
+      },
+      {
+       "adjusted_minus_engine": -5.066750000000866,
+       "class": "FEED_DIFFERENCE",
+       "classification": null,
+       "course": {
+        "concept": "FIFTY_PERCENT_OF_MOVE",
+        "tom_target": 4109.71
+       },
+       "dim": 11,
+       "engine": {
+        "concept": "50% of extension from H.open",
+        "target_at_shift": 4114.761750000001
+       },
+       "name": "target_concept",
+       "status": "FEED_DIFFERENCE",
+       "tom_minus_engine": -5.051750000000538
+      },
+      {
+       "class": "BEHAVIORAL_MATCH",
+       "classification": null,
+       "course": {
+        "compare_field": "dxy_1h_forming_direction",
+        "direction": "UP",
+        "text": "DXY range bound; hourly candle opened and pushed bullish into highs"
+       },
+       "descriptive": true,
+       "dim": 12,
+       "engine": {
+        "dxy_15m_forming_direction": "UP",
+        "dxy_15m_forming_state": "OK",
+        "dxy_15m_last_direction": "UP",
+        "dxy_1h_forming_direction": "UP",
+        "dxy_1h_forming_state": "OK",
+        "dxy_1h_last_direction": "DOWN",
+        "dxy_confidence": "FULL",
+        "dxy_reason_codes": "",
+        "field": "dxy_1h_forming_direction",
+        "time": "2025-10-24T04:24:45+00:00",
+        "tvc_hour_direction": "UP",
+        "tvc_note": "TVC:DXY 1h bar final direction (hour close; hindsight, descriptive)",
+        "value": "UP"
+       },
+       "name": "dxy",
+       "status": "MATCH"
+      }
+     ],
+     "engine": {
+      "activation_time": "2025-10-24T04:24:15+00:00",
+      "atr_1h": 21.411804490298472,
+      "atr_1m": 1.6422989492096494,
+      "beyond_external": null,
+      "c_med": 1.0587606202839743,
+      "cancel_reason": "S5_SHIFT_TRIGGERED",
+      "cancel_time": "2025-10-24T04:24:45+00:00",
+      "cond_direction": "UP",
+      "condition": "RANGE",
+      "condition_missing_minutes": 0,
+      "condition_tradable_minutes": 480,
+      "continuity_state": "CONTINUOUS",
+      "direction": "BUY",
+      "entry_model": "HVCS_S5_SHIFT",
+      "er_pro": null,
+      "event": "REJECTED",
+      "ext_extreme_at_decision": 4107.5,
+      "five_second_broken_price": 4109.120000000001,
+      "five_second_shift_level": 4109.130000000001,
+      "five_second_shift_time": "2025-10-24T04:24:45+00:00",
+      "five_second_sweep_time": "2025-10-24T04:24:10+00:00",
+      "five_second_swept_price": 4107.5,
+      "h_missing_minutes": 0,
+      "h_open": 4122.4400000000005,
+      "hvcs_minutes": 8,
+      "m1_hilo_armed_at_decision": true,
+      "n_legs": 4,
+      "oe_dir": "DOWN",
+      "oe_duration_min": 23.0,
+      "oe_extreme_time": "2025-10-24T04:23:00+00:00",
+      "oe_no_pullback": false,
+      "oe_opposite_wick": 0.06459170013387634,
+      "oe_origin_time": "2025-10-24T04:00:00+00:00",
+      "oe_size": 14.94000000000051,
+      "oe_size_atr1h": 0.6977459562910595,
+      "oe_two_sided": false,
+      "parent_structure_type": "HVCS",
+      "pos_oe_extreme": 0.03749023691746002,
+      "prior_setup_count": 0,
+      "q_break_by_q": true,
+      "q_open_utc": "2025-10-24T04:15:00+00:00",
+      "q_prev_closed_in_trade_direction": false,
+      "q_prev_high": 4123.405000000001,
+      "q_prev_low": 4115.709999999999,
+      "range_high": 4144.469999999999,
+      "range_low": 4106.06,
+      "rules": {
+       "IMPL-REWARD": true,
+       "M1H-6A-1-HVCS-INTO-SHIFT": true,
+       "M1H-6A-2-PREV-15M-BROKEN-BY-Q": true,
+       "M1H-6A-3-NEW-EXTREME-IN-Q": true,
+       "M1H-COND-01": true,
+       "M1H-COND-02": true,
+       "M1H-COND-03": true,
+       "M1H-COND-04": false,
+       "M1H-LOC-01": true,
+       "M1H-OE-01": true,
+       "M1H-OE-02": false,
+       "M1H-OE-04a": true,
+       "M1H-OE-04b": true,
+       "M1H-TIME-01": true,
+       "NT_INCOMPLETE_H": true,
+       "NT_INCOMPLETE_H_OPEN": true,
+       "NT_ROLLOVER": true,
+       "NT_SYDNEY": true
+      },
+      "rules_failed": [
+       "M1H-COND-04",
+       "M1H-OE-02"
+      ],
+      "rules_not_evaluated": [],
+      "s5_t3_end": "BREAK",
+      "signal_id": "CBR1H_BASELINE_V1/A/20251024T0400/BUY/7",
+      "stop_anchor_at_shift": 4107.083500000001,
+      "stop_anchor_time": "2025-10-24T04:24:15+00:00",
+      "stop_buffer_price": 0.16422989492096496,
+      "structure_stop_anchor": 4107.4400000000005,
+      "sweep_bar_extreme": 4107.4400000000005,
+      "target_at_activation": 4114.9400000000005,
+      "target_at_decision": 4114.97,
+      "target_at_shift": 4114.761750000001,
+      "timestamp": "2025-10-24T04:24:15+00:00",
+      "timing30_state": "NOT_APPLICABLE",
+      "valid_until": "2025-10-24T04:52:00+00:00",
+      "variant": "A"
+     },
+     "example_verdict": "CANON_MISMATCH",
+     "hard": {
+      "core_structural_trigger": {
+       "class": "CANON_MISMATCH",
+       "met": false
+      },
+      "direction": {
+       "class": "BEHAVIORAL_MATCH",
+       "met": true
+      },
+      "extension_direction": {
+       "class": "BEHAVIORAL_MATCH",
+       "met": true
+      },
+      "model_family": {
+       "class": "BEHAVIORAL_MATCH",
+       "met": true
+      }
+     },
+     "how_selected": "DIAGNOSTIC_FIRST_IN_ORDER",
+     "margins_usd": {
+      "M1H-6A-2-PREV-15M-BROKEN-BY-Q": 8.269999999998618,
+      "M1H-6A-3-NEW-EXTREME-IN-Q": 8.209999999999127,
+      "M1H-LOC-01": 8.162500000000364,
+      "M1H-LOC-02": null,
+      "M1H-LOC-03": null,
+      "M1H-OE-02": -0.5874999999996362,
+      "M1H-OE-04a": 6.505000000000109,
+      "M1H-OE-04b": 4.234097754851273,
+      "extension_direction": 13.975000000000364
+     },
+     "strict_course": {
+      "STRICT_COURSE:early_shift_guard=ALIGN_15M": {
+       "dimensions": [
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": "CBR1H 5s shift",
+         "dim": 1,
+         "engine": {
+          "entry_model": "HVCS_S5_SHIFT",
+          "parent": "HVCS",
+          "variant": "A"
+         },
+         "name": "model",
+         "status": "MATCH"
+        },
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": "BUY",
+         "dim": 2,
+         "engine": "BUY",
+         "name": "direction",
+         "status": "MATCH"
+        },
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": [
+          {
+           "condition": "TRENDING_RANGE",
+           "direction": "DOWN"
+          },
+          {
+           "condition": "RANGE"
+          }
+         ],
+         "dim": 3,
+         "engine": {
+          "c_med": 1.0587606202839743,
+          "cond_direction": "UP",
+          "condition": "RANGE",
+          "n_legs": 4
+         },
+         "name": "condition",
+         "status": "MATCH"
+        },
+        {
+         "class": "UNRESOLVED_SPEC_AMBIGUITY",
+         "classification": {
+          "blocks_gate": false,
+          "evidence": {
+           "open_question": "direction governed by OQ-01, OQ-02"
+          },
+          "implementation_bug": false,
+          "primary": "UNRESOLVED_SPEC_AMBIGUITY",
+          "secondary": [],
+          "tags": []
+         },
+         "course": "DOWN",
+         "dim": 4,
+         "engine": "UP",
+         "name": "tr_direction",
+         "status": "MISMATCH"
+        },
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": "DOWN",
+         "dim": 5,
+         "engine": "DOWN",
+         "margin_usd": 13.975000000000364,
+         "name": "extension_direction",
+         "status": "MATCH"
+        },
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": "duration \u2265 20 min, extreme before the shift; course 20-30 min",
+         "dim": 6,
+         "engine": {
+          "oe_duration_min": 23.0,
+          "oe_extreme_time": "2025-10-24T04:23:00+00:00",
+          "oe_no_pullback": false,
+          "reference_time": "2025-10-24T04:24:45+00:00"
+         },
+         "name": "extension_timing",
+         "status": "MATCH"
+        },
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": "The :30 15m candle opened and pushed bearish for its first half (~7.5 min), taking out the previous 15m low",
+         "dim": 7,
+         "engine": {
+          "q_break_by_q": true,
+          "q_open_utc": "2025-10-24T04:15:00+00:00",
+          "q_prev_closed_in_trade_direction": false
+         },
+         "margin_usd": 8.269999999998618,
+         "name": "previous_15m_take",
+         "status": "MATCH"
+        },
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": "seconds shift (break of the seconds-chart high; he also calls it 'a bit of a high low entry')",
+         "dim": 8,
+         "engine": {
+          "cancel_reason": "S5_SHIFT_TRIGGERED",
+          "m1_hilo_armed_at_decision": true,
+          "s5_type3_direction": "BUY",
+          "shift_completed": true
+         },
+         "name": "shift_type",
+         "status": "MATCH"
+        },
+        {
+         "class": "CANON_MISMATCH",
+         "classification": {
+          "blocks_gate": false,
+          "evidence": {
+           "canon_evidence": "E1H-021, E1H-022; frozen selection D19-10 takes the first shift; course CX-TE1-1 cb_hour_timing: ~37 minutes into the hour; labelled a '30m Reversal' (30-45 min window) (00:11:31-00:11:47)"
+          },
+          "implementation_bug": false,
+          "primary": "CANON_MISMATCH",
+          "secondary": [],
+          "tags": []
+         },
+         "course": {
+          "tolerance_s": 60,
+          "tom_interval": [
+           "2025-10-24T04:37:00+00:00",
+           "2025-10-24T04:39:00+00:00"
+          ]
+         },
+         "dim": 9,
+         "engine": "2025-10-24T04:24:45+00:00",
+         "name": "shift_time",
+         "p3": {
+          "direction_agrees": true,
+          "distance_to_tom_interval_s": 735.0,
+          "equivalent": false,
+          "same_15m_candle": false
+         },
+         "status": "MISMATCH"
+        },
+        {
+         "adjusted_minus_engine": -4.298500000000786,
+         "class": "FEED_DIFFERENCE",
+         "classification": null,
+         "course": {
+          "delta_h": 0.015,
+          "tom_stop": 4102.8,
+          "tom_stop_minus_delta_h": 4102.785
+         },
+         "dim": 10,
+         "engine": {
+          "anchor_at_shift": 4107.083500000001,
+          "buffer_price": 0.16422989492096496,
+          "source": "STRUCTURE_TICK_MID_5S_EXTENSION_EXTREME"
+         },
+         "name": "stop_anchor",
+         "status": "FEED_DIFFERENCE",
+         "tom_minus_engine": -4.283500000000458
+        },
+        {
+         "adjusted_minus_engine": -5.066750000000866,
+         "class": "FEED_DIFFERENCE",
+         "classification": null,
+         "course": {
+          "concept": "FIFTY_PERCENT_OF_MOVE",
+          "tom_target": 4109.71
+         },
+         "dim": 11,
+         "engine": {
+          "concept": "50% of extension from H.open",
+          "target_at_shift": 4114.761750000001
+         },
+         "name": "target_concept",
+         "status": "FEED_DIFFERENCE",
+         "tom_minus_engine": -5.051750000000538
+        }
+       ],
+       "engine": {
+        "activation_time": "2025-10-24T04:24:15+00:00",
+        "atr_1h": 21.411804490298472,
+        "atr_1m": 1.6422989492096494,
+        "beyond_external": null,
+        "c_med": 1.0587606202839743,
+        "cancel_reason": "S5_SHIFT_TRIGGERED",
+        "cancel_time": "2025-10-24T04:24:45+00:00",
+        "cond_direction": "UP",
+        "condition": "RANGE",
+        "condition_missing_minutes": 0,
+        "condition_tradable_minutes": 480,
+        "continuity_state": "CONTINUOUS",
+        "direction": "BUY",
+        "entry_model": "HVCS_S5_SHIFT",
+        "er_pro": null,
+        "event": "REJECTED",
+        "ext_extreme_at_decision": 4107.5,
+        "five_second_broken_price": 4109.120000000001,
+        "five_second_shift_level": 4109.130000000001,
+        "five_second_shift_time": "2025-10-24T04:24:45+00:00",
+        "five_second_sweep_time": "2025-10-24T04:24:10+00:00",
+        "five_second_swept_price": 4107.5,
+        "h_missing_minutes": 0,
+        "h_open": 4122.4400000000005,
+        "hvcs_minutes": 8,
+        "m1_hilo_armed_at_decision": true,
+        "n_legs": 4,
+        "oe_dir": "DOWN",
+        "oe_duration_min": 23.0,
+        "oe_extreme_time": "2025-10-24T04:23:00+00:00",
+        "oe_no_pullback": false,
+        "oe_opposite_wick": 0.06459170013387634,
+        "oe_origin_time": "2025-10-24T04:00:00+00:00",
+        "oe_size": 14.94000000000051,
+        "oe_size_atr1h": 0.6977459562910595,
+        "oe_two_sided": false,
+        "parent_structure_type": "HVCS",
+        "pos_oe_extreme": 0.03749023691746002,
+        "prior_setup_count": 0,
+        "q_break_by_q": true,
+        "q_open_utc": "2025-10-24T04:15:00+00:00",
+        "q_prev_closed_in_trade_direction": false,
+        "q_prev_high": 4123.405000000001,
+        "q_prev_low": 4115.709999999999,
+        "range_high": 4144.469999999999,
+        "range_low": 4106.06,
+        "rules": {
+         "ABL-D9-ALIGN-15M": true,
+         "IMPL-REWARD": true,
+         "M1H-6A-1-HVCS-INTO-SHIFT": true,
+         "M1H-6A-2-PREV-15M-BROKEN-BY-Q": true,
+         "M1H-6A-3-NEW-EXTREME-IN-Q": true,
+         "M1H-COND-01": true,
+         "M1H-COND-02": true,
+         "M1H-COND-03": true,
+         "M1H-COND-04": false,
+         "M1H-LOC-01": true,
+         "M1H-OE-01": true,
+         "M1H-OE-02": false,
+         "M1H-OE-04a": true,
+         "M1H-OE-04b": true,
+         "M1H-TIME-01": true,
+         "NT_INCOMPLETE_H": true,
+         "NT_INCOMPLETE_H_OPEN": true,
+         "NT_ROLLOVER": true,
+         "NT_SYDNEY": true
+        },
+        "rules_failed": [
+         "M1H-COND-04",
+         "M1H-OE-02"
+        ],
+        "rules_not_evaluated": [],
+        "s5_t3_end": "BREAK",
+        "signal_id": "CBR1H_BASELINE_V1/A/20251024T0400/BUY/7",
+        "stop_anchor_at_shift": 4107.083500000001,
+        "stop_anchor_time": "2025-10-24T04:24:15+00:00",
+        "stop_buffer_price": 0.16422989492096496,
+        "structure_stop_anchor": 4107.4400000000005,
+        "sweep_bar_extreme": 4107.4400000000005,
+        "target_at_activation": 4114.9400000000005,
+        "target_at_decision": 4114.97,
+        "target_at_shift": 4114.761750000001,
+        "timestamp": "2025-10-24T04:24:15+00:00",
+        "timing30_state": "NOT_APPLICABLE",
+        "valid_until": "2025-10-24T04:52:00+00:00",
+        "variant": "A"
+       },
+       "hard": {
+        "core_structural_trigger": {
+         "class": "CANON_MISMATCH",
+         "met": false
+        },
+        "direction": {
+         "class": "BEHAVIORAL_MATCH",
+         "met": true
+        },
+        "extension_direction": {
+         "class": "BEHAVIORAL_MATCH",
+         "met": true
+        },
+        "model_family": {
+         "class": "BEHAVIORAL_MATCH",
+         "met": true
+        }
+       },
+       "how": "DIAGNOSTIC_FIRST_IN_ORDER"
+      },
+      "STRICT_COURSE:early_shift_guard=FINAL_PUSH": {
+       "dimensions": [
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": "CBR1H 5s shift",
+         "dim": 1,
+         "engine": {
+          "entry_model": "HVCS_S5_SHIFT",
+          "parent": "HVCS",
+          "variant": "A"
+         },
+         "name": "model",
+         "status": "MATCH"
+        },
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": "BUY",
+         "dim": 2,
+         "engine": "BUY",
+         "name": "direction",
+         "status": "MATCH"
+        },
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": [
+          {
+           "condition": "TRENDING_RANGE",
+           "direction": "DOWN"
+          },
+          {
+           "condition": "RANGE"
+          }
+         ],
+         "dim": 3,
+         "engine": {
+          "c_med": 1.0587606202839743,
+          "cond_direction": "UP",
+          "condition": "RANGE",
+          "n_legs": 4
+         },
+         "name": "condition",
+         "status": "MATCH"
+        },
+        {
+         "class": "UNRESOLVED_SPEC_AMBIGUITY",
+         "classification": {
+          "blocks_gate": false,
+          "evidence": {
+           "open_question": "direction governed by OQ-01, OQ-02"
+          },
+          "implementation_bug": false,
+          "primary": "UNRESOLVED_SPEC_AMBIGUITY",
+          "secondary": [],
+          "tags": []
+         },
+         "course": "DOWN",
+         "dim": 4,
+         "engine": "UP",
+         "name": "tr_direction",
+         "status": "MISMATCH"
+        },
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": "DOWN",
+         "dim": 5,
+         "engine": "DOWN",
+         "margin_usd": 13.975000000000364,
+         "name": "extension_direction",
+         "status": "MATCH"
+        },
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": "duration \u2265 20 min, extreme before the shift; course 20-30 min",
+         "dim": 6,
+         "engine": {
+          "oe_duration_min": 23.0,
+          "oe_extreme_time": "2025-10-24T04:23:00+00:00",
+          "oe_no_pullback": false,
+          "reference_time": "2025-10-24T04:24:45+00:00"
+         },
+         "name": "extension_timing",
+         "status": "MATCH"
+        },
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": "The :30 15m candle opened and pushed bearish for its first half (~7.5 min), taking out the previous 15m low",
+         "dim": 7,
+         "engine": {
+          "q_break_by_q": true,
+          "q_open_utc": "2025-10-24T04:15:00+00:00",
+          "q_prev_closed_in_trade_direction": false
+         },
+         "margin_usd": 8.269999999998618,
+         "name": "previous_15m_take",
+         "status": "MATCH"
+        },
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": "seconds shift (break of the seconds-chart high; he also calls it 'a bit of a high low entry')",
+         "dim": 8,
+         "engine": {
+          "cancel_reason": "S5_SHIFT_TRIGGERED",
+          "m1_hilo_armed_at_decision": true,
+          "s5_type3_direction": "BUY",
+          "shift_completed": true
+         },
+         "name": "shift_type",
+         "status": "MATCH"
+        },
+        {
+         "class": "CANON_MISMATCH",
+         "classification": {
+          "blocks_gate": false,
+          "evidence": {
+           "canon_evidence": "E1H-021, E1H-022; frozen selection D19-10 takes the first shift; course CX-TE1-1 cb_hour_timing: ~37 minutes into the hour; labelled a '30m Reversal' (30-45 min window) (00:11:31-00:11:47)"
+          },
+          "implementation_bug": false,
+          "primary": "CANON_MISMATCH",
+          "secondary": [],
+          "tags": []
+         },
+         "course": {
+          "tolerance_s": 60,
+          "tom_interval": [
+           "2025-10-24T04:37:00+00:00",
+           "2025-10-24T04:39:00+00:00"
+          ]
+         },
+         "dim": 9,
+         "engine": "2025-10-24T04:24:45+00:00",
+         "name": "shift_time",
+         "p3": {
+          "direction_agrees": true,
+          "distance_to_tom_interval_s": 735.0,
+          "equivalent": false,
+          "same_15m_candle": false
+         },
+         "status": "MISMATCH"
+        },
+        {
+         "adjusted_minus_engine": -4.298500000000786,
+         "class": "FEED_DIFFERENCE",
+         "classification": null,
+         "course": {
+          "delta_h": 0.015,
+          "tom_stop": 4102.8,
+          "tom_stop_minus_delta_h": 4102.785
+         },
+         "dim": 10,
+         "engine": {
+          "anchor_at_shift": 4107.083500000001,
+          "buffer_price": 0.16422989492096496,
+          "source": "STRUCTURE_TICK_MID_5S_EXTENSION_EXTREME"
+         },
+         "name": "stop_anchor",
+         "status": "FEED_DIFFERENCE",
+         "tom_minus_engine": -4.283500000000458
+        },
+        {
+         "adjusted_minus_engine": -5.066750000000866,
+         "class": "FEED_DIFFERENCE",
+         "classification": null,
+         "course": {
+          "concept": "FIFTY_PERCENT_OF_MOVE",
+          "tom_target": 4109.71
+         },
+         "dim": 11,
+         "engine": {
+          "concept": "50% of extension from H.open",
+          "target_at_shift": 4114.761750000001
+         },
+         "name": "target_concept",
+         "status": "FEED_DIFFERENCE",
+         "tom_minus_engine": -5.051750000000538
+        }
+       ],
+       "engine": {
+        "activation_time": "2025-10-24T04:24:15+00:00",
+        "atr_1h": 21.411804490298472,
+        "atr_1m": 1.6422989492096494,
+        "beyond_external": null,
+        "c_med": 1.0587606202839743,
+        "cancel_reason": "S5_SHIFT_TRIGGERED",
+        "cancel_time": "2025-10-24T04:24:45+00:00",
+        "cond_direction": "UP",
+        "condition": "RANGE",
+        "condition_missing_minutes": 0,
+        "condition_tradable_minutes": 480,
+        "continuity_state": "CONTINUOUS",
+        "direction": "BUY",
+        "entry_model": "HVCS_S5_SHIFT",
+        "er_pro": null,
+        "event": "REJECTED",
+        "ext_extreme_at_decision": 4107.5,
+        "five_second_broken_price": 4109.120000000001,
+        "five_second_shift_level": 4109.130000000001,
+        "five_second_shift_time": "2025-10-24T04:24:45+00:00",
+        "five_second_sweep_time": "2025-10-24T04:24:10+00:00",
+        "five_second_swept_price": 4107.5,
+        "h_missing_minutes": 0,
+        "h_open": 4122.4400000000005,
+        "hvcs_minutes": 8,
+        "m1_hilo_armed_at_decision": true,
+        "n_legs": 4,
+        "oe_dir": "DOWN",
+        "oe_duration_min": 23.0,
+        "oe_extreme_time": "2025-10-24T04:23:00+00:00",
+        "oe_no_pullback": false,
+        "oe_opposite_wick": 0.06459170013387634,
+        "oe_origin_time": "2025-10-24T04:00:00+00:00",
+        "oe_size": 14.94000000000051,
+        "oe_size_atr1h": 0.6977459562910595,
+        "oe_two_sided": false,
+        "parent_structure_type": "HVCS",
+        "pos_oe_extreme": 0.03749023691746002,
+        "prior_setup_count": 0,
+        "q_break_by_q": true,
+        "q_open_utc": "2025-10-24T04:15:00+00:00",
+        "q_prev_closed_in_trade_direction": false,
+        "q_prev_high": 4123.405000000001,
+        "q_prev_low": 4115.709999999999,
+        "range_high": 4144.469999999999,
+        "range_low": 4106.06,
+        "rules": {
+         "ABL-D9-FINAL-PUSH": true,
+         "IMPL-REWARD": true,
+         "M1H-6A-1-HVCS-INTO-SHIFT": true,
+         "M1H-6A-2-PREV-15M-BROKEN-BY-Q": true,
+         "M1H-6A-3-NEW-EXTREME-IN-Q": true,
+         "M1H-COND-01": true,
+         "M1H-COND-02": true,
+         "M1H-COND-03": true,
+         "M1H-COND-04": false,
+         "M1H-LOC-01": true,
+         "M1H-OE-01": true,
+         "M1H-OE-02": false,
+         "M1H-OE-04a": true,
+         "M1H-OE-04b": true,
+         "M1H-TIME-01": true,
+         "NT_INCOMPLETE_H": true,
+         "NT_INCOMPLETE_H_OPEN": true,
+         "NT_ROLLOVER": true,
+         "NT_SYDNEY": true
+        },
+        "rules_failed": [
+         "M1H-COND-04",
+         "M1H-OE-02"
+        ],
+        "rules_not_evaluated": [],
+        "s5_t3_end": "BREAK",
+        "signal_id": "CBR1H_BASELINE_V1/A/20251024T0400/BUY/7",
+        "stop_anchor_at_shift": 4107.083500000001,
+        "stop_anchor_time": "2025-10-24T04:24:15+00:00",
+        "stop_buffer_price": 0.16422989492096496,
+        "structure_stop_anchor": 4107.4400000000005,
+        "sweep_bar_extreme": 4107.4400000000005,
+        "target_at_activation": 4114.9400000000005,
+        "target_at_decision": 4114.97,
+        "target_at_shift": 4114.761750000001,
+        "timestamp": "2025-10-24T04:24:15+00:00",
+        "timing30_state": "NOT_APPLICABLE",
+        "valid_until": "2025-10-24T04:52:00+00:00",
+        "variant": "A"
+       },
+       "hard": {
+        "core_structural_trigger": {
+         "class": "CANON_MISMATCH",
+         "met": false
+        },
+        "direction": {
+         "class": "BEHAVIORAL_MATCH",
+         "met": true
+        },
+        "extension_direction": {
+         "class": "BEHAVIORAL_MATCH",
+         "met": true
+        },
+        "model_family": {
+         "class": "BEHAVIORAL_MATCH",
+         "met": true
+        }
+       },
+       "how": "DIAGNOSTIC_FIRST_IN_ORDER"
+      },
+      "STRICT_COURSE:oe_origin=LAST_RESET": {
+       "dimensions": [
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": "CBR1H 5s shift",
+         "dim": 1,
+         "engine": {
+          "entry_model": "HVCS_S5_SHIFT",
+          "parent": "HVCS",
+          "variant": "A"
+         },
+         "name": "model",
+         "status": "MATCH"
+        },
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": "BUY",
+         "dim": 2,
+         "engine": "BUY",
+         "name": "direction",
+         "status": "MATCH"
+        },
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": [
+          {
+           "condition": "TRENDING_RANGE",
+           "direction": "DOWN"
+          },
+          {
+           "condition": "RANGE"
+          }
+         ],
+         "dim": 3,
+         "engine": {
+          "c_med": 1.0587606202839743,
+          "cond_direction": "UP",
+          "condition": "RANGE",
+          "n_legs": 4
+         },
+         "name": "condition",
+         "status": "MATCH"
+        },
+        {
+         "class": "UNRESOLVED_SPEC_AMBIGUITY",
+         "classification": {
+          "blocks_gate": false,
+          "evidence": {
+           "open_question": "direction governed by OQ-01, OQ-02"
+          },
+          "implementation_bug": false,
+          "primary": "UNRESOLVED_SPEC_AMBIGUITY",
+          "secondary": [],
+          "tags": []
+         },
+         "course": "DOWN",
+         "dim": 4,
+         "engine": "UP",
+         "name": "tr_direction",
+         "status": "MISMATCH"
+        },
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": "DOWN",
+         "dim": 5,
+         "engine": "DOWN",
+         "margin_usd": 13.975000000000364,
+         "name": "extension_direction",
+         "status": "MATCH"
+        },
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": "duration \u2265 20 min, extreme before the shift; course 20-30 min",
+         "dim": 6,
+         "engine": {
+          "oe_duration_min": 22.0,
+          "oe_extreme_time": "2025-10-24T04:23:00+00:00",
+          "oe_no_pullback": true,
+          "reference_time": "2025-10-24T04:24:45+00:00"
+         },
+         "name": "extension_timing",
+         "status": "MATCH"
+        },
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": "The :30 15m candle opened and pushed bearish for its first half (~7.5 min), taking out the previous 15m low",
+         "dim": 7,
+         "engine": {
+          "q_break_by_q": true,
+          "q_open_utc": "2025-10-24T04:15:00+00:00",
+          "q_prev_closed_in_trade_direction": false
+         },
+         "margin_usd": 8.269999999998618,
+         "name": "previous_15m_take",
+         "status": "MATCH"
+        },
+        {
+         "class": "BEHAVIORAL_MATCH",
+         "classification": null,
+         "course": "seconds shift (break of the seconds-chart high; he also calls it 'a bit of a high low entry')",
+         "dim": 8,
+         "engine": {
+          "cancel_reason": "S5_SHIFT_TRIGGERED",
+          "m1_hilo_armed_at_decision": true,
+          "s5_type3_direction": "BUY",
+          "shift_completed": true
+         },
+         "name": "shift_type",
+         "status": "MATCH"
+        },
+        {
+         "class": "CANON_MISMATCH",
+         "classification": {
+          "blocks_gate": false,
+          "evidence": {
+           "canon_evidence": "E1H-021, E1H-022; frozen selection D19-10 takes the first shift; course CX-TE1-1 cb_hour_timing: ~37 minutes into the hour; labelled a '30m Reversal' (30-45 min window) (00:11:31-00:11:47)"
+          },
+          "implementation_bug": false,
+          "primary": "CANON_MISMATCH",
+          "secondary": [],
+          "tags": []
+         },
+         "course": {
+          "tolerance_s": 60,
+          "tom_interval": [
+           "2025-10-24T04:37:00+00:00",
+           "2025-10-24T04:39:00+00:00"
+          ]
+         },
+         "dim": 9,
+         "engine": "2025-10-24T04:24:45+00:00",
+         "name": "shift_time",
+         "p3": {
+          "direction_agrees": true,
+          "distance_to_tom_interval_s": 735.0,
+          "equivalent": false,
+          "same_15m_candle": false
+         },
+         "status": "MISMATCH"
+        },
+        {
+         "adjusted_minus_engine": -4.298500000000786,
+         "class": "FEED_DIFFERENCE",
+         "classification": null,
+         "course": {
+          "delta_h": 0.015,
+          "tom_stop": 4102.8,
+          "tom_stop_minus_delta_h": 4102.785
+         },
+         "dim": 10,
+         "engine": {
+          "anchor_at_shift": 4107.083500000001,
+          "buffer_price": 0.16422989492096496,
+          "source": "STRUCTURE_TICK_MID_5S_EXTENSION_EXTREME"
+         },
+         "name": "stop_anchor",
+         "status": "FEED_DIFFERENCE",
+         "tom_minus_engine": -4.283500000000458
+        },
+        {
+         "adjusted_minus_engine": -5.066750000000866,
+         "class": "FEED_DIFFERENCE",
+         "classification": null,
+         "course": {
+          "concept": "FIFTY_PERCENT_OF_MOVE",
+          "tom_target": 4109.71
+         },
+         "dim": 11,
+         "engine": {
+          "concept": "50% of extension from H.open",
+          "target_at_shift": 4114.761750000001
+         },
+         "name": "target_concept",
+         "status": "FEED_DIFFERENCE",
+         "tom_minus_engine": -5.051750000000538
+        }
+       ],
+       "engine": {
+        "activation_time": "2025-10-24T04:24:15+00:00",
+        "atr_1h": 21.411804490298472,
+        "atr_1m": 1.6422989492096494,
+        "beyond_external": null,
+        "c_med": 1.0587606202839743,
+        "cancel_reason": "S5_SHIFT_TRIGGERED",
+        "cancel_time": "2025-10-24T04:24:45+00:00",
+        "cond_direction": "UP",
+        "condition": "RANGE",
+        "condition_missing_minutes": 0,
+        "condition_tradable_minutes": 480,
+        "continuity_state": "CONTINUOUS",
+        "direction": "BUY",
+        "entry_model": "HVCS_S5_SHIFT",
+        "er_pro": null,
+        "event": "REJECTED",
+        "ext_extreme_at_decision": 4107.5,
+        "five_second_broken_price": 4109.120000000001,
+        "five_second_shift_level": 4109.130000000001,
+        "five_second_shift_time": "2025-10-24T04:24:45+00:00",
+        "five_second_sweep_time": "2025-10-24T04:24:10+00:00",
+        "five_second_swept_price": 4107.5,
+        "h_missing_minutes": 0,
+        "h_open": 4122.4400000000005,
+        "hvcs_minutes": 8,
+        "m1_hilo_armed_at_decision": true,
+        "n_legs": 4,
+        "oe_dir": "DOWN",
+        "oe_duration_min": 22.0,
+        "oe_extreme_time": "2025-10-24T04:23:00+00:00",
+        "oe_no_pullback": true,
+        "oe_opposite_wick": 0.06459170013387634,
+        "oe_origin_time": "2025-10-24T04:01:00+00:00",
+        "oe_size": 14.94000000000051,
+        "oe_size_atr1h": 0.6977459562910595,
+        "oe_two_sided": false,
+        "parent_structure_type": "HVCS",
+        "pos_oe_extreme": 0.03749023691746002,
+        "prior_setup_count": 0,
+        "q_break_by_q": true,
+        "q_open_utc": "2025-10-24T04:15:00+00:00",
+        "q_prev_closed_in_trade_direction": false,
+        "q_prev_high": 4123.405000000001,
+        "q_prev_low": 4115.709999999999,
+        "range_high": 4144.469999999999,
+        "range_low": 4106.06,
+        "rules": {
+         "IMPL-REWARD": true,
+         "M1H-6A-1-HVCS-INTO-SHIFT": true,
+         "M1H-6A-2-PREV-15M-BROKEN-BY-Q": true,
+         "M1H-6A-3-NEW-EXTREME-IN-Q": true,
+         "M1H-COND-01": true,
+         "M1H-COND-02": true,
+         "M1H-COND-03": true,
+         "M1H-COND-04": false,
+         "M1H-LOC-01": true,
+         "M1H-OE-01": true,
+         "M1H-OE-02": true,
+         "M1H-OE-04a": true,
+         "M1H-OE-04b": true,
+         "M1H-TIME-01": true,
+         "NT_INCOMPLETE_H": true,
+         "NT_INCOMPLETE_H_OPEN": true,
+         "NT_ROLLOVER": true,
+         "NT_SYDNEY": true
+        },
+        "rules_failed": [
+         "M1H-COND-04"
+        ],
+        "rules_not_evaluated": [],
+        "s5_t3_end": "BREAK",
+        "signal_id": "CBR1H_BASELINE_V1/A/20251024T0400/BUY/7",
+        "stop_anchor_at_shift": 4107.083500000001,
+        "stop_anchor_time": "2025-10-24T04:24:15+00:00",
+        "stop_buffer_price": 0.16422989492096496,
+        "structure_stop_anchor": 4107.4400000000005,
+        "sweep_bar_extreme": 4107.4400000000005,
+        "target_at_activation": 4114.9400000000005,
+        "target_at_decision": 4114.97,
+        "target_at_shift": 4114.761750000001,
+        "timestamp": "2025-10-24T04:24:15+00:00",
+        "timing30_state": "NOT_APPLICABLE",
+        "valid_until": "2025-10-24T04:52:00+00:00",
+        "variant": "A"
+       },
+       "hard": {
+        "core_structural_trigger": {
+         "class": "CANON_MISMATCH",
+         "met": false
+        },
+        "direction": {
+         "class": "BEHAVIORAL_MATCH",
+         "met": true
+        },
+        "extension_direction": {
+         "class": "BEHAVIORAL_MATCH",
+         "met": true
+        },
+        "model_family": {
+         "class": "BEHAVIORAL_MATCH",
+         "met": true
+        }
+       },
+       "how": "DIAGNOSTIC_FIRST_IN_ORDER"
+      }
+     }
+    },
+    "B": {
+     "acceptance": {
+      "event": null,
+      "failed_rules": []
+     },
+     "armed_in_hour": 0,
+     "candidates_in_hour": 0,
+     "causality": {
+      "checked": false
+     },
+     "dimensions": [
+      {
+       "class": "CANON_MISMATCH",
+       "classification": {
+        "blocks_gate": false,
+        "evidence": {
+         "canon_evidence": "E1H-021, E1H-022; course CX-TE1-1 entry_model: seconds shift (break of the seconds-chart high; he also calls it 'a bit of a high low entry') (00:12:17-00:12:30)"
+        },
+        "implementation_bug": false,
+        "primary": "CANON_MISMATCH",
+        "secondary": [],
+        "tags": []
+       },
+       "course": "CBR1H 5s-shift candidate in H",
+       "dim": 1,
+       "engine": null,
+       "name": "model",
+       "status": "MISMATCH"
+      }
+     ],
+     "engine": null,
+     "example_verdict": "CANON_MISMATCH",
+     "hard": {
+      "core_structural_trigger": {
+       "class": "CANON_MISMATCH",
+       "met": false
+      },
+      "direction": {
+       "class": "CANON_MISMATCH",
+       "met": false
+      },
+      "extension_direction": {
+       "class": "CANON_MISMATCH",
+       "met": false
+      },
+      "model_family": {
+       "class": "CANON_MISMATCH",
+       "met": false
+      }
+     },
+     "how_selected": "NO_CANDIDATE",
+     "margins_usd": {},
+     "strict_course": {
+      "STRICT_COURSE:early_shift_guard=ALIGN_15M": {
+       "dimensions": [
+        {
+         "class": "CANON_MISMATCH",
+         "classification": {
+          "blocks_gate": false,
+          "evidence": {
+           "canon_evidence": "E1H-021, E1H-022; course CX-TE1-1 entry_model: seconds shift (break of the seconds-chart high; he also calls it 'a bit of a high low entry') (00:12:17-00:12:30)"
+          },
+          "implementation_bug": false,
+          "primary": "CANON_MISMATCH",
+          "secondary": [],
+          "tags": []
+         },
+         "course": "CBR1H 5s-shift candidate in H",
+         "dim": 1,
+         "engine": null,
+         "name": "model",
+         "status": "MISMATCH"
+        }
+       ],
+       "engine": null,
+       "hard": {
+        "core_structural_trigger": {
+         "class": "CANON_MISMATCH",
+         "met": false
+        },
+        "direction": {
+         "class": "CANON_MISMATCH",
+         "met": false
+        },
+        "extension_direction": {
+         "class": "CANON_MISMATCH",
+         "met": false
+        },
+        "model_family": {
+         "class": "CANON_MISMATCH",
+         "met": false
+        }
+       },
+       "how": "NO_CANDIDATE"
+      },
+      "STRICT_COURSE:early_shift_guard=FINAL_PUSH": {
+       "dimensions": [
+        {
+         "class": "CANON_MISMATCH",
+         "classification": {
+          "blocks_gate": false,
+          "evidence": {
+           "canon_evidence": "E1H-021, E1H-022; course CX-TE1-1 entry_model: seconds shift (break of the seconds-chart high; he also calls it 'a bit of a high low entry') (00:12:17-00:12:30)"
+          },
+          "implementation_bug": false,
+          "primary": "CANON_MISMATCH",
+          "secondary": [],
+          "tags": []
+         },
+         "course": "CBR1H 5s-shift candidate in H",
+         "dim": 1,
+         "engine": null,
+         "name": "model",
+         "status": "MISMATCH"
+        }
+       ],
+       "engine": null,
+       "hard": {
+        "core_structural_trigger": {
+         "class": "CANON_MISMATCH",
+         "met": false
+        },
+        "direction": {
+         "class": "CANON_MISMATCH",
+         "met": false
+        },
+        "extension_direction": {
+         "class": "CANON_MISMATCH",
+         "met": false
+        },
+        "model_family": {
+         "class": "CANON_MISMATCH",
+         "met": false
+        }
+       },
+       "how": "NO_CANDIDATE"
+      },
+      "STRICT_COURSE:oe_origin=LAST_RESET": {
+       "dimensions": [
+        {
+         "class": "CANON_MISMATCH",
+         "classification": {
+          "blocks_gate": false,
+          "evidence": {
+           "canon_evidence": "E1H-021, E1H-022; course CX-TE1-1 entry_model: seconds shift (break of the seconds-chart high; he also calls it 'a bit of a high low entry') (00:12:17-00:12:30)"
+          },
+          "implementation_bug": false,
+          "primary": "CANON_MISMATCH",
+          "secondary": [],
+          "tags": []
+         },
+         "course": "CBR1H 5s-shift candidate in H",
+         "dim": 1,
+         "engine": null,
+         "name": "model",
+         "status": "MISMATCH"
+        }
+       ],
+       "engine": null,
+       "hard": {
+        "core_structural_trigger": {
+         "class": "CANON_MISMATCH",
+         "met": false
+        },
+        "direction": {
+         "class": "CANON_MISMATCH",
+         "met": false
+        },
+        "extension_direction": {
+         "class": "CANON_MISMATCH",
+         "met": false
+        },
+        "model_family": {
+         "class": "CANON_MISMATCH",
+         "met": false
+        }
+       },
+       "how": "NO_CANDIDATE"
+      }
+     }
+    }
+   }
+  }
+ },
+ "negative_control": {
+  "all_candidates_with_shift_in_window": [],
+  "course_record_sha256": "05c64f63358a059012b22f47ec9945ff21d96513709769602fe5bfce13c4ab5d",
+  "eligible_signals": [],
+  "example_id": "CX-LT3-1",
+  "expected": "NO_ELIGIBLE_CANONICAL_SIGNAL",
+  "result": "NO_ELIGIBLE_CANONICAL_SIGNAL",
+  "window_utc": [
+   "2025-11-10T01:28:00+00:00",
+   "2025-11-10T01:36:00+00:00"
+  ]
+ },
+ "engine_run_determinism": {
+  "2025-10-21T01:00:00+00:00|['2025-10-20T00:00:00+00:00', '2025-10-21T03:00:00+00:00']|A|BASELINE_SPEC": {
+   "hashes": [
+    "7c0c2f9410754d8fb6720a44896d7a3410f1c1e99826e324374d09d6c5e51a6a",
+    "7c0c2f9410754d8fb6720a44896d7a3410f1c1e99826e324374d09d6c5e51a6a"
+   ],
+   "identical": true
+  },
+  "2025-10-21T01:00:00+00:00|['2025-10-20T00:00:00+00:00', '2025-10-21T03:00:00+00:00']|A|STRICT_COURSE:early_shift_guard=ALIGN_15M": {
+   "hashes": [
+    "9e4e085d449c335beea3347ce94030aef3863999fd6251fa28c6207303b934f4",
+    "9e4e085d449c335beea3347ce94030aef3863999fd6251fa28c6207303b934f4"
+   ],
+   "identical": true
+  },
+  "2025-10-21T01:00:00+00:00|['2025-10-20T00:00:00+00:00', '2025-10-21T03:00:00+00:00']|A|STRICT_COURSE:early_shift_guard=FINAL_PUSH": {
+   "hashes": [
+    "3557074e39057d057707b00c94eea36d3b1c6e4334e832761826ad662150c9be",
+    "3557074e39057d057707b00c94eea36d3b1c6e4334e832761826ad662150c9be"
+   ],
+   "identical": true
+  },
+  "2025-10-21T01:00:00+00:00|['2025-10-20T00:00:00+00:00', '2025-10-21T03:00:00+00:00']|A|STRICT_COURSE:oe_origin=LAST_RESET": {
+   "hashes": [
+    "5370bee1b31fc0c8f3f192426a884c24200f7e4bed878cf9f08b26a0cf023662",
+    "5370bee1b31fc0c8f3f192426a884c24200f7e4bed878cf9f08b26a0cf023662"
+   ],
+   "identical": true
+  },
+  "2025-10-21T01:00:00+00:00|['2025-10-20T00:00:00+00:00', '2025-10-21T03:00:00+00:00']|B|BASELINE_SPEC": {
+   "hashes": [
+    "1c01bc02bd13032394c3e34247448d5256c712389ea3209b3ae07ca2bf500d4c",
+    "1c01bc02bd13032394c3e34247448d5256c712389ea3209b3ae07ca2bf500d4c"
+   ],
+   "identical": true
+  },
+  "2025-10-21T01:00:00+00:00|['2025-10-20T00:00:00+00:00', '2025-10-21T03:00:00+00:00']|B|STRICT_COURSE:early_shift_guard=ALIGN_15M": {
+   "hashes": [
+    "1c01bc02bd13032394c3e34247448d5256c712389ea3209b3ae07ca2bf500d4c",
+    "1c01bc02bd13032394c3e34247448d5256c712389ea3209b3ae07ca2bf500d4c"
+   ],
+   "identical": true
+  },
+  "2025-10-21T01:00:00+00:00|['2025-10-20T00:00:00+00:00', '2025-10-21T03:00:00+00:00']|B|STRICT_COURSE:early_shift_guard=FINAL_PUSH": {
+   "hashes": [
+    "1c01bc02bd13032394c3e34247448d5256c712389ea3209b3ae07ca2bf500d4c",
+    "1c01bc02bd13032394c3e34247448d5256c712389ea3209b3ae07ca2bf500d4c"
+   ],
+   "identical": true
+  },
+  "2025-10-21T01:00:00+00:00|['2025-10-20T00:00:00+00:00', '2025-10-21T03:00:00+00:00']|B|STRICT_COURSE:oe_origin=LAST_RESET": {
+   "hashes": [
+    "1c01bc02bd13032394c3e34247448d5256c712389ea3209b3ae07ca2bf500d4c",
+    "1c01bc02bd13032394c3e34247448d5256c712389ea3209b3ae07ca2bf500d4c"
+   ],
+   "identical": true
+  },
+  "2025-10-24T04:00:00+00:00|['2025-10-20T00:00:00+00:00', '2025-10-24T06:00:00+00:00']|A|BASELINE_SPEC": {
+   "hashes": [
+    "4fee7b2ee930b090456b721ec946c60b92a84f7db944afd5023d59be1a4bc0da",
+    "4fee7b2ee930b090456b721ec946c60b92a84f7db944afd5023d59be1a4bc0da"
+   ],
+   "identical": true
+  },
+  "2025-10-24T04:00:00+00:00|['2025-10-20T00:00:00+00:00', '2025-10-24T06:00:00+00:00']|A|STRICT_COURSE:early_shift_guard=ALIGN_15M": {
+   "hashes": [
+    "4fee7b2ee930b090456b721ec946c60b92a84f7db944afd5023d59be1a4bc0da",
+    "4fee7b2ee930b090456b721ec946c60b92a84f7db944afd5023d59be1a4bc0da"
+   ],
+   "identical": true
+  },
+  "2025-10-24T04:00:00+00:00|['2025-10-20T00:00:00+00:00', '2025-10-24T06:00:00+00:00']|A|STRICT_COURSE:early_shift_guard=FINAL_PUSH": {
+   "hashes": [
+    "7deb1ea67293dfb478375445b6e70e02f9b5eb0dd8423b594907f1415422f8ec",
+    "7deb1ea67293dfb478375445b6e70e02f9b5eb0dd8423b594907f1415422f8ec"
+   ],
+   "identical": true
+  },
+  "2025-10-24T04:00:00+00:00|['2025-10-20T00:00:00+00:00', '2025-10-24T06:00:00+00:00']|A|STRICT_COURSE:oe_origin=LAST_RESET": {
+   "hashes": [
+    "c53a2b9c6e7cebeab1c35001238b77da728bab7b5185a36ce7f8d340b8cd153d",
+    "c53a2b9c6e7cebeab1c35001238b77da728bab7b5185a36ce7f8d340b8cd153d"
+   ],
+   "identical": true
+  },
+  "2025-10-24T04:00:00+00:00|['2025-10-20T00:00:00+00:00', '2025-10-24T06:00:00+00:00']|B|BASELINE_SPEC": {
+   "hashes": [
+    "1c01bc02bd13032394c3e34247448d5256c712389ea3209b3ae07ca2bf500d4c",
+    "1c01bc02bd13032394c3e34247448d5256c712389ea3209b3ae07ca2bf500d4c"
+   ],
+   "identical": true
+  },
+  "2025-10-24T04:00:00+00:00|['2025-10-20T00:00:00+00:00', '2025-10-24T06:00:00+00:00']|B|STRICT_COURSE:early_shift_guard=ALIGN_15M": {
+   "hashes": [
+    "1c01bc02bd13032394c3e34247448d5256c712389ea3209b3ae07ca2bf500d4c",
+    "1c01bc02bd13032394c3e34247448d5256c712389ea3209b3ae07ca2bf500d4c"
+   ],
+   "identical": true
+  },
+  "2025-10-24T04:00:00+00:00|['2025-10-20T00:00:00+00:00', '2025-10-24T06:00:00+00:00']|B|STRICT_COURSE:early_shift_guard=FINAL_PUSH": {
+   "hashes": [
+    "1c01bc02bd13032394c3e34247448d5256c712389ea3209b3ae07ca2bf500d4c",
+    "1c01bc02bd13032394c3e34247448d5256c712389ea3209b3ae07ca2bf500d4c"
+   ],
+   "identical": true
+  },
+  "2025-10-24T04:00:00+00:00|['2025-10-20T00:00:00+00:00', '2025-10-24T06:00:00+00:00']|B|STRICT_COURSE:oe_origin=LAST_RESET": {
+   "hashes": [
+    "1c01bc02bd13032394c3e34247448d5256c712389ea3209b3ae07ca2bf500d4c",
+    "1c01bc02bd13032394c3e34247448d5256c712389ea3209b3ae07ca2bf500d4c"
+   ],
+   "identical": true
+  },
+  "2025-11-10T01:00:00+00:00|['2025-11-07T00:00:00+00:00', '2025-11-10T03:00:00+00:00']|A|BASELINE_SPEC": {
+   "hashes": [
+    "c5de2b8d4787403443ad767f235b2613e4eb216eb9e369c112611926f7d0866f",
+    "c5de2b8d4787403443ad767f235b2613e4eb216eb9e369c112611926f7d0866f"
+   ],
+   "identical": true
+  },
+  "2025-11-10T01:00:00+00:00|['2025-11-07T00:00:00+00:00', '2025-11-10T03:00:00+00:00']|A|STRICT_COURSE:early_shift_guard=ALIGN_15M": {
+   "hashes": [
+    "00cdbaa1609f0a7ff9cc681df1caed0d6209216c3646ae0fa98d934f4651a756",
+    "00cdbaa1609f0a7ff9cc681df1caed0d6209216c3646ae0fa98d934f4651a756"
+   ],
+   "identical": true
+  },
+  "2025-11-10T01:00:00+00:00|['2025-11-07T00:00:00+00:00', '2025-11-10T03:00:00+00:00']|A|STRICT_COURSE:early_shift_guard=FINAL_PUSH": {
+   "hashes": [
+    "c22f06941c72664ead8fcf4ce66771bf38258bee5384ba7d1542cc83378621bc",
+    "c22f06941c72664ead8fcf4ce66771bf38258bee5384ba7d1542cc83378621bc"
+   ],
+   "identical": true
+  },
+  "2025-11-10T01:00:00+00:00|['2025-11-07T00:00:00+00:00', '2025-11-10T03:00:00+00:00']|A|STRICT_COURSE:oe_origin=LAST_RESET": {
+   "hashes": [
+    "b607f370d91ac54818e18d4ee0ad85f09fb808d053a7a389cadbd02655d304b1",
+    "b607f370d91ac54818e18d4ee0ad85f09fb808d053a7a389cadbd02655d304b1"
+   ],
+   "identical": true
+  },
+  "2025-11-10T01:00:00+00:00|['2025-11-07T00:00:00+00:00', '2025-11-10T03:00:00+00:00']|B|BASELINE_SPEC": {
+   "hashes": [
+    "1c01bc02bd13032394c3e34247448d5256c712389ea3209b3ae07ca2bf500d4c",
+    "1c01bc02bd13032394c3e34247448d5256c712389ea3209b3ae07ca2bf500d4c"
+   ],
+   "identical": true
+  },
+  "2025-11-10T01:00:00+00:00|['2025-11-07T00:00:00+00:00', '2025-11-10T03:00:00+00:00']|B|STRICT_COURSE:early_shift_guard=ALIGN_15M": {
+   "hashes": [
+    "1c01bc02bd13032394c3e34247448d5256c712389ea3209b3ae07ca2bf500d4c",
+    "1c01bc02bd13032394c3e34247448d5256c712389ea3209b3ae07ca2bf500d4c"
+   ],
+   "identical": true
+  },
+  "2025-11-10T01:00:00+00:00|['2025-11-07T00:00:00+00:00', '2025-11-10T03:00:00+00:00']|B|STRICT_COURSE:early_shift_guard=FINAL_PUSH": {
+   "hashes": [
+    "1c01bc02bd13032394c3e34247448d5256c712389ea3209b3ae07ca2bf500d4c",
+    "1c01bc02bd13032394c3e34247448d5256c712389ea3209b3ae07ca2bf500d4c"
+   ],
+   "identical": true
+  },
+  "2025-11-10T01:00:00+00:00|['2025-11-07T00:00:00+00:00', '2025-11-10T03:00:00+00:00']|B|STRICT_COURSE:oe_origin=LAST_RESET": {
+   "hashes": [
+    "1c01bc02bd13032394c3e34247448d5256c712389ea3209b3ae07ca2bf500d4c",
+    "1c01bc02bd13032394c3e34247448d5256c712389ea3209b3ae07ca2bf500d4c"
+   ],
+   "identical": true
+  }
+ }
+}
