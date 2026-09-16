@@ -1,7 +1,7 @@
 # Phase 13 Readiness Checklist
 
 **Doc:** CBR-READY-013 · **Created:** 2026-09-15 (owner ruling D18-12) · **Updated:** 2026-09-15 (D24, fidelity revision) ·
-**Status:** RUN EXECUTED (CBR-RUN-013B-2); report returned: FAIL under the frozen rules; awaiting owner verdict
+**Status:** FAIL (owner verdict D26). Phase 13R spec reconciliation package delivered; PC3 not created; Phase 14 not authorized
 
 Phase 13 is now **STRATEGY FIDELITY AND BEHAVIORAL PARITY** (D24; gate CBR-ACC-013). It may not run while any
 mandatory item in sections A or C is unchecked. Section B (V-1) is **supporting feed-fidelity validation** and no longer
@@ -60,7 +60,7 @@ and Dukascopy calibration days are preserved as supporting evidence.
 | 33 | [x] Behavioral-parity runs executed twice with identical result hashes (gate A) | CBR-RUN-013B-2: `f3905430…d063` both runs; spot-check defect 1 recorded in the post-run review | §2 |
 | 34 | [x] Every mismatch classified; no unexplained or open implementation mismatch (gates B, D, E) | all classified; no IMPLEMENTATION_BUG in PC2; checking-code defects 2-3 recorded | `reports/phase13-post-run-review.md` §5 |
 | 35 | [x] Feed differences documented (gate F) and gate G assessed under the P-5 rule | criterion 9 MET (O-1 reading) | §6, §7.1 |
-| 36 | [ ] Owner Phase 13 verdict issued (PASS / PASS WITH CONCERNS / FAIL) | Research Engineer report: **FAIL** (frozen rules); awaiting owner review | CBR-ACC-013 §7 |
+| 36 | [x] Owner Phase 13 verdict issued (PASS / PASS WITH CONCERNS / FAIL) | **FAIL** accepted by the owner (D26); PC2 permanently frozen as the failed candidate; Phase 13R spec reconciliation opened | `docs/governance/d26-phase13-fail-reconciliation.md` | CBR-ACC-013 §7 |
 
 **Current status (2026-09-15): NOT READY.** Mandatory: 20 of 28 checked (A 20/20; C 0/8). Supporting V-1: 1 of 8
 checked. Next step: owner approval of CBR-PROT-013B and P-1…P-8.

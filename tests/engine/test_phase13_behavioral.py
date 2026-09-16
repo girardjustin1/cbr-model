@@ -189,13 +189,12 @@ def test_end_to_end_pipeline_on_synthetic_data(monkeypatch):
     """Engine runs → evaluated candidates → dimensions → classification → negative control → verdict → Markdown, on a
     synthetic series with a synthetic 'course' record (crash and schema check; no course window is touched)."""
     import copy
+    from zoneinfo import ZoneInfo
 
     from cbr.data import feed_comparison as fc
     from cbr.data import price_series as ps
     from cbr.engine import phase13_report as rep
     from tests.test_feed_comparison import _walk
-
-    from zoneinfo import ZoneInfo
 
     s5 = _walk("2030-01-08 00:00", 2 * 24 * 720, seed=5)
     s1 = ps.rollup_structure(s5, "1min")[["open", "high", "low", "close", "tick_count", "hl_method", "price_role"]]
@@ -273,3 +272,91 @@ def test_htf_example_on_synthetic_exports():
     out["dxy_1h"] = fc.dxy_example(T("2030-01-09 09:00"), h1, s1, 3)
     md = rep.render_htf(pb.js({"run_id": "SYN", "generated_utc": "t", "examples": {"SYN": out}}))
     assert "SYN" in md and "4h bars" in md
+
+
+# ------------------------------------------------------------------ Phase 13R checker fixes (D26 item 11)
+
+def _row(shift=None, cancel="S5_SHIFT_TRIGGERED", anchor=4332.95, direction="BUY"):
+    """Minimal candidate row with the fields the dimension table reads."""
+    return pd.Series({
+        "signal_id": "CBR1H_BASELINE_V1/A/20251021T0100/BUY/6", "variant": "A", "direction": direction,
+        "entry_model": "HVCS_S5_SHIFT", "parent_structure_type": "HVCS", "event": "REJECTED", "rules_failed": [],
+        "rules_not_evaluated": [], "rules": {}, "timestamp": T("2025-10-21 01:38:40"),
+        "hour_open_utc": T("2025-10-21 01:00"), "condition": "RANGE", "cond_direction": "NONE", "c_med": 0.81,
+        "n_legs": 3, "condition_tradable_minutes": 480, "condition_missing_minutes": 0, "range_high": 4381.56,
+        "range_low": 4337.29, "pos_oe_extreme": 0.1, "er_pro": None, "beyond_external": None, "oe_dir": "DOWN",
+        "ext_extreme_at_decision": anchor, "oe_extreme_time": T("2025-10-21 01:37"), "oe_origin_time": T("2025-10-21 01:00"),
+        "oe_size": 35.8, "oe_size_atr1h": 1.2, "oe_duration_min": 37.0, "oe_no_pullback": False, "oe_two_sided": False,
+        "oe_opposite_wick": 0.1, "atr_1m": 4.0, "atr_1h": 30.0, "hvcs_minutes": 3, "continuity_state": "CONTINUOUS",
+        "q_open_utc": T("2025-10-21 01:30"), "q_prev_high": 4352.0, "q_prev_low": 4341.0, "q_break_by_q": True,
+        "q_prev_closed_in_trade_direction": False, "five_second_sweep_time": T("2025-10-21 01:38:35"),
+        "five_second_shift_level": 4340.185, "five_second_shift_time": None if shift is None else T(shift),
+        "five_second_swept_price": 4340.0, "five_second_broken_price": 4340.2, "sweep_bar_extreme": 4335.0,
+        "s5_t3_end": "BREAK", "m1_hilo_armed_at_decision": True, "activation_time": T("2025-10-21 01:38:40"),
+        "valid_until": T("2025-10-21 01:52"), "timing30_state": "NOT_APPLICABLE", "structure_stop_anchor": anchor,
+        "stop_anchor_time": T("2025-10-21 01:37"), "stop_anchor_source": "STRUCTURE_TICK_MID_5S_EXTENSION_EXTREME",
+        "stop_anchor_path": [], "stop_buffer_price": 0.4, "h_open": 4368.73, "target_at_decision": 4350.8,
+        "target_at_activation": 4350.8, "cancel_time": T("2025-10-21 01:52"), "cancel_reason": cancel,
+        "prior_setup_count": 0, "h_missing_minutes": 0})
+
+
+def test_shift_known_only_at_its_bar_close_in_the_causality_check():
+    """Fix A: a 5s shift bar that opens before the cut but closes after it is not knowable at the cut, so the
+    truncated run legitimately lacks it; the spot check must not report that as a causality difference."""
+    from cbr.data import price_series as ps
+    from cbr.engine import cbr1h
+    from tests.test_feed_comparison import _walk
+    s5 = _walk("2030-01-08 00:00", 720 * 30, seed=21)
+    s1 = ps.rollup_structure(s5, "1min")
+    p = load_cbr1h("A")
+    found = []
+    for h0 in pd.date_range(T("2030-01-08 06:00"), T("2030-01-09 06:00"), freq="1h"):
+        res = cbr1h.run_cbr1h(s1, s5, start=h0, end=h0 + pd.Timedelta(hours=1), variant="A", params=p)
+        shifted = res.candidates[res.candidates["five_second_shift_time"].notna()] if len(res.candidates) else []
+        if len(shifted):
+            found.append((h0, shifted.iloc[0]))
+        if len(found) == 2:
+            break
+    assert found, "synthetic series produced no completed 5s shift"
+    for h0, row in found:
+        checks = pb.causality_checks(s1, s5, h0, "A", p, row)
+        assert checks["all_identical"], (h0, checks)
+
+
+def test_timing_class_is_not_inherited_from_the_shift_type_class():
+    """Fix B: with no completed baseline shift and no P-3-equivalent shift under any alternative, dimension 9 is not
+    OWNER_BASELINE_CHOICE just because some alternative produced *a* shift."""
+    spec = pb.load_spec()
+    x = spec["examples"]["CX-LT1-1"]
+    course = {"example_id": "CX-LT1-1", "entry_model": {"value": "seconds shift"}, "cb_hour_timing": {"value": "39 min"},
+              "fifteen_min_cb": {"value": "broke the low"}, "mtf_model": {"value": "range"},
+              "overextension": {"value": "pushed bearish"}, "target_description": {"value": "50%"}}
+    base = _row(shift=None, cancel="OE_PULLBACK")
+    far = _row(shift="2025-10-21 01:29:05")                      # completed, but 10 minutes before Tom
+    dims = pb.dimensions(base, x, course, spec, load_cbr1h("A"), tau=0.2, delta_h=0.07, marg={},
+                         strict_eval={"STRICT_COURSE:oe_origin=LAST_RESET": far}, strict_same={}, dxy=None)
+    d8, d9 = next(d for d in dims if d["dim"] == 8), next(d for d in dims if d["dim"] == 9)
+    assert d8["class"] == parity.OWNER_BASELINE_CHOICE                    # a shift does exist under the alternative
+    assert d9["class"] == parity.CANON_MISMATCH                           # but it is not Tom's event
+    near = _row(shift="2025-10-21 01:39:20")
+    dims2 = pb.dimensions(base, x, course, spec, load_cbr1h("A"), tau=0.2, delta_h=0.07, marg={},
+                          strict_eval={"STRICT_COURSE:oe_origin=LAST_RESET": near}, strict_same={}, dxy=None)
+    assert next(d for d in dims2 if d["dim"] == 9)["class"] == parity.OWNER_BASELINE_CHOICE
+
+
+def test_stop_gap_beyond_the_feed_band_is_not_a_feed_difference():
+    """Fix C: a $25 gap with a $0.20 band is a structural difference, not a feed difference."""
+    spec = pb.load_spec()
+    x = spec["examples"]["CX-LT1-1"]
+    course = {"example_id": "CX-LT1-1", "entry_model": {"value": "s"}, "cb_hour_timing": {"value": "39"},
+              "fifteen_min_cb": {"value": "low"}, "mtf_model": {"value": "range"}, "overextension": {"value": "x"},
+              "target_description": {"value": "50%"}}
+    p = load_cbr1h("A")
+    far = _row(shift="2025-10-21 01:39:20", anchor=4358.5)                 # Tom's stop 4332.96 sits $25 below
+    dims = pb.dimensions(far, x, course, spec, p, tau=0.2, delta_h=0.0, marg={}, strict_eval={}, strict_same={}, dxy=None)
+    d10 = next(d for d in dims if d["dim"] == 10)
+    assert d10["status"] == pb.MISMATCH and d10["class"] == parity.CANON_MISMATCH
+    close = _row(shift="2025-10-21 01:39:20", anchor=4332.90)              # within the band
+    d10b = next(d for d in pb.dimensions(close, x, course, spec, p, tau=0.2, delta_h=0.0, marg={}, strict_eval={},
+                                         strict_same={}, dxy=None) if d["dim"] == 10)
+    assert d10b["status"] == pb.FEED

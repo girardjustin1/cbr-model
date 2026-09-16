@@ -584,12 +584,16 @@ def dimensions(row: pd.Series | None, x: dict, course: dict, spec: dict, p, *, t
         st9, k9 = FEED, None
     else:
         st9 = MISMATCH
+        # Phase 13R fix B: the timing class is decided on its own evidence. OWNER_BASELINE_CHOICE only when an
+        # alternative actually produces a D25-P3-equivalent shift; "a shift exists under LAST_RESET" is not enough.
         obc = [v for v, r in (strict_eval or {}).items() if r is not None
                and p3_equivalent(_t(r["five_second_shift_time"]), x, r["direction"] == x["direction"], spec)["equivalent"]]
-        k9 = k8 if not ok8 else classify(parity.MismatchEvidence(
+        k9 = classify(parity.MismatchEvidence(
             owner_baseline_choice=f"D25-P3-equivalent shift selected under {obc}" if obc else None,
-            canon_evidence=f"{', '.join(cl['canon_evidence']['shift'])}; frozen selection D19-10 takes the first shift; "
-                           f"course {_course_quote(course, 'cb_hour_timing')}"))
+            canon_evidence=f"{', '.join(cl['canon_evidence']['shift'])}; "
+                           + (f"no completed shift (cancel {row['cancel_reason']})" if not ok8
+                              else "frozen selection D19-10 takes the first shift")
+                           + f"; course {_course_quote(course, 'cb_hour_timing')}"))
     dims.append(dim_record(9, "shift_time", shift, {"tom_interval": x["tom_time_utc"], "tolerance_s": x["time_tolerance_s"]},
                            st9, k9, p3=eq))
     # 10 stop anchor concept
@@ -600,13 +604,18 @@ def dimensions(row: pd.Series | None, x: dict, course: dict, spec: dict, p, *, t
     if anchor is None or adj is None:
         k10 = classify(parity.MismatchEvidence(data_limitation="anchor or FOREXCOM hour offset unavailable"))
     else:
+        # Phase 13R fix C: a price gap is only a feed difference while it is of feed size. Beyond the measured band the
+        # engine anchor and Tom's stop reference are different structural levels, whichever side they sit on.
         beyond = adj <= anchor if x["direction"] == "BUY" else adj >= anchor
-        if beyond:
-            st10 = MATCH if abs(tom_stop - anchor) <= 0.01 else FEED
-        elif abs(adj - anchor) <= tau:
+        gap = abs(adj - anchor)
+        if beyond and abs(tom_stop - anchor) <= 0.01:
+            st10 = MATCH
+        elif gap <= tau:
             st10 = FEED
         else:
-            k10 = classify(canon("stop_anchor", "stop at a level inside the engine extension"))
+            k10 = classify(canon("stop_anchor", f"offset-adjusted gap {gap:.2f} exceeds the feed band {tau}: Tom's stop "
+                                                f"references a different structural level than the engine anchor "
+                                                f"({'beyond' if beyond else 'inside'} the engine extension)"))
     dims.append(dim_record(10, "stop_anchor", {"anchor_at_shift": anchor, "source": row["stop_anchor_source"],
                                                 "buffer_price": row["stop_buffer_price"]},
                            {"tom_stop": tom_stop, "delta_h": delta_h, "tom_stop_minus_delta_h": adj}, st10, k10,
@@ -713,9 +722,11 @@ def causality_checks(s1m, s5s, h0, variant, params, row: pd.Series | None) -> di
             want = dec_full[dec_full["timestamp"] <= cut].reset_index(drop=True).astype(str)
             got = cbr1h.decision_frame(r)
             got = got[got["timestamp"] <= cut].reset_index(drop=True).astype(str)
-            tw = trg_full[pd.to_datetime(trg_full["five_second_shift_time"], utc=True) <= cut].reset_index(drop=True).astype(str)
+            # Phase 13R fix A: a 5s shift is known at its bar CLOSE, so compare only shifts whose bar closed by the cut.
+            known = lambda f: pd.to_datetime(f["five_second_shift_time"], utc=True) + S5 <= cut          # noqa: B023
+            tw = trg_full[known(trg_full)].reset_index(drop=True).astype(str)
             tg = cbr1h.trigger_frame(r)
-            tg = tg[pd.to_datetime(tg["five_second_shift_time"], utc=True) <= cut].reset_index(drop=True).astype(str)
+            tg = tg[known(tg)].reset_index(drop=True).astype(str)
             res[kind] = {"decision_rows": len(want), "decision_identical": bool(want.equals(got)),
                          "trigger_rows": len(tw), "trigger_identical": bool(tw.equals(tg))}
         out[label] = {"cut": cut, **res}
