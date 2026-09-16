@@ -1,7 +1,7 @@
 # Phase 13 Readiness Checklist
 
 **Doc:** CBR-READY-013 · **Created:** 2026-09-15 (owner ruling D18-12) · **Updated:** 2026-09-15 (D24, fidelity revision) ·
-**Status:** FAIL (owner verdict D26). Phase 13R complete (D27, D28). **PC3 created and implemented under D29** (specs frozen, 22 new tests, PC2 untouched); PC3 **not scored**. Expanded parity set extracted; data acquisition in progress; CBR-PROT-013C proposed; Phase 14 not authorized
+**Status:** FAIL twice. PC2 failed Phase 13 (D26) and PC3 failed Phase 13C (CBR-RUN-013C-1, accepted in D32). Both candidates stay frozen and no PC4 exists. The D32 failure-diagnosis package (OQ-48, OQ-49, OQ-50; eight classified candidate changes, none applied) is with the owner; Phase 14 not authorized
 
 Phase 13 is now **STRATEGY FIDELITY AND BEHAVIORAL PARITY** (D24; gate CBR-ACC-013). It may not run while any
 mandatory item in sections A or C is unchecked. Section B (V-1) is **supporting feed-fidelity validation** and no longer
