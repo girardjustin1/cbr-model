@@ -26,9 +26,9 @@ confirmed by two rows that match existing examples). Outcome columns exist in th
 
 | Id | Journal time (local) | Hour (UTC) | Dir | MTF model | Condition | CB hour | Shifts | AOI | data_available | machine_testable |
 |---|---|---|---|---|---|---|---|---|---|---|
-| JM-2025-10-29 | 2025-10-29 7:14 PM | 2025-10-29 **08:00** | BUY | TRR PT (pro trending range) | Trending | 37 | LLTF (seconds) | 4h | fetch in progress | hour-level |
-| JM-2025-10-17 | 2025-10-17 12:53 PM | 2025-10-17 **01:00** | BUY | IFS (inverse fractal shift) | Volume | 52 | LLTF (seconds) + LTF (1m) | 1hr, 30m | fetch in progress | hour-level |
-| JM-2025-10-16 | 2025-10-16 11:41 AM | 2025-10-16 **00:00** | SELL | TRR CT (trending range counter) | Trending | 37 | LLTF (seconds) | — | fetch in progress | hour-level |
+| JM-2025-10-29 | 2025-10-29 7:14 PM | 2025-10-29 **08:00** | BUY | TRR PT (pro trending range) | Trending | 37 | LLTF (seconds) | 4h | **yes** | hour-level |
+| JM-2025-10-17 | 2025-10-17 12:53 PM | 2025-10-17 **01:00** | BUY | IFS (inverse fractal shift) | Volume | 52 | LLTF (seconds) + LTF (1m) | 1hr, 30m | **yes** | hour-level |
+| JM-2025-10-16 | 2025-10-16 11:41 AM | 2025-10-16 **00:00** | SELL | TRR CT (trending range counter) | Trending | 37 | LLTF (seconds) | — | **yes** | hour-level |
 
 **Corroboration:** the same table's rows "textbook · October 24, 2025 3:38 PM · XAU/USD · TRR CT · Ranging" and
 "new · October 21, 2025 12:39 PM · XAU/USD · TRR CT · Ranging" match CX-TE1-1 and CX-LT1-1 exactly, which is what
@@ -73,6 +73,8 @@ direction mix, and three MTF model families the current set lacks (TRR PT, IFS, 
 | 2025-10-28 | warm-up for JM-2025-10-29 |
 | 2025-10-29 | JM-2025-10-29 example day |
 
+**Acquisition complete (2026-09-16):** all five days, 24/24 hours each, 0 unresolved failures after 38 retries; the only empty hours are the daily break (21h UTC) and Friday's weekend close. Integrity: 0 duplicate timestamps, 0 bad spreads, monotonic, 0 missing scheduled-open minutes, deterministic rebuild and manifest hashes verified on every day.
+
 Five XAUUSD tick days, chosen as the minimum that still covers the 8-hour tradable condition window, ATR(1h,14)
 warm-up, the previous 15m candle and the 5-second trigger. No unrelated history. These dates sit inside the holdout
 window and are parity fixtures only, logged in `research/holdout-access-log.md`.
@@ -84,3 +86,9 @@ window and are parity fixtures only, logged in `research/holdout-access-log.md`.
 - Their source is Tom's own journal table (his record) captured in a Level-1 frame, which is weaker than a video
   walkthrough narrating the trade. They should be labelled as such in any report.
 - **No CBR15 machine example exists**, so CBR15-PC3 stays unscored.
+
+## F. Frozen manifest
+
+`research/examples/parity_set_manifest.json` · manifest hash `a3ee0bd6ba225ce6b89d8bc61fbefd227ce8097a3f6bfac2f9414e19cd81ea9c`
+· 4 ENTRY_LEVEL, 3 HOUR_LEVEL, 7 NARRATIVE_ONLY · guarded by `tests/engine/test_parity_set_manifest.py`, which fails if
+any source or market-data file changes after the freeze.
