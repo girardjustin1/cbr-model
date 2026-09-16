@@ -673,3 +673,18 @@ said to hold ~350 trades (P2G-37). The spoken and slide DXY figures disagree.
 4. **Sessions.** Baseline with no session filter (author's Asia/London windows tested as an ablation)?
 5. **Long recordings.** Course lessons or live sessions?
 6. ~~USDJPY~~: resolved, XAUUSD + DXY only.
+
+### OQ-46 · Trending-range direction test (raised in Phase 13R)
+- **Problem.** `M1H-COND-03` blocks every CX-LT3-2 candidate because the MTF direction is `NONE`: in the 8 h window the
+  last two highs fall (4027.53 → 4009.29) while the last two lows rise (3992.47 → 3994.55). Tom calls the same market
+  "very bullish, um, a little bit trendy" (V1H-live_trade_3_gold_win 00:01:07).
+- **Options.** A last two swing pairs (current) · B range position (where the hour opens inside the range) · C a
+  directional measure over the window · D another evidence-backed reading.
+- **Status.** `OPEN`. Raised by `docs/decisions/weekend-condition-window-note.md`; adjacent to OQ-01 / OQ-02.
+
+### OQ-47 · Does a type-3 sweep require a named external level? (raised in Phase 13R)
+- **Problem.** T3-B (re-anchoring) reproduces all three course triggers but produces 1.66× as many raw 5s type-3 events
+  as PC2. Restricting the sweep to a *named* external level (previous 15m candle high/low, range edge) would tighten it.
+- **Evidence.** "you want it to be beyond low timeframe, middle timeframe structure, beyond previous high or low"
+  (V1H-seconds_shift_1m_hilo_hvcs 00:01:47, L1); E1H-017.
+- **Status.** `OPEN`. Raised by `docs/decisions/t3-1-type3-sweep-evidence.md` (interpretation T3-C).
