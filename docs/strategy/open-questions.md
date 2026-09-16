@@ -680,11 +680,11 @@ said to hold ~350 trades (P2G-37). The spoken and slide DXY figures disagree.
   "very bullish, um, a little bit trendy" (V1H-live_trade_3_gold_win 00:01:07).
 - **Options.** A last two swing pairs (current) · B range position (where the hour opens inside the range) · C a
   directional measure over the window · D another evidence-backed reading.
-- **Status.** `OPEN`. Raised by `docs/decisions/weekend-condition-window-note.md`; adjacent to OQ-01 / OQ-02.
+- **Status.** `REVIEWED` (D28 §16): `docs/decisions/oq46-trending-range-direction-evidence.md` recommends classifying a directionless trending range as RANGE. Owner decision pending.
 
 ### OQ-47 · Does a type-3 sweep require a named external level? (raised in Phase 13R)
 - **Problem.** T3-B (re-anchoring) reproduces all three course triggers but produces 1.66× as many raw 5s type-3 events
   as PC2. Restricting the sweep to a *named* external level (previous 15m candle high/low, range edge) would tighten it.
 - **Evidence.** "you want it to be beyond low timeframe, middle timeframe structure, beyond previous high or low"
   (V1H-seconds_shift_1m_hilo_hvcs 00:01:47, L1); E1H-017.
-- **Status.** `OPEN`. Raised by `docs/decisions/t3-1-type3-sweep-evidence.md` (interpretation T3-C).
+- **Status.** `REVIEWED` (D28 §3): `docs/decisions/oq47-external-sweep-evidence.md` recommends option G (no separate external level on the sweep; externality stays in M1H-6A-2 and the LOC rules). Owner decision pending.

@@ -1,17 +1,14 @@
 # Proposed PC3 Change Set (NOT IMPLEMENTED)
 
-**Doc:** CBR-PC3-PROP · **Version:** v0.2 PROPOSED · **Date:** 2026-09-15 · **Rulings:** D26 §13, D27 §13
-**Status:** FOR OWNER DECISION. PC2 stays frozen and available for audit. **Nothing here is implemented.** No item was
-selected because it makes a course example pass. Groups per D27 §13: `CANON_CORRECTION` · `ASSUMPTION_CHANGE` ·
-`IMPLEMENTATION_FIX` · `DIAGNOSTIC_ONLY` · `NO_CHANGE`.
+**Doc:** CBR-PC3-PROP · **Version:** v0.3 FINAL PROPOSAL · **Date:** 2026-09-16 · **Rulings:** D26 §13, D27 §13, D28 §19-20
+**Status:** FOR OWNER APPROVAL. PC2 stays frozen and available for audit. **Nothing here is implemented.**
+Supersedes v0.2. Every item cites a completed evidence review; none was selected because it recovers a parity example.
 
-Supersedes v0.1. Changes in this version: D8 and the weekend window resolved to NO_CHANGE; COND-04 resolved to removal
-from canonical eligibility with diagnostics retained (D27 §3); HVCS items approved in principle (D27 §4-5); T3-1 and
-extension activation now have completed evidence reviews.
-
-Sources: `docs/decisions/t3-1-type3-sweep-evidence.md`, `extension-activation-evidence.md`,
-`d8-extension-anchor-evidence.md`, `cond04-prior-setup-evidence.md`, `hvcs-continuity-evidence.md`,
-`weekend-condition-window-note.md`, `reports/phase13r-cx-lt3-2-reconstruction.md`.
+Reviews behind this set: `t3-1-type3-sweep-evidence.md` · `oq47-external-sweep-evidence.md` ·
+`oq01-swing-confirmation-evidence.md` · `oq09-max-reversal-anchor.md` · `extension-activation-definition.md` ·
+`oe2-pullback-reference-evidence.md` · `oq46-trending-range-direction-evidence.md` · `hvcs-continuity-evidence.md` ·
+`cond04-prior-setup-evidence.md` · `d8-extension-anchor-evidence.md` · `weekend-condition-window-note.md` ·
+`research/examples/expanded-parity-set-inventory.md`.
 
 ---
 
@@ -19,63 +16,77 @@ Sources: `docs/decisions/t3-1-type3-sweep-evidence.md`, `extension-activation-ev
 
 | Id | Rule | Change | Evidence | Owner status |
 |---|---|---|---|---|
-| **H-1** | `M1H-6A-1` conforming candle | conform = respects the relevant high (DOWN) / low (UP) with directional progression; **drop the `close < open` requirement** | "we're respecting all the all the highs … consistently moving bearish" (V1H-seconds_shift_1m_hilo_hvcs 00:02:06, L1); "We're moving, respecting lows and highs" (VP2-1m_hilo_entries 00:05:19, L1); indecision candles allowed (VP2 00:04:49, L1) | **approved in principle (D27 §4)** |
-| **H-2** | `M1H-6A-1` run end | the run may end on the bar that sets the extension extreme even if that bar closes against the sequence | same passages; CX-TE1-1's extreme bar respects the high and closes bullish | **approved in principle (D27 §4)** |
-| **C04-1** | `M1H-COND-04` | **remove from canonical signal eligibility**; no prior-setup gate in CBR1H baseline | L1 states no hourly hard gate; the only hard clause is CBR15's slide; L2 gate statement is self-flagged as unevidenced | **ruled (D27 §3)** unless new L1 evidence appears before PC3 freeze |
-| **T3-1** | 5s type-3 semantics | a newly confirmed opposing swing **re-anchors** the trigger instead of disarming the pattern (full definition in §6 of the T3 review) | EP1-008 "take out **a** low" (unqualified); EP2-001/002/003 HILO re-anchors to the most recent candle extremes; Tom equates HILO and 5s shift | **pending owner decision** (this review) |
+| **T3-1** | 5s type-3 semantics | a newly confirmed opposing swing **re-anchors** the trigger instead of disarming the pattern | EP1-008 "take out **a** low" (unqualified); EP2-001/002/003 HILO re-anchors per candle; Tom equates HILO and 5s shift | principle **approved** (D28 §1); authorization pending OQ-47 + OQ-01 |
+| **OE-2** | `M1H-OE-02` reference | the 50% retrace is measured against **the extension as a whole** (deepest adverse excursion vs the extension to the extreme so far), re-evaluated at each decision, **no latch** | "Didn't correct 50% at all. Didn't even come close to that" (L1, applied to a chart); "on average correcting 50% of the previous move" | **new recommendation** |
+| **H-1** | `M1H-6A-1` conforming candle | conform = structural respect and directional progression; drop `close < open` | "respecting all the all the highs … consistently moving bearish"; "respecting lows and highs"; indecision candles allowed | **approved** (D27 §4) |
+| **H-2** | `M1H-6A-1` run end | the run may end on the bar that sets the extension extreme | same | **approved** (D27 §4) |
+| **C04-1** | `M1H-COND-04` | remove from canonical signal eligibility | no L1 hourly gate; L2 gate self-flagged as unevidenced; PC2 form unsatisfiable (0 raw setups in 60 hours) | **ruled** (D27 §3, D28 §13) |
+| **OQ-46** | condition taxonomy | when the correction ratio says trending range but no clear HH/HL (or LL/LH) sequence exists, classify **RANGE** rather than a directionless trending range | "this is more of a trending range **because we're making high highs and high lows**"; "still correcting … **but you're making clear** [higher highs/lows]" | **new recommendation** |
 
 ## 2. ASSUMPTION_CHANGE
 
-| Id | Parameter | Change | Evidence | Owner status |
+| Id | Parameter | Change | Classification note | Owner status |
 |---|---|---|---|---|
-| **ACT-1** | extension activation | replace the implicit `oe.activation_atr` activation with an evidence-linked concept: **B** (an early phase that is not yet the extension, range quoted as "seven to 15 minutes") or **D** (active once beyond the previous 15m high/low) | "the overextension can happen, can start around seven to 15 minutes in" (V1H-candle_behavior_timing 00:02:41, L1); "beyond previous high or low" (V1H-seconds_shift… 00:01:47, L1) | **pending owner choice of concept**; a number is required under B, not under D |
-| **OE-2** | `M1H-OE-02` reference | define "50% of the previous move" as the current leg rather than the whole move since the anchor | "on average correcting 50% of the previous move" (V1H-defining_a_good_extension 00:05:16, L1) | open; the other half of the activation problem |
-| **C04-4** | `prior.lookback_hours` | only if any prior-setup concept survives: use the L1 range (5-10+ h) rather than the assumed 10 h | V15-defining_ltf_range 00:07:00; V15-overview_methodology 00:04:26 | moot if C04-1 removes the gate |
+| **ACT-1** | extension activation | two-state model: `PRE_EXTENSION` → `EXTENSION_ACTIVE`; `EARLIEST_EXTENSION_ACTIVATION = minute 7` | ASSUMPTION implementing CANON timing guidance ("can start around seven to 15 minutes in") | **ruled** (D27 §8-9) |
+| **ACT-2** | qualifying directional push | **Q1**: price trades beyond the previous 15m candle's extreme in the extension direction, at or after minute 7 | no new indicator, no dollar/ATR floor; reuses the `M1H-6A-2` concept | **recommended** (alternative Q2 offered) |
+| **ACT-3** | `M1H-OE-01` duration | measure the 20 minutes from `extension_activation_time` | matches the "13 minute delay … only a seven minute extension" passage | **recommended** |
 
 ## 3. IMPLEMENTATION_FIX
 
 | Id | Item | Change | Owner status |
 |---|---|---|---|
-| **H-3** | `M1H-6A-1` evaluation instant | evaluate the HVCS sequence with information available at the canonical 5s shift decision time, never beyond it; add explicit causality tests | **approved (D27 §5)** |
-| **C04-3** | `raw_setup_armed` recursion | if any prior-setup concept is retained as a diagnostic, its object must not require every other rule to pass | follows from D27 §3 |
-| **T3-2** | `max_reversal` anchor | state explicitly whether the "immediately reverse" clock runs from the first sweep bar or the latest sweep extreme (changed one fixture result during prototyping) | open, OQ-09 |
+| **H-3** | HVCS evaluation instant | evaluate causally through the canonical 5s shift decision time; no information after the shift; add causality tests | **approved** (D27 §5) |
+| **OQ-09** | type-3 reversal timer | the `max_reversal` clock runs from the **latest update of the sweep extreme** ("take out high, **then** reverse, immediately reverse") | **recommended** |
+| **C04-3** | `raw_setup_armed` recursion | remove the recursive dependency now that COND-04 is diagnostic | follows D28 §13 |
+| **ACT-4** | new recorded fields | `pre_extension_start`, `extension_activation_time`, `extension_activation_reason`, `extension_origin_price`, `extension_extreme_path` | **ruled** (D27 §9) |
 
 ## 4. DIAGNOSTIC_ONLY
 
 | Id | Item | Treatment | Owner status |
 |---|---|---|---|
-| **C04-D** | prior-setup context | retain `prior_setup_exists`, `prior_setup_count`, `prior_setup_model`, `prior_setup_age` as diagnostics; L2 quality claims recorded as RESEARCH-DERIVED context, never a baseline veto; no outcome or profitability input | **ruled (D27 §3)** |
-| **D8-LR** | `oe_origin = LAST_RESET` | research/diagnostic only; never the canonical baseline | **ruled (D27 §1)** |
-| **HVCS-V** | LVCS / volume grading | unchanged: recorded, never a gate | existing |
+| **C04-D** | prior-setup context | `prior_setup_exists`, `prior_setup_count`, `prior_setup_age`, `prior_setup_model`; never canonical eligibility; no outcomes | **ruled** (D28 §13) |
+| **OQ-47-D** | "sweep extreme = hour extension extreme" | keep as the pre-registered D9 ablation `FINAL_PUSH`, not a canonical requirement | **recommended** (OQ-47 review) |
+| **D8-LR** | `oe_origin = LAST_RESET` | research/diagnostic only | **ruled** (D27 §1) |
+| **HVCS-V** | LVCS / volume grading | recorded, never a gate | existing |
+| **OQ-01-S** | swing-parameter sensitivity | record that under re-anchoring, k = 4 loses CX-LT3-2's trigger while CX-LT1-1 is insensitive | **new**, as an explicit spec risk |
 
 ## 5. NO_CHANGE
 
 | Id | Item | Reason | Owner status |
 |---|---|---|---|
-| **D8-1** | `oe_origin = HOUR_OPEN` | evidence supports the hour open as the normal reference; no canonical reset rule exists | **ruled (D27 §1)** |
-| **W-1** | condition-window basis | every window length in the quoted 5-12+ hour range reaches back across the weekend; the CX-LT3-2 condition mismatch is in the direction test, not the window | revised to NO_CHANGE (this package) |
-| **S-1** | candidate selection | signal generation must be reconciled first | **ruled (D26 §10, D27 §10)** |
-| **R-1** | `IMPL-REWARD`, `M1H-TIME-01`, `NT_*` | no evidence of a mismatch | — |
+| **D8-1** | `oe_origin = HOUR_OPEN` | canonical hourly reference; activation handles early noise separately | **ruled** (D27 §1, D28 §14) |
+| **OQ-01** | swing definition and k = 3 | no course definition exists; causal with 60-140 s margin on all three examples; changing it now would confound the T3-B decision | **recommended** |
+| **OQ-47** | external level on the sweep | externality already carried by `M1H-6A-2` and `M1H-LOC-01/02/03`; the one L1 statement about the trigger's own external need is a denial | **recommended (option G)** |
+| **W-1** | condition-window basis | every window in the 5-12+ h range reaches across the weekend; not the cause of the CX-LT3-2 condition | **ruled** (D28 §15) |
+| **S-1** | candidate selection | signal generation first | **ruled** (D27 §10, D28 §10) |
+| **R-1** | `IMPL-REWARD`, `M1H-TIME-01`, `NT_*`, CBR15 prior-setup rule | no evidence of a mismatch; CBR15's rule is separately evidenced | **ruled** (D28 §13) |
 
-## 6. New open questions raised by this package
+## 6. Combined effect on the three course examples (diagnostic, not a score)
 
-| Id | Question | Why it matters |
-|---|---|---|
-| **OQ-46 (proposed)** | Trending-range **direction** test: last two swing pairs, range position, or a directional measure? | blocks CX-LT3-2's condition (`M1H-COND-03`) independently of T3-1; OQ-01/OQ-02 adjacent |
-| **OQ-47 (proposed)** | Does the type-3 sweep require a **named external** level (previous 15m high/low, range edge) rather than any prior swing? | T3-C; would reduce T3-B's 1.66× extra trigger volume |
+| Layer | With this set |
+|---|---|
+| Extension direction, extreme, timing | already correct under PC2 |
+| `M1H-OE-02` | passes on all three (retraces 25% / 22% / 19% of the extension) |
+| `M1H-6A-1` | CX-TE1-1 no longer fails on the close-direction test; CX-LT1-1 no longer fails on the bar-close instant |
+| `M1H-COND-04` | no longer blocks (diagnostic) |
+| `M1H-COND-03` (CX-LT3-2) | no longer blocks; the hour reads as RANGE and `M1H-LOC-01` passes at position 1.69 |
+| 5s trigger | CX-LT1-1 4340.19, CX-TE1-1 4105.57, CX-LT3-2 4050.96 — Tom's three entries |
+| CX-LT3-1 negative control | still no eligible signal in the control window |
 
-## 7. Dependency order
+**This is a forecast from component diagnostics, not a parity run.** Nothing was run end-to-end, and candidate
+selection (unchanged) may still pick an earlier shift in a given hour.
 
-1. **T3-1** (decide the sweep semantics) — upstream of every candidate.
-2. **ACT-1 / OE-2** (when an extension exists and what its pullback is measured against).
-3. **H-1 / H-2 / H-3** (HVCS) — already approved in principle, implement with the rest.
-4. **C04-1 / C04-D / C04-3** (prior setup: remove the gate, keep diagnostics).
-5. **OQ-46** if CX-LT3-2's condition is to be reconciled.
+## 7. Dependency order for implementation
 
-## 8. Before PC3 is validated (D26 §14)
+1. T3-1 (+ OQ-09 timer anchor) — upstream of every candidate
+2. OE-2, then ACT-1/2/3 (activation)
+3. H-1 / H-2 / H-3
+4. C04-1 / C04-D / C04-3
+5. OQ-46
 
-An **expanded independent parity set** must be assembled first: positive type-3 examples, rejected/pass examples, both
-directions, multiple sessions, both CBR1H variants and CBR15 where available, with no trade outcomes. The T3-1 review
-records that today only CX-LT2-1/CX-LT2-2 (USDJPY, narrative only) and the two negative controls exist outside the
-three parity examples, and **no additional data-testable positive example** is available in the stored data. Assembling
-that set is itself a task the owner must authorize, because it may require new instruments or data.
+## 8. Validation requirement before PC3 is scored (D28 §14, §17-18)
+
+The expanded parity set must be assembled first. Today the machine-testable set is still 3 positive + 1 negative, all
+XAUUSD CBR1H Asia-session. `research/examples/expanded-parity-set-inventory.md` identifies four dated candidates for
+acquisition (three XAUUSD journal dates, one CBR15 walkthrough) requiring extraction work and owner-authorized data
+fetches, plus six narrative geometry cases.
