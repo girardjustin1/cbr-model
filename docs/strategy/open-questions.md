@@ -699,8 +699,13 @@ said to hold ~350 trades (P2G-37). The spoken and slide DXY figures disagree.
   the corpus.
 - **Separate finding.** PC3's rewrite silently dropped PC2's `hvcs.max_violations = 1` tolerance (an approved
   ASSUMPTION, still configured and loaded but never passed). Candidate fix **F-1**, classification IMPLEMENTATION_FIX.
-- **Status.** `UNRESOLVED_SPEC_AMBIGUITY`. Owner decision required on the anchor, the counting convention and F-1. No
-  threshold or convention may be selected because it recovers examples.
+- **Independent evidence (D33).** Two dated Level-1 examples outside the parity set — HX-1 (`V1H-seconds_shift_1m_hilo_hvcs`
+  @ 00:02:06, 2025-10-23) and HX-2 (`V1H-candle_behavior_extension` @ 00:03:38, 2025-10-29) — each contain exactly one
+  structural violation. PC3 measures **1** conforming minute on both; with `max_violations = 1` restored it measures
+  **9 and 10**. Every reading without the tolerance is INCONSISTENT with Tom's own examples.
+- **Status.** F-1 confirmed independently and approved (D33 §1). The **anchor** (extension extreme vs shift) remains
+  the one open question; counting convention and unit are recommended as status-quo ASSUMPTIONS
+  (`docs/decisions/oq48-hvcs-duration-evidence.md` §10). No convention was selected because it recovers examples.
 
 ### OQ-49 · Journal generalization and MTF model taxonomy (raised by CBR-RUN-013C-1, framed by D32 §9-14)
 - **Problem.** None of the three HOUR_LEVEL journal hours produced an eligible PC3 candidate, which is independently
@@ -721,4 +726,18 @@ said to hold ~350 trades (P2G-37). The spoken and slide DXY figures disagree.
   E1H-003 lets every step complete before the entry. Moving them to the shift flips CX-LT3-2's three failures to
   passes, and simultaneously flips JM-2025-10-17's `M1H-6A-2` / `M1H-6A-3` from pass to fail, because that shift sits
   1.6 minutes inside the next 15m candle.
-- **Status.** `OPEN`. Candidate change **F-4** (CANON_CORRECTION) is blocked on this question.
+- **Resolved recommendation (D33).** `docs/decisions/oq50-previous-15m-evaluation-time.md`: the take must be satisfied
+  **by the final 5s shift** (F-9, CANON_CORRECTION) for `M1H-6A-2` / `M1H-6A-3`, because every Level-1 statement makes it
+  a precondition of the *entry* and the type-3 arm has no counterpart in the course vocabulary. **Q** = the 15m candle
+  containing the final shift (F-10, ASSUMPTION), consistent with both independent examples.
+- **Status.** `AWAITING OWNER RULING`. F-4's wider scope (`M1H-LOC-*`, `M1H-OE-01`) is **withdrawn**: no Level-1
+  evidence supports moving them, and it was proposed from CX-LT3-2 alone.
+
+### OQ-51 · Should CBR1H contain a fractal-shift / inverse-fractal-shift context? (raised by D33 §10)
+- **Problem.** Level 1 (`V1H-mtf_model_types` 00:02:57, E1H-010/E1H-011) names **three** middle-timeframe models:
+  range, trending range (pro/counter) and fractal shift / inverse fractal shift. PC2 and PC3 implement the first two;
+  `condition.py` emits only `RANGE`, `TRENDING_RANGE`, `TREND`, `UNDEFINED`. Tom's journal records IFS trades as CBR
+  trades ("only been trading this model", `V1H-trade_journal` 00:00:27).
+- **Consequence.** JM-2025-10-17 was scored against a context the engine cannot represent (F-5, PARITY_SET_CORRECTION).
+- **Status.** `OPEN`. Extend CBR1H, or specify FS/IFS as a separate candidate model? Also open: what the journal's
+  `Condition = Volume` value means, and whether `Setup` or a separate column carries the MTF label.

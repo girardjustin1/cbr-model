@@ -1,0 +1,251 @@
+[
+ {
+  "bars": [
+   {
+    "close": 4089.75,
+    "high": 4091.54,
+    "low": 4089.65,
+    "open": 4091.07,
+    "progresses": true,
+    "respects": true,
+    "time": "05:18"
+   },
+   {
+    "close": 4089.08,
+    "high": 4090.49,
+    "low": 4088.95,
+    "open": 4089.7650000000003,
+    "progresses": true,
+    "respects": true,
+    "time": "05:19"
+   },
+   {
+    "close": 4087.0,
+    "high": 4089.365,
+    "low": 4086.71,
+    "open": 4089.13,
+    "progresses": true,
+    "respects": true,
+    "time": "05:20"
+   },
+   {
+    "close": 4086.81,
+    "high": 4088.21,
+    "low": 4085.955,
+    "open": 4087.0015000000003,
+    "progresses": true,
+    "respects": true,
+    "time": "05:21"
+   },
+   {
+    "close": 4085.38,
+    "high": 4087.025,
+    "low": 4084.8,
+    "open": 4086.85,
+    "progresses": true,
+    "respects": true,
+    "time": "05:22"
+   },
+   {
+    "close": 4085.45,
+    "high": 4086.575,
+    "low": 4084.29,
+    "open": 4085.37,
+    "progresses": false,
+    "respects": true,
+    "time": "05:23"
+   },
+   {
+    "close": 4085.825,
+    "high": 4086.21,
+    "low": 4085.325,
+    "open": 4085.45,
+    "progresses": false,
+    "respects": true,
+    "time": "05:24"
+   },
+   {
+    "close": 4086.565,
+    "high": 4086.915,
+    "low": 4084.6499999999996,
+    "open": 4085.81,
+    "progresses": false,
+    "respects": false,
+    "time": "05:25"
+   },
+   {
+    "close": 4084.83,
+    "high": 4086.57,
+    "low": 4084.05,
+    "open": 4086.525,
+    "progresses": true,
+    "respects": true,
+    "time": "05:26"
+   }
+  ],
+  "chart_date_local": "Thu 23 Oct '25, GMT+11",
+  "elapsed_minutes_sequence": 9.0,
+  "entry_time": "UNKNOWN (no entry price or time is stated in the lesson)",
+  "extension_direction": "DOWN",
+  "extension_extreme_candle": "05:26",
+  "first_qualifying_candle": "05:26",
+  "frame": "00:02:06-00:02:19",
+  "id": "HX-1",
+  "indecision_bars": 0,
+  "instrument": "XAUUSD",
+  "opposing_close_bars": 3,
+  "previous_15m_reference": 4088.64,
+  "previous_15m_window": [
+   "2025-10-23 05:00:00+00:00",
+   "2025-10-23 05:15:00+00:00"
+  ],
+  "q_takes_previous_15m_at": "05:20",
+  "quote": "i want this sort of high volume uh candle sequence so you see we're respecting all the all the highs we're just you know consistently moving bearish \u2026 and then we have a shift, take out a low into taking out a high",
+  "readings": {
+   "H-A": 1,
+   "H-B": 2,
+   "H-C": 1.0,
+   "H-D": 1,
+   "H-E": 2,
+   "H-F": 1,
+   "H-G": 9,
+   "H-H": 9
+  },
+  "sequence_visual_utc": [
+   "2025-10-23 05:18:00+00:00",
+   "2025-10-23 05:26:00+00:00"
+  ],
+  "shift_time": "05:27 (APPROXIMATE, read from the frame)",
+  "structural_violations_in_visible_sequence": 1,
+  "trade_direction": "BUY",
+  "type3_arm_time": "UNKNOWN (determining it would require running a candidate engine, which is not authorized)",
+  "type3_sweep_time": "UNKNOWN (same reason)",
+  "valid": true,
+  "video": "V1H-seconds_shift_1m_hilo_hvcs",
+  "visible_candle_count": 9,
+  "window_utc": [
+   "2025-10-23 05:05:00+00:00",
+   "2025-10-23 05:35:00+00:00"
+  ]
+ },
+ {
+  "bars": [
+   {
+    "close": 3963.565,
+    "high": 3965.24,
+    "low": 3963.2650000000003,
+    "open": 3965.24,
+    "progresses": true,
+    "respects": true,
+    "time": "02:29"
+   },
+   {
+    "close": 3962.9849999999997,
+    "high": 3964.9049999999997,
+    "low": 3962.165,
+    "open": 3963.59,
+    "progresses": true,
+    "respects": true,
+    "time": "02:30"
+   },
+   {
+    "close": 3960.2,
+    "high": 3963.395,
+    "low": 3959.44,
+    "open": 3963.035,
+    "progresses": true,
+    "respects": true,
+    "time": "02:31"
+   },
+   {
+    "close": 3957.145,
+    "high": 3961.335,
+    "low": 3954.4115,
+    "open": 3960.205,
+    "progresses": true,
+    "respects": true,
+    "time": "02:32"
+   },
+   {
+    "close": 3955.5,
+    "high": 3958.12,
+    "low": 3954.965,
+    "open": 3957.24,
+    "progresses": true,
+    "respects": true,
+    "time": "02:33"
+   },
+   {
+    "close": 3955.75,
+    "high": 3955.7614999999996,
+    "low": 3952.025,
+    "open": 3955.51,
+    "progresses": false,
+    "respects": true,
+    "time": "02:34"
+   },
+   {
+    "close": 3947.935,
+    "high": 3956.005,
+    "low": 3946.975,
+    "open": 3955.775,
+    "progresses": true,
+    "respects": false,
+    "time": "02:35"
+   },
+   {
+    "close": 3948.1450000000004,
+    "high": 3950.26,
+    "low": 3944.075,
+    "open": 3947.925,
+    "progresses": false,
+    "respects": true,
+    "time": "02:36"
+   }
+  ],
+  "chart_date_local": "Wed 29 Oct '25, GMT+11",
+  "elapsed_minutes_sequence": 8.0,
+  "entry_time": "UNKNOWN (no entry price or time is stated in the lesson)",
+  "extension_direction": "DOWN",
+  "extension_extreme_candle": "02:36",
+  "first_qualifying_candle": "02:36",
+  "frame": "00:03:38-00:03:47",
+  "id": "HX-2",
+  "indecision_bars": 0,
+  "instrument": "XAUUSD",
+  "opposing_close_bars": 2,
+  "previous_15m_reference": 3962.295,
+  "previous_15m_window": [
+   "2025-10-29 02:15:00+00:00",
+   "2025-10-29 02:30:00+00:00"
+  ],
+  "q_takes_previous_15m_at": "02:30",
+  "quote": "around the halfway point of this of this 15 minute candle you have the high volume counter sequence into a high low entry this would be like a second shift",
+  "readings": {
+   "H-A": 1,
+   "H-B": 2,
+   "H-C": 1.0,
+   "H-D": 1,
+   "H-E": 2,
+   "H-F": 3,
+   "H-G": 10,
+   "H-H": 10
+  },
+  "sequence_visual_utc": [
+   "2025-10-29 02:29:00+00:00",
+   "2025-10-29 02:36:00+00:00"
+  ],
+  "shift_time": "02:37 (APPROXIMATE, read from the frame)",
+  "structural_violations_in_visible_sequence": 1,
+  "trade_direction": "BUY",
+  "type3_arm_time": "UNKNOWN (determining it would require running a candidate engine, which is not authorized)",
+  "type3_sweep_time": "UNKNOWN (same reason)",
+  "valid": true,
+  "video": "V1H-candle_behavior_extension",
+  "visible_candle_count": 8,
+  "window_utc": [
+   "2025-10-29 02:15:00+00:00",
+   "2025-10-29 02:45:00+00:00"
+  ]
+ }
+]

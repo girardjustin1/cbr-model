@@ -72,9 +72,14 @@ and Dukascopy calibration days are preserved as supporting evidence.
 | 40 | [x] Scored run executed twice with identical result hashes | CBR-RUN-013C-1: `718efebd…caef` both runs | `reports/phase13c-run-manifest.json` |
 | 41 | [x] Every mismatch classified (22: 1 OWNER_BASELINE_CHOICE, 15 UNRESOLVED_SPEC_AMBIGUITY, 6 CANON_MISMATCH) | STEP 7 register | `reports/phase13c-parity.md` |
 | 42 | [x] Owner Phase 13C verdict issued | **FAIL** accepted by the owner (D32); PC3 frozen, no PC4 | `docs/governance/d32-phase13c-failure-diagnosis.md` |
-| 43 | [ ] Phase 13C failure diagnosis reviewed | package returned: OQ-48 (HVCS semantics), OQ-49 (journal scope), OQ-50 (evaluation instant), 8 classified candidate changes, none applied | D32 §4-6 |
+| 43 | [x] Phase 13C failure diagnosis reviewed | accepted (D33); F-1 approved as IMPLEMENTATION_FIX | `docs/governance/d32-phase13c-failure-diagnosis.md` |
+| 44 | [x] OQ-48 independent-evidence resolution | two dated Level-1 examples outside the parity set confirm F-1; anchor remains the one open question | `docs/decisions/oq48-hvcs-duration-evidence.md` §8-10 |
+| 45 | [x] OQ-50 evidence review and Q definition | take must be satisfied by the 5s shift (F-9); Q = the 15m candle containing the shift (F-10) | `docs/decisions/oq50-previous-15m-evaluation-time.md` |
+| 46 | [x] MTF model taxonomy and journal scope rulings | three MTF models, two implemented; JM-2025-10-17 out of scope, JM-2025-10-29 SOURCE_AMBIGUITY, JM-2025-10-16 confirmed | `docs/decisions/mtf-model-taxonomy.md` |
+| 47 | [ ] Corrected CBR1H parity set approved | proposal returned: 4 ENTRY_LEVEL + 1 HOUR_LEVEL may bind | `research/examples/cbr1h-parity-set-proposal.md` |
+| 48 | [ ] PC4 authorized | **NOT READY**: four owner rulings outstanding (HVCS anchor, OQ-50 scope, parity set, F-9/F-10/F-11) | `docs/governance/d33-evidence-resolution.md` §5 |
 
 **Current status (2026-09-16): NOT READY.** Mandatory: 20 of 28 checked (A 20/20; C 0/8). Supporting V-1: 1 of 8
 checked. PC3 scored parity **FAILED** (CBR-RUN-013C-1) and the FAIL is accepted (D32); PC3 stays frozen and no PC4
-exists. Next step: owner review of the failure-diagnosis package and rulings on OQ-48, OQ-49 and OQ-50 — in
-particular whether to restore `hvcs.max_violations` (candidate F-1, the only change ready for a ruling).
+exists. Next step: four owner rulings — the HVCS run anchor (OQ-48 §10), the OQ-50 scope, the recommended F-9/F-10/F-11, and
+the corrected parity set — after which PC4 can be specified in one pass with F-1 included.

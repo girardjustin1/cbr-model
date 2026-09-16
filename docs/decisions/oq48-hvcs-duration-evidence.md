@@ -100,3 +100,87 @@ Owner review of, in order: (1) whether the HVCS run is anchored at the extension
 entry 15m candle opens (§3 B); (2) whether "4+ mins" counts the first candle (§3 C); (3) whether `max_violations`
 should be restored as the ASSUMPTION it is recorded to be (§5). Each is a separate decision, and the evidence here
 supports none of them by itself. No change is proposed in this document.
+
+---
+
+# Part 2 — independent Level-1 examples and recommended ruling
+
+**Version:** v2.0 · **Date:** 2026-09-16 · **Ruling:** D33 §3-6 · Added after the owner approved F-1 and directed a
+broader evidence search. Measurements: `reports/oq48-independent-examples.md`.
+
+## 8. The independent examples found
+
+The Level-1 corpus was searched for every HVCS / high-volume-candle-sequence / 4-minute / push / indecision / HILO /
+seconds-shift reference outside the three parity cases. What it contains:
+
+| Id | Source | Date | Usable |
+|---|---|---|---|
+| **HX-1** | `V1H-seconds_shift_1m_hilo_hvcs` @ 00:02:06 — the lesson that *defines* the HVCS | chart legible: **Thu 23 Oct '25 GMT+11** → 2025-10-23 UTC | **yes**, XAUUSD, 1m data held |
+| **HX-2** | `V1H-candle_behavior_extension` @ 00:03:38 — "the high volume counter sequence into a high low entry" | chart legible: **Wed 29 Oct '25 GMT+11** → 2025-10-29 UTC | **yes**, XAUUSD, 1m data held |
+| HX-3 | `VP2-1m_hilo_entries` @ 00:05:14 — the annotated HVCS / LVCS pair | no date on the frame | geometry only |
+| HX-4 | `VP2-1m_hilo_entries` @ 00:04:49 — "this previous candle didn't do anything but it's more of an indecision candle" | no date | geometry only |
+| HX-5 | `V1H-1m_fractal_shift` @ 00:06:54 | **excluded**: gold ≈ 4 103-4 122, local 14:15-17:00 GMT+11 with the low ≈ 4 103.5 at ≈ 15:37 → almost certainly the same market event as CX-TE1-1 | not independent |
+| HX-6 | `V1H-live_trade_2_uj_loss` @ 00:23:11 | USDJPY, no data held; already the CX-LT2 narrative case | geometry only |
+
+Type-3 arm and sweep times are **UNKNOWN** for HX-1 and HX-2: recovering them would require running a candidate
+engine, which D33 §18 does not authorize. Entry times are **UNKNOWN**: neither lesson states one.
+
+## 9. What the two usable examples measure
+
+Both are sequences Tom presents as **valid** HVCSs, in his own words, on charts he is pointing at.
+
+| Reading | HX-1 (2025-10-23) | HX-2 (2025-10-29) | Verdict |
+|---|---|---|---|
+| H-A — PC3 today | **1** | **1** | **INCONSISTENT** |
+| H-B — inclusive count | 2 | 2 | INCONSISTENT |
+| H-C — elapsed to shift | 1.0 | 1.0 | INCONSISTENT |
+| H-D — run into the shift | 1 | 1 | INCONSISTENT |
+| H-E — H-D inclusive | 2 | 2 | INCONSISTENT |
+| H-F — run before the 15m open | 1 | 3 | INCONSISTENT |
+| **H-G — tolerance restored, extreme anchor** | **9** | **10** | **CONSISTENT** |
+| **H-H — tolerance restored, shift anchor** | **9** | **10** | **CONSISTENT** |
+
+The visible sequences are 9 and 8 candles long and each contains **exactly one** structural violation — a single
+higher high of $0.70 (HX-1, 05:25) and $0.25 (HX-2, 02:35) inside an obvious directional push. Each also contains
+opposing-close candles (3 and 2), which H-1 already allows.
+
+**This is the decisive result of the review.** PC3 as it stands measures **one minute** on the very sequence the course
+uses to define an HVCS. The only readings consistent with Tom's own examples are the two with
+`hvcs.max_violations = 1` restored — and the anchor makes **no difference** to either (H-G = H-H). The counting
+convention questions (C, F) also make no difference: 9 and 10 are far above 4 either way.
+
+Note that this confirmation is independent of the parity set: neither example is CX-LT1-1, CX-TE1-1 or CX-LT3-2, and
+F-1 was approved by the owner **before** these measurements existed.
+
+## 10. Recommended ruling (D33 §6)
+
+**10.1 The one evidence-driven change is F-1, already approved.** Restoring `max_violations = 1` is what the
+independent examples require, and it is an IMPLEMENTATION_FIX, not a new interpretation.
+
+**10.2 Everything else in OQ-48 stays an ASSUMPTION, resolved by the simplest deterministic choice.** After F-1, no
+available evidence discriminates the remaining questions, so under the D33 §6 standard each is recorded as an
+assumption and each is resolved by **keeping PC3's current behaviour**:
+
+| Question | Recommended assumption | Why this one |
+|---|---|---|
+| B — run anchor | the conforming run ends at the **extension-extreme bar known at the 5s shift** (current H-3 behaviour) | status quo; already causal; the examples cannot discriminate it (their extreme and shift are one minute apart) |
+| C — first candle | **not** counted (current) | status quo; irrelevant at 9-10 minutes |
+| F — unit | count of completed 1m candles (current) | status quo; equals elapsed minutes on gapless 1m bars |
+| I — continuity | `max_violations = 1` (F-1) | the configured value, restored, not re-chosen |
+
+Choosing the status quo is deliberate: it is the choice that cannot have been made to recover examples.
+
+**10.3 Disclosure, so the recommendation is not mistaken for a fix.** On the *parity* cases measured in D32, the
+recommended set (extreme anchor + tolerance) gives 6, 4 and **0** conforming minutes — CX-LT3-2's HVCS would still
+fail, because at its shift instant the extension-extreme bar itself breaks the respected side. The shift-anchored
+alternative (H-H) gives 6, 4 and 4. I am **not** recommending the anchor that turns CX-LT3-2 green, and the owner
+should know that is the consequence of the recommendation above.
+
+**10.4 The argument for the alternative, stated fairly.** The rule is named `M1H-6A-1-HVCS-INTO-**SHIFT**`, D19-6
+approved "the HVCS runs directly into the shift", and the master slide places the sequence before the entry rather
+than before the extreme. If the owner reads that as evidence for the anchor, the correct classification is
+CANON_CORRECTION and the ruling should say so explicitly — it would not be an assumption.
+
+**10.5 OQ-48 status after this review:** the duration *threshold* and the *conformity* test are settled (CANON, and
+H-1 respectively); the *continuity* question is settled by F-1; the *anchor* and *counting* questions remain
+ASSUMPTIONS and are recommended as above. OQ-48 can be closed on those terms, or kept open on the anchor alone.
