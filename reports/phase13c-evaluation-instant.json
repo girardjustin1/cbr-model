@@ -1,0 +1,282 @@
+{
+ "CX-LT1-1": {
+  "case_id": "CX-LT1-1",
+  "condition": "RANGE",
+  "decision": "2025-10-21 01:35:35+00:00",
+  "direction": "BUY",
+  "rules": {
+   "M1H-6A-1-HVCS-INTO-SHIFT": {
+    "decision": {
+     "detail": "1 conforming minutes ending 01:30 (needs \u2265 4)",
+     "pass": false
+    },
+    "shift": {
+     "detail": "3 conforming minutes ending 01:38 (needs \u2265 4)",
+     "pass": false
+    }
+   },
+   "M1H-6A-2-PREV-15M-BROKEN-BY-Q": {
+    "decision": {
+     "detail": "Q 01:30 takes Q\u22121's low: True; Q\u22121 closed in trade direction: False",
+     "pass": true
+    },
+    "shift": {
+     "detail": "Q 01:30 takes Q\u22121's low: True; Q\u22121 closed in trade direction: False",
+     "pass": true
+    }
+   },
+   "M1H-6A-3-NEW-EXTREME-IN-Q": {
+    "decision": {
+     "detail": "extension extreme 01:30 vs Q open 01:30",
+     "pass": true
+    },
+    "shift": {
+     "detail": "extension extreme 01:38 vs Q open 01:30",
+     "pass": true
+    }
+   },
+   "M1H-LOC-01": {
+    "decision": {
+     "detail": "extension extreme 4341.62 at 01:30 \u2192 range position 0.098",
+     "pass": true
+    },
+    "shift": {
+     "detail": "extension extreme 4332.95 at 01:38 \u2192 range position -0.098",
+     "pass": true
+    }
+   },
+   "M1H-OE-01": {
+    "decision": {
+     "detail": "23 min from activation (needs \u2265 20)",
+     "pass": true
+    },
+    "shift": {
+     "detail": "31 min from activation (needs \u2265 20)",
+     "pass": true
+    }
+   },
+   "M1H-OE-02": {
+    "decision": {
+     "detail": "deepest retracement ratio 0.286",
+     "pass": true
+    },
+    "shift": {
+     "detail": "deepest retracement ratio 0.223",
+     "pass": true
+    }
+   }
+  },
+  "shift": "2025-10-21 01:39:35+00:00",
+  "signal_id": "CBR1H_BASELINE_V1-PC3/A/20251021T0100/BUY/3"
+ },
+ "CX-LT3-2": {
+  "case_id": "CX-LT3-2",
+  "condition": "RANGE",
+  "decision": "2025-11-10 01:34:45+00:00",
+  "direction": "SELL",
+  "rules": {
+   "M1H-6A-1-HVCS-INTO-SHIFT": {
+    "decision": {
+     "detail": "1 conforming minutes ending 01:26 (needs \u2265 4)",
+     "pass": false
+    },
+    "shift": {
+     "detail": "0 conforming minutes ending 01:37 (needs \u2265 4)",
+     "pass": false
+    }
+   },
+   "M1H-6A-2-PREV-15M-BROKEN-BY-Q": {
+    "decision": {
+     "detail": "Q 01:30 takes Q\u22121's high: False; Q\u22121 closed in trade direction: False",
+     "pass": false
+    },
+    "shift": {
+     "detail": "Q 01:30 takes Q\u22121's high: True; Q\u22121 closed in trade direction: False",
+     "pass": true
+    }
+   },
+   "M1H-6A-3-NEW-EXTREME-IN-Q": {
+    "decision": {
+     "detail": "extension extreme 01:26 vs Q open 01:30",
+     "pass": false
+    },
+    "shift": {
+     "detail": "extension extreme 01:37 vs Q open 01:30",
+     "pass": true
+    }
+   },
+   "M1H-LOC-01": {
+    "decision": {
+     "detail": "extension extreme 4052.01 at 01:26 \u2192 range position 1.654",
+     "pass": true
+    },
+    "shift": {
+     "detail": "extension extreme 4053.43 at 01:37 \u2192 range position 1.691",
+     "pass": true
+    }
+   },
+   "M1H-OE-01": {
+    "decision": {
+     "detail": "16 min from activation (needs \u2265 20)",
+     "pass": false
+    },
+    "shift": {
+     "detail": "27 min from activation (needs \u2265 20)",
+     "pass": true
+    }
+   },
+   "M1H-OE-02": {
+    "decision": {
+     "detail": "deepest retracement ratio 0.129",
+     "pass": true
+    },
+    "shift": {
+     "detail": "deepest retracement ratio 0.186",
+     "pass": true
+    }
+   }
+  },
+  "shift": "2025-11-10 01:39:40+00:00",
+  "signal_id": "CBR1H_BASELINE_V1-PC3/A/20251110T0100/SELL/3"
+ },
+ "CX-TE1-1": {
+  "case_id": "CX-TE1-1",
+  "condition": "RANGE",
+  "decision": "2025-10-24 04:33:25+00:00",
+  "direction": "BUY",
+  "rules": {
+   "M1H-6A-1-HVCS-INTO-SHIFT": {
+    "decision": {
+     "detail": "0 conforming minutes ending 04:30 (needs \u2265 4)",
+     "pass": false
+    },
+    "shift": {
+     "detail": "2 conforming minutes ending 04:37 (needs \u2265 4)",
+     "pass": false
+    }
+   },
+   "M1H-6A-2-PREV-15M-BROKEN-BY-Q": {
+    "decision": {
+     "detail": "Q 04:30 takes Q\u22121's low: True; Q\u22121 closed in trade direction: False",
+     "pass": true
+    },
+    "shift": {
+     "detail": "Q 04:30 takes Q\u22121's low: True; Q\u22121 closed in trade direction: False",
+     "pass": true
+    }
+   },
+   "M1H-6A-3-NEW-EXTREME-IN-Q": {
+    "decision": {
+     "detail": "extension extreme 04:30 vs Q open 04:30",
+     "pass": true
+    },
+    "shift": {
+     "detail": "extension extreme 04:37 vs Q open 04:30",
+     "pass": true
+    }
+   },
+   "M1H-LOC-01": {
+    "decision": {
+     "detail": "extension extreme 4103.76 at 04:30 \u2192 range position -0.060",
+     "pass": true
+    },
+    "shift": {
+     "detail": "extension extreme 4102.88 at 04:37 \u2192 range position -0.083",
+     "pass": true
+    }
+   },
+   "M1H-OE-01": {
+    "decision": {
+     "detail": "23 min from activation (needs \u2265 20)",
+     "pass": true
+    },
+    "shift": {
+     "detail": "30 min from activation (needs \u2265 20)",
+     "pass": true
+    }
+   },
+   "M1H-OE-02": {
+    "decision": {
+     "detail": "deepest retracement ratio 0.217",
+     "pass": true
+    },
+    "shift": {
+     "detail": "deepest retracement ratio 0.208",
+     "pass": true
+    }
+   }
+  },
+  "shift": "2025-10-24 04:38:55+00:00",
+  "signal_id": "CBR1H_BASELINE_V1-PC3/A/20251024T0400/BUY/3"
+ },
+ "JM-2025-10-17": {
+  "case_id": "JM-2025-10-17",
+  "condition": "RANGE",
+  "decision": "2025-10-17 01:38:20+00:00",
+  "direction": "BUY",
+  "rules": {
+   "M1H-6A-1-HVCS-INTO-SHIFT": {
+    "decision": {
+     "detail": "3 conforming minutes ending 01:33 (needs \u2265 4)",
+     "pass": false
+    },
+    "shift": {
+     "detail": "4 conforming minutes ending 01:44 (needs \u2265 4)",
+     "pass": true
+    }
+   },
+   "M1H-6A-2-PREV-15M-BROKEN-BY-Q": {
+    "decision": {
+     "detail": "Q 01:30 takes Q\u22121's low: True; Q\u22121 closed in trade direction: False",
+     "pass": true
+    },
+    "shift": {
+     "detail": "Q 01:45 takes Q\u22121's low: False; Q\u22121 closed in trade direction: False",
+     "pass": false
+    }
+   },
+   "M1H-6A-3-NEW-EXTREME-IN-Q": {
+    "decision": {
+     "detail": "extension extreme 01:33 vs Q open 01:30",
+     "pass": true
+    },
+    "shift": {
+     "detail": "extension extreme 01:44 vs Q open 01:45",
+     "pass": false
+    }
+   },
+   "M1H-LOC-01": {
+    "decision": {
+     "detail": "extension extreme 4317.99 at 01:33 \u2192 range position 0.477",
+     "pass": false
+    },
+    "shift": {
+     "detail": "extension extreme 4279.07 at 01:44 \u2192 range position 0.148",
+     "pass": true
+    }
+   },
+   "M1H-OE-01": {
+    "decision": {
+     "detail": "26 min from activation (needs \u2265 20)",
+     "pass": true
+    },
+    "shift": {
+     "detail": "37 min from activation (needs \u2265 20)",
+     "pass": true
+    }
+   },
+   "M1H-OE-02": {
+    "decision": {
+     "detail": "deepest retracement ratio 0.384",
+     "pass": true
+    },
+    "shift": {
+     "detail": "deepest retracement ratio 0.205",
+     "pass": true
+    }
+   }
+  },
+  "shift": "2025-10-17 01:46:35+00:00",
+  "signal_id": "CBR1H_BASELINE_V1-PC3/A/20251017T0100/BUY/3"
+ }
+}

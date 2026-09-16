@@ -71,8 +71,10 @@ and Dukascopy calibration days are preserved as supporting evidence.
 | 39 | [x] CBR-PROT-013C approved and frozen with mappings M-1…M-7 | D31 | `docs/governance/d31-pc3-scored-parity-authorization.md` |
 | 40 | [x] Scored run executed twice with identical result hashes | CBR-RUN-013C-1: `718efebd…caef` both runs | `reports/phase13c-run-manifest.json` |
 | 41 | [x] Every mismatch classified (22: 1 OWNER_BASELINE_CHOICE, 15 UNRESOLVED_SPEC_AMBIGUITY, 6 CANON_MISMATCH) | STEP 7 register | `reports/phase13c-parity.md` |
-| 42 | [ ] Owner Phase 13C verdict issued | engine verdict **FAIL** (core trigger 0/3 eligible, hour level 0/3); returned for owner review | CBR-PROT-013C §3 A-7 |
+| 42 | [x] Owner Phase 13C verdict issued | **FAIL** accepted by the owner (D32); PC3 frozen, no PC4 | `docs/governance/d32-phase13c-failure-diagnosis.md` |
+| 43 | [ ] Phase 13C failure diagnosis reviewed | package returned: OQ-48 (HVCS semantics), OQ-49 (journal scope), OQ-50 (evaluation instant), 8 classified candidate changes, none applied | D32 §4-6 |
 
 **Current status (2026-09-16): NOT READY.** Mandatory: 20 of 28 checked (A 20/20; C 0/8). Supporting V-1: 1 of 8
-checked. PC3 scored parity returned **FAIL** under CBR-RUN-013C-1; PC3 is unchanged and awaits the owner's verdict.
-Next step: owner review of the Phase 13C report, and of OQ-48 / OQ-49 raised by the run.
+checked. PC3 scored parity **FAILED** (CBR-RUN-013C-1) and the FAIL is accepted (D32); PC3 stays frozen and no PC4
+exists. Next step: owner review of the failure-diagnosis package and rulings on OQ-48, OQ-49 and OQ-50 — in
+particular whether to restore `hvcs.max_violations` (candidate F-1, the only change ready for a ruling).

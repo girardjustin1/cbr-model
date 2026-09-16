@@ -689,21 +689,36 @@ said to hold ~350 trades (P2G-37). The spoken and slide DXY figures disagree.
   (V1H-seconds_shift_1m_hilo_hvcs 00:01:47, L1); E1H-017.
 - **Status.** `REVIEWED` (D28 §3): `docs/decisions/oq47-external-sweep-evidence.md` recommends option G (no separate external level on the sweep; externality stays in M1H-6A-2 and the LOC rules). Owner decision pending.
 
-### OQ-48 · What anchors and counts the HVCS run? (raised by CBR-RUN-013C-1)
-- **Problem.** `hvcs.min_minutes = 4` is labelled CANON (E1H-034, E1H-003), but PC3 measures the conforming run as the
-  candles that respect their predecessor **ending at the extension-extreme bar**, and counts the first candle of the
-  sequence as the reference rather than as a member. At Tom's own three entries the measured runs are 3, 2 and 0
-  minutes, so `M1H-6A-1-HVCS-INTO-SHIFT` rejects all three (`reports/phase13c-parity.md`).
-- **The two questions.** (a) **Anchor:** does the run end at the extension extreme, at the last push before the shift,
-  or at the shift itself? (b) **Counting:** does "4 candles" include the first candle of the sequence?
-- **Why it is not yet a canon mismatch.** Neither question was ruled on in D29's HVCS review, which settled only
-  conformity (H-1/H-2) and the evaluation instant (H-3).
-- **Status.** `OPEN`. Evidence review required before any change; no threshold or convention may be selected to
-  recover the examples.
+### OQ-48 · HVCS duration and counting semantics (raised by CBR-RUN-013C-1, framed by D32 §3-7)
+- **Problem.** `hvcs.min_minutes = 4` is CANON (E1H-003 "HVCS, 4+ mins"; E1H-034 "push immediately for at least four
+  minutes or more"), but no source states what starts the clock, what ends it, whether the first candle counts, or
+  whether the run must stay unbroken. PC3 measures a run ending at the extension-extreme bar and rejects all three
+  course positives (3, 2 and 0 minutes).
+- **Diagnosis.** `docs/decisions/oq48-hvcs-duration-evidence.md`: eight readings compared; the off-by-one readings
+  recover at most 1 of 3, so this is **not** an off-by-one. Seven of the ten D32 §4 questions are unanswerable from
+  the corpus.
+- **Separate finding.** PC3's rewrite silently dropped PC2's `hvcs.max_violations = 1` tolerance (an approved
+  ASSUMPTION, still configured and loaded but never passed). Candidate fix **F-1**, classification IMPLEMENTATION_FIX.
+- **Status.** `UNRESOLVED_SPEC_AMBIGUITY`. Owner decision required on the anchor, the counting convention and F-1. No
+  threshold or convention may be selected because it recovers examples.
 
-### OQ-49 · Do the journal hours support a CBR1H setup at all? (raised by CBR-RUN-013C-1)
-- **Problem.** None of the three HOUR_LEVEL journal hours produced an eligible PC3 candidate. 2025-10-16 is blocked by
-  the condition window (`M1H-COND-01/-02`), 2025-10-17 by location (`M1H-LOC-01`) plus an absent 5s shift, and on
-  2025-10-29 the engine produces **only SELL candidates** where the journal records a BUY.
-- **Status.** `OPEN`. The 2025-10-29 direction disagreement is the strongest signal and is classified CANON_MISMATCH;
-  the other two are assumption-dependent. Owner review required; no rule may be relaxed to recover them.
+### OQ-49 · Journal generalization and MTF model taxonomy (raised by CBR-RUN-013C-1, framed by D32 §9-14)
+- **Problem.** None of the three HOUR_LEVEL journal hours produced an eligible PC3 candidate, which is independently
+  sufficient to fail Phase 13C.
+- **Findings** (`docs/decisions/oq49-journal-generalization.md`): JM-2025-10-16 fails at the MTF condition classifier
+  (2 zig-zag legs where Tom records a trending range) and is correctly scoped and dated; JM-2025-10-17 is labelled
+  **IFS**, a middle-timeframe model with **no class in PC2 or PC3**, so it was scored against a model the engine does
+  not contain; JM-2025-10-29's journal time (minute 14) contradicts its own CB-hour column (37) and its frozen hour
+  holds no down-extension for a BUY to reverse.
+- **Sub-questions returned to the owner.** (1) Do FS/IFS belong to CBR1H at all? (2) What does the journal's
+  `Condition = Volume` mean? (3) Is the journal time the entry or the logging time — which column fixes the hour?
+- **Status.** `OPEN`. Per D32 §14, no strategy change may be proposed from a journal-case failure until the case is
+  shown to belong to the model, its source fields are sufficiently defined, and the engine is expected to reproduce
+  them. Candidate parity-set corrections F-5 / F-6 are recorded in D32, not applied.
+
+### OQ-50 · Which 15m candle anchors `Q` when the shift lands early in a new quarter? (raised by D32 §5.3)
+- **Problem.** PC3 evaluates `M1H-LOC-*`, `M1H-6A-2`, `M1H-6A-3` and `M1H-OE-01` at the instant the type 3 arms, while
+  E1H-003 lets every step complete before the entry. Moving them to the shift flips CX-LT3-2's three failures to
+  passes, and simultaneously flips JM-2025-10-17's `M1H-6A-2` / `M1H-6A-3` from pass to fail, because that shift sits
+  1.6 minutes inside the next 15m candle.
+- **Status.** `OPEN`. Candidate change **F-4** (CANON_CORRECTION) is blocked on this question.
