@@ -58,7 +58,7 @@ direction mix, and three MTF model families the current set lacks (TRR PT, IFS, 
 |---|---|
 | CX-LT1-1, CX-TE1-1, CX-LT3-2 positives | present (entry-level) |
 | CX-LT3-1 negative | present |
-| 2025-10-16, 2025-10-17, 2025-10-29 XAUUSD | **extracted** (hour-level); data fetch in progress |
+| 2025-10-16, 2025-10-17, 2025-10-29 XAUUSD | **extracted** (hour-level); data acquired and validated |
 | 2026-05 CBR15 example | **not extractable**: no stated entry; kept as narrative only |
 | CX-LT2-2 positive, CX-LT2-1 negative narrative | present |
 | Drawn type-3, HILO, extension good/bad | present |
