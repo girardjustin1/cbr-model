@@ -1,0 +1,76 @@
+# PC3 additions to config/strategy.yaml (owner ruling D29). The PC2 file is pinned and unchanged: every value here is
+# either new or an explicit PC3 override, and PC2 keeps its own values.
+spec_version: PC3
+supersedes: PC2
+ruling: D29
+
+extension:
+  earliest_activation_min:
+    value: 7
+    label: ASSUMPTION
+    source: [E1H-CBT-0241]          # V1H-candle_behavior_timing 00:02:41 "can start around seven to 15 minutes in"
+    reason: earliest permitted PRE_EXTENSION -> EXTENSION_ACTIVE transition; never a required activation time
+    research_range: [7, 10, 15]
+  qualifier:
+    value: PREV_15M_EXTREME          # Q1 (D29-6)
+    label: ASSUMPTION
+    source: [E1H-021, E1H-SS-0131]   # "the 15-minute candle to take out the previous high or low to be beyond structure"
+    research_range: [PREV_15M_EXTREME, MTF_SWING]
+  origin:
+    value: MOST_ADVERSE_BEFORE_ACTIVATION
+    label: ASSUMPTION
+    reason: the base the qualifying push started from; the hour open stays the canonical hourly reference (D8)
+  pullback_reference:
+    value: WHOLE_ACTIVE_EXTENSION    # OE-2 (D29-8)
+    label: CANON_CORRECTION
+    source: [E1H-018, E1H-DGE-0319]  # "Didn't correct 50% at all. Didn't even come close to that"
+    reason: deepest opposing retracement vs the active extension magnitude known at the decision time; no early latch
+  duration_from:
+    value: ACTIVATION                # D29-7
+    label: ASSUMPTION
+    source: [E1H-MET-4017]           # "13 minute delay ... it would only be like a seven minute extension"
+
+type3:
+  trigger:
+    value: REANCHOR_LATEST_OPPOSING  # T3-B (D29-1)
+    label: CANON_CORRECTION
+    source: [EP1-008, EP2-001, EP2-002, EP2-003]
+  reversal_timer_anchor:
+    value: LATEST_SWEEP_EXTREME      # OQ-09 (D29-4)
+    label: CANON_INTERPRETATION_FIX
+    source: [EP1-008]
+  external_level:
+    value: NONE                      # OQ-47 option G (D29-2)
+    label: NO_CHANGE
+    reason: externality stays in M1H-6A-2 and the location rules; FINAL_PUSH remains a research ablation
+
+hvcs:
+  conforming_candle:
+    value: STRUCTURAL_RESPECT        # H-1 / H-2 (D29-10)
+    label: CANON_CORRECTION
+    source: [E1H-SS-0206, EP2-1M-0519, EP2-1M-0449]
+    reason: respects the relevant high/low and progresses; close direction not required; indecision candles allowed
+  evaluation_instant:
+    value: SHIFT_DECISION_TIME       # H-3 (D29-11)
+    label: IMPLEMENTATION_FIX
+
+prior_setup:
+  cbr1h_gate:
+    value: DIAGNOSTIC_ONLY           # D29-12
+    label: CANON_CORRECTION
+    reason: no Level-1 hourly gate; PC2's recursive form was unsatisfiable (0 raw setups in 60 hours)
+  cbr15_gate:
+    value: UNCHANGED                 # D29-13
+    label: NO_CHANGE
+
+condition:
+  directionless_trending_range:
+    value: FALLBACK_TO_RANGE         # OQ-46 (D29-14)
+    label: CANON_CORRECTION
+    source: [E1H-WDC-0158, E1H-WDC-0304]
+
+unchanged_from_pc2:
+  oe_origin: HOUR_OPEN               # D8, D29-15
+  condition_window_basis: TRADABLE   # W-1, D29-16
+  candidate_selection: parity.select_candidate   # D29-17
+  swing: {k: 3.0, definition: ATR_ZIGZAG}        # OQ-01, D29-3
