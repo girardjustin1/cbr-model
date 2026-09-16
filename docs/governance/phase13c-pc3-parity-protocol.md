@@ -1,8 +1,9 @@
 # Phase 13C PC3 Parity Protocol (FINAL PROPOSAL)
 
-**Doc:** CBR-PROT-013C · **Version:** v1.0 **PROPOSED** · **Date:** 2026-09-16 · **Rulings:** D29 §25, D30 §12-15
-**Gate:** CBR-ACC-013C · **Status:** NOT APPROVED, NOT EXECUTED. PC3 exists, is frozen and has **never been scored**
-against any parity case. Nothing here runs until the owner approves this protocol and the §10 decisions.
+**Doc:** CBR-PROT-013C · **Version:** v1.1 **APPROVED** · **Date:** 2026-09-16 · **Rulings:** D29 §25, D30 §12-15, **D31**
+**Gate:** CBR-ACC-013C · **Status:** APPROVED for scored execution by owner ruling D31
+(`d31-pc3-scored-parity-authorization.md`), which also settles the §10 decisions and adds the pre-declared scoring
+mappings M-1…M-7. Run id **CBR-RUN-013C-1**. Frozen with D31 before execution.
 
 Inherited unchanged: the two parity views, deterministic answer-independent candidate selection, the mismatch taxonomy
 and its order, structural-event equivalence (D25-P3), the feed-band method (D25-P4), DXY as descriptive only.
@@ -86,14 +87,15 @@ Geometry consistency only: CONSISTENT / INCONSISTENT / NOT_DETERMINABLE. Never a
 |---|---|
 | **A-1** | **ENTRY_LEVEL positives:** all three must match hard dimensions 1, 2, 4 and 8 (model family, direction, extension direction, core trigger) unless a pre-existing approved mismatch class applies (FEED_DIFFERENCE by D25-P3; OWNER_BASELINE_CHOICE by D8/D9). This preserves the previous requirement |
 | **A-2** | **ENTRY_LEVEL positives, remaining hard dimensions** (3, 5, 6, 7, 9): each mismatch is classified and reported; an unclassified mismatch is a FAIL |
-| **A-3** | **HOUR_LEVEL positives:** each case is `HOUR_MATCH` when the declared hour contains an eligible candidate in the stated direction, `HOUR_MISMATCH` otherwise. Model family, condition and timing bucket are reported per case and classified when they differ. **No threshold is proposed for how many of the three must match**: the owner sets it, because three journal-sourced cases are a small and newly added sample |
+| **A-3** | **HOUR_LEVEL positives (D31-7/8):** `HOUR_MATCH` only when **every** source-supported field agrees (existence, direction, model family per M-3, condition per M-4, timing bucket per M-5). Threshold, frozen by D31-8: **3/3** supports a clean PASS · **2/3** caps the verdict at PASS WITH CONCERNS · **0/3 or 1/3 is a FAIL** |
 | **A-4** | **Negative:** CX-LT3-1 must produce no eligible candidate in its window. A signal there is a FAIL unless classified as an approved mismatch class |
 | **A-5** | **Gate A/B:** the complete run is repeated with identical result hashes; PC3 and PC2 hashes unchanged; the full suite passes on the run commit |
 | **A-6** | **Selection:** `CANDIDATE_SELECTION_MISMATCH` never counts as a trigger failure (§4) and is returned for owner review |
 | **A-7** | **Verdict:** PASS only if A-1, A-4 and A-5 hold with no unclassified mismatch and no concern; PASS WITH CONCERNS if they hold with documented classified mismatches; FAIL if a hard dimension fails without an approved class, an implementation bug is open, or determinism fails |
 
-**Owner must set before execution:** the A-3 threshold, and whether HOUR_LEVEL results can affect the overall verdict
-at all or are reported as supporting evidence only.
+**Set by D31:** the A-3 threshold above; HOUR_LEVEL results **do** bind the verdict, under that separate threshold.
+The pre-declared mappings M-1…M-7 in D31 resolve the accepted-condition sets, the OQ-46 interaction on CX-LT3-2, the
+journal model/condition/timing mappings and the definition of structural-event existence.
 
 ## 4. Candidate selection (D30-15)
 
@@ -150,3 +152,5 @@ both result hashes) · a mismatch register · a selection register.
 | C-5 | Confirm CBR15 stays out of scope |
 | C-6 | Confirm the parity set is frozen as inventoried (manifest hash `a3ee0bd6…`), including cases PC3 may fail |
 | C-7 | Authorize the scored run, which is the only step that lets PC3 see the parity cases |
+
+**All C-1…C-7 decisions were made in D31; this protocol is approved and executed as CBR-RUN-013C-1.**
