@@ -688,3 +688,22 @@ said to hold ~350 trades (P2G-37). The spoken and slide DXY figures disagree.
 - **Evidence.** "you want it to be beyond low timeframe, middle timeframe structure, beyond previous high or low"
   (V1H-seconds_shift_1m_hilo_hvcs 00:01:47, L1); E1H-017.
 - **Status.** `REVIEWED` (D28 §3): `docs/decisions/oq47-external-sweep-evidence.md` recommends option G (no separate external level on the sweep; externality stays in M1H-6A-2 and the LOC rules). Owner decision pending.
+
+### OQ-48 · What anchors and counts the HVCS run? (raised by CBR-RUN-013C-1)
+- **Problem.** `hvcs.min_minutes = 4` is labelled CANON (E1H-034, E1H-003), but PC3 measures the conforming run as the
+  candles that respect their predecessor **ending at the extension-extreme bar**, and counts the first candle of the
+  sequence as the reference rather than as a member. At Tom's own three entries the measured runs are 3, 2 and 0
+  minutes, so `M1H-6A-1-HVCS-INTO-SHIFT` rejects all three (`reports/phase13c-parity.md`).
+- **The two questions.** (a) **Anchor:** does the run end at the extension extreme, at the last push before the shift,
+  or at the shift itself? (b) **Counting:** does "4 candles" include the first candle of the sequence?
+- **Why it is not yet a canon mismatch.** Neither question was ruled on in D29's HVCS review, which settled only
+  conformity (H-1/H-2) and the evaluation instant (H-3).
+- **Status.** `OPEN`. Evidence review required before any change; no threshold or convention may be selected to
+  recover the examples.
+
+### OQ-49 · Do the journal hours support a CBR1H setup at all? (raised by CBR-RUN-013C-1)
+- **Problem.** None of the three HOUR_LEVEL journal hours produced an eligible PC3 candidate. 2025-10-16 is blocked by
+  the condition window (`M1H-COND-01/-02`), 2025-10-17 by location (`M1H-LOC-01`) plus an absent 5s shift, and on
+  2025-10-29 the engine produces **only SELL candidates** where the journal records a BUY.
+- **Status.** `OPEN`. The 2025-10-29 direction disagreement is the strongest signal and is classified CANON_MISMATCH;
+  the other two are assumption-dependent. Owner review required; no rule may be relaxed to recover them.

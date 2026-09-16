@@ -19,6 +19,40 @@ from cbr.engine.phase13c_run import (
 TAXONOMY = ["DATA_LIMITATION", "FEED_DIFFERENCE", "FEED_DEPENDENT_SIGNAL_DIFFERENCE", "EXECUTION_DEPENDENT",
             "OWNER_BASELINE_CHOICE", "UNRESOLVED_SPEC_AMBIGUITY", "IMPLEMENTATION_BUG", "CANON_MISMATCH",
             "CANDIDATE_SELECTION_MISMATCH"]
+AMBIGUOUS, CANON = "UNRESOLVED_SPEC_AMBIGUITY", "CANON_MISMATCH"
+# STEP 7 (D31-17). Each blocking rule is classified by what its failure actually depends on. A rule whose threshold or
+# reference instant is a carried ASSUMPTION (D30-16) cannot be called a canon mismatch, because canon never fixed the
+# quantity that failed. A rule resting entirely on CANON-labelled parameters and a ruled-on reference is CANON_MISMATCH.
+RULE_CLASS = {
+    "M1H-COND-01": (AMBIGUOUS, "tradable-time condition window is a carried ASSUMPTION (D30-16)"),
+    "M1H-COND-02": (AMBIGUOUS, "same condition window assumption"),
+    "M1H-OE-00-ACTIVE": (AMBIGUOUS, "minute-7 earliest activation and the Q1 qualifier are ASSUMPTIONS (D29-16/17)"),
+    "M1H-OE-01": (AMBIGUOUS, ("the 20-minute minimum is CANON but is measured from the assumed activation instant, "
+                              "so the failure is inseparable from the minute-7 assumption")),
+    "M1H-OE-02": (CANON, "pullback_frac 0.50 is CANON and the whole-active-extension reference was approved in D29"),
+    "M1H-OE-04a": (AMBIGUOUS, "two_sided_frac is an ASSUMPTION (OQ-08)"),
+    "M1H-OE-04b": (AMBIGUOUS, "oe min_size_atr is an ASSUMPTION (OQ-08)"),
+    "M1H-6A-1-HVCS-INTO-SHIFT": (AMBIGUOUS, ("min_minutes = 4 is CANON, but neither the end anchor of the conforming "
+                                             "run (PC3 ends it at the extension-extreme bar) nor whether the first "
+                                             "candle of the sequence is counted was ever ruled on; measured runs "
+                                             "were 3, 2 and 0 minutes")),
+    "M1H-6A-2-PREV-15M-BROKEN-BY-Q": (CANON, "previous-15m take is CANON and was not re-opened in PC3"),
+    "M1H-6A-3-NEW-EXTREME-IN-Q": (CANON, "new-extreme-in-Q is CANON and was not re-opened in PC3"),
+    "M1H-LOC-01": (CANON, "range_extreme 0.75 is CANON (E15-015, E1H-002)"),
+    "M1H-LOC-02": (CANON, "pro_er band is CANON (E1H-012, E15-015)"),
+    "M1H-LOC-03": (CANON, "counter-trend location is CANON"),
+    "IMPL-REWARD": (AMBIGUOUS, "the minimum reward ratio is an IMPL-labelled implementation rule, not canon"),
+    "NO_TRIGGER": (CANON, "no 5s type-3 shift was produced inside the entry window at all"),
+}
+
+
+def classify(rules: list[str]) -> tuple[str, list[str]]:
+    """First applicable class in the frozen taxonomy order, with the reasons that produced it."""
+    seen = [(RULE_CLASS.get(r, (CANON, "unmapped rule: treated as a canon mismatch"))) for r in rules] or \
+           [(CANON, "no rule recorded")]
+    best = min(seen, key=lambda x: TAXONOMY.index(x[0]))[0]
+    return best, sorted({f"`{r}` — {RULE_CLASS.get(r, (CANON, 'unmapped'))[1]}" for r in rules
+                         if RULE_CLASS.get(r, (CANON, ""))[0] == best})
 
 
 def write_reports() -> dict:
@@ -30,9 +64,17 @@ def write_reports() -> dict:
     register = []
     for cid in ("CX-LT1-1", "CX-TE1-1", "CX-LT3-2"):
         c = cases[cid]
+        blocking = (c["scored_candidate"] or {}).get("rules_failed_at_trigger") or []
         for d in c["dimensions"]:
             if d["status"] == "MISMATCH":
-                register.append({"case": cid, "dimension": f"{d['n']} {d['name']}", "class": d["class"],
+                rules = (d["engine"] or {}).get("failed_rules") if isinstance(d["engine"], dict) else None
+                if d["n"] == 3:             # M-2: pre-declared as an owner baseline choice, not a canon mismatch
+                    klass, why = "OWNER_BASELINE_CHOICE", [("M-2: PC3's approved OQ-46 correction (D29-14) "
+                                                            "classifies this hour RANGE where D25-P6 named "
+                                                            "TRENDING_RANGE UP")]
+                else:
+                    klass, why = classify(rules if rules else blocking)
+                register.append({"case": cid, "dimension": f"{d['n']} {d['name']}", "class": klass, "reasons": why,
                                  "engine": d["engine"], "expected": d["expected"], "note": d["note"]})
         if c["selection"]["classification"]:
             register.append({"case": cid, "dimension": "candidate selection",
@@ -40,9 +82,19 @@ def write_reports() -> dict:
                              "engine": c["selection"]["frozen_selection_ids"],
                              "expected": c["selection"]["matching_ids"], "note": None})
     for cid in ("JM-2025-10-16", "JM-2025-10-17", "JM-2025-10-29"):
-        for f in cases[cid]["fields"]:
+        c = cases[cid]
+        want = next(f["expected"] for f in c["fields"] if f["field"] == "direction")
+        same_dir = [x for x in c["all_candidates"] if x["direction"] == want]
+        if same_dir:
+            blocking = sorted({r for x in same_dir for r in (x["rules_failed_at_trigger"] or [])}
+                              | {"NO_TRIGGER" for x in same_dir if x["event_at_trigger"] == "NO_TRIGGER"
+                                 and not x["rules_failed_at_trigger"]})
+            klass, why = classify(blocking)
+        else:
+            klass, why = CANON, [f"the engine produced no {want} candidate at all in the hour"]
+        for f in c["fields"]:
             if f["status"] == "MISMATCH":
-                register.append({"case": cid, "dimension": f["field"], "class": "CANON_MISMATCH",
+                register.append({"case": cid, "dimension": f["field"], "class": klass, "reasons": why,
                                  "engine": f["engine"], "expected": f["expected"], "note": f["note"]})
     payload = {"run_id": RUN_ID, "protocol": "CBR-PROT-013C v1.1", "ruling": "D31",
                "generated_utc": datetime.now(UTC).replace(microsecond=0).isoformat(),
@@ -119,9 +171,14 @@ def markdown(p: dict) -> str:
         L += [f"Scored candidate: `{sc['signal_id']}` (eligible: {_yn(c['scored_candidate_eligible'])})" if sc
               else "**No candidate of any kind in the hour.**", "",
               "| # | Dimension | Engine | Source | Status | Class |", "|---|---|---|---|---|---|"]
+        classes = {m["dimension"]: m["class"] for m in p["mismatch_register"] if m["case"] == cid}
         for d in c["dimensions"]:
+            klass = classes.get("{} {}".format(d["n"], d["name"]), "—")
             L.append(f"| {d['n']} | {d['name']} | `{json.dumps(d['engine'])[:110]}` | "
-                     f"`{json.dumps(d['expected'])[:70]}` | {d['status']} | {d['class'] or '—'} |")
+                     f"`{json.dumps(d['expected'])[:70]}` | {d['status']} | {klass} |")
+        L += ["", ("Dimension 1 compares model *family*: the engine value is the variant's entry-model id, and the "
+                   "family is CBR1H in every case. Classes are the STEP 7 classifications, explained in the mismatch "
+                   "register below.")]
         sel = c["selection"]
         L += ["", (f"**Selection (D31-12).** Structural event exists (strict): "
                    f"{_yn(sel['structural_event_exists'])}. D25-P3-equivalent candidates regardless of eligibility: "
@@ -154,16 +211,35 @@ def markdown(p: dict) -> str:
     L += ["## Narrative / geometry set (never a machine pass count)", "",
           "| Case | Assessment | Reason |", "|---|---|---|"]
     L += [f"| {k} | {x['assessment']} | {x['reason']} |" for k, x in p["narrative"].items()]
-    L += ["", "## Mismatch register", ""]
+    L += ["", "## Mismatch register (STEP 7)", ""]
     if p["mismatch_register"]:
         L += ["| Case | Dimension | Class | Engine | Source |", "|---|---|---|---|---|"]
         L += [f"| {m['case']} | {m['dimension']} | {m['class']} | `{json.dumps(m['engine'])[:80]}` | "
               f"`{json.dumps(m['expected'])[:60]}` |" for m in p["mismatch_register"]]
+        counts = {}
+        for m in p["mismatch_register"]:
+            counts[m["class"]] = counts.get(m["class"], 0) + 1
         L += ["", "Taxonomy order applied: " + " → ".join(TAXONOMY) + ".",
-              "Every mismatch above is classified; none is unclassified."]
+              "By class: " + ", ".join(f"{k} {n}" for k, n in sorted(counts.items(), key=lambda x: TAXONOMY.index(x[0])))
+              + ". Every mismatch is classified; none is unclassified.", "",
+              ("**Why each class was assigned.** A rule whose failing quantity is a carried ASSUMPTION (D30-16) "
+               "cannot be reported as a canon mismatch, because canon never fixed that quantity. A rule resting "
+               "only on CANON-labelled parameters with a ruled-on reference instant is a canon mismatch."), "",
+              ("For an HOUR_LEVEL case the class is taken across every same-direction candidate in the hour, at the "
+               "least severe applicable class. That is deliberately the most forgiving reading: if any candidate in "
+               "the right direction was blocked only by an assumption-dependent rule, the missing setup is reported "
+               "as assumption-dependent rather than as a canon mismatch. Where the engine produced no candidate in "
+               "the journal's direction at all, the class is CANON_MISMATCH."), "",
+              "| Blocking rule | Class | Reason |", "|---|---|---|"]
+        L += [f"| `{r}` | {k} | {why} |" for r, (k, why) in RULE_CLASS.items()]
+        L += ["", "Reasons applied per case:", ""]
+        L += [f"- **{m['case']} / {m['dimension']}** → {m['class']}: " +
+              "; ".join(x.replace("`", "") for x in m["reasons"]) for m in p["mismatch_register"] if m.get("reasons")]
     else:
         L.append("No mismatches.")
-    L += ["", "## Concerns", ""] + ([f"- {x}" for x in v["concerns"]] or ["- none"])
+    L += ["", "## Concerns", "",
+          ("The class shown inline below is the placeholder severity the frozen runner records for any mismatch; the "
+           "STEP 7 classification above supersedes it."), ""] + ([f"- {x}" for x in v["concerns"]] or ["- none"])
     L += ["", "## Limits of this run (CBR-PROT-013C §9)", "",
           f"- Machine set: {set_counts} — XAUUSD only, CBR1H only.",
           "- The three HOUR_LEVEL cases come from Tom's journal table in a Level-1 frame and carry no prices.",

@@ -62,5 +62,17 @@ and Dukascopy calibration days are preserved as supporting evidence.
 | 35 | [x] Feed differences documented (gate F) and gate G assessed under the P-5 rule | criterion 9 MET (O-1 reading) | §6, §7.1 |
 | 36 | [x] Owner Phase 13 verdict issued (PASS / PASS WITH CONCERNS / FAIL) | **FAIL** accepted by the owner (D26); PC2 permanently frozen as the failed candidate; Phase 13R spec reconciliation opened | `docs/governance/d26-phase13-fail-reconciliation.md` | CBR-ACC-013 §7 |
 
-**Current status (2026-09-15): NOT READY.** Mandatory: 20 of 28 checked (A 20/20; C 0/8). Supporting V-1: 1 of 8
-checked. Next step: owner approval of CBR-PROT-013B and P-1…P-8.
+## D. PC3 scored-parity gate (D31, CBR-PROT-013C v1.1)
+
+| # | Item | Status | Reference |
+|---|---|---|---|
+| 37 | [x] PC3 created, implemented and frozen (`7032f400…`); PC2 untouched (`4dadc8b9…`) | D29 / D30 | `docs/strategy/parity-candidates/CBR1H_BASELINE_V1-PC3.yaml` |
+| 38 | [x] Expanded parity set frozen (`a3ee0bd6…`, 4 ENTRY_LEVEL + 3 HOUR_LEVEL + 7 NARRATIVE_ONLY) | D30-11 | `research/examples/parity_set_manifest.json` |
+| 39 | [x] CBR-PROT-013C approved and frozen with mappings M-1…M-7 | D31 | `docs/governance/d31-pc3-scored-parity-authorization.md` |
+| 40 | [x] Scored run executed twice with identical result hashes | CBR-RUN-013C-1: `718efebd…caef` both runs | `reports/phase13c-run-manifest.json` |
+| 41 | [x] Every mismatch classified (22: 1 OWNER_BASELINE_CHOICE, 15 UNRESOLVED_SPEC_AMBIGUITY, 6 CANON_MISMATCH) | STEP 7 register | `reports/phase13c-parity.md` |
+| 42 | [ ] Owner Phase 13C verdict issued | engine verdict **FAIL** (core trigger 0/3 eligible, hour level 0/3); returned for owner review | CBR-PROT-013C §3 A-7 |
+
+**Current status (2026-09-16): NOT READY.** Mandatory: 20 of 28 checked (A 20/20; C 0/8). Supporting V-1: 1 of 8
+checked. PC3 scored parity returned **FAIL** under CBR-RUN-013C-1; PC3 is unchanged and awaits the owner's verdict.
+Next step: owner review of the Phase 13C report, and of OQ-48 / OQ-49 raised by the run.
