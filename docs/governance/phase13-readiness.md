@@ -1,7 +1,7 @@
 # Phase 13 Readiness Checklist
 
 **Doc:** CBR-READY-013 · **Created:** 2026-09-15 (owner ruling D18-12) · **Updated:** 2026-09-15 (D24, fidelity revision) ·
-**Status:** NOT READY
+**Status:** **PHASE 13 CLOSED (D37) — RESEARCH-SUFFICIENT WITH DOCUMENTED FIDELITY CONCERNS.** The scored parity record is unchanged and stays FAIL for PC2 (CBR-RUN-013B-2), PC3 (CBR-RUN-013C-1) and PC4 (CBR-RUN-013D-1). PC4 is promoted to the frozen `CBR1H_BASELINE_V1` research specification; strategy logic is locked; **Phase 14A is authorized** and blocked only on ten execution rulings
 
 Phase 13 is now **STRATEGY FIDELITY AND BEHAVIORAL PARITY** (D24; gate CBR-ACC-013). It may not run while any
 mandatory item in sections A or C is unchecked. Section B (V-1) is **supporting feed-fidelity validation** and no longer
@@ -53,14 +53,50 @@ and Dukascopy calibration days are preserved as supporting evidence.
 
 | # | Item | Status | Reference |
 |---|---|---|---|
-| 29 | [ ] Behavioral-parity run protocol and decisions P-1…P-8 approved | proposed | `docs/governance/phase13-behavioral-parity-protocol.md` |
-| 30 | [ ] Protocol frozen (hash) and run code committed with tests | not started | CBR-PROT-013B §8 |
-| 31 | [ ] Recent feed comparison complete (Dukascopy for the P-2 days fetched and validated; agreement rates and feed band reported) | not started | CBR-ACC-013 G; CBR-PROT-013B §7.1 |
-| 32 | [ ] Higher-timeframe fidelity (FOREXCOM 1h/4h/1D; TVC:DXY 1h) reported | not started | CBR-ACC-013 F; §7.2 |
-| 33 | [ ] Behavioral-parity runs executed twice with identical result hashes (gate A) | not started | §2 |
-| 34 | [ ] Every mismatch classified; no unexplained or open implementation mismatch (gates B, D, E) | not started | §5 |
-| 35 | [ ] Feed differences documented (gate F) and gate G assessed under the P-5 rule | not started | §6, §7.1 |
-| 36 | [ ] Owner Phase 13 verdict issued (PASS / PASS WITH CONCERNS / FAIL) | not issued | CBR-ACC-013 §7 |
+| 29 | [x] Behavioral-parity run protocol and decisions P-1…P-8 approved | D25: approved; P-5 option B as the D25-P5 standard; run spec `config/phase13_behavioral_run.yaml` | `docs/governance/d25-phase13-run-approval.md` |
+| 30 | [x] Protocol frozen (hash) and run code committed with tests | frozen at commit `36e096c` (527 passed, 1 skipped; ruff clean); recent Dukascopy absent at freeze | `reports/phase13-freeze-manifest.json` |
+| 31 | [x] Recent feed comparison complete (Dukascopy for the P-2 days fetched and validated; agreement rates and feed band reported) | 4 days ready, 0 vendor gaps; zero lag; δ $0.00; τ $0.20; `reports/phase13-feed-comparison.md` | CBR-ACC-013 G; CBR-PROT-013B §7.1 |
+| 32 | [x] Higher-timeframe fidelity (FOREXCOM 1h/4h/1D; TVC:DXY 1h) reported | `reports/phase13-higher-timeframe-fidelity.md` | CBR-ACC-013 F; §7.2 |
+| 33 | [x] Behavioral-parity runs executed twice with identical result hashes (gate A) | CBR-RUN-013B-2: `f3905430…d063` both runs; spot-check defect 1 recorded in the post-run review | §2 |
+| 34 | [x] Every mismatch classified; no unexplained or open implementation mismatch (gates B, D, E) | all classified; no IMPLEMENTATION_BUG in PC2; checking-code defects 2-3 recorded | `reports/phase13-post-run-review.md` §5 |
+| 35 | [x] Feed differences documented (gate F) and gate G assessed under the P-5 rule | criterion 9 MET (O-1 reading) | §6, §7.1 |
+| 36 | [x] Owner Phase 13 verdict issued (PASS / PASS WITH CONCERNS / FAIL) | **FAIL** accepted by the owner (D26); PC2 permanently frozen as the failed candidate; Phase 13R spec reconciliation opened | `docs/governance/d26-phase13-fail-reconciliation.md` | CBR-ACC-013 §7 |
 
-**Current status (2026-09-15): NOT READY.** Mandatory: 20 of 28 checked (A 20/20; C 0/8). Supporting V-1: 1 of 8
-checked. Next step: owner approval of CBR-PROT-013B and P-1…P-8.
+## D. PC3 scored-parity gate (D31, CBR-PROT-013C v1.1)
+
+| # | Item | Status | Reference |
+|---|---|---|---|
+| 37 | [x] PC3 created, implemented and frozen (`7032f400…`); PC2 untouched (`4dadc8b9…`) | D29 / D30 | `docs/strategy/parity-candidates/CBR1H_BASELINE_V1-PC3.yaml` |
+| 38 | [x] Expanded parity set frozen (`a3ee0bd6…`, 4 ENTRY_LEVEL + 3 HOUR_LEVEL + 7 NARRATIVE_ONLY) | D30-11 | `research/examples/parity_set_manifest.json` |
+| 39 | [x] CBR-PROT-013C approved and frozen with mappings M-1…M-7 | D31 | `docs/governance/d31-pc3-scored-parity-authorization.md` |
+| 40 | [x] Scored run executed twice with identical result hashes | CBR-RUN-013C-1: `718efebd…caef` both runs | `reports/phase13c-run-manifest.json` |
+| 41 | [x] Every mismatch classified (22: 1 OWNER_BASELINE_CHOICE, 15 UNRESOLVED_SPEC_AMBIGUITY, 6 CANON_MISMATCH) | STEP 7 register | `reports/phase13c-parity.md` |
+| 42 | [x] Owner Phase 13C verdict issued | **FAIL** accepted by the owner (D32); PC3 frozen, no PC4 | `docs/governance/d32-phase13c-failure-diagnosis.md` |
+| 43 | [x] Phase 13C failure diagnosis reviewed | accepted (D33); F-1 approved as IMPLEMENTATION_FIX | `docs/governance/d32-phase13c-failure-diagnosis.md` |
+| 44 | [x] OQ-48 independent-evidence resolution | two dated Level-1 examples outside the parity set confirm F-1; anchor remains the one open question | `docs/decisions/oq48-hvcs-duration-evidence.md` §8-10 |
+| 45 | [x] OQ-50 evidence review and Q definition | take must be satisfied by the 5s shift (F-9); Q = the 15m candle containing the shift (F-10) | `docs/decisions/oq50-previous-15m-evaluation-time.md` |
+| 46 | [x] MTF model taxonomy and journal scope rulings | three MTF models, two implemented; JM-2025-10-17 out of scope, JM-2025-10-29 SOURCE_AMBIGUITY, JM-2025-10-16 confirmed | `docs/decisions/mtf-model-taxonomy.md` |
+| 47 | [ ] Corrected CBR1H parity set approved | proposal returned: 4 ENTRY_LEVEL + 1 HOUR_LEVEL may bind | `research/examples/cbr1h-parity-set-proposal.md` |
+| 48 | [x] PC4 authorized and created | D34: F-1, F-9, F-10, F-11 approved; anchor kept (NO_CHANGE); PC4 frozen at `62a2310e…` | `docs/governance/d34-pc4-authorization.md` |
+| 49 | [x] Corrected CBR1H parity set built | manifest v2 `e12f3882…`: 4 ENTRY_LEVEL + 1 HOUR_LEVEL binding, 11 narrative; v1 untouched | `research/examples/parity_set_manifest_v2.json` |
+| 50 | [x] CBR-PROT-013D approved | D35: v1.1 APPROVED; E-1…E-5 settled, E-2 threshold frozen before execution | `docs/governance/phase13d-pc4-parity-protocol.md` |
+| 51 | [x] PC4 scored parity executed twice with identical result hashes | CBR-RUN-013D-1: `361232f6…f209` both runs | `reports/phase13d-run-manifest.json` |
+| 52 | [x] Every mismatch classified (8: 1 OWNER_BASELINE_CHOICE, 7 UNRESOLVED_SPEC_AMBIGUITY, 0 IMPLEMENTATION_BUG) | STEP 7 register | `docs/governance/d35-phase13d-mismatch-classification.md` |
+| 53 | [x] Owner Phase 13D verdict issued | **FAIL** accepted (D36); PC4 frozen, no PC5 | `docs/governance/d36-phase13-decision-package.md` |
+| 54 | [x] Final source-contradiction review | CX-LT3-2 = **DISCRETIONARY_EXCEPTION**; 20-minute rule = guidance (OQ-53); no HVCS source contradiction; JM-2025-10-16 = hour-open classification limit (OQ-52) | `docs/decisions/cx-lt3-2-source-review.md` |
+| 55 | [x] Phase 13 completion criterion decided | **D37: Path B taken.** Phase 13 closes as RESEARCH-SUFFICIENT WITH DOCUMENTED FIDELITY CONCERNS; PC4 promoted to `CBR1H_BASELINE_V1`; the parity run stays **FAIL** | `docs/governance/d37-phase13-closure-and-promotion.md` |
+| 56 | [x] Strategy logic locked until the untouched baseline | `baseline_v1.verify()` aborts any run whose spec has drifted from `62a2310e…` | `src/cbr/engine/baseline_v1.py` |
+| 57 | [x] Phase 14A acceptance criteria approved | written before any outcome measurement | `docs/acceptance/phase14a-acceptance-criteria.md` |
+| 58 | [x] Execution assumptions E-OQ-1…E-OQ-10 ruled | **D38**: all ten frozen in `config/execution.yaml` before implementation | `docs/governance/d38-phase14a-execution-semantics.md` |
+| 59 | [x] Phase 14A simulator implemented and tested | 7 modules under `src/cbr/execution/`, 35 synthetic tests incl. the hand-computed example; 696 passing | `docs/governance/phase14a-completion-report.md` |
+| 60 | [x] Owner Phase 14A verdict | **PASS WITH CONCERNS** (D39): mechanics complete, integration outstanding | `docs/governance/d39-phase14a1-real-data-integration.md` |
+| 61 | [x] Phase 14A.1 real-data integration | tick loader, gap translation, rollover reuse, replay driver, provenance; 20 real-data tests | `docs/governance/phase14a1-completion-report.md` |
+| 62 | [ ] OQ-24 baseline data architecture decided | package updated; **option A recommended** on signal-membership and reproducibility grounds, never performance | `docs/decisions/oq24-baseline-data-architecture.md` |
+
+**Current status (2026-09-17): NOT READY.** Mandatory: 20 of 28 checked (A 20/20; C 0/8). Supporting V-1: 1 of 8
+checked. PC3 scored parity **FAILED** (CBR-RUN-013C-1) and the FAIL is accepted (D32); PC3 stays frozen and no PC4
+exists. PC4's FAIL is accepted (D36) and the source review is complete: CX-LT3-2 is classified a **discretionary
+exception** on Tom's own words, the 20-minute rule is **guidance** rather than a floor, there is **no HVCS source
+contradiction**, and JM-2025-10-16 fails on the hour-open condition convention (OQ-52). **No PC5 change is
+independently justified.** Next step: the owner's decision on **Path B** — whether Phase 13 completes when a
+candidate reproduces the textbook examples and the negative control, with discretionary examples documented.

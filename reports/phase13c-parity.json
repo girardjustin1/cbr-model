@@ -1,0 +1,1483 @@
+{
+ "cases": {
+  "CX-LT1-1": {
+   "case_id": "CX-LT1-1",
+   "dimensions": [
+    {
+     "class": null,
+     "engine": "HVCS_S5_SHIFT",
+     "expected": "CBR1H",
+     "n": 1,
+     "name": "model_family",
+     "note": null,
+     "status": "MATCH"
+    },
+    {
+     "class": null,
+     "engine": "BUY",
+     "expected": "BUY",
+     "n": 2,
+     "name": "direction",
+     "note": null,
+     "status": "MATCH"
+    },
+    {
+     "class": null,
+     "engine": {
+      "cond_direction": "NONE",
+      "condition": "RANGE",
+      "fallback_applied": false
+     },
+     "expected": [
+      {
+       "condition": "RANGE"
+      },
+      {
+       "condition": "TRENDING_RANGE"
+      }
+     ],
+     "n": 3,
+     "name": "condition",
+     "note": null,
+     "status": "MATCH"
+    },
+    {
+     "class": null,
+     "engine": "DOWN",
+     "expected": "DOWN",
+     "n": 4,
+     "name": "extension_direction",
+     "note": null,
+     "status": "MATCH"
+    },
+    {
+     "class": null,
+     "engine": {
+      "activation_time": "2025-10-21T01:07:00+00:00",
+      "state": "EXTENSION_ACTIVE"
+     },
+     "expected": "EXTENSION_ACTIVE",
+     "n": 5,
+     "name": "extension_activation",
+     "note": null,
+     "status": "MATCH"
+    },
+    {
+     "class": null,
+     "engine": {
+      "failed_rules": [],
+      "pos_oe_extreme": 0.0978879602439525,
+      "q_break_by_q": true
+     },
+     "expected": "location and previous-15m rules pass",
+     "n": 6,
+     "name": "location_or_previous_candle_event",
+     "note": null,
+     "status": "MATCH"
+    },
+    {
+     "class": "CANON_MISMATCH",
+     "engine": {
+      "failed_rules": [
+       "M1H-6A-1-HVCS-INTO-SHIFT"
+      ],
+      "indecision": 0.0,
+      "minutes": 3.0,
+      "state": false
+     },
+     "expected": "valid at the shift for variant A; not applicable for variant B",
+     "n": 7,
+     "name": "hvcs_state",
+     "note": null,
+     "status": "MISMATCH"
+    },
+    {
+     "class": null,
+     "engine": {
+      "reanchored": 1,
+      "shift_time": "2025-10-21T01:39:35+00:00",
+      "trigger_at_break": 4340.185,
+      "trigger_at_decision": 4348.110000000001
+     },
+     "expected": {
+      "rule": "D25-P3 equivalence",
+      "tom_interval": [
+       "2025-10-21T01:39:15+00:00",
+       "2025-10-21T01:39:15+00:00"
+      ]
+     },
+     "n": 8,
+     "name": "type3_5s_structural_trigger",
+     "note": "descriptive reading: the candidate carrying this shift was not eligible",
+     "status": "MATCH"
+    },
+    {
+     "class": "CANON_MISMATCH",
+     "engine": {
+      "event_at_trigger": "REJECTED_AT_TRIGGER",
+      "rules_failed_at_trigger": [
+       "M1H-6A-1-HVCS-INTO-SHIFT"
+      ]
+     },
+     "expected": "ARMED_AT_TRIGGER",
+     "n": 9,
+     "name": "eligible_candidate",
+     "note": null,
+     "status": "MISMATCH"
+    }
+   ],
+   "hard_dimensions": {
+    "core_structural_trigger": false,
+    "direction": true,
+    "extension_direction": true,
+    "model_family": true
+   },
+   "per_variant": {
+    "A": {
+     "candidates": 5,
+     "diagnostic_only": null,
+     "eligible": 0,
+     "eligible_ids": [],
+     "frozen_selection": "CBR1H_BASELINE_V1-PC3/A/20251021T0100/BUY/3",
+     "frozen_selection_eligible": false,
+     "selected_facts": null
+    },
+    "B": {
+     "candidates": 0,
+     "diagnostic_only": null,
+     "eligible": 0,
+     "eligible_ids": [],
+     "frozen_selection": null,
+     "frozen_selection_eligible": false,
+     "selected_facts": null
+    }
+   },
+   "positive_or_negative": "POSITIVE",
+   "scored_candidate": {
+    "cancel_reason": "S5_SHIFT_TRIGGERED",
+    "cond_direction": "NONE",
+    "condition": "RANGE",
+    "condition_fallback_applied": false,
+    "direction": "BUY",
+    "entry_model": "HVCS_S5_SHIFT",
+    "event": "ARMED",
+    "event_at_trigger": "REJECTED_AT_TRIGGER",
+    "ext_extreme_at_decision": 4341.62,
+    "extension_activation_reason": "took the previous 15m low 4364.455 at or after minute 7",
+    "extension_activation_time": "2025-10-21T01:07:00+00:00",
+    "extension_state": "EXTENSION_ACTIVE",
+    "five_second_shift_level": 4348.110000000001,
+    "five_second_shift_level_at_trigger": 4340.185,
+    "five_second_shift_time": "2025-10-21T01:39:35+00:00",
+    "five_second_sweep_time": "2025-10-21T01:35:30+00:00",
+    "hvcs_indecision_bars": 0.0,
+    "hvcs_minutes": 3.0,
+    "hvcs_rule_state": false,
+    "oe_dir": "DOWN",
+    "oe_duration_min": 23.0,
+    "oe_retracement_ratio": 0.2856770790943199,
+    "oe_size": 30.71649999999954,
+    "pos_oe_extreme": 0.0978879602439525,
+    "q_break_by_q": true,
+    "rules_failed": [],
+    "rules_failed_at_trigger": [
+     "M1H-6A-1-HVCS-INTO-SHIFT"
+    ],
+    "signal_id": "CBR1H_BASELINE_V1-PC3/A/20251021T0100/BUY/3",
+    "structure_stop_anchor": 4341.62,
+    "target_at_activation": 4355.17325,
+    "timestamp": "2025-10-21T01:35:35+00:00",
+    "trigger_reanchored": 1,
+    "variant": "A"
+   },
+   "scored_candidate_eligible": false,
+   "scoring_level": "ENTRY_LEVEL",
+   "selection": {
+    "classification": null,
+    "frozen_selection_ids": [
+     "CBR1H_BASELINE_V1-PC3/A/20251021T0100/BUY/3"
+    ],
+    "matching_ids": [],
+    "p3_equivalent_candidates_any_eligibility": [
+     "CBR1H_BASELINE_V1-PC3/A/20251021T0100/BUY/3"
+    ],
+    "structural_event_exists": false
+   }
+  },
+  "CX-LT3-1": {
+   "candidates_with_shift_in_window": [],
+   "case_id": "CX-LT3-1",
+   "eligible_signals": [],
+   "positive_or_negative": "NEGATIVE",
+   "result": "NO_ELIGIBLE_CANONICAL_SIGNAL",
+   "scoring_level": "ENTRY_LEVEL",
+   "window_utc": [
+    "2025-11-10 01:28:00+00:00",
+    "2025-11-10 01:36:00+00:00"
+   ]
+  },
+  "CX-LT3-2": {
+   "case_id": "CX-LT3-2",
+   "dimensions": [
+    {
+     "class": null,
+     "engine": "HVCS_S5_SHIFT",
+     "expected": "CBR1H",
+     "n": 1,
+     "name": "model_family",
+     "note": null,
+     "status": "MATCH"
+    },
+    {
+     "class": null,
+     "engine": "SELL",
+     "expected": "SELL",
+     "n": 2,
+     "name": "direction",
+     "note": null,
+     "status": "MATCH"
+    },
+    {
+     "class": "CANON_MISMATCH",
+     "engine": {
+      "cond_direction": "NONE",
+      "condition": "RANGE",
+      "fallback_applied": true
+     },
+     "expected": [
+      {
+       "condition": "TRENDING_RANGE",
+       "direction": "UP"
+      }
+     ],
+     "n": 3,
+     "name": "condition",
+     "note": "M-2: PC3 follows the approved OQ-46 correction (D29-14) while D25-P6 names the accepted set",
+     "status": "MISMATCH"
+    },
+    {
+     "class": null,
+     "engine": "UP",
+     "expected": "UP",
+     "n": 4,
+     "name": "extension_direction",
+     "note": null,
+     "status": "MATCH"
+    },
+    {
+     "class": null,
+     "engine": {
+      "activation_time": "2025-11-10T01:10:00+00:00",
+      "state": "EXTENSION_ACTIVE"
+     },
+     "expected": "EXTENSION_ACTIVE",
+     "n": 5,
+     "name": "extension_activation",
+     "note": null,
+     "status": "MATCH"
+    },
+    {
+     "class": "CANON_MISMATCH",
+     "engine": {
+      "failed_rules": [
+       "M1H-6A-2-PREV-15M-BROKEN-BY-Q",
+       "M1H-6A-3-NEW-EXTREME-IN-Q"
+      ],
+      "pos_oe_extreme": 1.6536653758846294,
+      "q_break_by_q": false
+     },
+     "expected": "location and previous-15m rules pass",
+     "n": 6,
+     "name": "location_or_previous_candle_event",
+     "note": null,
+     "status": "MISMATCH"
+    },
+    {
+     "class": "CANON_MISMATCH",
+     "engine": {
+      "failed_rules": [
+       "M1H-6A-1-HVCS-INTO-SHIFT"
+      ],
+      "indecision": 0.0,
+      "minutes": 0.0,
+      "state": false
+     },
+     "expected": "valid at the shift for variant A; not applicable for variant B",
+     "n": 7,
+     "name": "hvcs_state",
+     "note": null,
+     "status": "MISMATCH"
+    },
+    {
+     "class": null,
+     "engine": {
+      "reanchored": 1,
+      "shift_time": "2025-11-10T01:39:40+00:00",
+      "trigger_at_break": 4050.9599999999996,
+      "trigger_at_decision": 4045.765
+     },
+     "expected": {
+      "rule": "D25-P3 equivalence",
+      "tom_interval": [
+       "2025-11-10T01:40:00+00:00",
+       "2025-11-10T01:40:00+00:00"
+      ]
+     },
+     "n": 8,
+     "name": "type3_5s_structural_trigger",
+     "note": "descriptive reading: the candidate carrying this shift was not eligible",
+     "status": "MATCH"
+    },
+    {
+     "class": "CANON_MISMATCH",
+     "engine": {
+      "event_at_trigger": "REJECTED_AT_TRIGGER",
+      "rules_failed_at_trigger": [
+       "M1H-6A-1-HVCS-INTO-SHIFT",
+       "M1H-6A-2-PREV-15M-BROKEN-BY-Q",
+       "M1H-6A-3-NEW-EXTREME-IN-Q",
+       "M1H-OE-01"
+      ]
+     },
+     "expected": "ARMED_AT_TRIGGER",
+     "n": 9,
+     "name": "eligible_candidate",
+     "note": null,
+     "status": "MISMATCH"
+    }
+   ],
+   "hard_dimensions": {
+    "core_structural_trigger": false,
+    "direction": true,
+    "extension_direction": true,
+    "model_family": true
+   },
+   "per_variant": {
+    "A": {
+     "candidates": 6,
+     "diagnostic_only": null,
+     "eligible": 0,
+     "eligible_ids": [],
+     "frozen_selection": "CBR1H_BASELINE_V1-PC3/A/20251110T0100/SELL/4",
+     "frozen_selection_eligible": false,
+     "selected_facts": null
+    },
+    "B": {
+     "candidates": 0,
+     "diagnostic_only": null,
+     "eligible": 0,
+     "eligible_ids": [],
+     "frozen_selection": null,
+     "frozen_selection_eligible": false,
+     "selected_facts": null
+    }
+   },
+   "positive_or_negative": "POSITIVE",
+   "scored_candidate": {
+    "cancel_reason": "S5_SHIFT_TRIGGERED",
+    "cond_direction": "NONE",
+    "condition": "RANGE",
+    "condition_fallback_applied": true,
+    "direction": "SELL",
+    "entry_model": "HVCS_S5_SHIFT",
+    "event": "REJECTED",
+    "event_at_trigger": "REJECTED_AT_TRIGGER",
+    "ext_extreme_at_decision": 4052.0114999999996,
+    "extension_activation_reason": "took the previous 15m high 4023.995 at or after minute 7",
+    "extension_activation_time": "2025-11-10T01:10:00+00:00",
+    "extension_state": "EXTENSION_ACTIVE",
+    "five_second_shift_level": 4045.765,
+    "five_second_shift_level_at_trigger": 4050.9599999999996,
+    "five_second_shift_time": "2025-11-10T01:39:40+00:00",
+    "five_second_sweep_time": "2025-11-10T01:34:40+00:00",
+    "hvcs_indecision_bars": 0.0,
+    "hvcs_minutes": 0.0,
+    "hvcs_rule_state": false,
+    "oe_dir": "UP",
+    "oe_duration_min": 16.0,
+    "oe_retracement_ratio": 0.12930286375469455,
+    "oe_size": 32.84149999999954,
+    "pos_oe_extreme": 1.6536653758846294,
+    "q_break_by_q": false,
+    "rules_failed": [
+     "M1H-6A-2-PREV-15M-BROKEN-BY-Q",
+     "M1H-6A-3-NEW-EXTREME-IN-Q",
+     "M1H-OE-01"
+    ],
+    "rules_failed_at_trigger": [
+     "M1H-6A-1-HVCS-INTO-SHIFT",
+     "M1H-6A-2-PREV-15M-BROKEN-BY-Q",
+     "M1H-6A-3-NEW-EXTREME-IN-Q",
+     "M1H-OE-01"
+    ],
+    "signal_id": "CBR1H_BASELINE_V1-PC3/A/20251110T0100/SELL/3",
+    "structure_stop_anchor": 4052.0114999999996,
+    "target_at_activation": 4036.21825,
+    "timestamp": "2025-11-10T01:34:45+00:00",
+    "trigger_reanchored": 1,
+    "variant": "A"
+   },
+   "scored_candidate_eligible": false,
+   "scoring_level": "ENTRY_LEVEL",
+   "selection": {
+    "classification": null,
+    "frozen_selection_ids": [
+     "CBR1H_BASELINE_V1-PC3/A/20251110T0100/SELL/4"
+    ],
+    "matching_ids": [],
+    "p3_equivalent_candidates_any_eligibility": [
+     "CBR1H_BASELINE_V1-PC3/A/20251110T0100/SELL/3"
+    ],
+    "structural_event_exists": false
+   }
+  },
+  "CX-TE1-1": {
+   "case_id": "CX-TE1-1",
+   "dimensions": [
+    {
+     "class": null,
+     "engine": "HVCS_S5_SHIFT",
+     "expected": "CBR1H",
+     "n": 1,
+     "name": "model_family",
+     "note": null,
+     "status": "MATCH"
+    },
+    {
+     "class": null,
+     "engine": "BUY",
+     "expected": "BUY",
+     "n": 2,
+     "name": "direction",
+     "note": null,
+     "status": "MATCH"
+    },
+    {
+     "class": null,
+     "engine": {
+      "cond_direction": "UP",
+      "condition": "RANGE",
+      "fallback_applied": false
+     },
+     "expected": [
+      {
+       "condition": "TRENDING_RANGE",
+       "direction": "DOWN"
+      },
+      {
+       "condition": "RANGE"
+      }
+     ],
+     "n": 3,
+     "name": "condition",
+     "note": null,
+     "status": "MATCH"
+    },
+    {
+     "class": null,
+     "engine": "DOWN",
+     "expected": "DOWN",
+     "n": 4,
+     "name": "extension_direction",
+     "note": null,
+     "status": "MATCH"
+    },
+    {
+     "class": null,
+     "engine": {
+      "activation_time": "2025-10-24T04:07:00+00:00",
+      "state": "EXTENSION_ACTIVE"
+     },
+     "expected": "EXTENSION_ACTIVE",
+     "n": 5,
+     "name": "extension_activation",
+     "note": null,
+     "status": "MATCH"
+    },
+    {
+     "class": null,
+     "engine": {
+      "failed_rules": [],
+      "pos_oe_extreme": -0.06001041395470852,
+      "q_break_by_q": true
+     },
+     "expected": "location and previous-15m rules pass",
+     "n": 6,
+     "name": "location_or_previous_candle_event",
+     "note": null,
+     "status": "MATCH"
+    },
+    {
+     "class": "CANON_MISMATCH",
+     "engine": {
+      "failed_rules": [
+       "M1H-6A-1-HVCS-INTO-SHIFT"
+      ],
+      "indecision": 1.0,
+      "minutes": 2.0,
+      "state": false
+     },
+     "expected": "valid at the shift for variant A; not applicable for variant B",
+     "n": 7,
+     "name": "hvcs_state",
+     "note": null,
+     "status": "MISMATCH"
+    },
+    {
+     "class": null,
+     "engine": {
+      "reanchored": 1,
+      "shift_time": "2025-10-24T04:38:55+00:00",
+      "trigger_at_break": 4105.5650000000005,
+      "trigger_at_decision": 4106.425
+     },
+     "expected": {
+      "rule": "D25-P3 equivalence",
+      "tom_interval": [
+       "2025-10-24T04:37:00+00:00",
+       "2025-10-24T04:39:00+00:00"
+      ]
+     },
+     "n": 8,
+     "name": "type3_5s_structural_trigger",
+     "note": "descriptive reading: the candidate carrying this shift was not eligible",
+     "status": "MATCH"
+    },
+    {
+     "class": "CANON_MISMATCH",
+     "engine": {
+      "event_at_trigger": "REJECTED_AT_TRIGGER",
+      "rules_failed_at_trigger": [
+       "M1H-6A-1-HVCS-INTO-SHIFT"
+      ]
+     },
+     "expected": "ARMED_AT_TRIGGER",
+     "n": 9,
+     "name": "eligible_candidate",
+     "note": null,
+     "status": "MISMATCH"
+    }
+   ],
+   "hard_dimensions": {
+    "core_structural_trigger": false,
+    "direction": true,
+    "extension_direction": true,
+    "model_family": true
+   },
+   "per_variant": {
+    "A": {
+     "candidates": 4,
+     "diagnostic_only": null,
+     "eligible": 0,
+     "eligible_ids": [],
+     "frozen_selection": "CBR1H_BASELINE_V1-PC3/A/20251024T0400/BUY/3",
+     "frozen_selection_eligible": false,
+     "selected_facts": null
+    },
+    "B": {
+     "candidates": 0,
+     "diagnostic_only": null,
+     "eligible": 0,
+     "eligible_ids": [],
+     "frozen_selection": null,
+     "frozen_selection_eligible": false,
+     "selected_facts": null
+    }
+   },
+   "positive_or_negative": "POSITIVE",
+   "scored_candidate": {
+    "cancel_reason": "S5_SHIFT_TRIGGERED",
+    "cond_direction": "UP",
+    "condition": "RANGE",
+    "condition_fallback_applied": false,
+    "direction": "BUY",
+    "entry_model": "HVCS_S5_SHIFT",
+    "event": "ARMED",
+    "event_at_trigger": "REJECTED_AT_TRIGGER",
+    "ext_extreme_at_decision": 4103.755,
+    "extension_activation_reason": "took the previous 15m low 4116.370000000001 at or after minute 7",
+    "extension_activation_time": "2025-10-24T04:07:00+00:00",
+    "extension_state": "EXTENSION_ACTIVE",
+    "five_second_shift_level": 4106.425,
+    "five_second_shift_level_at_trigger": 4105.5650000000005,
+    "five_second_shift_time": "2025-10-24T04:38:55+00:00",
+    "five_second_sweep_time": "2025-10-24T04:33:20+00:00",
+    "hvcs_indecision_bars": 1.0,
+    "hvcs_minutes": 2.0,
+    "hvcs_rule_state": false,
+    "oe_dir": "DOWN",
+    "oe_duration_min": 23.0,
+    "oe_retracement_ratio": 0.21687022900760794,
+    "oe_size": 19.650000000000546,
+    "pos_oe_extreme": -0.06001041395470852,
+    "q_break_by_q": true,
+    "rules_failed": [],
+    "rules_failed_at_trigger": [
+     "M1H-6A-1-HVCS-INTO-SHIFT"
+    ],
+    "signal_id": "CBR1H_BASELINE_V1-PC3/A/20251024T0400/BUY/3",
+    "structure_stop_anchor": 4103.755,
+    "target_at_activation": 4113.0975,
+    "timestamp": "2025-10-24T04:33:25+00:00",
+    "trigger_reanchored": 1,
+    "variant": "A"
+   },
+   "scored_candidate_eligible": false,
+   "scoring_level": "ENTRY_LEVEL",
+   "selection": {
+    "classification": null,
+    "frozen_selection_ids": [
+     "CBR1H_BASELINE_V1-PC3/A/20251024T0400/BUY/3"
+    ],
+    "matching_ids": [],
+    "p3_equivalent_candidates_any_eligibility": [
+     "CBR1H_BASELINE_V1-PC3/A/20251024T0400/BUY/3"
+    ],
+    "structural_event_exists": false
+   }
+  },
+  "JM-2025-10-16": {
+   "all_candidates": [
+    {
+     "direction": "BUY",
+     "event_at_trigger": "NO_TRIGGER",
+     "rules_failed_at_trigger": [
+      "IMPL-REWARD",
+      "M1H-6A-3-NEW-EXTREME-IN-Q",
+      "M1H-COND-01",
+      "M1H-COND-02",
+      "M1H-OE-00-ACTIVE",
+      "M1H-OE-01",
+      "M1H-OE-04b"
+     ],
+     "shift": "None",
+     "signal_id": "CBR1H_BASELINE_V1-PC3/A/20251016T0000/BUY/0"
+    },
+    {
+     "direction": "SELL",
+     "event_at_trigger": "NO_TRIGGER",
+     "rules_failed_at_trigger": [
+      "M1H-COND-01",
+      "M1H-COND-02",
+      "M1H-OE-01"
+     ],
+     "shift": "None",
+     "signal_id": "CBR1H_BASELINE_V1-PC3/A/20251016T0000/SELL/0"
+    },
+    {
+     "direction": "SELL",
+     "event_at_trigger": "NO_TRIGGER",
+     "rules_failed_at_trigger": [
+      "M1H-COND-01",
+      "M1H-COND-02"
+     ],
+     "shift": "None",
+     "signal_id": "CBR1H_BASELINE_V1-PC3/A/20251016T0000/SELL/1"
+    },
+    {
+     "direction": "SELL",
+     "event_at_trigger": "REJECTED_AT_TRIGGER",
+     "rules_failed_at_trigger": [
+      "M1H-6A-1-HVCS-INTO-SHIFT",
+      "M1H-COND-01",
+      "M1H-COND-02"
+     ],
+     "shift": "2025-10-16 00:41:20+00:00",
+     "signal_id": "CBR1H_BASELINE_V1-PC3/A/20251016T0000/SELL/2"
+    },
+    {
+     "direction": "SELL",
+     "event_at_trigger": "NO_TRIGGER",
+     "rules_failed_at_trigger": [
+      "IMPL-REWARD",
+      "M1H-6A-3-NEW-EXTREME-IN-Q",
+      "M1H-COND-01",
+      "M1H-COND-02"
+     ],
+     "shift": "None",
+     "signal_id": "CBR1H_BASELINE_V1-PC3/A/20251016T0000/SELL/3"
+    }
+   ],
+   "case_id": "JM-2025-10-16",
+   "eligible_ids": [],
+   "fields": [
+    {
+     "engine": false,
+     "expected": true,
+     "field": "setup_exists_in_hour",
+     "note": null,
+     "status": "MISMATCH"
+    },
+    {
+     "engine": null,
+     "expected": "SELL",
+     "field": "direction",
+     "note": null,
+     "status": "MISMATCH"
+    },
+    {
+     "engine": null,
+     "expected": "CBR1H (M-3: journal labels are not scored as subtypes)",
+     "field": "model_family",
+     "note": "journal MTF label: TRR CT (recorded, not scored)",
+     "status": "MISMATCH"
+    },
+    {
+     "engine": null,
+     "expected": [
+      "TRENDING_RANGE",
+      "RANGE"
+     ],
+     "field": "condition",
+     "note": null,
+     "status": "MISMATCH"
+    },
+    {
+     "engine": null,
+     "expected": "CB 37 -> [30, 45) minutes",
+     "field": "timing_bucket",
+     "note": null,
+     "status": "MISMATCH"
+    }
+   ],
+   "frozen_selection": {
+    "A": null,
+    "B": null
+   },
+   "journal": {
+    "aoi": null,
+    "cb_hour": 37,
+    "condition": "Trending",
+    "journal_time_local": "2025-10-16 11:41 AM (UTC+11)",
+    "mtf_model": "TRR CT",
+    "reversal_label": "30m Reversal",
+    "shifts": "LLTF (Seconds)"
+   },
+   "positive_or_negative": "POSITIVE",
+   "scored_candidate": null,
+   "scoring_level": "HOUR_LEVEL",
+   "verdict": "HOUR_MISMATCH"
+  },
+  "JM-2025-10-17": {
+   "all_candidates": [
+    {
+     "direction": "BUY",
+     "event_at_trigger": "NO_TRIGGER",
+     "rules_failed_at_trigger": [
+      "IMPL-REWARD",
+      "M1H-LOC-01",
+      "M1H-OE-01"
+     ],
+     "shift": "None",
+     "signal_id": "CBR1H_BASELINE_V1-PC3/A/20251017T0100/BUY/0"
+    },
+    {
+     "direction": "BUY",
+     "event_at_trigger": "REJECTED_AT_TRIGGER",
+     "rules_failed_at_trigger": [
+      "M1H-LOC-01",
+      "M1H-OE-01"
+     ],
+     "shift": "2025-10-17 01:30:25+00:00",
+     "signal_id": "CBR1H_BASELINE_V1-PC3/A/20251017T0100/BUY/1"
+    },
+    {
+     "direction": "BUY",
+     "event_at_trigger": "NO_TRIGGER",
+     "rules_failed_at_trigger": [
+      "M1H-6A-2-PREV-15M-BROKEN-BY-Q",
+      "M1H-6A-3-NEW-EXTREME-IN-Q",
+      "M1H-LOC-01",
+      "M1H-OE-01"
+     ],
+     "shift": "None",
+     "signal_id": "CBR1H_BASELINE_V1-PC3/A/20251017T0100/BUY/2"
+    },
+    {
+     "direction": "BUY",
+     "event_at_trigger": "REJECTED_AT_TRIGGER",
+     "rules_failed_at_trigger": [
+      "M1H-LOC-01"
+     ],
+     "shift": "2025-10-17 01:46:35+00:00",
+     "signal_id": "CBR1H_BASELINE_V1-PC3/A/20251017T0100/BUY/3"
+    },
+    {
+     "direction": "BUY",
+     "event_at_trigger": "NO_TRIGGER",
+     "rules_failed_at_trigger": [
+      "M1H-6A-2-PREV-15M-BROKEN-BY-Q",
+      "M1H-6A-3-NEW-EXTREME-IN-Q"
+     ],
+     "shift": "None",
+     "signal_id": "CBR1H_BASELINE_V1-PC3/A/20251017T0100/BUY/4"
+    }
+   ],
+   "case_id": "JM-2025-10-17",
+   "eligible_ids": [],
+   "fields": [
+    {
+     "engine": false,
+     "expected": true,
+     "field": "setup_exists_in_hour",
+     "note": null,
+     "status": "MISMATCH"
+    },
+    {
+     "engine": null,
+     "expected": "BUY",
+     "field": "direction",
+     "note": null,
+     "status": "MISMATCH"
+    },
+    {
+     "engine": null,
+     "expected": "CBR1H (M-3: journal labels are not scored as subtypes)",
+     "field": "model_family",
+     "note": "journal MTF label: IFS (recorded, not scored)",
+     "status": "MISMATCH"
+    },
+    {
+     "engine": null,
+     "expected": "Volume (M-4: not scored)",
+     "field": "condition",
+     "note": null,
+     "status": "NOT_SCORED"
+    },
+    {
+     "engine": null,
+     "expected": "CB 52 -> [45, 60) minutes",
+     "field": "timing_bucket",
+     "note": null,
+     "status": "MISMATCH"
+    }
+   ],
+   "frozen_selection": {
+    "A": null,
+    "B": null
+   },
+   "journal": {
+    "aoi": "1hr, 30m",
+    "cb_hour": 52,
+    "condition": "Volume",
+    "journal_time_local": "2025-10-17 12:53 PM (UTC+11)",
+    "mtf_model": "IFS",
+    "reversal_label": "45m Reversal",
+    "shifts": "LLTF (Seconds) + LTF (1m)"
+   },
+   "positive_or_negative": "POSITIVE",
+   "scored_candidate": null,
+   "scoring_level": "HOUR_LEVEL",
+   "verdict": "HOUR_MISMATCH"
+  },
+  "JM-2025-10-29": {
+   "all_candidates": [
+    {
+     "direction": "SELL",
+     "event_at_trigger": "NO_TRIGGER",
+     "rules_failed_at_trigger": [
+      "M1H-OE-01",
+      "M1H-OE-04b"
+     ],
+     "shift": "None",
+     "signal_id": "CBR1H_BASELINE_V1-PC3/A/20251029T0800/SELL/0"
+    },
+    {
+     "direction": "SELL",
+     "event_at_trigger": "NO_TRIGGER",
+     "rules_failed_at_trigger": [
+      "IMPL-REWARD",
+      "M1H-6A-2-PREV-15M-BROKEN-BY-Q",
+      "M1H-6A-3-NEW-EXTREME-IN-Q",
+      "M1H-OE-01",
+      "M1H-OE-04b"
+     ],
+     "shift": "None",
+     "signal_id": "CBR1H_BASELINE_V1-PC3/A/20251029T0800/SELL/1"
+    },
+    {
+     "direction": "SELL",
+     "event_at_trigger": "NO_TRIGGER",
+     "rules_failed_at_trigger": [
+      "IMPL-REWARD",
+      "M1H-OE-01",
+      "M1H-OE-02",
+      "M1H-OE-04b"
+     ],
+     "shift": "None",
+     "signal_id": "CBR1H_BASELINE_V1-PC3/A/20251029T0800/SELL/2"
+    },
+    {
+     "direction": "SELL",
+     "event_at_trigger": "REJECTED_AT_TRIGGER",
+     "rules_failed_at_trigger": [
+      "M1H-6A-1-HVCS-INTO-SHIFT",
+      "M1H-6A-2-PREV-15M-BROKEN-BY-Q",
+      "M1H-6A-3-NEW-EXTREME-IN-Q",
+      "M1H-OE-01",
+      "M1H-OE-02",
+      "M1H-OE-04b"
+     ],
+     "shift": "2025-10-29 08:33:00+00:00",
+     "signal_id": "CBR1H_BASELINE_V1-PC3/A/20251029T0800/SELL/3"
+    },
+    {
+     "direction": "SELL",
+     "event_at_trigger": "REJECTED_AT_TRIGGER",
+     "rules_failed_at_trigger": [
+      "IMPL-REWARD",
+      "M1H-6A-1-HVCS-INTO-SHIFT"
+     ],
+     "shift": "2025-10-29 08:49:55+00:00",
+     "signal_id": "CBR1H_BASELINE_V1-PC3/A/20251029T0800/SELL/4"
+    },
+    {
+     "direction": "SELL",
+     "event_at_trigger": "NO_TRIGGER",
+     "rules_failed_at_trigger": [],
+     "shift": "None",
+     "signal_id": "CBR1H_BASELINE_V1-PC3/A/20251029T0800/SELL/5"
+    }
+   ],
+   "case_id": "JM-2025-10-29",
+   "eligible_ids": [],
+   "fields": [
+    {
+     "engine": false,
+     "expected": true,
+     "field": "setup_exists_in_hour",
+     "note": null,
+     "status": "MISMATCH"
+    },
+    {
+     "engine": null,
+     "expected": "BUY",
+     "field": "direction",
+     "note": null,
+     "status": "MISMATCH"
+    },
+    {
+     "engine": null,
+     "expected": "CBR1H (M-3: journal labels are not scored as subtypes)",
+     "field": "model_family",
+     "note": "journal MTF label: TRR PT (recorded, not scored)",
+     "status": "MISMATCH"
+    },
+    {
+     "engine": null,
+     "expected": [
+      "TRENDING_RANGE",
+      "RANGE"
+     ],
+     "field": "condition",
+     "note": null,
+     "status": "MISMATCH"
+    },
+    {
+     "engine": null,
+     "expected": "CB 37 -> [30, 45) minutes",
+     "field": "timing_bucket",
+     "note": null,
+     "status": "MISMATCH"
+    }
+   ],
+   "frozen_selection": {
+    "A": "CBR1H_BASELINE_V1-PC3/A/20251029T0800/SELL/5",
+    "B": null
+   },
+   "journal": {
+    "aoi": "4h",
+    "cb_hour": 37,
+    "condition": "Trending",
+    "journal_time_local": "2025-10-29 7:14 PM (UTC+11)",
+    "mtf_model": "TRR PT",
+    "reversal_label": "30m Reversal",
+    "shifts": "LLTF (Seconds)"
+   },
+   "positive_or_negative": "POSITIVE",
+   "scored_candidate": null,
+   "scoring_level": "HOUR_LEVEL",
+   "verdict": "HOUR_MISMATCH"
+  }
+ },
+ "freeze": {
+  "expected_hashes": {
+   "parity_manifest": "a3ee0bd6ba225ce6b89d8bc61fbefd227ce8097a3f6bfac2f9414e19cd81ea9c",
+   "pc2_spec": "4dadc8b99cc4134888e5778704c0863d269d6f43ef9a5e47b1ba07fcb1b663b2",
+   "pc3_spec": "7032f400688ada1d5e9691d79a19f7ce78f6d830ad3124f588975f41b7c5d453"
+  },
+  "files": {
+   "config/strategy.yaml": "024a791e4211b01050cbf0140240b7e36476f03f2b860b35b1e930a2dd26ef5f",
+   "config/strategy_pc3.yaml": "c71ff58f970c9baf8149aebdce2c2b5c0b13be202e88332587196d6030d6bacf",
+   "docs/governance/d29-pc3-authorization.md": "b0f6629f8938a099f3a7d3c403aa45145bdc134ac0b39073f85d9fcb3d29ac4e",
+   "docs/governance/d30-pc3-parity-preparation.md": "0d340aeb4c540bb84e91d4c3fc08e4354dea57e8c5c9a1f822fbf3863a62a400",
+   "docs/governance/d31-pc3-scored-parity-authorization.md": "e33032b7d35be0e3f2252836b75e8928d68c3a05e97860c0b75db0ca0fe6f457",
+   "docs/governance/phase13c-pc3-parity-protocol.md": "35ac7039c9d9c4936381a3fc4bcd9dc592d70ffdd468774f751a85e4b7c62a27",
+   "docs/strategy/parity-candidates/CBR15_BASELINE_V1-PC3.yaml": "86dec663ac1cc4e72e26c384dd5025219208345b612be41206be23355b638e94",
+   "docs/strategy/parity-candidates/CBR1H_BASELINE_V1-PC2.yaml": "4f0e00c591ac0bd3c60fac393cbffe17bb765da6dba1237cefae9f3ee39738da",
+   "docs/strategy/parity-candidates/CBR1H_BASELINE_V1-PC3.yaml": "72a4025f3a7e40b7a168363bf4486e656a9b491d395ab4d0a0a8f914f334cd70",
+   "research/examples/parity_set_manifest.json": "841092c2e1b49f9ab3fcc55d0917c9881515886bc8c259997ed804324b92e361",
+   "src/cbr/engine/cbr1h_pc3.py": "934153b85bb651339f7a0507261dd70f13dd81c49ebca3e697e1be9b100d0677",
+   "src/cbr/engine/params_pc3.py": "46b2404be1724ddf8a0da2b559a456ece7221979a731bd6b1bbe72ad03903f16",
+   "src/cbr/engine/parity.py": "803946c4d8c3d543bd352d2bd50fba7d69546a9be2f7f91bced31e30ae62ff28",
+   "src/cbr/engine/parity_set.py": "27d9cf88563c984f54207d4dfe9f7b95c0afe581a5aba7134cc4533ce9ebc4a3",
+   "src/cbr/engine/phase13c_run.py": "5b575665cbb51f27a9c7a064d7efa4d259f55a956a34a9641ccb9ab90a42104a",
+   "src/cbr/structure/condition_pc3.py": "d5482290d1284355704485fc680f5b0870b44ae81de2573985bdd80728f40aed",
+   "src/cbr/structure/overextension_pc3.py": "d65a961f35b40f5a0360274ae6036826b59b52c554cc8ccbacd330a811e30e87",
+   "src/cbr/structure/shifts_pc3.py": "5e0ee21dd06ae8e8ef89deedf90f78ae5e6464e3174e9c0ba269d6385a9bcaca"
+  },
+  "frozen_utc": "2026-09-16T14:20:44+00:00",
+  "git_branch": "cbr-work_091526-4pm",
+  "git_commit": "f31cc6fd707a347edb8129915ed2ae24d1904f69",
+  "lint": "All checks passed!",
+  "market_data_hashes": {
+   "data/normalized/xauusd/structure_1m/2025-10-15.parquet": "e585f75a22f50dd40cde3b6d72236992f9b82f1e3879e9e51f37be11144da2d7",
+   "data/normalized/xauusd/structure_1m/2025-10-16.parquet": "90517be31f7f423b5e254b424e620f6e2794716951104b560343f1b0c5dc7c13",
+   "data/normalized/xauusd/structure_1m/2025-10-17.parquet": "3d425ad0227ef5642145308021eb4872cd18f9bfc2917bcc918acfb9b125884f",
+   "data/normalized/xauusd/structure_1m/2025-10-20.parquet": "fbcad47b5959d6a03665b549407fab024ff6d499be0b6e52de0f16bb11d09ee2",
+   "data/normalized/xauusd/structure_1m/2025-10-21.parquet": "377efadbff8d526259192b81c0e09faf905b1c376fb3d54d9bb9389d5fbc7dff",
+   "data/normalized/xauusd/structure_1m/2025-10-22.parquet": "740e4e8ccb0683c591f4c64570721be528a0293ade2fdd11100f207b68739485",
+   "data/normalized/xauusd/structure_1m/2025-10-23.parquet": "ff8ee715bfcca3ee301878a319a4842224dea6973f2803975302a019589c86c2",
+   "data/normalized/xauusd/structure_1m/2025-10-24.parquet": "680aaa70b44a92d1998d11ae6cf22f4a84a18a73d5dfbf8efdb82f6c152501fe",
+   "data/normalized/xauusd/structure_1m/2025-10-28.parquet": "13d5ff52045adcc2262043c93c2c5460faf0148deddecad66e30b1da4f84f7cf",
+   "data/normalized/xauusd/structure_1m/2025-10-29.parquet": "5dc8e58ba271380be9ab8a1ec4f54d16fe2b4bb405e3c67e72f80e539f99e0a0",
+   "data/normalized/xauusd/structure_1m/2025-11-07.parquet": "7386b4b49139352edd16261415f28407bb41f88ef6d20cbba50bc5687b0a10f3",
+   "data/normalized/xauusd/structure_1m/2025-11-09.parquet": "84e48073f30bffa08371677f99c3018f906f0fa3cfd1c4c3e1346d0b244a63cb",
+   "data/normalized/xauusd/structure_1m/2025-11-10.parquet": "82c206b1ddf77bc43ddde066021cd2f395cdbf5e1cb662fdb47fc60d037f2dbe",
+   "data/normalized/xauusd/structure_5s/2025-10-15.parquet": "d0a13b1db18c8a9c78eb48d2f1677383836975f0631cd381a8c35f9e3744fa89",
+   "data/normalized/xauusd/structure_5s/2025-10-16.parquet": "064f846b0c82d613bf2729216f7dfcf438e7da14c693914f817ec885f1397a2c",
+   "data/normalized/xauusd/structure_5s/2025-10-17.parquet": "8214e262ac6be60d18fd42742244acb889b9db8af11f835d1be6d2a7bc8517c7",
+   "data/normalized/xauusd/structure_5s/2025-10-20.parquet": "d16362b0049bc4782925564eb3a935bc73d19e515c0d37b6766f8a29b7af4d38",
+   "data/normalized/xauusd/structure_5s/2025-10-21.parquet": "cae165892dd03fda2df2a7b5f27898684f81f9bff6c7494fc476e52eef52e075",
+   "data/normalized/xauusd/structure_5s/2025-10-22.parquet": "0460ef4f74a434450e16669a54be96fdbeb2140f7887ca7f0e9c8cc9359a2a1b",
+   "data/normalized/xauusd/structure_5s/2025-10-23.parquet": "19bb3b8f3897264c6452693ba58285e1970540fea4ebad83bbc942ed40ee5b17",
+   "data/normalized/xauusd/structure_5s/2025-10-24.parquet": "0b9394e254cd72c24d1b212f812fae357f731f62254028d4373a2f9130bf0ba9",
+   "data/normalized/xauusd/structure_5s/2025-10-28.parquet": "07c20c0a4276a0a5146d213bea733bad4b1e6b5f98990bac6125ce1feeb9aa60",
+   "data/normalized/xauusd/structure_5s/2025-10-29.parquet": "d7c45c53361d9d1f3d587dd5960fd224f14065eb65f89311d2ba369654d4db30",
+   "data/normalized/xauusd/structure_5s/2025-11-07.parquet": "8b370870c20e7d2a757e2a2d25750e2b3b819cdc7dcf3cb0c97e80989c2e7203",
+   "data/normalized/xauusd/structure_5s/2025-11-09.parquet": "42fd5238fa71b0e089c5f439250b942fc2bf34b647e80ea0faaa5f6cb3d8f92f",
+   "data/normalized/xauusd/structure_5s/2025-11-10.parquet": "364727b67148cb2e80b277dabe577886bc21cc754974c867105498ba144c1ee7"
+  },
+  "pre_execution_tests": "579 passed, 1 skipped in 61.19s (0:01:01)",
+  "ruling": "D31",
+  "run_id": "CBR-RUN-013C-1",
+  "verified_hashes": {
+   "parity_manifest": "a3ee0bd6ba225ce6b89d8bc61fbefd227ce8097a3f6bfac2f9414e19cd81ea9c",
+   "pc2_spec": "4dadc8b99cc4134888e5778704c0863d269d6f43ef9a5e47b1ba07fcb1b663b2",
+   "pc3_spec": "7032f400688ada1d5e9691d79a19f7ce78f6d830ad3124f588975f41b7c5d453"
+  }
+ },
+ "generated_utc": "2026-09-16T14:26:35+00:00",
+ "mismatch_register": [
+  {
+   "case": "CX-LT1-1",
+   "class": "UNRESOLVED_SPEC_AMBIGUITY",
+   "dimension": "7 hvcs_state",
+   "engine": {
+    "failed_rules": [
+     "M1H-6A-1-HVCS-INTO-SHIFT"
+    ],
+    "indecision": 0.0,
+    "minutes": 3.0,
+    "state": false
+   },
+   "expected": "valid at the shift for variant A; not applicable for variant B",
+   "note": null,
+   "reasons": [
+    "`M1H-6A-1-HVCS-INTO-SHIFT` \u2014 min_minutes = 4 is CANON, but neither the end anchor of the conforming run (PC3 ends it at the extension-extreme bar) nor whether the first candle of the sequence is counted was ever ruled on; measured runs were 3, 2 and 0 minutes"
+   ]
+  },
+  {
+   "case": "CX-LT1-1",
+   "class": "UNRESOLVED_SPEC_AMBIGUITY",
+   "dimension": "9 eligible_candidate",
+   "engine": {
+    "event_at_trigger": "REJECTED_AT_TRIGGER",
+    "rules_failed_at_trigger": [
+     "M1H-6A-1-HVCS-INTO-SHIFT"
+    ]
+   },
+   "expected": "ARMED_AT_TRIGGER",
+   "note": null,
+   "reasons": [
+    "`M1H-6A-1-HVCS-INTO-SHIFT` \u2014 min_minutes = 4 is CANON, but neither the end anchor of the conforming run (PC3 ends it at the extension-extreme bar) nor whether the first candle of the sequence is counted was ever ruled on; measured runs were 3, 2 and 0 minutes"
+   ]
+  },
+  {
+   "case": "CX-TE1-1",
+   "class": "UNRESOLVED_SPEC_AMBIGUITY",
+   "dimension": "7 hvcs_state",
+   "engine": {
+    "failed_rules": [
+     "M1H-6A-1-HVCS-INTO-SHIFT"
+    ],
+    "indecision": 1.0,
+    "minutes": 2.0,
+    "state": false
+   },
+   "expected": "valid at the shift for variant A; not applicable for variant B",
+   "note": null,
+   "reasons": [
+    "`M1H-6A-1-HVCS-INTO-SHIFT` \u2014 min_minutes = 4 is CANON, but neither the end anchor of the conforming run (PC3 ends it at the extension-extreme bar) nor whether the first candle of the sequence is counted was ever ruled on; measured runs were 3, 2 and 0 minutes"
+   ]
+  },
+  {
+   "case": "CX-TE1-1",
+   "class": "UNRESOLVED_SPEC_AMBIGUITY",
+   "dimension": "9 eligible_candidate",
+   "engine": {
+    "event_at_trigger": "REJECTED_AT_TRIGGER",
+    "rules_failed_at_trigger": [
+     "M1H-6A-1-HVCS-INTO-SHIFT"
+    ]
+   },
+   "expected": "ARMED_AT_TRIGGER",
+   "note": null,
+   "reasons": [
+    "`M1H-6A-1-HVCS-INTO-SHIFT` \u2014 min_minutes = 4 is CANON, but neither the end anchor of the conforming run (PC3 ends it at the extension-extreme bar) nor whether the first candle of the sequence is counted was ever ruled on; measured runs were 3, 2 and 0 minutes"
+   ]
+  },
+  {
+   "case": "CX-LT3-2",
+   "class": "OWNER_BASELINE_CHOICE",
+   "dimension": "3 condition",
+   "engine": {
+    "cond_direction": "NONE",
+    "condition": "RANGE",
+    "fallback_applied": true
+   },
+   "expected": [
+    {
+     "condition": "TRENDING_RANGE",
+     "direction": "UP"
+    }
+   ],
+   "note": "M-2: PC3 follows the approved OQ-46 correction (D29-14) while D25-P6 names the accepted set",
+   "reasons": [
+    "M-2: PC3's approved OQ-46 correction (D29-14) classifies this hour RANGE where D25-P6 named TRENDING_RANGE UP"
+   ]
+  },
+  {
+   "case": "CX-LT3-2",
+   "class": "CANON_MISMATCH",
+   "dimension": "6 location_or_previous_candle_event",
+   "engine": {
+    "failed_rules": [
+     "M1H-6A-2-PREV-15M-BROKEN-BY-Q",
+     "M1H-6A-3-NEW-EXTREME-IN-Q"
+    ],
+    "pos_oe_extreme": 1.6536653758846294,
+    "q_break_by_q": false
+   },
+   "expected": "location and previous-15m rules pass",
+   "note": null,
+   "reasons": [
+    "`M1H-6A-2-PREV-15M-BROKEN-BY-Q` \u2014 previous-15m take is CANON and was not re-opened in PC3",
+    "`M1H-6A-3-NEW-EXTREME-IN-Q` \u2014 new-extreme-in-Q is CANON and was not re-opened in PC3"
+   ]
+  },
+  {
+   "case": "CX-LT3-2",
+   "class": "UNRESOLVED_SPEC_AMBIGUITY",
+   "dimension": "7 hvcs_state",
+   "engine": {
+    "failed_rules": [
+     "M1H-6A-1-HVCS-INTO-SHIFT"
+    ],
+    "indecision": 0.0,
+    "minutes": 0.0,
+    "state": false
+   },
+   "expected": "valid at the shift for variant A; not applicable for variant B",
+   "note": null,
+   "reasons": [
+    "`M1H-6A-1-HVCS-INTO-SHIFT` \u2014 min_minutes = 4 is CANON, but neither the end anchor of the conforming run (PC3 ends it at the extension-extreme bar) nor whether the first candle of the sequence is counted was ever ruled on; measured runs were 3, 2 and 0 minutes"
+   ]
+  },
+  {
+   "case": "CX-LT3-2",
+   "class": "UNRESOLVED_SPEC_AMBIGUITY",
+   "dimension": "9 eligible_candidate",
+   "engine": {
+    "event_at_trigger": "REJECTED_AT_TRIGGER",
+    "rules_failed_at_trigger": [
+     "M1H-6A-1-HVCS-INTO-SHIFT",
+     "M1H-6A-2-PREV-15M-BROKEN-BY-Q",
+     "M1H-6A-3-NEW-EXTREME-IN-Q",
+     "M1H-OE-01"
+    ]
+   },
+   "expected": "ARMED_AT_TRIGGER",
+   "note": null,
+   "reasons": [
+    "`M1H-6A-1-HVCS-INTO-SHIFT` \u2014 min_minutes = 4 is CANON, but neither the end anchor of the conforming run (PC3 ends it at the extension-extreme bar) nor whether the first candle of the sequence is counted was ever ruled on; measured runs were 3, 2 and 0 minutes",
+    "`M1H-OE-01` \u2014 the 20-minute minimum is CANON but is measured from the assumed activation instant, so the failure is inseparable from the minute-7 assumption"
+   ]
+  },
+  {
+   "case": "JM-2025-10-16",
+   "class": "UNRESOLVED_SPEC_AMBIGUITY",
+   "dimension": "setup_exists_in_hour",
+   "engine": false,
+   "expected": true,
+   "note": null,
+   "reasons": [
+    "`IMPL-REWARD` \u2014 the minimum reward ratio is an IMPL-labelled implementation rule, not canon",
+    "`M1H-6A-1-HVCS-INTO-SHIFT` \u2014 min_minutes = 4 is CANON, but neither the end anchor of the conforming run (PC3 ends it at the extension-extreme bar) nor whether the first candle of the sequence is counted was ever ruled on; measured runs were 3, 2 and 0 minutes",
+    "`M1H-COND-01` \u2014 tradable-time condition window is a carried ASSUMPTION (D30-16)",
+    "`M1H-COND-02` \u2014 same condition window assumption",
+    "`M1H-OE-01` \u2014 the 20-minute minimum is CANON but is measured from the assumed activation instant, so the failure is inseparable from the minute-7 assumption"
+   ]
+  },
+  {
+   "case": "JM-2025-10-16",
+   "class": "UNRESOLVED_SPEC_AMBIGUITY",
+   "dimension": "direction",
+   "engine": null,
+   "expected": "SELL",
+   "note": null,
+   "reasons": [
+    "`IMPL-REWARD` \u2014 the minimum reward ratio is an IMPL-labelled implementation rule, not canon",
+    "`M1H-6A-1-HVCS-INTO-SHIFT` \u2014 min_minutes = 4 is CANON, but neither the end anchor of the conforming run (PC3 ends it at the extension-extreme bar) nor whether the first candle of the sequence is counted was ever ruled on; measured runs were 3, 2 and 0 minutes",
+    "`M1H-COND-01` \u2014 tradable-time condition window is a carried ASSUMPTION (D30-16)",
+    "`M1H-COND-02` \u2014 same condition window assumption",
+    "`M1H-OE-01` \u2014 the 20-minute minimum is CANON but is measured from the assumed activation instant, so the failure is inseparable from the minute-7 assumption"
+   ]
+  },
+  {
+   "case": "JM-2025-10-16",
+   "class": "UNRESOLVED_SPEC_AMBIGUITY",
+   "dimension": "model_family",
+   "engine": null,
+   "expected": "CBR1H (M-3: journal labels are not scored as subtypes)",
+   "note": "journal MTF label: TRR CT (recorded, not scored)",
+   "reasons": [
+    "`IMPL-REWARD` \u2014 the minimum reward ratio is an IMPL-labelled implementation rule, not canon",
+    "`M1H-6A-1-HVCS-INTO-SHIFT` \u2014 min_minutes = 4 is CANON, but neither the end anchor of the conforming run (PC3 ends it at the extension-extreme bar) nor whether the first candle of the sequence is counted was ever ruled on; measured runs were 3, 2 and 0 minutes",
+    "`M1H-COND-01` \u2014 tradable-time condition window is a carried ASSUMPTION (D30-16)",
+    "`M1H-COND-02` \u2014 same condition window assumption",
+    "`M1H-OE-01` \u2014 the 20-minute minimum is CANON but is measured from the assumed activation instant, so the failure is inseparable from the minute-7 assumption"
+   ]
+  },
+  {
+   "case": "JM-2025-10-16",
+   "class": "UNRESOLVED_SPEC_AMBIGUITY",
+   "dimension": "condition",
+   "engine": null,
+   "expected": [
+    "TRENDING_RANGE",
+    "RANGE"
+   ],
+   "note": null,
+   "reasons": [
+    "`IMPL-REWARD` \u2014 the minimum reward ratio is an IMPL-labelled implementation rule, not canon",
+    "`M1H-6A-1-HVCS-INTO-SHIFT` \u2014 min_minutes = 4 is CANON, but neither the end anchor of the conforming run (PC3 ends it at the extension-extreme bar) nor whether the first candle of the sequence is counted was ever ruled on; measured runs were 3, 2 and 0 minutes",
+    "`M1H-COND-01` \u2014 tradable-time condition window is a carried ASSUMPTION (D30-16)",
+    "`M1H-COND-02` \u2014 same condition window assumption",
+    "`M1H-OE-01` \u2014 the 20-minute minimum is CANON but is measured from the assumed activation instant, so the failure is inseparable from the minute-7 assumption"
+   ]
+  },
+  {
+   "case": "JM-2025-10-16",
+   "class": "UNRESOLVED_SPEC_AMBIGUITY",
+   "dimension": "timing_bucket",
+   "engine": null,
+   "expected": "CB 37 -> [30, 45) minutes",
+   "note": null,
+   "reasons": [
+    "`IMPL-REWARD` \u2014 the minimum reward ratio is an IMPL-labelled implementation rule, not canon",
+    "`M1H-6A-1-HVCS-INTO-SHIFT` \u2014 min_minutes = 4 is CANON, but neither the end anchor of the conforming run (PC3 ends it at the extension-extreme bar) nor whether the first candle of the sequence is counted was ever ruled on; measured runs were 3, 2 and 0 minutes",
+    "`M1H-COND-01` \u2014 tradable-time condition window is a carried ASSUMPTION (D30-16)",
+    "`M1H-COND-02` \u2014 same condition window assumption",
+    "`M1H-OE-01` \u2014 the 20-minute minimum is CANON but is measured from the assumed activation instant, so the failure is inseparable from the minute-7 assumption"
+   ]
+  },
+  {
+   "case": "JM-2025-10-17",
+   "class": "UNRESOLVED_SPEC_AMBIGUITY",
+   "dimension": "setup_exists_in_hour",
+   "engine": false,
+   "expected": true,
+   "note": null,
+   "reasons": [
+    "`IMPL-REWARD` \u2014 the minimum reward ratio is an IMPL-labelled implementation rule, not canon",
+    "`M1H-OE-01` \u2014 the 20-minute minimum is CANON but is measured from the assumed activation instant, so the failure is inseparable from the minute-7 assumption"
+   ]
+  },
+  {
+   "case": "JM-2025-10-17",
+   "class": "UNRESOLVED_SPEC_AMBIGUITY",
+   "dimension": "direction",
+   "engine": null,
+   "expected": "BUY",
+   "note": null,
+   "reasons": [
+    "`IMPL-REWARD` \u2014 the minimum reward ratio is an IMPL-labelled implementation rule, not canon",
+    "`M1H-OE-01` \u2014 the 20-minute minimum is CANON but is measured from the assumed activation instant, so the failure is inseparable from the minute-7 assumption"
+   ]
+  },
+  {
+   "case": "JM-2025-10-17",
+   "class": "UNRESOLVED_SPEC_AMBIGUITY",
+   "dimension": "model_family",
+   "engine": null,
+   "expected": "CBR1H (M-3: journal labels are not scored as subtypes)",
+   "note": "journal MTF label: IFS (recorded, not scored)",
+   "reasons": [
+    "`IMPL-REWARD` \u2014 the minimum reward ratio is an IMPL-labelled implementation rule, not canon",
+    "`M1H-OE-01` \u2014 the 20-minute minimum is CANON but is measured from the assumed activation instant, so the failure is inseparable from the minute-7 assumption"
+   ]
+  },
+  {
+   "case": "JM-2025-10-17",
+   "class": "UNRESOLVED_SPEC_AMBIGUITY",
+   "dimension": "timing_bucket",
+   "engine": null,
+   "expected": "CB 52 -> [45, 60) minutes",
+   "note": null,
+   "reasons": [
+    "`IMPL-REWARD` \u2014 the minimum reward ratio is an IMPL-labelled implementation rule, not canon",
+    "`M1H-OE-01` \u2014 the 20-minute minimum is CANON but is measured from the assumed activation instant, so the failure is inseparable from the minute-7 assumption"
+   ]
+  },
+  {
+   "case": "JM-2025-10-29",
+   "class": "CANON_MISMATCH",
+   "dimension": "setup_exists_in_hour",
+   "engine": false,
+   "expected": true,
+   "note": null,
+   "reasons": [
+    "the engine produced no BUY candidate at all in the hour"
+   ]
+  },
+  {
+   "case": "JM-2025-10-29",
+   "class": "CANON_MISMATCH",
+   "dimension": "direction",
+   "engine": null,
+   "expected": "BUY",
+   "note": null,
+   "reasons": [
+    "the engine produced no BUY candidate at all in the hour"
+   ]
+  },
+  {
+   "case": "JM-2025-10-29",
+   "class": "CANON_MISMATCH",
+   "dimension": "model_family",
+   "engine": null,
+   "expected": "CBR1H (M-3: journal labels are not scored as subtypes)",
+   "note": "journal MTF label: TRR PT (recorded, not scored)",
+   "reasons": [
+    "the engine produced no BUY candidate at all in the hour"
+   ]
+  },
+  {
+   "case": "JM-2025-10-29",
+   "class": "CANON_MISMATCH",
+   "dimension": "condition",
+   "engine": null,
+   "expected": [
+    "TRENDING_RANGE",
+    "RANGE"
+   ],
+   "note": null,
+   "reasons": [
+    "the engine produced no BUY candidate at all in the hour"
+   ]
+  },
+  {
+   "case": "JM-2025-10-29",
+   "class": "CANON_MISMATCH",
+   "dimension": "timing_bucket",
+   "engine": null,
+   "expected": "CB 37 -> [30, 45) minutes",
+   "note": null,
+   "reasons": [
+    "the engine produced no BUY candidate at all in the hour"
+   ]
+  }
+ ],
+ "narrative": {
+  "CX-LT2-1": {
+   "assessment": "NOT_DETERMINABLE",
+   "reason": "The source rejects the setup on timing (~22 minutes in), and PC3 has no rule that encodes Tom's discretionary 'too early' judgement; no data to test."
+  },
+  "CX-LT2-2": {
+   "assessment": "CONSISTENT",
+   "reason": "PC3's geometry is sweep \u2192 break of the most recent opposing swing, which is exactly 'sell at the break of that low'. USDJPY has no data, so this is geometry only."
+  },
+  "OE-GOOD-BAD": {
+   "assessment": "CONSISTENT",
+   "reason": "PC3 measures the deepest retracement against the whole active extension, so the 'didn't correct 50% at all' chart passes and the 'on average correcting 50%' chart fails, matching the lesson."
+  },
+  "T3-VP1-A": {
+   "assessment": "CONSISTENT",
+   "reason": "The drawn ranging type 3 takes the range high, then the range low, then shifts: PC3's sweep-then-break with a re-anchored trigger reproduces that ordering."
+  },
+  "T3-VP1-B": {
+   "assessment": "CONSISTENT",
+   "reason": "The swept low is marked and extended as a level, then the reversal follows; PC3 treats the sweep extreme as the stop reference and the opposing swing as the trigger."
+  },
+  "T3-VP2-HILO": {
+   "assessment": "CONSISTENT",
+   "reason": "The HILO lesson re-anchors its reference to the previous candle each candle, which is the evidence behind PC3's re-anchored trigger; the invalid example lacks the prior-candle break, which PC3 also rejects for lack of a confirmed opposing swing."
+  },
+  "V15-SEM-2026-05": {
+   "assessment": "NOT_DETERMINABLE",
+   "reason": "Illustrative CBR15 walkthrough with no stated entry; CBR15-PC3 is SPEC_ONLY and unscored (D30-3, D30-10)."
+  }
+ },
+ "protocol": "CBR-PROT-013C v1.1",
+ "result_hashes": {
+  "run_1": "718efebdb12370e8c4221a7eb91dbaf59c298fdd530fb1ca08fff2420271caef",
+  "run_2": "718efebdb12370e8c4221a7eb91dbaf59c298fdd530fb1ca08fff2420271caef"
+ },
+ "ruling": "D31",
+ "run_id": "CBR-RUN-013C-1",
+ "verdict": {
+  "concerns": [
+   "CX-LT1-1 dim 7 hvcs_state: CANON_MISMATCH",
+   "CX-LT1-1 dim 9 eligible_candidate: CANON_MISMATCH",
+   "CX-TE1-1 dim 7 hvcs_state: CANON_MISMATCH",
+   "CX-TE1-1 dim 9 eligible_candidate: CANON_MISMATCH",
+   "CX-LT3-2 dim 3 condition: CANON_MISMATCH \u2014 M-2: PC3 follows the approved OQ-46 correction (D29-14) while D25-P6 names the accepted set",
+   "CX-LT3-2 dim 6 location_or_previous_candle_event: CANON_MISMATCH",
+   "CX-LT3-2 dim 7 hvcs_state: CANON_MISMATCH",
+   "CX-LT3-2 dim 9 eligible_candidate: CANON_MISMATCH",
+   "JM-2025-10-16 setup_exists_in_hour: engine False vs source True",
+   "JM-2025-10-16 direction: engine None vs source SELL",
+   "JM-2025-10-16 model_family: engine None vs source CBR1H (M-3: journal labels are not scored as subtypes)",
+   "JM-2025-10-16 condition: engine None vs source ['TRENDING_RANGE', 'RANGE']",
+   "JM-2025-10-16 timing_bucket: engine None vs source CB 37 -> [30, 45) minutes",
+   "JM-2025-10-17 setup_exists_in_hour: engine False vs source True",
+   "JM-2025-10-17 direction: engine None vs source BUY",
+   "JM-2025-10-17 model_family: engine None vs source CBR1H (M-3: journal labels are not scored as subtypes)",
+   "JM-2025-10-17 timing_bucket: engine None vs source CB 52 -> [45, 60) minutes",
+   "JM-2025-10-29 setup_exists_in_hour: engine False vs source True",
+   "JM-2025-10-29 direction: engine None vs source BUY",
+   "JM-2025-10-29 model_family: engine None vs source CBR1H (M-3: journal labels are not scored as subtypes)",
+   "JM-2025-10-29 condition: engine None vs source ['TRENDING_RANGE', 'RANGE']",
+   "JM-2025-10-29 timing_bucket: engine None vs source CB 37 -> [30, 45) minutes"
+  ],
+  "deterministic": true,
+  "entry_hard_counts": {
+   "core_structural_trigger": 0,
+   "direction": 3,
+   "extension_direction": 3,
+   "model_family": 3
+  },
+  "fail_reasons": [
+   "entry-level hard dimension core_structural_trigger: 0/3 (CX-LT1-1, CX-TE1-1, CX-LT3-2)",
+   "hour-level: 0/3 HOUR_MATCH (D31-8: 0/3 or 1/3 is a FAIL)"
+  ],
+  "hour_matches": "0/3",
+  "negative_control": "NO_ELIGIBLE_CANONICAL_SIGNAL",
+  "result_hashes": [
+   "718efebdb12370e8c4221a7eb91dbaf59c298fdd530fb1ca08fff2420271caef",
+   "718efebdb12370e8c4221a7eb91dbaf59c298fdd530fb1ca08fff2420271caef"
+  ],
+  "verdict": "FAIL"
+ }
+}

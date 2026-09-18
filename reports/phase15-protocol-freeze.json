@@ -1,0 +1,7 @@
+{
+ "doc": "docs/acceptance/phase15-cbr1h-baseline-criteria.md",
+ "sha256": "d0c9fed3eb46a33a60ee04e824b5a9a35809c807fab0ef6be749f1a64e1a81ca",
+ "ruling": "D40 §12",
+ "frozen_before": "any historical signal generation or outcome observation",
+ "status": "PROPOSED, for owner approval"
+}

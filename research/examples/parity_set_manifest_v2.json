@@ -1,0 +1,753 @@
+{
+ "manifest_version": "v2",
+ "supersedes": {
+  "manifest": "parity_set_manifest.json",
+  "hash": "a3ee0bd6ba225ce6b89d8bc61fbefd227ce8097a3f6bfac2f9414e19cd81ea9c"
+ },
+ "ruling": "D34 \u00a79-12",
+ "generated_utc": "2026-09-18T00:03:46+00:00",
+ "scope": "CBR1H only. Every binding machine case satisfies model_scope = CONFIRMED_CBR1H (D34 \u00a712). No case is scored by this file and no engine output was read.",
+ "counts": {
+  "binding_entry_level": 4,
+  "binding_hour_level": 1,
+  "narrative_only": 11
+ },
+ "binding_case_ids": [
+  "CX-LT1-1",
+  "CX-TE1-1",
+  "CX-LT3-2",
+  "CX-LT3-1",
+  "JM-2025-10-16"
+ ],
+ "corrections": {
+  "JM-2025-10-17": "PARITY_SET_CORRECTION",
+  "JM-2025-10-29": "PARITY_SET_CORRECTION",
+  "JM-2025-10-16": "NO_CHANGE"
+ },
+ "cases": [
+  {
+   "case_id": "CX-LT1-1",
+   "source": "research/examples/course_examples.jsonl",
+   "source_detail": "V1H-live_trade_1_gold_win",
+   "evidence_level": "L1_VIDEO",
+   "instrument": "XAUUSD",
+   "model": "CBR1H",
+   "model_scope": "CONFIRMED_CBR1H",
+   "direction": "BUY",
+   "positive_or_negative": "POSITIVE",
+   "scoring_level": "ENTRY_LEVEL",
+   "binds_verdict": true,
+   "start_time": "2025-10-21T01:00:00+00:00",
+   "end_time": "2025-10-21 02:00:00+00:00",
+   "data_span_utc": [
+    "2025-10-20T00:00:00+00:00",
+    "2025-10-21T03:00:00+00:00"
+   ],
+   "stated": {
+    "entry_time_utc": "2025-10-21T01:39:15+00:00",
+    "entry": 4340.13,
+    "stop": 4332.96,
+    "target": 4351.59
+   },
+   "source_supported_fields": [
+    "model_family",
+    "direction",
+    "condition",
+    "extension_direction",
+    "extension_activation",
+    "location_or_previous_candle_event",
+    "hvcs_state",
+    "type3_5s_trigger",
+    "eligible_candidate",
+    "trigger_time",
+    "trigger_price",
+    "stop_anchor_concept",
+    "target_concept"
+   ],
+   "market_data_hashes": {
+    "data/normalized/xauusd/structure_1m/2025-10-20.parquet": "fbcad47b5959d6a03665b549407fab024ff6d499be0b6e52de0f16bb11d09ee2",
+    "data/normalized/xauusd/structure_5s/2025-10-20.parquet": "d16362b0049bc4782925564eb3a935bc73d19e515c0d37b6766f8a29b7af4d38",
+    "data/normalized/xauusd/structure_1m/2025-10-21.parquet": "377efadbff8d526259192b81c0e09faf905b1c376fb3d54d9bb9389d5fbc7dff",
+    "data/normalized/xauusd/structure_5s/2025-10-21.parquet": "cae165892dd03fda2df2a7b5f27898684f81f9bff6c7494fc476e52eef52e075"
+   },
+   "source_hashes": {
+    "research/examples/course_examples.jsonl": "4f2f6650baa4d76c0789dc550572ac32188d45b06a389e9d0e6c8a48f73e27d2"
+   },
+   "evidence_hashes": {
+    "docs/governance/d34-pc4-authorization.md": "59bdabfc00620138fab7ae3591f7cda5b0e57350ab2d11acfca250bef339fcb2",
+    "docs/decisions/mtf-model-taxonomy.md": "7984632d807588d9c6b27e7ff38aaad392dbb96b231526aab6dbe9323d50b17b",
+    "docs/decisions/oq49-journal-generalization.md": "2fc8a9c00fddad3127fb08c312b3241637c34206af56df975467b4a4bfb64305",
+    "docs/decisions/oq48-hvcs-duration-evidence.md": "78e30dd4b310ad82cd4bb657123bd4db5573ce82fcb3091ac55269277bf81475",
+    "research/examples/cbr1h-parity-set-proposal.md": "367e20bff456cec4e4e9fb2f722c70f23d183c0c983cb5479dd3ee3bb875dd7c"
+   }
+  },
+  {
+   "case_id": "CX-TE1-1",
+   "source": "research/examples/course_examples.jsonl",
+   "source_detail": "V1H-trade_example_1",
+   "evidence_level": "L1_VIDEO",
+   "instrument": "XAUUSD",
+   "model": "CBR1H",
+   "model_scope": "CONFIRMED_CBR1H",
+   "direction": "BUY",
+   "positive_or_negative": "POSITIVE",
+   "scoring_level": "ENTRY_LEVEL",
+   "binds_verdict": true,
+   "start_time": "2025-10-24T04:00:00+00:00",
+   "end_time": "2025-10-24 05:00:00+00:00",
+   "data_span_utc": [
+    "2025-10-20T00:00:00+00:00",
+    "2025-10-24T06:00:00+00:00"
+   ],
+   "stated": {
+    "entry_time_utc": [
+     "2025-10-24T04:37:00+00:00",
+     "2025-10-24T04:39:00+00:00"
+    ],
+    "entry": 4105.58,
+    "stop": 4102.8,
+    "target": 4109.71
+   },
+   "source_supported_fields": [
+    "model_family",
+    "direction",
+    "condition",
+    "extension_direction",
+    "extension_activation",
+    "location_or_previous_candle_event",
+    "hvcs_state",
+    "type3_5s_trigger",
+    "eligible_candidate",
+    "trigger_time",
+    "trigger_price",
+    "stop_anchor_concept",
+    "target_concept"
+   ],
+   "market_data_hashes": {
+    "data/normalized/xauusd/structure_1m/2025-10-20.parquet": "fbcad47b5959d6a03665b549407fab024ff6d499be0b6e52de0f16bb11d09ee2",
+    "data/normalized/xauusd/structure_5s/2025-10-20.parquet": "d16362b0049bc4782925564eb3a935bc73d19e515c0d37b6766f8a29b7af4d38",
+    "data/normalized/xauusd/structure_1m/2025-10-21.parquet": "377efadbff8d526259192b81c0e09faf905b1c376fb3d54d9bb9389d5fbc7dff",
+    "data/normalized/xauusd/structure_5s/2025-10-21.parquet": "cae165892dd03fda2df2a7b5f27898684f81f9bff6c7494fc476e52eef52e075",
+    "data/normalized/xauusd/structure_1m/2025-10-22.parquet": "740e4e8ccb0683c591f4c64570721be528a0293ade2fdd11100f207b68739485",
+    "data/normalized/xauusd/structure_5s/2025-10-22.parquet": "0460ef4f74a434450e16669a54be96fdbeb2140f7887ca7f0e9c8cc9359a2a1b",
+    "data/normalized/xauusd/structure_1m/2025-10-23.parquet": "ff8ee715bfcca3ee301878a319a4842224dea6973f2803975302a019589c86c2",
+    "data/normalized/xauusd/structure_5s/2025-10-23.parquet": "19bb3b8f3897264c6452693ba58285e1970540fea4ebad83bbc942ed40ee5b17",
+    "data/normalized/xauusd/structure_1m/2025-10-24.parquet": "680aaa70b44a92d1998d11ae6cf22f4a84a18a73d5dfbf8efdb82f6c152501fe",
+    "data/normalized/xauusd/structure_5s/2025-10-24.parquet": "0b9394e254cd72c24d1b212f812fae357f731f62254028d4373a2f9130bf0ba9"
+   },
+   "source_hashes": {
+    "research/examples/course_examples.jsonl": "4f2f6650baa4d76c0789dc550572ac32188d45b06a389e9d0e6c8a48f73e27d2"
+   },
+   "evidence_hashes": {
+    "docs/governance/d34-pc4-authorization.md": "59bdabfc00620138fab7ae3591f7cda5b0e57350ab2d11acfca250bef339fcb2",
+    "docs/decisions/mtf-model-taxonomy.md": "7984632d807588d9c6b27e7ff38aaad392dbb96b231526aab6dbe9323d50b17b",
+    "docs/decisions/oq49-journal-generalization.md": "2fc8a9c00fddad3127fb08c312b3241637c34206af56df975467b4a4bfb64305",
+    "docs/decisions/oq48-hvcs-duration-evidence.md": "78e30dd4b310ad82cd4bb657123bd4db5573ce82fcb3091ac55269277bf81475",
+    "research/examples/cbr1h-parity-set-proposal.md": "367e20bff456cec4e4e9fb2f722c70f23d183c0c983cb5479dd3ee3bb875dd7c"
+   }
+  },
+  {
+   "case_id": "CX-LT3-2",
+   "source": "research/examples/course_examples.jsonl",
+   "source_detail": "V1H-live_trade_3_gold_win",
+   "evidence_level": "L1_VIDEO",
+   "instrument": "XAUUSD",
+   "model": "CBR1H",
+   "model_scope": "CONFIRMED_CBR1H",
+   "direction": "SELL",
+   "positive_or_negative": "POSITIVE",
+   "scoring_level": "ENTRY_LEVEL",
+   "binds_verdict": true,
+   "start_time": "2025-11-10T01:00:00+00:00",
+   "end_time": "2025-11-10 02:00:00+00:00",
+   "data_span_utc": [
+    "2025-11-07T00:00:00+00:00",
+    "2025-11-10T03:00:00+00:00"
+   ],
+   "stated": {
+    "entry_time_utc": "2025-11-10T01:40:00+00:00",
+    "entry": 4050.71,
+    "stop": 4053.3,
+    "target": 4043.8
+   },
+   "source_supported_fields": [
+    "model_family",
+    "direction",
+    "condition",
+    "extension_direction",
+    "extension_activation",
+    "location_or_previous_candle_event",
+    "hvcs_state",
+    "type3_5s_trigger",
+    "eligible_candidate",
+    "trigger_time",
+    "trigger_price",
+    "stop_anchor_concept",
+    "target_concept"
+   ],
+   "market_data_hashes": {
+    "data/normalized/xauusd/structure_1m/2025-11-07.parquet": "7386b4b49139352edd16261415f28407bb41f88ef6d20cbba50bc5687b0a10f3",
+    "data/normalized/xauusd/structure_5s/2025-11-07.parquet": "8b370870c20e7d2a757e2a2d25750e2b3b819cdc7dcf3cb0c97e80989c2e7203",
+    "data/normalized/xauusd/structure_1m/2025-11-09.parquet": "84e48073f30bffa08371677f99c3018f906f0fa3cfd1c4c3e1346d0b244a63cb",
+    "data/normalized/xauusd/structure_5s/2025-11-09.parquet": "42fd5238fa71b0e089c5f439250b942fc2bf34b647e80ea0faaa5f6cb3d8f92f",
+    "data/normalized/xauusd/structure_1m/2025-11-10.parquet": "82c206b1ddf77bc43ddde066021cd2f395cdbf5e1cb662fdb47fc60d037f2dbe",
+    "data/normalized/xauusd/structure_5s/2025-11-10.parquet": "364727b67148cb2e80b277dabe577886bc21cc754974c867105498ba144c1ee7"
+   },
+   "source_hashes": {
+    "research/examples/course_examples.jsonl": "4f2f6650baa4d76c0789dc550572ac32188d45b06a389e9d0e6c8a48f73e27d2"
+   },
+   "evidence_hashes": {
+    "docs/governance/d34-pc4-authorization.md": "59bdabfc00620138fab7ae3591f7cda5b0e57350ab2d11acfca250bef339fcb2",
+    "docs/decisions/mtf-model-taxonomy.md": "7984632d807588d9c6b27e7ff38aaad392dbb96b231526aab6dbe9323d50b17b",
+    "docs/decisions/oq49-journal-generalization.md": "2fc8a9c00fddad3127fb08c312b3241637c34206af56df975467b4a4bfb64305",
+    "docs/decisions/oq48-hvcs-duration-evidence.md": "78e30dd4b310ad82cd4bb657123bd4db5573ce82fcb3091ac55269277bf81475",
+    "research/examples/cbr1h-parity-set-proposal.md": "367e20bff456cec4e4e9fb2f722c70f23d183c0c983cb5479dd3ee3bb875dd7c"
+   }
+  },
+  {
+   "case_id": "CX-LT3-1",
+   "source": "research/examples/course_examples.jsonl",
+   "source_detail": "V1H-live_trade_3_gold_win",
+   "evidence_level": "L1_VIDEO",
+   "instrument": "XAUUSD",
+   "model": "CBR1H",
+   "model_scope": "CONFIRMED_CBR1H",
+   "direction": "SELL",
+   "positive_or_negative": "NEGATIVE",
+   "scoring_level": "ENTRY_LEVEL",
+   "binds_verdict": true,
+   "start_time": "2025-11-10T01:00:00+00:00",
+   "end_time": "2025-11-10 02:00:00+00:00",
+   "data_span_utc": [
+    "2025-11-07T00:00:00+00:00",
+    "2025-11-10T03:00:00+00:00"
+   ],
+   "stated": {
+    "rejected_window_utc": [
+     "2025-11-10T01:28:00+00:00",
+     "2025-11-10T01:36:00+00:00"
+    ],
+    "rejected_because": [
+     "shift too small",
+     "shift not clean",
+     "pushing off a 5m/15m candle open",
+     "gold spread and DXY moving together (out of scope, D7)"
+    ]
+   },
+   "source_supported_fields": [
+    "no_eligible_candidate_for_the_rejected_geometry"
+   ],
+   "market_data_hashes": {
+    "data/normalized/xauusd/structure_1m/2025-11-07.parquet": "7386b4b49139352edd16261415f28407bb41f88ef6d20cbba50bc5687b0a10f3",
+    "data/normalized/xauusd/structure_5s/2025-11-07.parquet": "8b370870c20e7d2a757e2a2d25750e2b3b819cdc7dcf3cb0c97e80989c2e7203",
+    "data/normalized/xauusd/structure_1m/2025-11-09.parquet": "84e48073f30bffa08371677f99c3018f906f0fa3cfd1c4c3e1346d0b244a63cb",
+    "data/normalized/xauusd/structure_5s/2025-11-09.parquet": "42fd5238fa71b0e089c5f439250b942fc2bf34b647e80ea0faaa5f6cb3d8f92f",
+    "data/normalized/xauusd/structure_1m/2025-11-10.parquet": "82c206b1ddf77bc43ddde066021cd2f395cdbf5e1cb662fdb47fc60d037f2dbe",
+    "data/normalized/xauusd/structure_5s/2025-11-10.parquet": "364727b67148cb2e80b277dabe577886bc21cc754974c867105498ba144c1ee7"
+   },
+   "source_hashes": {
+    "research/examples/course_examples.jsonl": "4f2f6650baa4d76c0789dc550572ac32188d45b06a389e9d0e6c8a48f73e27d2"
+   },
+   "evidence_hashes": {
+    "docs/governance/d34-pc4-authorization.md": "59bdabfc00620138fab7ae3591f7cda5b0e57350ab2d11acfca250bef339fcb2",
+    "docs/decisions/mtf-model-taxonomy.md": "7984632d807588d9c6b27e7ff38aaad392dbb96b231526aab6dbe9323d50b17b",
+    "docs/decisions/oq49-journal-generalization.md": "2fc8a9c00fddad3127fb08c312b3241637c34206af56df975467b4a4bfb64305",
+    "docs/decisions/oq48-hvcs-duration-evidence.md": "78e30dd4b310ad82cd4bb657123bd4db5573ce82fcb3091ac55269277bf81475",
+    "research/examples/cbr1h-parity-set-proposal.md": "367e20bff456cec4e4e9fb2f722c70f23d183c0c983cb5479dd3ee3bb875dd7c"
+   }
+  },
+  {
+   "case_id": "JM-2025-10-16",
+   "source": "research/frames/V1H-defining_a_good_extension/slides/00-02-42.jpg",
+   "source_detail": "Journal Master 2025 row 'nice GS'",
+   "evidence_level": "L1_FRAME_JOURNAL_TABLE",
+   "instrument": "XAUUSD",
+   "model": "CBR1H",
+   "model_scope": "CONFIRMED_CBR1H",
+   "direction": "SELL",
+   "positive_or_negative": "POSITIVE",
+   "scoring_level": "HOUR_LEVEL",
+   "binds_verdict": true,
+   "start_time": "2025-10-16T00:00:00+00:00",
+   "end_time": "2025-10-16 01:00:00+00:00",
+   "data_span_utc": [
+    "2025-10-15T00:00:00+00:00",
+    "2025-10-16T02:00:00+00:00"
+   ],
+   "stated": {
+    "journal_time_local": "2025-10-16 11:41 AM (UTC+11)",
+    "mtf_model": "TRR CT",
+    "condition": "Trending",
+    "cb_hour": 37,
+    "shifts": "LLTF (Seconds)",
+    "reversal_label": "30m Reversal",
+    "aoi": null
+   },
+   "source_supported_fields": [
+    "setup_exists_in_hour",
+    "direction",
+    "model_family_if_source_defined",
+    "condition_if_source_defined",
+    "timing_bucket_if_source_defined"
+   ],
+   "market_data_hashes": {
+    "data/normalized/xauusd/structure_1m/2025-10-15.parquet": "e585f75a22f50dd40cde3b6d72236992f9b82f1e3879e9e51f37be11144da2d7",
+    "data/normalized/xauusd/structure_5s/2025-10-15.parquet": "d0a13b1db18c8a9c78eb48d2f1677383836975f0631cd381a8c35f9e3744fa89",
+    "data/normalized/xauusd/structure_1m/2025-10-16.parquet": "90517be31f7f423b5e254b424e620f6e2794716951104b560343f1b0c5dc7c13",
+    "data/normalized/xauusd/structure_5s/2025-10-16.parquet": "064f846b0c82d613bf2729216f7dfcf438e7da14c693914f817ec885f1397a2c"
+   },
+   "source_hashes": {
+    "research/frames/V1H-defining_a_good_extension/slides/00-02-42.jpg": "9a0dc40416754492ea2d862c3425eaf511cde2340592c2f9fa375ec6f580d75c"
+   },
+   "evidence_hashes": {
+    "docs/governance/d34-pc4-authorization.md": "59bdabfc00620138fab7ae3591f7cda5b0e57350ab2d11acfca250bef339fcb2",
+    "docs/decisions/mtf-model-taxonomy.md": "7984632d807588d9c6b27e7ff38aaad392dbb96b231526aab6dbe9323d50b17b",
+    "docs/decisions/oq49-journal-generalization.md": "2fc8a9c00fddad3127fb08c312b3241637c34206af56df975467b4a4bfb64305",
+    "docs/decisions/oq48-hvcs-duration-evidence.md": "78e30dd4b310ad82cd4bb657123bd4db5573ce82fcb3091ac55269277bf81475",
+    "research/examples/cbr1h-parity-set-proposal.md": "367e20bff456cec4e4e9fb2f722c70f23d183c0c983cb5479dd3ee3bb875dd7c"
+   },
+   "correction": {
+    "classification": "NO_CHANGE",
+    "ruling": "D34-11",
+    "reason": "TRR CT is the counter-trending-range variant the engine implements (TRENDING_RANGE + M1H-LOC-03). Its dating is corroborated inside the frozen hour, independently of the journal time column. Scored no further than the journal states.",
+    "evidence": "docs/decisions/mtf-model-taxonomy.md"
+   }
+  },
+  {
+   "case_id": "JM-2025-10-17",
+   "source": "research/frames/V1H-defining_a_good_extension/slides/00-02-42.jpg",
+   "source_detail": "Journal Master 2025 row 'ok, dxy cor'",
+   "evidence_level": "L1_FRAME_JOURNAL_TABLE",
+   "instrument": "XAUUSD",
+   "model": "CBR1H",
+   "model_scope": "IFS_NOT_IMPLEMENTED",
+   "direction": "BUY",
+   "positive_or_negative": "POSITIVE",
+   "scoring_level": "NARRATIVE_ONLY",
+   "binds_verdict": false,
+   "start_time": "2025-10-17T01:00:00+00:00",
+   "end_time": "2025-10-17 02:00:00+00:00",
+   "data_span_utc": [
+    "2025-10-16T00:00:00+00:00",
+    "2025-10-17T03:00:00+00:00"
+   ],
+   "stated": {
+    "journal_time_local": "2025-10-17 12:53 PM (UTC+11)",
+    "mtf_model": "IFS",
+    "condition": "Volume",
+    "cb_hour": 52,
+    "shifts": "LLTF (Seconds) + LTF (1m)",
+    "reversal_label": "45m Reversal",
+    "aoi": "1hr, 30m"
+   },
+   "source_supported_fields": [
+    "setup_exists_in_hour",
+    "direction",
+    "model_family_if_source_defined",
+    "condition_if_source_defined",
+    "timing_bucket_if_source_defined"
+   ],
+   "market_data_hashes": {
+    "data/normalized/xauusd/structure_1m/2025-10-16.parquet": "90517be31f7f423b5e254b424e620f6e2794716951104b560343f1b0c5dc7c13",
+    "data/normalized/xauusd/structure_5s/2025-10-16.parquet": "064f846b0c82d613bf2729216f7dfcf438e7da14c693914f817ec885f1397a2c",
+    "data/normalized/xauusd/structure_1m/2025-10-17.parquet": "3d425ad0227ef5642145308021eb4872cd18f9bfc2917bcc918acfb9b125884f",
+    "data/normalized/xauusd/structure_5s/2025-10-17.parquet": "8214e262ac6be60d18fd42742244acb889b9db8af11f835d1be6d2a7bc8517c7"
+   },
+   "source_hashes": {
+    "research/frames/V1H-defining_a_good_extension/slides/00-02-42.jpg": "9a0dc40416754492ea2d862c3425eaf511cde2340592c2f9fa375ec6f580d75c"
+   },
+   "evidence_hashes": {
+    "docs/governance/d34-pc4-authorization.md": "59bdabfc00620138fab7ae3591f7cda5b0e57350ab2d11acfca250bef339fcb2",
+    "docs/decisions/mtf-model-taxonomy.md": "7984632d807588d9c6b27e7ff38aaad392dbb96b231526aab6dbe9323d50b17b",
+    "docs/decisions/oq49-journal-generalization.md": "2fc8a9c00fddad3127fb08c312b3241637c34206af56df975467b4a4bfb64305",
+    "docs/decisions/oq48-hvcs-duration-evidence.md": "78e30dd4b310ad82cd4bb657123bd4db5573ce82fcb3091ac55269277bf81475",
+    "research/examples/cbr1h-parity-set-proposal.md": "367e20bff456cec4e4e9fb2f722c70f23d183c0c983cb5479dd3ee3bb875dd7c"
+   },
+   "correction": {
+    "classification": "PARITY_SET_CORRECTION",
+    "ruling": "D34-9",
+    "reason": "the journal records an IFS (inverse fractal shift). Level 1 names three middle-timeframe models and the engine implements two: there is no FS/IFS condition class in PC2, PC3 or PC4, so the engine cannot express the model this row records.",
+    "evidence": "docs/decisions/mtf-model-taxonomy.md",
+    "preserved_for": "future FS/IFS model validation set"
+   }
+  },
+  {
+   "case_id": "JM-2025-10-29",
+   "source": "research/frames/V1H-defining_a_good_extension/slides/00-02-42.jpg",
+   "source_detail": "Journal Master 2025 row 'niceueeee'",
+   "evidence_level": "L1_FRAME_JOURNAL_TABLE",
+   "instrument": "XAUUSD",
+   "model": "CBR1H",
+   "model_scope": "SOURCE_AMBIGUITY",
+   "direction": "BUY",
+   "positive_or_negative": "POSITIVE",
+   "scoring_level": "NARRATIVE_ONLY",
+   "binds_verdict": false,
+   "start_time": "2025-10-29T08:00:00+00:00",
+   "end_time": "2025-10-29 09:00:00+00:00",
+   "data_span_utc": [
+    "2025-10-28T00:00:00+00:00",
+    "2025-10-29T10:00:00+00:00"
+   ],
+   "stated": {
+    "journal_time_local": "2025-10-29 7:14 PM (UTC+11)",
+    "mtf_model": "TRR PT",
+    "condition": "Trending",
+    "cb_hour": 37,
+    "shifts": "LLTF (Seconds)",
+    "reversal_label": "30m Reversal",
+    "aoi": "4h"
+   },
+   "source_supported_fields": [
+    "setup_exists_in_hour",
+    "direction",
+    "model_family_if_source_defined",
+    "condition_if_source_defined",
+    "timing_bucket_if_source_defined"
+   ],
+   "market_data_hashes": {
+    "data/normalized/xauusd/structure_1m/2025-10-28.parquet": "13d5ff52045adcc2262043c93c2c5460faf0148deddecad66e30b1da4f84f7cf",
+    "data/normalized/xauusd/structure_5s/2025-10-28.parquet": "07c20c0a4276a0a5146d213bea733bad4b1e6b5f98990bac6125ce1feeb9aa60",
+    "data/normalized/xauusd/structure_1m/2025-10-29.parquet": "5dc8e58ba271380be9ab8a1ec4f54d16fe2b4bb405e3c67e72f80e539f99e0a0",
+    "data/normalized/xauusd/structure_5s/2025-10-29.parquet": "d7c45c53361d9d1f3d587dd5960fd224f14065eb65f89311d2ba369654d4db30"
+   },
+   "source_hashes": {
+    "research/frames/V1H-defining_a_good_extension/slides/00-02-42.jpg": "9a0dc40416754492ea2d862c3425eaf511cde2340592c2f9fa375ec6f580d75c"
+   },
+   "evidence_hashes": {
+    "docs/governance/d34-pc4-authorization.md": "59bdabfc00620138fab7ae3591f7cda5b0e57350ab2d11acfca250bef339fcb2",
+    "docs/decisions/mtf-model-taxonomy.md": "7984632d807588d9c6b27e7ff38aaad392dbb96b231526aab6dbe9323d50b17b",
+    "docs/decisions/oq49-journal-generalization.md": "2fc8a9c00fddad3127fb08c312b3241637c34206af56df975467b4a4bfb64305",
+    "docs/decisions/oq48-hvcs-duration-evidence.md": "78e30dd4b310ad82cd4bb657123bd4db5573ce82fcb3091ac55269277bf81475",
+    "research/examples/cbr1h-parity-set-proposal.md": "367e20bff456cec4e4e9fb2f722c70f23d183c0c983cb5479dd3ee3bb875dd7c"
+   },
+   "correction": {
+    "classification": "PARITY_SET_CORRECTION",
+    "ruling": "D34-10",
+    "reason": "the row's own columns disagree: the journal time maps to minute 14 of the hour while the CB-hour column reads 37, and the frozen hour contains no down-extension for the recorded BUY. Entry time, candle-behaviour time, direction semantics and model membership may not be inferred from engine output (D34-10).",
+    "evidence": "docs/decisions/mtf-model-taxonomy.md",
+    "preserved_for": "reference; re-admissible only if the source ambiguity is resolved independently"
+   }
+  },
+  {
+   "case_id": "CX-LT2-2",
+   "source": "research/examples/course_examples.jsonl",
+   "source_detail": "V1H-live_trade_2_uj_loss",
+   "evidence_level": "L1_VIDEO",
+   "instrument": "USDJPY",
+   "model": "CBR1H",
+   "model_scope": "NARRATIVE",
+   "direction": "SELL",
+   "positive_or_negative": "POSITIVE",
+   "scoring_level": "NARRATIVE_ONLY",
+   "binds_verdict": false,
+   "start_time": "2025-10-23T01:00:00+00:00",
+   "end_time": "2025-10-23 02:00:00+00:00",
+   "data_span_utc": null,
+   "stated": {
+    "entry": 152.402,
+    "stop": 152.457,
+    "geometry": "sell at the break of that low"
+   },
+   "source_supported_fields": [
+    "geometry_consistency_only"
+   ],
+   "market_data_hashes": {},
+   "source_hashes": {
+    "research/examples/course_examples.jsonl": "4f2f6650baa4d76c0789dc550572ac32188d45b06a389e9d0e6c8a48f73e27d2"
+   },
+   "evidence_hashes": {
+    "docs/governance/d34-pc4-authorization.md": "59bdabfc00620138fab7ae3591f7cda5b0e57350ab2d11acfca250bef339fcb2",
+    "docs/decisions/mtf-model-taxonomy.md": "7984632d807588d9c6b27e7ff38aaad392dbb96b231526aab6dbe9323d50b17b",
+    "docs/decisions/oq49-journal-generalization.md": "2fc8a9c00fddad3127fb08c312b3241637c34206af56df975467b4a4bfb64305",
+    "docs/decisions/oq48-hvcs-duration-evidence.md": "78e30dd4b310ad82cd4bb657123bd4db5573ce82fcb3091ac55269277bf81475",
+    "research/examples/cbr1h-parity-set-proposal.md": "367e20bff456cec4e4e9fb2f722c70f23d183c0c983cb5479dd3ee3bb875dd7c"
+   }
+  },
+  {
+   "case_id": "CX-LT2-1",
+   "source": "research/examples/course_examples.jsonl",
+   "source_detail": "V1H-live_trade_2_uj_loss",
+   "evidence_level": "L1_VIDEO",
+   "instrument": "USDJPY",
+   "model": "CBR1H",
+   "model_scope": "NARRATIVE",
+   "direction": "SELL",
+   "positive_or_negative": "NEGATIVE",
+   "scoring_level": "NARRATIVE_ONLY",
+   "binds_verdict": false,
+   "start_time": "2025-10-23T01:00:00+00:00",
+   "end_time": "2025-10-23 02:00:00+00:00",
+   "data_span_utc": null,
+   "stated": {
+    "rejected_because": [
+     "~22 minutes into the hour is too early",
+     "better late than early"
+    ]
+   },
+   "source_supported_fields": [
+    "geometry_consistency_only"
+   ],
+   "market_data_hashes": {},
+   "source_hashes": {
+    "research/examples/course_examples.jsonl": "4f2f6650baa4d76c0789dc550572ac32188d45b06a389e9d0e6c8a48f73e27d2"
+   },
+   "evidence_hashes": {
+    "docs/governance/d34-pc4-authorization.md": "59bdabfc00620138fab7ae3591f7cda5b0e57350ab2d11acfca250bef339fcb2",
+    "docs/decisions/mtf-model-taxonomy.md": "7984632d807588d9c6b27e7ff38aaad392dbb96b231526aab6dbe9323d50b17b",
+    "docs/decisions/oq49-journal-generalization.md": "2fc8a9c00fddad3127fb08c312b3241637c34206af56df975467b4a4bfb64305",
+    "docs/decisions/oq48-hvcs-duration-evidence.md": "78e30dd4b310ad82cd4bb657123bd4db5573ce82fcb3091ac55269277bf81475",
+    "research/examples/cbr1h-parity-set-proposal.md": "367e20bff456cec4e4e9fb2f722c70f23d183c0c983cb5479dd3ee3bb875dd7c"
+   }
+  },
+  {
+   "case_id": "T3-VP1-A",
+   "source": "research/frames/VP1-1_4_shifts_type_3_choch/slides/00-03-04.jpg",
+   "source_detail": "VP1-1_4_shifts_type_3_choch 00:03:04",
+   "evidence_level": "L1_FRAME",
+   "instrument": "XAUUSD",
+   "model": "TYPE3_LESSON",
+   "model_scope": "NARRATIVE",
+   "direction": null,
+   "positive_or_negative": "POSITIVE",
+   "scoring_level": "NARRATIVE_ONLY",
+   "binds_verdict": false,
+   "start_time": null,
+   "end_time": null,
+   "data_span_utc": null,
+   "stated": {
+    "geometry": "ranging type 3: take the range high, then the range low, then shift"
+   },
+   "source_supported_fields": [
+    "geometry_consistency_only"
+   ],
+   "market_data_hashes": {},
+   "source_hashes": {
+    "research/frames/VP1-1_4_shifts_type_3_choch/slides/00-03-04.jpg": "b7df97e679df3f24ae1480d9528297800c80b3a8d1e18399777f6f22a9c7d287"
+   },
+   "evidence_hashes": {
+    "docs/governance/d34-pc4-authorization.md": "59bdabfc00620138fab7ae3591f7cda5b0e57350ab2d11acfca250bef339fcb2",
+    "docs/decisions/mtf-model-taxonomy.md": "7984632d807588d9c6b27e7ff38aaad392dbb96b231526aab6dbe9323d50b17b",
+    "docs/decisions/oq49-journal-generalization.md": "2fc8a9c00fddad3127fb08c312b3241637c34206af56df975467b4a4bfb64305",
+    "docs/decisions/oq48-hvcs-duration-evidence.md": "78e30dd4b310ad82cd4bb657123bd4db5573ce82fcb3091ac55269277bf81475",
+    "research/examples/cbr1h-parity-set-proposal.md": "367e20bff456cec4e4e9fb2f722c70f23d183c0c983cb5479dd3ee3bb875dd7c"
+   }
+  },
+  {
+   "case_id": "T3-VP1-B",
+   "source": "research/frames/VP1-1_4_shifts_type_3_choch/slides/00-03-38.jpg",
+   "source_detail": "VP1-1_4_shifts_type_3_choch 00:03:38",
+   "evidence_level": "L1_FRAME",
+   "instrument": "XAUUSD",
+   "model": "TYPE3_LESSON",
+   "model_scope": "NARRATIVE",
+   "direction": "BUY",
+   "positive_or_negative": "POSITIVE",
+   "scoring_level": "NARRATIVE_ONLY",
+   "binds_verdict": false,
+   "start_time": null,
+   "end_time": null,
+   "data_span_utc": null,
+   "stated": {
+    "geometry": "swept low marked and extended as a level, then the reversal"
+   },
+   "source_supported_fields": [
+    "geometry_consistency_only"
+   ],
+   "market_data_hashes": {},
+   "source_hashes": {
+    "research/frames/VP1-1_4_shifts_type_3_choch/slides/00-03-38.jpg": "beddf7c5516a3587126b1112f97bd7376d5e4b702579713fd74391a4c04486a5"
+   },
+   "evidence_hashes": {
+    "docs/governance/d34-pc4-authorization.md": "59bdabfc00620138fab7ae3591f7cda5b0e57350ab2d11acfca250bef339fcb2",
+    "docs/decisions/mtf-model-taxonomy.md": "7984632d807588d9c6b27e7ff38aaad392dbb96b231526aab6dbe9323d50b17b",
+    "docs/decisions/oq49-journal-generalization.md": "2fc8a9c00fddad3127fb08c312b3241637c34206af56df975467b4a4bfb64305",
+    "docs/decisions/oq48-hvcs-duration-evidence.md": "78e30dd4b310ad82cd4bb657123bd4db5573ce82fcb3091ac55269277bf81475",
+    "research/examples/cbr1h-parity-set-proposal.md": "367e20bff456cec4e4e9fb2f722c70f23d183c0c983cb5479dd3ee3bb875dd7c"
+   }
+  },
+  {
+   "case_id": "T3-VP2-HILO",
+   "source": "research/transcripts/phase2/VP2-1m_hilo_entries.json",
+   "source_detail": "VP2-1m_hilo_entries 00:02:44-00:05:25",
+   "evidence_level": "L1_VIDEO",
+   "instrument": "XAUUSD",
+   "model": "HILO",
+   "model_scope": "NARRATIVE",
+   "direction": null,
+   "positive_or_negative": "BOTH",
+   "scoring_level": "NARRATIVE_ONLY",
+   "binds_verdict": false,
+   "start_time": null,
+   "end_time": null,
+   "data_span_utc": null,
+   "stated": {
+    "geometry": "valid vs invalid HILO; reference levels re-anchor to the previous candle each candle"
+   },
+   "source_supported_fields": [
+    "geometry_consistency_only"
+   ],
+   "market_data_hashes": {},
+   "source_hashes": {
+    "research/transcripts/phase2/VP2-1m_hilo_entries.json": "756a39f2e6cfa14bd1226f5fd78e5b9a3c9e19d8df274af4a564ef1691624743"
+   },
+   "evidence_hashes": {
+    "docs/governance/d34-pc4-authorization.md": "59bdabfc00620138fab7ae3591f7cda5b0e57350ab2d11acfca250bef339fcb2",
+    "docs/decisions/mtf-model-taxonomy.md": "7984632d807588d9c6b27e7ff38aaad392dbb96b231526aab6dbe9323d50b17b",
+    "docs/decisions/oq49-journal-generalization.md": "2fc8a9c00fddad3127fb08c312b3241637c34206af56df975467b4a4bfb64305",
+    "docs/decisions/oq48-hvcs-duration-evidence.md": "78e30dd4b310ad82cd4bb657123bd4db5573ce82fcb3091ac55269277bf81475",
+    "research/examples/cbr1h-parity-set-proposal.md": "367e20bff456cec4e4e9fb2f722c70f23d183c0c983cb5479dd3ee3bb875dd7c"
+   }
+  },
+  {
+   "case_id": "OE-GOOD-BAD",
+   "source": "research/transcripts/hourly/V1H-defining_a_good_extension.json",
+   "source_detail": "V1H-defining_a_good_extension 00:03:19, 00:05:03, 00:05:16",
+   "evidence_level": "L1_VIDEO",
+   "instrument": "XAUUSD",
+   "model": "CBR1H_EXTENSION",
+   "model_scope": "NARRATIVE",
+   "direction": null,
+   "positive_or_negative": "BOTH",
+   "scoring_level": "NARRATIVE_ONLY",
+   "binds_verdict": false,
+   "start_time": null,
+   "end_time": null,
+   "data_span_utc": null,
+   "stated": {
+    "geometry": "'didn't correct 50% at all' (good) vs 'on average correcting 50% of the previous move' (bad)"
+   },
+   "source_supported_fields": [
+    "geometry_consistency_only"
+   ],
+   "market_data_hashes": {},
+   "source_hashes": {
+    "research/transcripts/hourly/V1H-defining_a_good_extension.json": "48afc106132e851b2dac8625041ad96b4573ee0b798c0b4afa5eeeecda5b1044"
+   },
+   "evidence_hashes": {
+    "docs/governance/d34-pc4-authorization.md": "59bdabfc00620138fab7ae3591f7cda5b0e57350ab2d11acfca250bef339fcb2",
+    "docs/decisions/mtf-model-taxonomy.md": "7984632d807588d9c6b27e7ff38aaad392dbb96b231526aab6dbe9323d50b17b",
+    "docs/decisions/oq49-journal-generalization.md": "2fc8a9c00fddad3127fb08c312b3241637c34206af56df975467b4a4bfb64305",
+    "docs/decisions/oq48-hvcs-duration-evidence.md": "78e30dd4b310ad82cd4bb657123bd4db5573ce82fcb3091ac55269277bf81475",
+    "research/examples/cbr1h-parity-set-proposal.md": "367e20bff456cec4e4e9fb2f722c70f23d183c0c983cb5479dd3ee3bb875dd7c"
+   }
+  },
+  {
+   "case_id": "V15-SEM-2026-05",
+   "source": "research/frames/V15-seconds_entry_model/slides/00-00-22.jpg",
+   "source_detail": "V15-seconds_entry_model",
+   "evidence_level": "L1_FRAME",
+   "instrument": "XAUUSD",
+   "model": "CBR15",
+   "model_scope": "NARRATIVE",
+   "direction": null,
+   "positive_or_negative": "INSTRUCTIONAL",
+   "scoring_level": "NARRATIVE_ONLY",
+   "binds_verdict": false,
+   "start_time": null,
+   "end_time": null,
+   "data_span_utc": null,
+   "stated": {
+    "chart_date": "~2026-05-01 (5s, FOREX.com)",
+    "note": "illustrative walkthrough, no stated entry"
+   },
+   "source_supported_fields": [
+    "geometry_consistency_only"
+   ],
+   "market_data_hashes": {},
+   "source_hashes": {
+    "research/frames/V15-seconds_entry_model/slides/00-00-22.jpg": "c3977216b339b11be1538e10d509243b774f57fb02ea5b558b36fa66a58c9ae9"
+   },
+   "evidence_hashes": {
+    "docs/governance/d34-pc4-authorization.md": "59bdabfc00620138fab7ae3591f7cda5b0e57350ab2d11acfca250bef339fcb2",
+    "docs/decisions/mtf-model-taxonomy.md": "7984632d807588d9c6b27e7ff38aaad392dbb96b231526aab6dbe9323d50b17b",
+    "docs/decisions/oq49-journal-generalization.md": "2fc8a9c00fddad3127fb08c312b3241637c34206af56df975467b4a4bfb64305",
+    "docs/decisions/oq48-hvcs-duration-evidence.md": "78e30dd4b310ad82cd4bb657123bd4db5573ce82fcb3091ac55269277bf81475",
+    "research/examples/cbr1h-parity-set-proposal.md": "367e20bff456cec4e4e9fb2f722c70f23d183c0c983cb5479dd3ee3bb875dd7c"
+   }
+  },
+  {
+   "case_id": "HX-1",
+   "source": "research/transcripts/hourly/V1H-seconds_shift_1m_hilo_hvcs.json",
+   "source_detail": "V1H-seconds_shift_1m_hilo_hvcs 00:02:06, chart dated Thu 23 Oct '25 GMT+11",
+   "evidence_level": "L1_VIDEO",
+   "model_scope": "CONFIRMED_CBR1H",
+   "direction": "BUY",
+   "positive_or_negative": "POSITIVE",
+   "scoring_level": "NARRATIVE_ONLY",
+   "binds_verdict": false,
+   "source_supported_fields": [
+    "hvcs_sequence",
+    "extension_direction",
+    "approximate_shift_minute",
+    "previous_15m_take"
+   ],
+   "why_not_binding": "used as evidence to resolve OQ-48; scoring the rule it helped settle would be circular",
+   "data_span_utc": [
+    "2025-10-23T00:00:00+00:00",
+    "2025-10-24T00:00:00+00:00"
+   ],
+   "instrument": "XAUUSD",
+   "model": "CBR1H",
+   "stated": {},
+   "market_data_hashes": {
+    "data/normalized/xauusd/structure_1m/2025-10-23.parquet": "ff8ee715bfcca3ee301878a319a4842224dea6973f2803975302a019589c86c2",
+    "data/normalized/xauusd/structure_5s/2025-10-23.parquet": "19bb3b8f3897264c6452693ba58285e1970540fea4ebad83bbc942ed40ee5b17"
+   },
+   "source_hashes": {
+    "research/transcripts/hourly/V1H-seconds_shift_1m_hilo_hvcs.json": "5e93b0b452fe25a0a4b3a071c6b7ed6134fc7c75e930985b40b1c136bc4d7256"
+   },
+   "evidence_hashes": {
+    "docs/governance/d34-pc4-authorization.md": "59bdabfc00620138fab7ae3591f7cda5b0e57350ab2d11acfca250bef339fcb2",
+    "docs/decisions/mtf-model-taxonomy.md": "7984632d807588d9c6b27e7ff38aaad392dbb96b231526aab6dbe9323d50b17b",
+    "docs/decisions/oq49-journal-generalization.md": "2fc8a9c00fddad3127fb08c312b3241637c34206af56df975467b4a4bfb64305",
+    "docs/decisions/oq48-hvcs-duration-evidence.md": "78e30dd4b310ad82cd4bb657123bd4db5573ce82fcb3091ac55269277bf81475",
+    "research/examples/cbr1h-parity-set-proposal.md": "367e20bff456cec4e4e9fb2f722c70f23d183c0c983cb5479dd3ee3bb875dd7c"
+   },
+   "start_time": null,
+   "end_time": null
+  },
+  {
+   "case_id": "HX-2",
+   "source": "research/transcripts/hourly/V1H-candle_behavior_extension.json",
+   "source_detail": "V1H-candle_behavior_extension 00:03:38, chart dated Wed 29 Oct '25 GMT+11",
+   "evidence_level": "L1_VIDEO",
+   "model_scope": "CONFIRMED_CBR1H",
+   "direction": "BUY",
+   "positive_or_negative": "POSITIVE",
+   "scoring_level": "NARRATIVE_ONLY",
+   "binds_verdict": false,
+   "source_supported_fields": [
+    "hvcs_sequence",
+    "extension_direction",
+    "approximate_shift_minute",
+    "previous_15m_take"
+   ],
+   "why_not_binding": "same reason as HX-1",
+   "data_span_utc": [
+    "2025-10-29T00:00:00+00:00",
+    "2025-10-30T00:00:00+00:00"
+   ],
+   "instrument": "XAUUSD",
+   "model": "CBR1H",
+   "stated": {},
+   "market_data_hashes": {
+    "data/normalized/xauusd/structure_1m/2025-10-29.parquet": "5dc8e58ba271380be9ab8a1ec4f54d16fe2b4bb405e3c67e72f80e539f99e0a0",
+    "data/normalized/xauusd/structure_5s/2025-10-29.parquet": "d7c45c53361d9d1f3d587dd5960fd224f14065eb65f89311d2ba369654d4db30"
+   },
+   "source_hashes": {
+    "research/transcripts/hourly/V1H-candle_behavior_extension.json": "3a8fc509c4b8536ddf5f6e0ccbdcb4e45264deef5b63deab9692d44510b00b6c"
+   },
+   "evidence_hashes": {
+    "docs/governance/d34-pc4-authorization.md": "59bdabfc00620138fab7ae3591f7cda5b0e57350ab2d11acfca250bef339fcb2",
+    "docs/decisions/mtf-model-taxonomy.md": "7984632d807588d9c6b27e7ff38aaad392dbb96b231526aab6dbe9323d50b17b",
+    "docs/decisions/oq49-journal-generalization.md": "2fc8a9c00fddad3127fb08c312b3241637c34206af56df975467b4a4bfb64305",
+    "docs/decisions/oq48-hvcs-duration-evidence.md": "78e30dd4b310ad82cd4bb657123bd4db5573ce82fcb3091ac55269277bf81475",
+    "research/examples/cbr1h-parity-set-proposal.md": "367e20bff456cec4e4e9fb2f722c70f23d183c0c983cb5479dd3ee3bb875dd7c"
+   },
+   "start_time": null,
+   "end_time": null
+  }
+ ],
+ "manifest_hash": "e12f3882f01b8ac4655520f00d5cd19829da989a371a1feb15b070d1a718804e"
+}

@@ -1,0 +1,173 @@
+{
+ "run_id": "CBR-RUN-013B-2",
+ "generated_utc": "2026-09-15T22:27:59+00:00",
+ "ruling": "D25",
+ "freeze_commit": "eb1a9f372d9a30514ab130e7902b9793c2b70450",
+ "protocol_sha256": "7a364f70cff2a780536ce4912b256ad056ac0804de07f439acca988dc88ffc7f",
+ "run_spec_sha256": "2dafe514d545442e27ca3b0b18a570da1a500e9997ca5832444732738d743a07",
+ "ruling_sha256": "4672b9065e71f266371357dd54465a7952b1583dbc8bd8d04191f18d562f1b9a",
+ "frozen_files": {
+  "docs/governance/phase13-behavioral-parity-protocol.md": "7a364f70cff2a780536ce4912b256ad056ac0804de07f439acca988dc88ffc7f",
+  "docs/governance/d25-phase13-run-approval.md": "4672b9065e71f266371357dd54465a7952b1583dbc8bd8d04191f18d562f1b9a",
+  "config/phase13_behavioral_run.yaml": "2dafe514d545442e27ca3b0b18a570da1a500e9997ca5832444732738d743a07",
+  "docs/acceptance/phase13-acceptance-criteria.md": "2fd525ca58d202a44b7e2dd2d795de29222c0b5789a013ecfd6abcd0a1e0abc5",
+  "docs/governance/phase13-parity-protocol.md": "a5e0c4199ee515844088579f43d8de70d8098fd479f20c2f285b53153deee834",
+  "docs/governance/d24-phase13-fidelity-revision.md": "5eab38711069e4ac440b28f0a7b5fea228edc49e416d16cc8a9699b8e6f4da82",
+  "docs/strategy/parity-candidates/CBR1H_BASELINE_V1-PC2.yaml": "4f0e00c591ac0bd3c60fac393cbffe17bb765da6dba1237cefae9f3ee39738da",
+  "docs/strategy/parity-candidates/CBR15_BASELINE_V1-PC2.yaml": "8d5ffeddb7ced2003e19a4925daa97d8f04aeefa878fc063f0db1b4f2c0df360",
+  "research/examples/course_examples.jsonl": "4f2f6650baa4d76c0789dc550572ac32188d45b06a389e9d0e6c8a48f73e27d2",
+  "src/cbr/engine/parity.py": "803946c4d8c3d543bd352d2bd50fba7d69546a9be2f7f91bced31e30ae62ff28",
+  "src/cbr/engine/phase13_behavioral.py": "866662bdde0bd73bc57137234a5975518055e5f630fdcf6fc474c0750198de9a",
+  "src/cbr/data/feed_comparison.py": "a353661fe4b9cf4bb3df090adea60d73a7288ad095e5d3fcf8144f2082459fa9",
+  "src/cbr/data/dukascopy_fetch.py": "fad7bcfdb7ab83b1561bc27ca7067c5eede37b129ec9f7f4cead0cc8e1a1591f",
+  "src/cbr/data/canonical_bars.py": "06af04fcd43eb884261506cad07bfe9ebcdac4c6f2e7ed70e7fc63a66a93b59f",
+  "src/cbr/data/v1_dukascopy_readiness.py": "772e5bab0938419cd2fe0194a1dfcbd7806f48b0e5bb0cd517d37826ba8b676f",
+  "src/cbr/dxy/context.py": "ea0f0c5f7a840301e872ce1a4779d9af9ed390b431d17d285492d7dfaadda79e",
+  "config/dxy_context.yaml": "0bdb82bb4cee2f5226052fd612d2f8261aa7fedcc12395ecd915ca18f70ea73b",
+  "config/data_quality.yaml": "0b04de1edf2716701b924cd6daa8843a912e4cc84f21984130b4fc2a65dbd7b7",
+  "tests/engine/test_phase13_behavioral.py": "f10c2a150f7e1ad429714e5213a0965e64a3caedb906bf3a9c1a9b4f48613271",
+  "tests/test_feed_comparison.py": "2871bb318b211f1f3b7168e7b42a4a9c0f476b10efb2fff40a05851dba5c2e1d",
+  "docs/governance/phase13-run-incident-1.md": "01131e01096b62d5005e1f217044a88d366aa8dc23fcabc9d55ae22c7e38e29c"
+ },
+ "pc2": {
+  "record": "docs/strategy/parity-candidates/CBR1H_BASELINE_V1-PC2.yaml",
+  "spec_hash": "4dadc8b99cc4134888e5778704c0863d269d6f43ef9a5e47b1ba07fcb1b663b2",
+  "spec_files": {
+   "docs/strategy/cbr-primitives-machine-spec.md": "52a14d8c2aacb4a349f3de30525e4e752fb95a1eba9a10cc7741029f14005059",
+   "docs/strategy/15min-cbr-machine-spec.md": "6cda00d704ca8a3c1b1de211990a9a0bfb7f01c020a290c44b52a7abf65bc68e",
+   "config/strategy.yaml": "024a791e4211b01050cbf0140240b7e36476f03f2b860b35b1e930a2dd26ef5f",
+   "config/data_sources.yaml": "0d3041932937822328bfe13c624c0b1d9b36b48695364d9a34ed1f11e5c1aec6",
+   "src/cbr/engine/cbr15.py": "df1b0e460fc6bb2bc598c6ab090b7235556d822067c3247d3d9cbb3ad97721ca",
+   "src/cbr/engine/params.py": "4acd295a2453237a340d492fd4ba69702cb0ee1fa42723e6a9ec942216cd2a46",
+   "src/cbr/structure/swings.py": "d7c956eac7241dfeb8ef49455407699ab8633e57a04d887265d6bab9e8992073",
+   "src/cbr/structure/condition.py": "d818e0ed7ad586c7d061b2a0ff6ed47fd665667e20d8a3e5e99848d95e67a52d",
+   "src/cbr/structure/overextension.py": "30078ea0851d9cc086079e75f0a02e05023ecd584098cbe73f15f846dcac60c3",
+   "src/cbr/structure/shifts.py": "fd8418f404c348a5ed2a03fdd2fba35ae157724105170db6e08f090b0c9d17b0",
+   "src/cbr/structure/levels.py": "b6f85a859bfa911c4e927948d71f03b2cb3bab7535996990a4afc67230cbbaae",
+   "src/cbr/structure/indicators.py": "3435235bb3a86b43d0a97628d264b68e1f369a0290a6b5e288f95865e6f3ff5b",
+   "src/cbr/data/price_series.py": "9dd8993b6f590c06b304ac6af0f0197f00841c658f5e5a15cba421d33544effd",
+   "src/cbr/engine/common.py": "d5c9bea2c33a1d99e2d414a14413e05eb44f1f9a0cfabd4ac41ffc2fb0819264",
+   "docs/strategy/1h-cbr-machine-spec.md": "64772accb276fe9cb76cb52cc11e29095cfb0568eb6c78e892fad46eca70e80f",
+   "src/cbr/engine/cbr1h.py": "103440421808bfcdb92050993f99795e1ad27744f21624538a693008594c98b9",
+   "src/cbr/data/sessions.py": "bee25e7843dabd3518b6b01e063f9d3e21bd05973ff7c218aca21372ff1a25d8"
+  },
+  "selection_protocol": {
+   "src/cbr/engine/parity.py": "803946c4d8c3d543bd352d2bd50fba7d69546a9be2f7f91bced31e30ae62ff28",
+   "docs/governance/phase13-parity-protocol.md": "a5e0c4199ee515844088579f43d8de70d8098fd479f20c2f285b53153deee834"
+  }
+ },
+ "forexcom_exports": {
+  "references/tom-chart-data/FOREXCOM_XAUUSD, 1.csv": "5fb0a1b5d1ca717e2c03989eae6a138bfd2ede9494c82b106a4576abfd945e28",
+  "references/tom-chart-data/FOREXCOM_XAUUSD, 15.csv": "69b731582a2e161cbdd06590a281bf894b7692969a5cbca0c4f3ce3bec018a68",
+  "references/tom-chart-data/FOREXCOM_XAUUSD, 1D.csv": "891c30eb69cc230472a4b71e6b6af700e3fe09a516c38a72bf4a8416459f431b",
+  "references/tom-chart-data/FOREXCOM_XAUUSD, 240.csv": "a83531dd6fd32a55123ad2355b23a4eff54e5f246044116a1c10bd198915d55a",
+  "references/tom-chart-data/FOREXCOM_XAUUSD, 5.csv": "5d8f2d185eec39bbe272a6b2e8281cb0021b5f115807ff47648c3924f09c38a2",
+  "references/tom-chart-data/FOREXCOM_XAUUSD, 60.csv": "dd7814e2227d0f3dd62ca420aac2a9d74f90516fee9fcb081ed4a31c45daf299",
+  "references/tom-chart-data/TVC_DXY, 60.csv": "1602a763e7c5269e1d6642454097f2f0497aa6fb90382e64b4f9d5aac946a2a5"
+ },
+ "pre_execution_tests": "528 passed, 1 skipped in 44.04s",
+ "lint": "[*] 1 fixable with the `--fix` option.",
+ "frozen_utc": "2026-09-15T22:20:39+00:00",
+ "data_hashes": {
+  "course_structure_bars": {
+   "data/normalized/xauusd/structure_1m/2025-10-20.parquet": {
+    "manifest_match": true,
+    "sha256": "fbcad47b5959d6a03665b549407fab024ff6d499be0b6e52de0f16bb11d09ee2"
+   },
+   "data/normalized/xauusd/structure_1m/2025-10-21.parquet": {
+    "manifest_match": true,
+    "sha256": "377efadbff8d526259192b81c0e09faf905b1c376fb3d54d9bb9389d5fbc7dff"
+   },
+   "data/normalized/xauusd/structure_1m/2025-10-22.parquet": {
+    "manifest_match": true,
+    "sha256": "740e4e8ccb0683c591f4c64570721be528a0293ade2fdd11100f207b68739485"
+   },
+   "data/normalized/xauusd/structure_1m/2025-10-23.parquet": {
+    "manifest_match": true,
+    "sha256": "ff8ee715bfcca3ee301878a319a4842224dea6973f2803975302a019589c86c2"
+   },
+   "data/normalized/xauusd/structure_1m/2025-10-24.parquet": {
+    "manifest_match": true,
+    "sha256": "680aaa70b44a92d1998d11ae6cf22f4a84a18a73d5dfbf8efdb82f6c152501fe"
+   },
+   "data/normalized/xauusd/structure_1m/2025-11-07.parquet": {
+    "manifest_match": true,
+    "sha256": "7386b4b49139352edd16261415f28407bb41f88ef6d20cbba50bc5687b0a10f3"
+   },
+   "data/normalized/xauusd/structure_1m/2025-11-09.parquet": {
+    "manifest_match": true,
+    "sha256": "84e48073f30bffa08371677f99c3018f906f0fa3cfd1c4c3e1346d0b244a63cb"
+   },
+   "data/normalized/xauusd/structure_1m/2025-11-10.parquet": {
+    "manifest_match": true,
+    "sha256": "82c206b1ddf77bc43ddde066021cd2f395cdbf5e1cb662fdb47fc60d037f2dbe"
+   },
+   "data/normalized/xauusd/structure_5s/2025-10-20.parquet": {
+    "manifest_match": true,
+    "sha256": "d16362b0049bc4782925564eb3a935bc73d19e515c0d37b6766f8a29b7af4d38"
+   },
+   "data/normalized/xauusd/structure_5s/2025-10-21.parquet": {
+    "manifest_match": true,
+    "sha256": "cae165892dd03fda2df2a7b5f27898684f81f9bff6c7494fc476e52eef52e075"
+   },
+   "data/normalized/xauusd/structure_5s/2025-10-22.parquet": {
+    "manifest_match": true,
+    "sha256": "0460ef4f74a434450e16669a54be96fdbeb2140f7887ca7f0e9c8cc9359a2a1b"
+   },
+   "data/normalized/xauusd/structure_5s/2025-10-23.parquet": {
+    "manifest_match": true,
+    "sha256": "19bb3b8f3897264c6452693ba58285e1970540fea4ebad83bbc942ed40ee5b17"
+   },
+   "data/normalized/xauusd/structure_5s/2025-10-24.parquet": {
+    "manifest_match": true,
+    "sha256": "0b9394e254cd72c24d1b212f812fae357f731f62254028d4373a2f9130bf0ba9"
+   },
+   "data/normalized/xauusd/structure_5s/2025-11-07.parquet": {
+    "manifest_match": true,
+    "sha256": "8b370870c20e7d2a757e2a2d25750e2b3b819cdc7dcf3cb0c97e80989c2e7203"
+   },
+   "data/normalized/xauusd/structure_5s/2025-11-09.parquet": {
+    "manifest_match": true,
+    "sha256": "42fd5238fa71b0e089c5f439250b942fc2bf34b647e80ea0faaa5f6cb3d8f92f"
+   },
+   "data/normalized/xauusd/structure_5s/2025-11-10.parquet": {
+    "manifest_match": true,
+    "sha256": "364727b67148cb2e80b277dabe577886bc21cc754974c867105498ba144c1ee7"
+   }
+  },
+  "dx_front": {
+   "data/raw/databento/dx_front_ohlcv1m.parquet": "a10c7bd355e649e7242529bdfa2b233d27929e58482db560a5dfe5abcf0c811a"
+  },
+  "dxy_candles": {
+   "data/normalized/dollaridxusd/candles_1m/2025-10-21.parquet": "21de3a73e96447a0cc8bfa7349eff3e6f6e01fe83ad4976bb74b312403a559ed",
+   "data/normalized/dollaridxusd/candles_1m/2025-10-24.parquet": "77d16e677a277b40c2e14c2bc4d8fedf58c59f3fb0349a368641673399adfd97",
+   "data/normalized/dollaridxusd/candles_1m/2025-11-10.parquet": "8a2e9039874ef46155b2a94731f83fc77279d4d198717e2ce83d59ea580832d7"
+  },
+  "recent_structure_bars": {
+   "data/normalized/xauusd/structure_1m/2026-09-09.parquet": "3b5ff9c9720f46358f79a0af85262239f1abc090ec5edf795bc2b467ff61af4f",
+   "data/normalized/xauusd/structure_1m/2026-09-10.parquet": "9e053af8772fbf106e7e254bddfe72b637fdd9afa4e1848f94b45569f7af896f",
+   "data/normalized/xauusd/structure_1m/2026-09-11.parquet": "a5755c586ab9f76e8c3724a45f38d60e895391ccf356a206d7832e320d175d6d",
+   "data/normalized/xauusd/structure_1m/2026-09-14.parquet": "addb6406b519c0caf9122370fb1de424033168ecc49266d00bcb7cad5a037681",
+   "data/normalized/xauusd/structure_5s/2026-09-09.parquet": "871a208b82051fa1c84fc6c99b6e6e904eae58e1b3eff222b7ea7aefaa6f14f2",
+   "data/normalized/xauusd/structure_5s/2026-09-10.parquet": "cbd5cfc0a548307239d1d35b0b7825006c88d959bfb9184776dd7271eecb0741",
+   "data/normalized/xauusd/structure_5s/2026-09-11.parquet": "34f304a842dec213e1a839439a2a11dcf91a599d2b8c483c25c93e706bded3a5",
+   "data/normalized/xauusd/structure_5s/2026-09-14.parquet": "3a60675cf4b73a7bd76b75c547364d44a21e3ed1b24ee63a6885a91c88068035"
+  },
+  "recent_ticks": {
+   "data/raw/dukascopy/xauusd/ticks/2026-09-09.parquet": "cecfb0bb925e3664ddbe4cbe5d7e52c8c746d1f2f1792aff38299d5a2955c2c3",
+   "data/raw/dukascopy/xauusd/ticks/2026-09-10.parquet": "b1e09a8e87442a496513238ce72ae0817c7dcaa4e83a2176ba6d528e2ce15ac5",
+   "data/raw/dukascopy/xauusd/ticks/2026-09-11.parquet": "8c2edcf5188f331659deca1db9de6d2aee370753d8adba236f58fa5349c557a2",
+   "data/raw/dukascopy/xauusd/ticks/2026-09-14.parquet": "fa654a0b8cda75e4d955ecddfbba0be6b3dd17a5c727fc249621f009a9b4d0c6"
+  }
+ },
+ "result_hashes": {
+  "run-1": "f39054300808e2c4b11d074b4a8a4eeff4526a0707d5e63a9e1c4bb5cf10d063",
+  "run-2": "f39054300808e2c4b11d074b4a8a4eeff4526a0707d5e63a9e1c4bb5cf10d063"
+ },
+ "run_generated_utc": {
+  "run-1": "2026-09-15T22:22:16+00:00",
+  "run-2": "2026-09-15T22:23:48+00:00"
+ },
+ "deterministic_rerun": true,
+ "verdict": "FAIL"
+}

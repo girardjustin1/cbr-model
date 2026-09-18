@@ -1,0 +1,117 @@
+# Phase 14A execution semantics, frozen by owner ruling D38 before any historical outcome is measured.
+# Execution may decide whether and at what price an order fills. It may never decide whether a signal exists,
+# its direction, or any CBR context (D38 §1).
+spec_version: EXEC-14A
+ruling: D38
+baseline: CBR1H_BASELINE_V1            # = frozen PC4, spec hash 62a2310e...
+
+stop:
+  resolution_instant:
+    value: AT_ENTRY_FILL               # E-OQ-1 / OQ-28 (D38 §2)
+    label: EXECUTION_SEMANTIC
+    reason: >-
+      the final executable stop is computed at the entry fill using the latest canonical STRUCTURE anchor available
+      causally through the fill timestamp, then frozen. Never trailed afterwards.
+  anchor_side:
+    value: MOST_ADVERSE_STRUCTURE_EXTREME_THROUGH_FILL
+    label: EXECUTION_SEMANTIC
+    reason: SHORT takes the highest applicable structure extreme, LONG the lowest (D38 §2)
+  buffer:
+    value_param: cbr1h.stop.buffer_atr  # 0.1 x ATR(1m,14), ASSUMPTION (OQ-11); not changed here
+    label: INHERITED_ASSUMPTION
+  spread_policy:
+    value: ADD_SPREAD_AT_FILL           # carried on the frozen signal contract
+    label: INHERITED
+    reason: the contemporaneous spread at fill widens the stop away from entry
+  frozen_after_fill:
+    value: true
+    label: EXECUTION_SEMANTIC
+
+entry:
+  order_type: {value: STOP, label: INHERITED}
+  trigger:
+    value: FIRST_EXECUTABLE_QUOTE       # E-OQ-5 (D38 §10)
+    label: EXECUTION_SEMANTIC
+    reason: >-
+      LONG triggers when ASK >= trigger_price and fills at that ASK; SHORT triggers when BID <= trigger_price and
+      fills at that BID. The order never receives the theoretical trigger price if the quote has moved through it.
+  not_before:
+    value: ACTIVATION_TIME              # D38 §11
+    label: EXECUTION_SEMANTIC
+    reason: quotes before activation are irrelevant; a pre-activation crossing never fabricates a fill
+
+exit:
+  stop_fill:
+    value: FIRST_EXECUTABLE_QUOTE_AFTER_BREACH   # E-OQ-6 (D38 §12)
+    label: EXECUTION_SEMANTIC
+    reason: LONG stops on BID <= stop and fills at that BID; SHORT stops on ASK >= stop and fills at that ASK
+  target_fill:
+    value: AT_TARGET_PRICE              # D38 §13
+    label: EXECUTION_SEMANTIC
+    reason: >-
+      targets are LIMIT exits and fill at the target price once the executable quote reaches or passes it. Without
+      order-book data price improvement cannot be proven, so a gap never awards a better-than-target fill.
+  forced_exit:
+    value: NONE                         # E-OQ-2 (D38 §4)
+    label: EXECUTION_SEMANTIC
+    reason: >-
+      canon supplies no mechanical time exit and Tom's trade management is discretionary. The only non-strategy
+      exits are ROLLOVER_EXIT and DATASET_END_EXIT, which are labelled separately and never called canonical.
+
+sequencing:
+  authority:
+    value: ACTUAL_TICK_SEQUENCE         # E-OQ-3 (D38 §7)
+    label: EXECUTION_SEMANTIC
+    reason: the first event actually observed wins, even when entry, stop and target share one aggregated bar
+  unresolved:
+    value: EXECUTION_UNPROVABLE_INTRABAR  # D38 §8
+    label: EXECUTION_SEMANTIC
+    reason: where tick sequencing is unavailable the outcome is not guessed and no favourable convention is used
+
+costs:
+  additional_slippage:
+    value: 0.0                          # E-OQ-4 (D38 §9)
+    label: ASSUMPTION
+    reason: >-
+      not identifiable from quote data beyond the executable bid/ask, time-varying spread, quote sequencing and
+      gap-through execution already modelled. This does not assert that real slippage is zero; pre-registered
+      stress tests come later.
+  explicit_commission:
+    value: 0.0                          # D38 §24
+    label: ASSUMPTION / NOT YET BROKER-SPECIFIC
+    reason: no commission schedule has been approved for the spot XAUUSD research feed; spread is modelled directly
+  double_count_spread:
+    value: false
+    label: EXECUTION_SEMANTIC
+    reason: spread is already represented by bid/ask fills and is never subtracted again as a synthetic cost
+
+position:
+  scope:
+    value: ONE_OPEN_POSITION_PER_INSTRUMENT   # E-OQ-7 (D38 §14)
+    label: EXECUTION_SEMANTIC
+    reason: variants A and B are alternate entry models for one CBR1H research model, never concurrent positions
+  sibling_resolution:
+    value: FIRST_FILL_IN_TICK_SEQUENCE_WINS   # D38 §15
+    label: EXECUTION_SEMANTIC
+    reason: never variant preference, distance, eventual profitability or Tom's actual trade
+
+rollover:
+  entries:
+    value: NO_ACTIVATION_OR_FILL_INSIDE_WINDOW  # D38 §16
+    label: CANON_ENFORCEMENT
+    reason: D3 / EP1-018 already forbid trading through rollover
+  pending_orders: {value: ROLLOVER_CANCEL, label: CANON_ENFORCEMENT}
+  open_positions: {value: ROLLOVER_EXIT, label: CANON_ENFORCEMENT}
+  window_params: cbr1h.session.rollover_pre_min / rollover_post_min / rollover_ny_time
+
+data:
+  spread_fallback:
+    value: NONE                         # E-OQ-9 (D38 §17)
+    label: EXECUTION_SEMANTIC
+    reason: no median, daily, fixed, neighbouring, futures or forward-filled spread; return EXECUTION_DATA_UNAVAILABLE
+  missing_data:
+    value: NO_INTERPOLATION_NO_FORWARD_FILL   # E-OQ-10 (D38 §18-21)
+    label: EXECUTION_SEMANTIC
+    reason: >-
+      a classified data gap intersecting a possible execution event makes the outcome unprovable. Scheduled closure,
+      rollover exclusion and ordinary sparse quoting are not data gaps.

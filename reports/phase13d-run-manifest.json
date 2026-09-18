@@ -1,0 +1,57 @@
+{
+ "deterministic": true,
+ "engine_result_hashes": {
+  "CX-LT1-1|A": "f10a0fa9bce207b6a2280be34ba3c7ffd22be29afac5691c28bb7bdf6ee12f4b",
+  "CX-LT1-1|B": "1c01bc02bd13032394c3e34247448d5256c712389ea3209b3ae07ca2bf500d4c",
+  "CX-LT3-1|A": "110f3d180792f41d571e50d60ba871c3c4405af7f1135e7467b8a9be106d079a",
+  "CX-LT3-1|B": "1c01bc02bd13032394c3e34247448d5256c712389ea3209b3ae07ca2bf500d4c",
+  "CX-LT3-2|A": "110f3d180792f41d571e50d60ba871c3c4405af7f1135e7467b8a9be106d079a",
+  "CX-LT3-2|B": "1c01bc02bd13032394c3e34247448d5256c712389ea3209b3ae07ca2bf500d4c",
+  "CX-TE1-1|A": "a145e83964640f6fdb66505fa39bdba5a24a48dd745b1c742121abc716fbe3cf",
+  "CX-TE1-1|B": "1c01bc02bd13032394c3e34247448d5256c712389ea3209b3ae07ca2bf500d4c",
+  "JM-2025-10-16|A": "7f822ee21df53c3d6a49c40fdd0a4792c742fe2f100f899f84792a1f0d629faf",
+  "JM-2025-10-16|B": "1c01bc02bd13032394c3e34247448d5256c712389ea3209b3ae07ca2bf500d4c"
+ },
+ "evidence_hashes": {
+  "docs/decisions/mtf-model-taxonomy.md": "7984632d807588d9c6b27e7ff38aaad392dbb96b231526aab6dbe9323d50b17b",
+  "docs/decisions/oq48-hvcs-duration-evidence.md": "78e30dd4b310ad82cd4bb657123bd4db5573ce82fcb3091ac55269277bf81475",
+  "docs/decisions/oq49-journal-generalization.md": "2fc8a9c00fddad3127fb08c312b3241637c34206af56df975467b4a4bfb64305",
+  "docs/governance/d34-pc4-authorization.md": "59bdabfc00620138fab7ae3591f7cda5b0e57350ab2d11acfca250bef339fcb2",
+  "research/examples/cbr1h-parity-set-proposal.md": "367e20bff456cec4e4e9fb2f722c70f23d183c0c983cb5479dd3ee3bb875dd7c"
+ },
+ "git_commit": "bd86f1671bb389e30ce478122c5a9f3f8705c6e6",
+ "market_data_hashes": {
+  "data/normalized/xauusd/structure_1m/2025-10-15.parquet": "e585f75a22f50dd40cde3b6d72236992f9b82f1e3879e9e51f37be11144da2d7",
+  "data/normalized/xauusd/structure_1m/2025-10-16.parquet": "90517be31f7f423b5e254b424e620f6e2794716951104b560343f1b0c5dc7c13",
+  "data/normalized/xauusd/structure_1m/2025-10-20.parquet": "fbcad47b5959d6a03665b549407fab024ff6d499be0b6e52de0f16bb11d09ee2",
+  "data/normalized/xauusd/structure_1m/2025-10-21.parquet": "377efadbff8d526259192b81c0e09faf905b1c376fb3d54d9bb9389d5fbc7dff",
+  "data/normalized/xauusd/structure_1m/2025-10-22.parquet": "740e4e8ccb0683c591f4c64570721be528a0293ade2fdd11100f207b68739485",
+  "data/normalized/xauusd/structure_1m/2025-10-23.parquet": "ff8ee715bfcca3ee301878a319a4842224dea6973f2803975302a019589c86c2",
+  "data/normalized/xauusd/structure_1m/2025-10-24.parquet": "680aaa70b44a92d1998d11ae6cf22f4a84a18a73d5dfbf8efdb82f6c152501fe",
+  "data/normalized/xauusd/structure_1m/2025-11-07.parquet": "7386b4b49139352edd16261415f28407bb41f88ef6d20cbba50bc5687b0a10f3",
+  "data/normalized/xauusd/structure_1m/2025-11-09.parquet": "84e48073f30bffa08371677f99c3018f906f0fa3cfd1c4c3e1346d0b244a63cb",
+  "data/normalized/xauusd/structure_1m/2025-11-10.parquet": "82c206b1ddf77bc43ddde066021cd2f395cdbf5e1cb662fdb47fc60d037f2dbe",
+  "data/normalized/xauusd/structure_5s/2025-10-15.parquet": "d0a13b1db18c8a9c78eb48d2f1677383836975f0631cd381a8c35f9e3744fa89",
+  "data/normalized/xauusd/structure_5s/2025-10-16.parquet": "064f846b0c82d613bf2729216f7dfcf438e7da14c693914f817ec885f1397a2c",
+  "data/normalized/xauusd/structure_5s/2025-10-20.parquet": "d16362b0049bc4782925564eb3a935bc73d19e515c0d37b6766f8a29b7af4d38",
+  "data/normalized/xauusd/structure_5s/2025-10-21.parquet": "cae165892dd03fda2df2a7b5f27898684f81f9bff6c7494fc476e52eef52e075",
+  "data/normalized/xauusd/structure_5s/2025-10-22.parquet": "0460ef4f74a434450e16669a54be96fdbeb2140f7887ca7f0e9c8cc9359a2a1b",
+  "data/normalized/xauusd/structure_5s/2025-10-23.parquet": "19bb3b8f3897264c6452693ba58285e1970540fea4ebad83bbc942ed40ee5b17",
+  "data/normalized/xauusd/structure_5s/2025-10-24.parquet": "0b9394e254cd72c24d1b212f812fae357f731f62254028d4373a2f9130bf0ba9",
+  "data/normalized/xauusd/structure_5s/2025-11-07.parquet": "8b370870c20e7d2a757e2a2d25750e2b3b819cdc7dcf3cb0c97e80989c2e7203",
+  "data/normalized/xauusd/structure_5s/2025-11-09.parquet": "42fd5238fa71b0e089c5f439250b942fc2bf34b647e80ea0faaa5f6cb3d8f92f",
+  "data/normalized/xauusd/structure_5s/2025-11-10.parquet": "364727b67148cb2e80b277dabe577886bc21cc754974c867105498ba144c1ee7"
+ },
+ "parity_manifest_hash": "e12f3882f01b8ac4655520f00d5cd19829da989a371a1feb15b070d1a718804e",
+ "pc2_spec_hash": "4dadc8b99cc4134888e5778704c0863d269d6f43ef9a5e47b1ba07fcb1b663b2",
+ "pc3_spec_hash": "7032f400688ada1d5e9691d79a19f7ce78f6d830ad3124f588975f41b7c5d453",
+ "pc4_spec_hash": "62a2310e43d7cf57a6fafe318a4d1d7ed094d2d629e7f5ea8b20098db8e4d0b7",
+ "protocol_hash": "426803858363cddabdf51e068c7058bef974c5f911daf7f26da1803058a7475b",
+ "result_hashes": {
+  "run_1": "361232f6f20d634623f8119d570c23fefbbcd555287b61fa26ce4b9ba69af209",
+  "run_2": "361232f6f20d634623f8119d570c23fefbbcd555287b61fa26ce4b9ba69af209"
+ },
+ "ruling_hash": "279fc78d95606c32b5b8fbcb3b76bc58545fe4a0f214b383b83165e4a3fad2f3",
+ "run_id": "CBR-RUN-013D-1",
+ "verdict": "FAIL"
+}

@@ -673,3 +673,123 @@ said to hold ~350 trades (P2G-37). The spoken and slide DXY figures disagree.
 4. **Sessions.** Baseline with no session filter (author's Asia/London windows tested as an ablation)?
 5. **Long recordings.** Course lessons or live sessions?
 6. ~~USDJPY~~: resolved, XAUUSD + DXY only.
+
+### OQ-46 · Trending-range direction test (raised in Phase 13R)
+- **Problem.** `M1H-COND-03` blocks every CX-LT3-2 candidate because the MTF direction is `NONE`: in the 8 h window the
+  last two highs fall (4027.53 → 4009.29) while the last two lows rise (3992.47 → 3994.55). Tom calls the same market
+  "very bullish, um, a little bit trendy" (V1H-live_trade_3_gold_win 00:01:07).
+- **Options.** A last two swing pairs (current) · B range position (where the hour opens inside the range) · C a
+  directional measure over the window · D another evidence-backed reading.
+- **Status.** `REVIEWED` (D28 §16): `docs/decisions/oq46-trending-range-direction-evidence.md` recommends classifying a directionless trending range as RANGE. Owner decision pending.
+
+### OQ-47 · Does a type-3 sweep require a named external level? (raised in Phase 13R)
+- **Problem.** T3-B (re-anchoring) reproduces all three course triggers but produces 1.66× as many raw 5s type-3 events
+  as PC2. Restricting the sweep to a *named* external level (previous 15m candle high/low, range edge) would tighten it.
+- **Evidence.** "you want it to be beyond low timeframe, middle timeframe structure, beyond previous high or low"
+  (V1H-seconds_shift_1m_hilo_hvcs 00:01:47, L1); E1H-017.
+- **Status.** `REVIEWED` (D28 §3): `docs/decisions/oq47-external-sweep-evidence.md` recommends option G (no separate external level on the sweep; externality stays in M1H-6A-2 and the LOC rules). Owner decision pending.
+
+### OQ-48 · HVCS duration and counting semantics (raised by CBR-RUN-013C-1, framed by D32 §3-7)
+- **Problem.** `hvcs.min_minutes = 4` is CANON (E1H-003 "HVCS, 4+ mins"; E1H-034 "push immediately for at least four
+  minutes or more"), but no source states what starts the clock, what ends it, whether the first candle counts, or
+  whether the run must stay unbroken. PC3 measures a run ending at the extension-extreme bar and rejects all three
+  course positives (3, 2 and 0 minutes).
+- **Diagnosis.** `docs/decisions/oq48-hvcs-duration-evidence.md`: eight readings compared; the off-by-one readings
+  recover at most 1 of 3, so this is **not** an off-by-one. Seven of the ten D32 §4 questions are unanswerable from
+  the corpus.
+- **Separate finding.** PC3's rewrite silently dropped PC2's `hvcs.max_violations = 1` tolerance (an approved
+  ASSUMPTION, still configured and loaded but never passed). Candidate fix **F-1**, classification IMPLEMENTATION_FIX.
+- **Independent evidence (D33).** Two dated Level-1 examples outside the parity set — HX-1 (`V1H-seconds_shift_1m_hilo_hvcs`
+  @ 00:02:06, 2025-10-23) and HX-2 (`V1H-candle_behavior_extension` @ 00:03:38, 2025-10-29) — each contain exactly one
+  structural violation. PC3 measures **1** conforming minute on both; with `max_violations = 1` restored it measures
+  **9 and 10**. Every reading without the tolerance is INCONSISTENT with Tom's own examples.
+- **Ruled (D34 §3-4).** F-1 approved as an IMPLEMENTATION_FIX and implemented in PC4. The **anchor stays the
+  extension extreme** — the shift-anchored reading was refused precisely because it produces 3/3, and is preserved as
+  the `hvcs_to_shift_minutes` diagnostic. The counting convention, minute-clock origin and unit are recorded as
+  explicit ASSUMPTIONS in `config/strategy_pc4.yaml`.
+- **Status.** `UNRESOLVED_SPEC_AMBIGUITY`, carried into PC4 with the ambiguity visible in the spec. No alternate
+  convention may be used during a scored run.
+
+### OQ-49 · Journal generalization and MTF model taxonomy (raised by CBR-RUN-013C-1, framed by D32 §9-14)
+- **Problem.** None of the three HOUR_LEVEL journal hours produced an eligible PC3 candidate, which is independently
+  sufficient to fail Phase 13C.
+- **Findings** (`docs/decisions/oq49-journal-generalization.md`): JM-2025-10-16 fails at the MTF condition classifier
+  (2 zig-zag legs where Tom records a trending range) and is correctly scoped and dated; JM-2025-10-17 is labelled
+  **IFS**, a middle-timeframe model with **no class in PC2 or PC3**, so it was scored against a model the engine does
+  not contain; JM-2025-10-29's journal time (minute 14) contradicts its own CB-hour column (37) and its frozen hour
+  holds no down-extension for a BUY to reverse.
+- **Sub-questions returned to the owner.** (1) Do FS/IFS belong to CBR1H at all? (2) What does the journal's
+  `Condition = Volume` mean? (3) Is the journal time the entry or the logging time — which column fixes the hour?
+- **Status.** `OPEN`. Per D32 §14, no strategy change may be proposed from a journal-case failure until the case is
+  shown to belong to the model, its source fields are sufficiently defined, and the engine is expected to reproduce
+  them. Candidate parity-set corrections F-5 / F-6 are recorded in D32, not applied.
+
+### OQ-50 · Which 15m candle anchors `Q` when the shift lands early in a new quarter? (raised by D32 §5.3)
+- **Problem.** PC3 evaluates `M1H-LOC-*`, `M1H-6A-2`, `M1H-6A-3` and `M1H-OE-01` at the instant the type 3 arms, while
+  E1H-003 lets every step complete before the entry. Moving them to the shift flips CX-LT3-2's three failures to
+  passes, and simultaneously flips JM-2025-10-17's `M1H-6A-2` / `M1H-6A-3` from pass to fail, because that shift sits
+  1.6 minutes inside the next 15m candle.
+- **Resolved recommendation (D33).** `docs/decisions/oq50-previous-15m-evaluation-time.md`: the take must be satisfied
+  **by the final 5s shift** (F-9, CANON_CORRECTION) for `M1H-6A-2` / `M1H-6A-3`, because every Level-1 statement makes it
+  a precondition of the *entry* and the type-3 arm has no counterpart in the course vocabulary. **Q** = the 15m candle
+  containing the final shift (F-10, ASSUMPTION), consistent with both independent examples.
+- **Ruled (D34 §5-6).** The narrow change is approved and implemented in PC4: only `M1H-6A-2` and `M1H-6A-3` move to
+  the final 5s shift (F-9, CANON_CORRECTION), with `Q` = the 15m candle containing that shift (F-10, ASSUMPTION) and
+  no data after the shift decision instant. `M1H-LOC-*`, `M1H-OE-*` and `M1H-COND-*` do **not** move.
+- **Status.** `RESOLVED for PC4`. The 15m-boundary behaviour stays an assumption; its frequency is measurable only
+  under an authorized run.
+
+### OQ-51 · Should CBR1H contain a fractal-shift / inverse-fractal-shift context? (raised by D33 §10)
+- **Problem.** Level 1 (`V1H-mtf_model_types` 00:02:57, E1H-010/E1H-011) names **three** middle-timeframe models:
+  range, trending range (pro/counter) and fractal shift / inverse fractal shift. PC2 and PC3 implement the first two;
+  `condition.py` emits only `RANGE`, `TRENDING_RANGE`, `TREND`, `UNDEFINED`. Tom's journal records IFS trades as CBR
+  trades ("only been trading this model", `V1H-trade_journal` 00:00:27).
+- **Consequence.** JM-2025-10-17 was scored against a context the engine cannot represent (F-5, PARITY_SET_CORRECTION).
+- **Status.** `OPEN`. Extend CBR1H, or specify FS/IFS as a separate candidate model? Also open: what the journal's
+  `Condition = Volume` value means, and whether `Setup` or a separate column carries the MTF label.
+
+### OQ-52 · Should the MTF condition be classified once at the hour open? (raised by CBR-RUN-013D-1, D36 §2.5)
+- **Problem.** `classify_pc3` is called with `as_of = h0`, so the condition is fixed at the hour open for the whole
+  hour. On JM-2025-10-16 only **2** swing legs are confirmed at 00:00, giving `UNDEFINED` and blocking every
+  candidate through `M1H-COND-01/-02`; by **00:41** — the journal's recorded time and the minute of the engine's own
+  SELL candidate shift — **4** legs are confirmed, which clears `min_legs = 3`. The two swings formed before the hour
+  and confirmed inside it (H 4216.08 formed 23:00 → confirmed 00:05; L 4204.96 formed 00:00 → confirmed 00:20).
+- **Not** an OQ-01 detection failure (k = 3 finds the legs), **not** a taxonomy issue, **not** thin journal evidence.
+- **Related.** Same evaluation-instant family as OQ-50. `min_legs = 3` is itself an ASSUMPTION (OQ-02).
+- **Status.** `OPEN`. Per D36 §8, `k = 3` is not changed from this case and no rule change is proposed.
+
+### OQ-53 · Is the 20-minute extension minimum a floor or guidance? (raised by D36 §4)
+- **Evidence.** Every Level-1 statement is hedged: "around 20 minutes", "around 20 to 30 minutes", "40 to 50 percent
+  of that candle", "around 2 15-minute intervals" (E1H-018, E1H-002). One L1 instance explicitly calls an extension
+  of **"almost 20 minutes"** a **"really nice overextension"** (V1H-defining_a_good_extension 00:03:10) — an example a
+  hard `≥ 20` floor rejects. The corpus never says "at least", "minimum" or "must".
+- **Engine.** `oe.min_minutes = 20` is implemented as a hard floor and labelled CANON. The number is sourced; the
+  hardness is not.
+- **Measured.** No dated example falls under 20 minutes when measured from the hour open the way E1H-018 describes;
+  sub-20 figures arise only from PC4's decision-instant evaluation and activation anchor.
+- **Status.** `OPEN`. Mechanizing "around 20" needs a tolerance no source states, so nothing is proposed. Recorded so
+  the hardness is not mistaken for canon.
+
+## Execution-only open questions (Phase 14A, raised by D37 §22)
+
+These concern *what happens when a frozen signal is executed*. None may be chosen from trade outcomes, and none can
+be settled from the course corpus — they are owner rulings. Full options table:
+`docs/governance/phase14a-implementation-plan.md` §3.
+
+| Id | Question | Status |
+|---|---|---|
+| E-OQ-1 | **OQ-28**: stop resolved at fill, or frozen at the decision? | OPEN — blocks `position.py` |
+| E-OQ-2 | Forced exit: canon supplies none (trade management is explicitly discretionary) | OPEN — blocks `position.py` |
+| E-OQ-3 | Same-bar ambiguity when stop and target fall inside one 5s bar | OPEN — blocks `fills.py`; the ticks are held, so a tick-sequence resolution is available |
+| E-OQ-4 | Slippage model | OPEN — blocks `fills.py` |
+| E-OQ-5 | Entry fill price for a STOP order | OPEN — blocks `fills.py` |
+| E-OQ-6 | Gap through stop / target | OPEN — blocks `fills.py` |
+| E-OQ-7 | One-position rule and its scope | OPEN — blocks `position.py` |
+| E-OQ-8 | Rollover / daily-break handling | OPEN |
+| E-OQ-9 | Spread fallback where tick spread is unavailable | OPEN |
+| E-OQ-10 | Missing EXECUTION data during a live position | OPEN |
+
+**OQ-24** (baseline feed) is not a 14A blocker but must be resolved before Phase 15, on signal fidelity, data
+availability, historical coverage, tick granularity, bid/ask availability, reproducibility and roll/basis risk —
+never by comparing profitability (D37 §8). **OQ-29** (execution clock) is treated as settled at 5 seconds by the
+frozen spec and should be confirmed in the same ruling.

@@ -1,8 +1,9 @@
 # Phase 13 Behavioral-Parity Run Protocol
 
-**Doc:** CBR-PROT-013B · **Version:** v0.1 **PROPOSED** · **Date:** 2026-09-15 · **Ruling:** D24 · **Gate:** CBR-ACC-013
-**Status:** NOT APPROVED. Nothing here runs until the owner approves this protocol and decisions P-1…P-8 (§9). After
-approval it is frozen (hash recorded in the run manifest) before any data is fetched or any engine run starts.
+**Doc:** CBR-PROT-013B · **Version:** v1.0 **APPROVED** · **Date:** 2026-09-15 · **Rulings:** D24, D25 · **Gate:** CBR-ACC-013
+**Status:** APPROVED by owner ruling D25 (`d25-phase13-run-approval.md`), which also settles P-1…P-8 (§9). Frozen (hash
+recorded in `reports/phase13-freeze-manifest.json`) with the run specification `config/phase13_behavioral_run.yaml`
+before any data is fetched or any engine run starts.
 
 Inherited unchanged from CBR-PROT-013 (pinned in PC2):
 - two parity views (§2);
@@ -164,3 +165,9 @@ Holdout access (course windows) is logged; the recent 2026 days are post-holdout
 | P-6 | Course-side condition mapping | the §3 accepted sets (in particular CX-LT3-2: TRENDING_RANGE UP matches; TREND is classified as a canon or discretion difference, not matched) |
 | P-7 | Optional negative check | include CX-LT3-1 (XAUUSD, not taken: Tom rejected an early, too-small shift at ~12:31-12:33 local) as a supporting "engine should not treat it as the taken setup" check; excluded from the three-example verdict |
 | P-8 | DXY dimension | descriptive comparison (engine CFD context and TVC 1h vs Tom's notes); never affects acceptance, since V1 has no DXY rule |
+
+**Owner decisions (D25, 2026-09-15):** P-1, P-2, P-3, P-4, P-6, P-7 and P-8 approved as proposed (P-3 with the D25-P3
+wording; P-7 makes CX-LT3-1 a frozen negative control whose expected result is no eligible canonical signal). P-5:
+option B, replaced by the D25-P5 dimension-by-dimension standard (hard dimensions, supporting dimensions, overall
+verdict rules). Execution details the approval doesn't fix numerically are frozen in `config/phase13_behavioral_run.yaml`
+and listed in the D25 record (O-1…O-8).
