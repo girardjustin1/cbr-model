@@ -1,7 +1,7 @@
 # Phase 13 Readiness Checklist
 
 **Doc:** CBR-READY-013 · **Created:** 2026-09-15 (owner ruling D18-12) · **Updated:** 2026-09-15 (D24, fidelity revision) ·
-**Status:** FAIL twice. PC2 failed Phase 13 (D26) and PC3 failed Phase 13C (CBR-RUN-013C-1, accepted in D32). Both stay frozen. **PC4 created under D34** (spec hash `62a2310e…`) with three behavioural changes — the restored HVCS violation tolerance and the two previous-15m rules moved to the shift — and is **not scored**: CBR-PROT-013D is drafted and awaits approval. Phase 14 not authorized
+**Status:** PC2 FAIL (D26) · PC3 FAIL (D32) · **PC4 FAIL** (CBR-RUN-013D-1, returned for the owner's verdict). All three candidates frozen. PC4 produced the first eligible course signals: 2 of 3 positives clean, CX-LT3-2 blocked at the HVCS anchor kept by D34 §3, hour level 0/1. Phase 14 not authorized
 
 Phase 13 is now **STRATEGY FIDELITY AND BEHAVIORAL PARITY** (D24; gate CBR-ACC-013). It may not run while any
 mandatory item in sections A or C is unchecked. Section B (V-1) is **supporting feed-fidelity validation** and no longer
@@ -79,11 +79,14 @@ and Dukascopy calibration days are preserved as supporting evidence.
 | 47 | [ ] Corrected CBR1H parity set approved | proposal returned: 4 ENTRY_LEVEL + 1 HOUR_LEVEL may bind | `research/examples/cbr1h-parity-set-proposal.md` |
 | 48 | [x] PC4 authorized and created | D34: F-1, F-9, F-10, F-11 approved; anchor kept (NO_CHANGE); PC4 frozen at `62a2310e…` | `docs/governance/d34-pc4-authorization.md` |
 | 49 | [x] Corrected CBR1H parity set built | manifest v2 `e12f3882…`: 4 ENTRY_LEVEL + 1 HOUR_LEVEL binding, 11 narrative; v1 untouched | `research/examples/parity_set_manifest_v2.json` |
-| 50 | [ ] CBR-PROT-013D approved | drafted, not run; decisions E-1…E-5 outstanding, in particular the one-case hour-level threshold | `docs/governance/phase13d-pc4-parity-protocol.md` |
-| 51 | [ ] PC4 scored parity authorized | **NOT AUTHORIZED** (D34 §18) | `docs/governance/d34-pc4-creation-report.md` §16 |
+| 50 | [x] CBR-PROT-013D approved | D35: v1.1 APPROVED; E-1…E-5 settled, E-2 threshold frozen before execution | `docs/governance/phase13d-pc4-parity-protocol.md` |
+| 51 | [x] PC4 scored parity executed twice with identical result hashes | CBR-RUN-013D-1: `361232f6…f209` both runs | `reports/phase13d-run-manifest.json` |
+| 52 | [x] Every mismatch classified (8: 1 OWNER_BASELINE_CHOICE, 7 UNRESOLVED_SPEC_AMBIGUITY, 0 IMPLEMENTATION_BUG) | STEP 7 register | `docs/governance/d35-phase13d-mismatch-classification.md` |
+| 53 | [ ] Owner Phase 13D verdict issued | engine verdict **FAIL**: 2/3 on HVCS eligibility (CX-LT1-1 and CX-TE1-1 clean, CX-LT3-2 blocked at the kept anchor); control passed; hour level 0/1 | CBR-PROT-013D §7 D-7 |
 
 **Current status (2026-09-17): NOT READY.** Mandatory: 20 of 28 checked (A 20/20; C 0/8). Supporting V-1: 1 of 8
 checked. PC3 scored parity **FAILED** (CBR-RUN-013C-1) and the FAIL is accepted (D32); PC3 stays frozen and no PC4
-exists. PC4 is created, frozen and tested (633 passed, 1 skipped) but **not scored**. Next step: owner approval of
-CBR-PROT-013D, including the hour-level threshold now that only one hour-level case binds (E-2), and confirmation of
-the corrected parity set as the scoring set (E-3).
+exists. PC4 scored under CBR-PROT-013D v1.1 (CBR-RUN-013D-1): **FAIL**, but the closest result yet — CX-LT1-1 and
+CX-TE1-1 are clean on all nine dimensions in the STRICT view (the first eligible course signals any candidate has
+produced), CX-LT3-2 is blocked by the HVCS anchor the owner deliberately kept, and the single hour-level case is
+0/1. Next step: the owner's Phase 13D verdict.

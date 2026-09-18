@@ -1,0 +1,79 @@
+{
+  "run_id": "CBR-RUN-013D-1",
+  "ruling": "D35",
+  "protocol": "CBR-PROT-013D v1.1",
+  "frozen_utc": "2026-09-18T01:18:48+00:00",
+  "git_commit": "bd86f1671bb389e30ce478122c5a9f3f8705c6e6",
+  "git_branch": "cbrModel-work-091726-8pm",
+  "expected_hashes": {
+    "pc4_spec": "62a2310e43d7cf57a6fafe318a4d1d7ed094d2d629e7f5ea8b20098db8e4d0b7",
+    "parity_manifest_v2": "e12f3882f01b8ac4655520f00d5cd19829da989a371a1feb15b070d1a718804e",
+    "pc3_spec": "7032f400688ada1d5e9691d79a19f7ce78f6d830ad3124f588975f41b7c5d453",
+    "pc2_spec": "4dadc8b99cc4134888e5778704c0863d269d6f43ef9a5e47b1ba07fcb1b663b2"
+  },
+  "verified_hashes": {
+    "pc4_spec": "62a2310e43d7cf57a6fafe318a4d1d7ed094d2d629e7f5ea8b20098db8e4d0b7",
+    "parity_manifest_v2": "e12f3882f01b8ac4655520f00d5cd19829da989a371a1feb15b070d1a718804e",
+    "pc3_spec": "7032f400688ada1d5e9691d79a19f7ce78f6d830ad3124f588975f41b7c5d453",
+    "pc2_spec": "4dadc8b99cc4134888e5778704c0863d269d6f43ef9a5e47b1ba07fcb1b663b2"
+  },
+  "files": {
+    "docs/governance/phase13d-pc4-parity-protocol.md": "426803858363cddabdf51e068c7058bef974c5f911daf7f26da1803058a7475b",
+    "docs/governance/d35-pc4-scored-parity-authorization.md": "279fc78d95606c32b5b8fbcb3b76bc58545fe4a0f214b383b83165e4a3fad2f3",
+    "docs/governance/d34-pc4-authorization.md": "59bdabfc00620138fab7ae3591f7cda5b0e57350ab2d11acfca250bef339fcb2",
+    "docs/strategy/parity-candidates/CBR1H_BASELINE_V1-PC4.yaml": "2b9355e926ca9432ec700f1c3ed323b916a34dcac1a6001dcd04087b0515b942",
+    "docs/strategy/parity-candidates/CBR1H_BASELINE_V1-PC3.yaml": "72a4025f3a7e40b7a168363bf4486e656a9b491d395ab4d0a0a8f914f334cd70",
+    "research/examples/parity_set_manifest_v2.json": "aaca7cce6b06bd58dafe086e23292d4d5fae6d41baffb62f5d277a4ab93ac3ff",
+    "config/strategy.yaml": "024a791e4211b01050cbf0140240b7e36476f03f2b860b35b1e930a2dd26ef5f",
+    "config/strategy_pc3.yaml": "c71ff58f970c9baf8149aebdce2c2b5c0b13be202e88332587196d6030d6bacf",
+    "config/strategy_pc4.yaml": "220f307e4edddda9f3413bb68790d4786cfba084602af20396187875ba5acdc2",
+    "src/cbr/engine/cbr1h_pc4.py": "152410f60dc739188e88728f1254fdbaea141ff1edd074d5651755fe66f175a1",
+    "src/cbr/engine/params_pc4.py": "87beb6d35476ef9dc2b89fcd1a7b54243c0fe48d261a089745d1222926161883",
+    "src/cbr/engine/parity.py": "803946c4d8c3d543bd352d2bd50fba7d69546a9be2f7f91bced31e30ae62ff28",
+    "src/cbr/engine/parity_set_v2.py": "ce4c1aa0a6b682c9ed41f40e7f5fee094309f90d5e2686af42feaf617b6afe5d",
+    "src/cbr/engine/phase13d_run.py": "cd3f5dc431f1e1ab3f122568ebbb56228ffd53c2e4a5fc38ba48d78ae7baa069",
+    "src/cbr/structure/shifts_pc4.py": "5d880e8e87403cedfbce4af61d1d84bd6ddd468d15a36f653cfa62b1d791228c",
+    "src/cbr/structure/shifts_pc3.py": "5e0ee21dd06ae8e8ef89deedf90f78ae5e6464e3174e9c0ba269d6385a9bcaca",
+    "src/cbr/structure/overextension_pc3.py": "d65a961f35b40f5a0360274ae6036826b59b52c554cc8ccbacd330a811e30e87",
+    "src/cbr/structure/condition_pc3.py": "d5482290d1284355704485fc680f5b0870b44ae81de2573985bdd80728f40aed"
+  },
+  "market_data_hashes": {
+    "data/normalized/xauusd/structure_1m/2025-10-20.parquet": "fbcad47b5959d6a03665b549407fab024ff6d499be0b6e52de0f16bb11d09ee2",
+    "data/normalized/xauusd/structure_5s/2025-10-20.parquet": "d16362b0049bc4782925564eb3a935bc73d19e515c0d37b6766f8a29b7af4d38",
+    "data/normalized/xauusd/structure_1m/2025-10-21.parquet": "377efadbff8d526259192b81c0e09faf905b1c376fb3d54d9bb9389d5fbc7dff",
+    "data/normalized/xauusd/structure_5s/2025-10-21.parquet": "cae165892dd03fda2df2a7b5f27898684f81f9bff6c7494fc476e52eef52e075",
+    "data/normalized/xauusd/structure_1m/2025-10-22.parquet": "740e4e8ccb0683c591f4c64570721be528a0293ade2fdd11100f207b68739485",
+    "data/normalized/xauusd/structure_5s/2025-10-22.parquet": "0460ef4f74a434450e16669a54be96fdbeb2140f7887ca7f0e9c8cc9359a2a1b",
+    "data/normalized/xauusd/structure_1m/2025-10-23.parquet": "ff8ee715bfcca3ee301878a319a4842224dea6973f2803975302a019589c86c2",
+    "data/normalized/xauusd/structure_5s/2025-10-23.parquet": "19bb3b8f3897264c6452693ba58285e1970540fea4ebad83bbc942ed40ee5b17",
+    "data/normalized/xauusd/structure_1m/2025-10-24.parquet": "680aaa70b44a92d1998d11ae6cf22f4a84a18a73d5dfbf8efdb82f6c152501fe",
+    "data/normalized/xauusd/structure_5s/2025-10-24.parquet": "0b9394e254cd72c24d1b212f812fae357f731f62254028d4373a2f9130bf0ba9",
+    "data/normalized/xauusd/structure_1m/2025-11-07.parquet": "7386b4b49139352edd16261415f28407bb41f88ef6d20cbba50bc5687b0a10f3",
+    "data/normalized/xauusd/structure_5s/2025-11-07.parquet": "8b370870c20e7d2a757e2a2d25750e2b3b819cdc7dcf3cb0c97e80989c2e7203",
+    "data/normalized/xauusd/structure_1m/2025-11-09.parquet": "84e48073f30bffa08371677f99c3018f906f0fa3cfd1c4c3e1346d0b244a63cb",
+    "data/normalized/xauusd/structure_5s/2025-11-09.parquet": "42fd5238fa71b0e089c5f439250b942fc2bf34b647e80ea0faaa5f6cb3d8f92f",
+    "data/normalized/xauusd/structure_1m/2025-11-10.parquet": "82c206b1ddf77bc43ddde066021cd2f395cdbf5e1cb662fdb47fc60d037f2dbe",
+    "data/normalized/xauusd/structure_5s/2025-11-10.parquet": "364727b67148cb2e80b277dabe577886bc21cc754974c867105498ba144c1ee7",
+    "data/normalized/xauusd/structure_1m/2025-10-15.parquet": "e585f75a22f50dd40cde3b6d72236992f9b82f1e3879e9e51f37be11144da2d7",
+    "data/normalized/xauusd/structure_5s/2025-10-15.parquet": "d0a13b1db18c8a9c78eb48d2f1677383836975f0631cd381a8c35f9e3744fa89",
+    "data/normalized/xauusd/structure_1m/2025-10-16.parquet": "90517be31f7f423b5e254b424e620f6e2794716951104b560343f1b0c5dc7c13",
+    "data/normalized/xauusd/structure_5s/2025-10-16.parquet": "064f846b0c82d613bf2729216f7dfcf438e7da14c693914f817ec885f1397a2c"
+  },
+  "evidence_hashes": {
+    "docs/governance/d34-pc4-authorization.md": "59bdabfc00620138fab7ae3591f7cda5b0e57350ab2d11acfca250bef339fcb2",
+    "docs/decisions/mtf-model-taxonomy.md": "7984632d807588d9c6b27e7ff38aaad392dbb96b231526aab6dbe9323d50b17b",
+    "docs/decisions/oq49-journal-generalization.md": "2fc8a9c00fddad3127fb08c312b3241637c34206af56df975467b4a4bfb64305",
+    "docs/decisions/oq48-hvcs-duration-evidence.md": "78e30dd4b310ad82cd4bb657123bd4db5573ce82fcb3091ac55269277bf81475",
+    "research/examples/cbr1h-parity-set-proposal.md": "367e20bff456cec4e4e9fb2f722c70f23d183c0c983cb5479dd3ee3bb875dd7c"
+  },
+  "binding_cases": [
+    "CX-LT1-1",
+    "CX-TE1-1",
+    "CX-LT3-2",
+    "CX-LT3-1",
+    "JM-2025-10-16"
+  ],
+  "pre_execution_tests": "647 passed, 1 skipped in 66.34s (0:01:06)",
+  "lint": "All checks passed!",
+  "pre_freeze_real_case_smoke_run": "NONE \u2014 every PC4 invocation before this freeze is in tests/engine/test_cbr1h_pc4.py against a synthetic random walk (D35 \u00a78)"
+}
