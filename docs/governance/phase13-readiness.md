@@ -86,8 +86,10 @@ and Dukascopy calibration days are preserved as supporting evidence.
 | 54 | [x] Final source-contradiction review | CX-LT3-2 = **DISCRETIONARY_EXCEPTION**; 20-minute rule = guidance (OQ-53); no HVCS source contradiction; JM-2025-10-16 = hour-open classification limit (OQ-52) | `docs/decisions/cx-lt3-2-source-review.md` |
 | 55 | [x] Phase 13 completion criterion decided | **D37: Path B taken.** Phase 13 closes as RESEARCH-SUFFICIENT WITH DOCUMENTED FIDELITY CONCERNS; PC4 promoted to `CBR1H_BASELINE_V1`; the parity run stays **FAIL** | `docs/governance/d37-phase13-closure-and-promotion.md` |
 | 56 | [x] Strategy logic locked until the untouched baseline | `baseline_v1.verify()` aborts any run whose spec has drifted from `62a2310e…` | `src/cbr/engine/baseline_v1.py` |
-| 57 | [ ] Phase 14A acceptance criteria approved | written before any outcome measurement; A-1…E-5 for owner approval | `docs/acceptance/phase14a-acceptance-criteria.md` |
-| 58 | [ ] Execution assumptions E-OQ-1…E-OQ-10 ruled | **blocker**: fills, stop resolution and forced exit cannot be implemented until these are frozen | `docs/governance/phase14a-implementation-plan.md` §3 |
+| 57 | [x] Phase 14A acceptance criteria approved | written before any outcome measurement | `docs/acceptance/phase14a-acceptance-criteria.md` |
+| 58 | [x] Execution assumptions E-OQ-1…E-OQ-10 ruled | **D38**: all ten frozen in `config/execution.yaml` before implementation | `docs/governance/d38-phase14a-execution-semantics.md` |
+| 59 | [x] Phase 14A simulator implemented and tested | 7 modules under `src/cbr/execution/`, 35 synthetic tests incl. the hand-computed example; 696 passing | `docs/governance/phase14a-completion-report.md` |
+| 60 | [ ] Owner Phase 14A verdict | engine verdict **PASS**; returned for owner approval before 14B or OQ-24 | CBR-ACC-014A §F |
 
 **Current status (2026-09-17): NOT READY.** Mandatory: 20 of 28 checked (A 20/20; C 0/8). Supporting V-1: 1 of 8
 checked. PC3 scored parity **FAILED** (CBR-RUN-013C-1) and the FAIL is accepted (D32); PC3 stays frozen and no PC4
