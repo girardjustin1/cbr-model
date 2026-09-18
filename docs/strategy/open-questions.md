@@ -769,3 +769,27 @@ said to hold ~350 trades (P2G-37). The spoken and slide DXY figures disagree.
   sub-20 figures arise only from PC4's decision-instant evaluation and activation anchor.
 - **Status.** `OPEN`. Mechanizing "around 20" needs a tolerance no source states, so nothing is proposed. Recorded so
   the hardness is not mistaken for canon.
+
+## Execution-only open questions (Phase 14A, raised by D37 §22)
+
+These concern *what happens when a frozen signal is executed*. None may be chosen from trade outcomes, and none can
+be settled from the course corpus — they are owner rulings. Full options table:
+`docs/governance/phase14a-implementation-plan.md` §3.
+
+| Id | Question | Status |
+|---|---|---|
+| E-OQ-1 | **OQ-28**: stop resolved at fill, or frozen at the decision? | OPEN — blocks `position.py` |
+| E-OQ-2 | Forced exit: canon supplies none (trade management is explicitly discretionary) | OPEN — blocks `position.py` |
+| E-OQ-3 | Same-bar ambiguity when stop and target fall inside one 5s bar | OPEN — blocks `fills.py`; the ticks are held, so a tick-sequence resolution is available |
+| E-OQ-4 | Slippage model | OPEN — blocks `fills.py` |
+| E-OQ-5 | Entry fill price for a STOP order | OPEN — blocks `fills.py` |
+| E-OQ-6 | Gap through stop / target | OPEN — blocks `fills.py` |
+| E-OQ-7 | One-position rule and its scope | OPEN — blocks `position.py` |
+| E-OQ-8 | Rollover / daily-break handling | OPEN |
+| E-OQ-9 | Spread fallback where tick spread is unavailable | OPEN |
+| E-OQ-10 | Missing EXECUTION data during a live position | OPEN |
+
+**OQ-24** (baseline feed) is not a 14A blocker but must be resolved before Phase 15, on signal fidelity, data
+availability, historical coverage, tick granularity, bid/ask availability, reproducibility and roll/basis risk —
+never by comparing profitability (D37 §8). **OQ-29** (execution clock) is treated as settled at 5 seconds by the
+frozen spec and should be confirmed in the same ruling.

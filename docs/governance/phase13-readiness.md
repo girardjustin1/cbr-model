@@ -1,7 +1,7 @@
 # Phase 13 Readiness Checklist
 
 **Doc:** CBR-READY-013 · **Created:** 2026-09-15 (owner ruling D18-12) · **Updated:** 2026-09-15 (D24, fidelity revision) ·
-**Status:** PC2 FAIL (D26) · PC3 FAIL (D32) · **PC4 FAIL** (CBR-RUN-013D-1, returned for the owner's verdict). All three candidates frozen. PC4 produced the first eligible course signals: 2 of 3 positives clean, CX-LT3-2 blocked at the HVCS anchor kept by D34 §3, hour level 0/1. Phase 14 not authorized
+**Status:** **PHASE 13 CLOSED (D37) — RESEARCH-SUFFICIENT WITH DOCUMENTED FIDELITY CONCERNS.** The scored parity record is unchanged and stays FAIL for PC2 (CBR-RUN-013B-2), PC3 (CBR-RUN-013C-1) and PC4 (CBR-RUN-013D-1). PC4 is promoted to the frozen `CBR1H_BASELINE_V1` research specification; strategy logic is locked; **Phase 14A is authorized** and blocked only on ten execution rulings
 
 Phase 13 is now **STRATEGY FIDELITY AND BEHAVIORAL PARITY** (D24; gate CBR-ACC-013). It may not run while any
 mandatory item in sections A or C is unchecked. Section B (V-1) is **supporting feed-fidelity validation** and no longer
@@ -84,7 +84,10 @@ and Dukascopy calibration days are preserved as supporting evidence.
 | 52 | [x] Every mismatch classified (8: 1 OWNER_BASELINE_CHOICE, 7 UNRESOLVED_SPEC_AMBIGUITY, 0 IMPLEMENTATION_BUG) | STEP 7 register | `docs/governance/d35-phase13d-mismatch-classification.md` |
 | 53 | [x] Owner Phase 13D verdict issued | **FAIL** accepted (D36); PC4 frozen, no PC5 | `docs/governance/d36-phase13-decision-package.md` |
 | 54 | [x] Final source-contradiction review | CX-LT3-2 = **DISCRETIONARY_EXCEPTION**; 20-minute rule = guidance (OQ-53); no HVCS source contradiction; JM-2025-10-16 = hour-open classification limit (OQ-52) | `docs/decisions/cx-lt3-2-source-review.md` |
-| 55 | [ ] Phase 13 completion criterion decided | **Path B recommended** — PC4 sufficient with documented source ambiguity; requires a new owner decision redefining the criterion | D36 §2.7 |
+| 55 | [x] Phase 13 completion criterion decided | **D37: Path B taken.** Phase 13 closes as RESEARCH-SUFFICIENT WITH DOCUMENTED FIDELITY CONCERNS; PC4 promoted to `CBR1H_BASELINE_V1`; the parity run stays **FAIL** | `docs/governance/d37-phase13-closure-and-promotion.md` |
+| 56 | [x] Strategy logic locked until the untouched baseline | `baseline_v1.verify()` aborts any run whose spec has drifted from `62a2310e…` | `src/cbr/engine/baseline_v1.py` |
+| 57 | [ ] Phase 14A acceptance criteria approved | written before any outcome measurement; A-1…E-5 for owner approval | `docs/acceptance/phase14a-acceptance-criteria.md` |
+| 58 | [ ] Execution assumptions E-OQ-1…E-OQ-10 ruled | **blocker**: fills, stop resolution and forced exit cannot be implemented until these are frozen | `docs/governance/phase14a-implementation-plan.md` §3 |
 
 **Current status (2026-09-17): NOT READY.** Mandatory: 20 of 28 checked (A 20/20; C 0/8). Supporting V-1: 1 of 8
 checked. PC3 scored parity **FAILED** (CBR-RUN-013C-1) and the FAIL is accepted (D32); PC3 stays frozen and no PC4
