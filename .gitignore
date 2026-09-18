@@ -21,3 +21,6 @@ __pycache__/
 *.key
 
 .DS_Store
+
+# Runtime logs from long-running jobs (e.g. the staged Dukascopy acquisition)
+logs/
