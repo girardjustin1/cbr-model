@@ -1,0 +1,208 @@
+spec_version: CBR1H_BASELINE_V1-PC4
+supersedes: CBR1H_BASELINE_V1-PC3
+status: PARITY-CANDIDATE (created under D34; scoring NOT authorized; NOT a validated strategy spec)
+frozen_utc: '2026-09-18T00:02:02+00:00'
+ruling: D34
+implementation_status: IMPLEMENTED
+machine_spec: docs/strategy/1h-cbr-machine-spec.md
+engine: src/cbr/engine/cbr1h_pc4.py
+decisions:
+- D24
+- D25
+- D26
+- D27
+- D28
+- D29
+- D30
+- D31
+- D32
+- D33
+- D34
+ruling_records:
+  docs/governance/d31-pc3-scored-parity-authorization.md: e33032b7d35be0e3f2252836b75e8928d68c3a05e97860c0b75db0ca0fe6f457
+  docs/governance/d32-phase13c-failure-diagnosis.md: b1ae65ff7644f9f416a24b404efb78942bdcfebea4d97b1d7c4554ef9581b848
+  docs/governance/d33-evidence-resolution.md: c6178dc67d89e7fffc0205359dea8281cbce08987346a85e7fcaeb0becbddf2f
+  docs/governance/d34-pc4-authorization.md: 59bdabfc00620138fab7ae3591f7cda5b0e57350ab2d11acfca250bef339fcb2
+  docs/governance/f1-max-violations-implementation-plan.md: e783a2110286e5e56df8ed9597aac09d86c4fc6d6f42a6db9f4d99cc0afac1d3
+spec_hash: 62a2310e43d7cf57a6fafe318a4d1d7ed094d2d629e7f5ea8b20098db8e4d0b7
+spec_files:
+  docs/strategy/cbr-primitives-machine-spec.md: 52a14d8c2aacb4a349f3de30525e4e752fb95a1eba9a10cc7741029f14005059
+  docs/strategy/15min-cbr-machine-spec.md: 6cda00d704ca8a3c1b1de211990a9a0bfb7f01c020a290c44b52a7abf65bc68e
+  docs/strategy/1h-cbr-machine-spec.md: 64772accb276fe9cb76cb52cc11e29095cfb0568eb6c78e892fad46eca70e80f
+  config/strategy.yaml: 024a791e4211b01050cbf0140240b7e36476f03f2b860b35b1e930a2dd26ef5f
+  config/strategy_pc3.yaml: c71ff58f970c9baf8149aebdce2c2b5c0b13be202e88332587196d6030d6bacf
+  config/strategy_pc4.yaml: 220f307e4edddda9f3413bb68790d4786cfba084602af20396187875ba5acdc2
+  config/data_sources.yaml: 0d3041932937822328bfe13c624c0b1d9b36b48695364d9a34ed1f11e5c1aec6
+  src/cbr/engine/params.py: 4acd295a2453237a340d492fd4ba69702cb0ee1fa42723e6a9ec942216cd2a46
+  src/cbr/engine/params_pc3.py: 46b2404be1724ddf8a0da2b559a456ece7221979a731bd6b1bbe72ad03903f16
+  src/cbr/engine/params_pc4.py: 87beb6d35476ef9dc2b89fcd1a7b54243c0fe48d261a089745d1222926161883
+  src/cbr/engine/cbr1h.py: 103440421808bfcdb92050993f99795e1ad27744f21624538a693008594c98b9
+  src/cbr/engine/cbr1h_pc3.py: 934153b85bb651339f7a0507261dd70f13dd81c49ebca3e697e1be9b100d0677
+  src/cbr/engine/cbr1h_pc4.py: 152410f60dc739188e88728f1254fdbaea141ff1edd074d5651755fe66f175a1
+  src/cbr/engine/common.py: d5c9bea2c33a1d99e2d414a14413e05eb44f1f9a0cfabd4ac41ffc2fb0819264
+  src/cbr/structure/swings.py: d7c956eac7241dfeb8ef49455407699ab8633e57a04d887265d6bab9e8992073
+  src/cbr/structure/condition.py: d818e0ed7ad586c7d061b2a0ff6ed47fd665667e20d8a3e5e99848d95e67a52d
+  src/cbr/structure/condition_pc3.py: d5482290d1284355704485fc680f5b0870b44ae81de2573985bdd80728f40aed
+  src/cbr/structure/overextension.py: 30078ea0851d9cc086079e75f0a02e05023ecd584098cbe73f15f846dcac60c3
+  src/cbr/structure/overextension_pc3.py: d65a961f35b40f5a0360274ae6036826b59b52c554cc8ccbacd330a811e30e87
+  src/cbr/structure/shifts.py: fd8418f404c348a5ed2a03fdd2fba35ae157724105170db6e08f090b0c9d17b0
+  src/cbr/structure/shifts_pc3.py: 5e0ee21dd06ae8e8ef89deedf90f78ae5e6464e3174e9c0ba269d6385a9bcaca
+  src/cbr/structure/shifts_pc4.py: 5d880e8e87403cedfbce4af61d1d84bd6ddd468d15a36f653cfa62b1d791228c
+  src/cbr/structure/levels.py: b6f85a859bfa911c4e927948d71f03b2cb3bab7535996990a4afc67230cbbaae
+  src/cbr/structure/indicators.py: 3435235bb3a86b43d0a97628d264b68e1f369a0290a6b5e288f95865e6f3ff5b
+  src/cbr/data/price_series.py: 9dd8993b6f590c06b304ac6af0f0197f00841c658f5e5a15cba421d33544effd
+  src/cbr/data/sessions.py: bee25e7843dabd3518b6b01e063f9d3e21bd05973ff7c218aca21372ff1a25d8
+evidence:
+  docs/decisions/oq48-hvcs-duration-evidence.md: 78e30dd4b310ad82cd4bb657123bd4db5573ce82fcb3091ac55269277bf81475
+  docs/decisions/oq50-previous-15m-evaluation-time.md: f542e73af61fc13790bb22ab073bede97f9a0da3901da06dee0aa4f9946ad0a0
+  docs/decisions/mtf-model-taxonomy.md: 7984632d807588d9c6b27e7ff38aaad392dbb96b231526aab6dbe9323d50b17b
+  docs/decisions/oq49-journal-generalization.md: 2fc8a9c00fddad3127fb08c312b3241637c34206af56df975467b4a4bfb64305
+  docs/decisions/hvcs-continuity-evidence.md: 755271d76224ebd07041cb96990eb99fbdaf14e82f5f9042505b29b556eb66e3
+  research/evidence/strategy_evidence.jsonl: 52f51ffa9366c60e4817b1daafaf43d192c01d840682a98d74d61278b3770bb7
+  reports/oq48-independent-examples.md: 9576360c60efe3a4fc4a0be628e9a70669aa3fc3579f06e3358baaf64b186b25
+  reports/phase13c-evaluation-instant.md: 39c0a958ec3e3ab384bb5c6b185c58119a57c34221f5af4467d6e209fa0c24e6
+config:
+  pc2: config/strategy.yaml
+  pc3_additions: config/strategy_pc3.yaml
+  pc4_additions: config/strategy_pc4.yaml
+  pc2_values_unchanged: true
+  pc3_values_unchanged: true
+changes_from_pc3:
+- id: F-1
+  rule: M1H-6A-1-HVCS-INTO-SHIFT conforming run
+  classification: IMPLEMENTATION_FIX
+  ruling: D34-2
+  from_pc3: the run breaks at the first candle that fails the structural respect test; `hvcs.max_violations` is configured
+    and loaded but never passed to the measurement
+  to_pc4: the configured `hvcs.max_violations` = 1 tolerance is applied again, exactly as PC2 applied it; the value is unchanged
+    and untested at other values
+  evidence:
+  - E1H-003
+  - E1H-034
+  - HX-1
+  - HX-2
+  evidence_note: two dated Level-1 examples outside the parity set (2025-10-23, 2025-10-29) each contain exactly one structural
+    violation; PC3 measures 1 conforming minute on both, PC4 measures 9 and 10
+  code: src/cbr/structure/shifts_pc4.py
+- id: F-9
+  rule: M1H-6A-2-PREV-15M-BROKEN-BY-Q, M1H-6A-3-NEW-EXTREME-IN-Q evaluation instant
+  classification: CANON_CORRECTION
+  ruling: D34-5
+  from_pc3: both are decision-time rules, evaluated when the lower-timeframe type 3 arms
+  to_pc4: both are trigger-time rules, evaluated at the final canonical 5s shift; no other rule moves
+  evidence:
+  - E1H-003
+  - E1H-034
+  - E1H-017
+  evidence_note: every Level-1 statement makes the take a precondition of the entry; the type-3 arm has no counterpart in
+    the course vocabulary
+  code: src/cbr/engine/cbr1h_pc4.py
+- id: F-10
+  rule: Q anchor for the two previous-15m rules
+  classification: ASSUMPTION
+  ruling: D34-6
+  from_pc3: Q is the 15m candle containing the decision instant
+  to_pc4: Q is the 15m candle containing the final canonical 5s shift; Q-1 is the previous completed 15m candle; judged only
+    from bars closed at or before the shift decision instant
+  evidence:
+  - E1H-034
+  code: src/cbr/engine/cbr1h_pc4.py
+- id: F-11
+  rule: OQ-48 anchor, counting convention and unit
+  classification: ASSUMPTION_CHANGE
+  ruling: D34-4
+  from_pc3: implicit in the implementation, not stated in the spec record
+  to_pc4: recorded explicitly as ASSUMPTIONS in config/strategy_pc4.yaml; OQ-48 stays UNRESOLVED_SPEC_AMBIGUITY and no alternate
+    convention may be used during a scored run
+  evidence:
+  - OQ-48
+  code: config/strategy_pc4.yaml
+- id: A-1
+  rule: HVCS endpoint
+  classification: NO_CHANGE
+  ruling: D34-3
+  from_pc3: the run ends at the extension-extreme bar known at the 5s shift
+  to_pc4: unchanged. HVCS_TO_SHIFT is computed as a diagnostic (`hvcs_to_shift_minutes`) and never gates a signal; it was
+    not adopted and must not be adopted because it yields 3/3
+  evidence:
+  - E1H-003
+  code: src/cbr/engine/cbr1h_pc4.py
+- id: A-2
+  rule: type-3 re-anchoring, sweep-extreme timer, whole-extension pullback, PRE_EXTENSION / EXTENSION_ACTIVE, minute-7 activation,
+    Q1 qualifier, HOUR_OPEN, k = 3, directionless trending range -> RANGE, candidate selection, tradable-time window, prior-setup
+    gate removal
+  classification: NO_CHANGE
+  ruling: D34-13
+  from_pc3: as implemented in PC3
+  to_pc4: unchanged; these recovered Tom's trigger geometry and are outside the current failure scope
+  evidence: []
+  code: null
+- id: A-3
+  rule: M1H-LOC-*, M1H-OE-*, M1H-COND-* evaluation instant
+  classification: NO_CHANGE
+  ruling: D34-5
+  from_pc3: decision-time
+  to_pc4: unchanged. D34 §5 forbids moving rules as a bundle merely because they share an evaluation timestamp; no evidence
+    requires shift-time evaluation for these
+  evidence: []
+  code: null
+classification_summary:
+  CANON_CORRECTION:
+  - F-9
+  ASSUMPTION:
+  - F-10
+  ASSUMPTION_CHANGE:
+  - F-11
+  IMPLEMENTATION_FIX:
+  - F-1
+  PARITY_SET_CORRECTION: []
+  NO_CHANGE:
+  - A-1
+  - A-2
+  - A-3
+unresolved:
+- item: HVCS run anchor
+  detail: the run ends at the extension-extreme bar known at the shift
+  label: ASSUMPTION
+  open_question: OQ-48; the shift-anchored reading stays a diagnostic only
+- item: HVCS counting convention
+  detail: completed 1m candles, first candle not counted
+  label: ASSUMPTION
+  open_question: OQ-48; inclusive counting and the minute-clock origin are undefined
+- item: HVCS duration unit
+  detail: candle count, not elapsed wall-clock time
+  label: ASSUMPTION
+  open_question: OQ-48
+- item: extension origin price
+  detail: most adverse price between the hour open and activation
+  label: ASSUMPTION
+  open_question: carried from PC3, unchanged
+- item: earliest activation minute
+  detail: minute 7
+  label: ASSUMPTION
+  open_question: carried from PC3, unchanged
+- item: swing definition
+  detail: ATR zig-zag k = 3
+  label: ASSUMPTION
+  open_question: OQ-01; JM-2025-10-16 adds a second instance of the classifier disagreeing with the source
+- item: Q anchor at a 15m boundary
+  detail: Q follows the shift, so a shift early in a new candle moves Q
+  label: ASSUMPTION
+  open_question: OQ-50 §5; frequency is measurable only under an authorized run
+- item: FS / IFS middle-timeframe model
+  detail: not implemented in any candidate
+  label: OPEN
+  open_question: OQ-51; Tom trades three MTF models, the engine implements two
+open_blockers:
+- PC4_SCORING_NOT_AUTHORIZED
+- CBR_PROT_013D_NOT_APPROVED
+- CORRECTED_PARITY_SET_NOT_FROZEN
+predecessors:
+  PC2:
+    verdict: FAIL
+    run: CBR-RUN-013B-2
+    frozen: true
+  PC3:
+    verdict: FAIL
+    run: CBR-RUN-013C-1
+    frozen: true

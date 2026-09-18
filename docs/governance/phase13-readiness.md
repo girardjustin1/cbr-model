@@ -1,7 +1,7 @@
 # Phase 13 Readiness Checklist
 
 **Doc:** CBR-READY-013 · **Created:** 2026-09-15 (owner ruling D18-12) · **Updated:** 2026-09-15 (D24, fidelity revision) ·
-**Status:** FAIL twice. PC2 failed Phase 13 (D26) and PC3 failed Phase 13C (CBR-RUN-013C-1, accepted in D32). Both candidates stay frozen and no PC4 exists. The D32 failure-diagnosis package (OQ-48, OQ-49, OQ-50; eight classified candidate changes, none applied) is with the owner; Phase 14 not authorized
+**Status:** FAIL twice. PC2 failed Phase 13 (D26) and PC3 failed Phase 13C (CBR-RUN-013C-1, accepted in D32). Both stay frozen. **PC4 created under D34** (spec hash `62a2310e…`) with three behavioural changes — the restored HVCS violation tolerance and the two previous-15m rules moved to the shift — and is **not scored**: CBR-PROT-013D is drafted and awaits approval. Phase 14 not authorized
 
 Phase 13 is now **STRATEGY FIDELITY AND BEHAVIORAL PARITY** (D24; gate CBR-ACC-013). It may not run while any
 mandatory item in sections A or C is unchecked. Section B (V-1) is **supporting feed-fidelity validation** and no longer
@@ -77,9 +77,13 @@ and Dukascopy calibration days are preserved as supporting evidence.
 | 45 | [x] OQ-50 evidence review and Q definition | take must be satisfied by the 5s shift (F-9); Q = the 15m candle containing the shift (F-10) | `docs/decisions/oq50-previous-15m-evaluation-time.md` |
 | 46 | [x] MTF model taxonomy and journal scope rulings | three MTF models, two implemented; JM-2025-10-17 out of scope, JM-2025-10-29 SOURCE_AMBIGUITY, JM-2025-10-16 confirmed | `docs/decisions/mtf-model-taxonomy.md` |
 | 47 | [ ] Corrected CBR1H parity set approved | proposal returned: 4 ENTRY_LEVEL + 1 HOUR_LEVEL may bind | `research/examples/cbr1h-parity-set-proposal.md` |
-| 48 | [ ] PC4 authorized | **NOT READY**: four owner rulings outstanding (HVCS anchor, OQ-50 scope, parity set, F-9/F-10/F-11) | `docs/governance/d33-evidence-resolution.md` §5 |
+| 48 | [x] PC4 authorized and created | D34: F-1, F-9, F-10, F-11 approved; anchor kept (NO_CHANGE); PC4 frozen at `62a2310e…` | `docs/governance/d34-pc4-authorization.md` |
+| 49 | [x] Corrected CBR1H parity set built | manifest v2 `e12f3882…`: 4 ENTRY_LEVEL + 1 HOUR_LEVEL binding, 11 narrative; v1 untouched | `research/examples/parity_set_manifest_v2.json` |
+| 50 | [ ] CBR-PROT-013D approved | drafted, not run; decisions E-1…E-5 outstanding, in particular the one-case hour-level threshold | `docs/governance/phase13d-pc4-parity-protocol.md` |
+| 51 | [ ] PC4 scored parity authorized | **NOT AUTHORIZED** (D34 §18) | `docs/governance/d34-pc4-creation-report.md` §16 |
 
-**Current status (2026-09-16): NOT READY.** Mandatory: 20 of 28 checked (A 20/20; C 0/8). Supporting V-1: 1 of 8
+**Current status (2026-09-17): NOT READY.** Mandatory: 20 of 28 checked (A 20/20; C 0/8). Supporting V-1: 1 of 8
 checked. PC3 scored parity **FAILED** (CBR-RUN-013C-1) and the FAIL is accepted (D32); PC3 stays frozen and no PC4
-exists. Next step: four owner rulings — the HVCS run anchor (OQ-48 §10), the OQ-50 scope, the recommended F-9/F-10/F-11, and
-the corrected parity set — after which PC4 can be specified in one pass with F-1 included.
+exists. PC4 is created, frozen and tested (633 passed, 1 skipped) but **not scored**. Next step: owner approval of
+CBR-PROT-013D, including the hour-level threshold now that only one hour-level case binds (E-2), and confirmation of
+the corrected parity set as the scoring set (E-3).

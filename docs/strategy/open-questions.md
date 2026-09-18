@@ -703,9 +703,12 @@ said to hold ~350 trades (P2G-37). The spoken and slide DXY figures disagree.
   @ 00:02:06, 2025-10-23) and HX-2 (`V1H-candle_behavior_extension` @ 00:03:38, 2025-10-29) — each contain exactly one
   structural violation. PC3 measures **1** conforming minute on both; with `max_violations = 1` restored it measures
   **9 and 10**. Every reading without the tolerance is INCONSISTENT with Tom's own examples.
-- **Status.** F-1 confirmed independently and approved (D33 §1). The **anchor** (extension extreme vs shift) remains
-  the one open question; counting convention and unit are recommended as status-quo ASSUMPTIONS
-  (`docs/decisions/oq48-hvcs-duration-evidence.md` §10). No convention was selected because it recovers examples.
+- **Ruled (D34 §3-4).** F-1 approved as an IMPLEMENTATION_FIX and implemented in PC4. The **anchor stays the
+  extension extreme** — the shift-anchored reading was refused precisely because it produces 3/3, and is preserved as
+  the `hvcs_to_shift_minutes` diagnostic. The counting convention, minute-clock origin and unit are recorded as
+  explicit ASSUMPTIONS in `config/strategy_pc4.yaml`.
+- **Status.** `UNRESOLVED_SPEC_AMBIGUITY`, carried into PC4 with the ambiguity visible in the spec. No alternate
+  convention may be used during a scored run.
 
 ### OQ-49 · Journal generalization and MTF model taxonomy (raised by CBR-RUN-013C-1, framed by D32 §9-14)
 - **Problem.** None of the three HOUR_LEVEL journal hours produced an eligible PC3 candidate, which is independently
@@ -730,8 +733,11 @@ said to hold ~350 trades (P2G-37). The spoken and slide DXY figures disagree.
   **by the final 5s shift** (F-9, CANON_CORRECTION) for `M1H-6A-2` / `M1H-6A-3`, because every Level-1 statement makes it
   a precondition of the *entry* and the type-3 arm has no counterpart in the course vocabulary. **Q** = the 15m candle
   containing the final shift (F-10, ASSUMPTION), consistent with both independent examples.
-- **Status.** `AWAITING OWNER RULING`. F-4's wider scope (`M1H-LOC-*`, `M1H-OE-01`) is **withdrawn**: no Level-1
-  evidence supports moving them, and it was proposed from CX-LT3-2 alone.
+- **Ruled (D34 §5-6).** The narrow change is approved and implemented in PC4: only `M1H-6A-2` and `M1H-6A-3` move to
+  the final 5s shift (F-9, CANON_CORRECTION), with `Q` = the 15m candle containing that shift (F-10, ASSUMPTION) and
+  no data after the shift decision instant. `M1H-LOC-*`, `M1H-OE-*` and `M1H-COND-*` do **not** move.
+- **Status.** `RESOLVED for PC4`. The 15m-boundary behaviour stays an assumption; its frequency is measurable only
+  under an authorized run.
 
 ### OQ-51 · Should CBR1H contain a fractal-shift / inverse-fractal-shift context? (raised by D33 §10)
 - **Problem.** Level 1 (`V1H-mtf_model_types` 00:02:57, E1H-010/E1H-011) names **three** middle-timeframe models:

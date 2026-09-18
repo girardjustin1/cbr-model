@@ -1,0 +1,76 @@
+# PC4 additions to config/strategy.yaml + config/strategy_pc3.yaml (owner ruling D34). Both earlier files are pinned
+# by the frozen PC2 and PC3 records and are unchanged: every value here is a PC4 setting or an explicit PC4 override.
+# PC4 contains ONLY owner-approved changes relative to PC3 (D34 §14).
+spec_version: PC4
+supersedes: PC3
+ruling: D34
+
+hvcs:
+  violation_tolerance:
+    value: INHERITED_MAX_VIOLATIONS   # F-1 (D34 §2)
+    label: IMPLEMENTATION_FIX
+    reason: >-
+      apply `hvcs.max_violations` from config/strategy.yaml again. PC2 applied it; PC3's H-1 rewrite stopped passing
+      it without a ruling. The value stays 1 and is neither changed nor tested at other values (D34 §2).
+    parameter_source: config/strategy.yaml -> cbr1h.hvcs.max_violations (value 1, label ASSUMPTION, source OQ-08)
+  endpoint:
+    value: EXTENSION_EXTREME          # D34 §3
+    label: NO_CHANGE
+    reason: >-
+      the HVCS run still ends at the extension-extreme bar known at the 5s shift (PC3's H-2 / H-3 behaviour). The
+      course ordering is HVCS -> beyond previous structure -> wick/additional push -> HILO/BOS entry, which keeps the
+      HVCS a precursor to the entry sequence. The shift-anchored reading was NOT adopted and must not be adopted
+      because it yields 3/3.
+  hvcs_to_shift_diagnostic:
+    value: RECORDED_NOT_SCORED        # D34 §3
+    label: NO_CHANGE
+    reason: HVCS_TO_SHIFT is preserved as a diagnostic / future-research interpretation only; it never gates a signal
+  counting_convention:
+    value: INHERITED_EXCLUSIVE_CANDLE_COUNT   # OQ-48 (D34 §4)
+    label: ASSUMPTION
+    unresolved: true
+    reason: >-
+      OQ-48 stays UNRESOLVED_SPEC_AMBIGUITY. The course does not define inclusive/exclusive counting, the minute-clock
+      origin, extreme-minute inclusion or shift-minute inclusion. PC4 uses the simplest inherited deterministic
+      convention: completed 1m candles, the first candle of the sequence is the reference and is not counted, and the
+      run may end on the extreme bar. No alternate convention may be used during a scored run.
+    open_question: OQ-48
+
+previous_15m:
+  evaluation_instant:
+    value: FINAL_5S_SHIFT             # F-9 (D34 §5)
+    label: CANON_CORRECTION
+    source: [E1H-003, E1H-034, E1H-017]
+    reason: >-
+      only the two rules whose requirement is directly "the active 15-minute candle has taken the previous completed
+      15-minute high/low / is beyond that structure" move to the final canonical 5s shift:
+      M1H-6A-2-PREV-15M-BROKEN-BY-Q and M1H-6A-3-NEW-EXTREME-IN-Q. Every Level-1 statement makes the take a
+      precondition of the entry, and the type-3 arm has no counterpart in the course vocabulary.
+    scope: [M1H-6A-2-PREV-15M-BROKEN-BY-Q, M1H-6A-3-NEW-EXTREME-IN-Q]
+    not_in_scope: [M1H-OE-00-ACTIVE, M1H-OE-01, M1H-OE-02, M1H-OE-04a, M1H-OE-04b, M1H-LOC-01, M1H-LOC-02,
+                   M1H-LOC-03, M1H-LOC-04, M1H-COND-01, M1H-COND-02]
+  q_anchor:
+    value: CANDLE_CONTAINING_SHIFT    # F-10 (D34 §6)
+    label: ASSUMPTION
+    source: [E1H-034]
+    reason: >-
+      Q = the 15m candle containing the final canonical 5s entry shift; Q-1 = the immediately previous completed 15m
+      candle. E1H-034 has one candle both taking the previous extreme and carrying the entry "around the halfway
+      point of that".
+  data_horizon:
+    value: SHIFT_DECISION_TIME        # D34 §6
+    label: IMPLEMENTATION_FIX
+    reason: >-
+      the take is judged from 5s bars closed at or before the shift decision instant (the shift bar's close). No
+      later portion of Q may be used, so a take occurring after the shift can never retroactively validate a signal.
+
+documented_assumptions:            # F-11 (D34 §4): recorded, not changed
+  - id: OQ-48-ANCHOR
+    statement: the conforming run ends at the extension-extreme bar known at the 5s shift
+    label: ASSUMPTION
+  - id: OQ-48-COUNTING
+    statement: the first candle of the sequence is the reference and is not counted
+    label: ASSUMPTION
+  - id: OQ-48-UNIT
+    statement: duration is a count of completed 1m candles, not elapsed wall-clock time
+    label: ASSUMPTION
