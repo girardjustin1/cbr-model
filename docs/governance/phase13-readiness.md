@@ -89,7 +89,9 @@ and Dukascopy calibration days are preserved as supporting evidence.
 | 57 | [x] Phase 14A acceptance criteria approved | written before any outcome measurement | `docs/acceptance/phase14a-acceptance-criteria.md` |
 | 58 | [x] Execution assumptions E-OQ-1…E-OQ-10 ruled | **D38**: all ten frozen in `config/execution.yaml` before implementation | `docs/governance/d38-phase14a-execution-semantics.md` |
 | 59 | [x] Phase 14A simulator implemented and tested | 7 modules under `src/cbr/execution/`, 35 synthetic tests incl. the hand-computed example; 696 passing | `docs/governance/phase14a-completion-report.md` |
-| 60 | [ ] Owner Phase 14A verdict | engine verdict **PASS**; returned for owner approval before 14B or OQ-24 | CBR-ACC-014A §F |
+| 60 | [x] Owner Phase 14A verdict | **PASS WITH CONCERNS** (D39): mechanics complete, integration outstanding | `docs/governance/d39-phase14a1-real-data-integration.md` |
+| 61 | [x] Phase 14A.1 real-data integration | tick loader, gap translation, rollover reuse, replay driver, provenance; 20 real-data tests | `docs/governance/phase14a1-completion-report.md` |
+| 62 | [ ] OQ-24 baseline data architecture decided | package updated; **option A recommended** on signal-membership and reproducibility grounds, never performance | `docs/decisions/oq24-baseline-data-architecture.md` |
 
 **Current status (2026-09-17): NOT READY.** Mandatory: 20 of 28 checked (A 20/20; C 0/8). Supporting V-1: 1 of 8
 checked. PC3 scored parity **FAILED** (CBR-RUN-013C-1) and the FAIL is accepted (D32); PC3 stays frozen and no PC4
