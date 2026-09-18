@@ -82,11 +82,14 @@ and Dukascopy calibration days are preserved as supporting evidence.
 | 50 | [x] CBR-PROT-013D approved | D35: v1.1 APPROVED; E-1…E-5 settled, E-2 threshold frozen before execution | `docs/governance/phase13d-pc4-parity-protocol.md` |
 | 51 | [x] PC4 scored parity executed twice with identical result hashes | CBR-RUN-013D-1: `361232f6…f209` both runs | `reports/phase13d-run-manifest.json` |
 | 52 | [x] Every mismatch classified (8: 1 OWNER_BASELINE_CHOICE, 7 UNRESOLVED_SPEC_AMBIGUITY, 0 IMPLEMENTATION_BUG) | STEP 7 register | `docs/governance/d35-phase13d-mismatch-classification.md` |
-| 53 | [ ] Owner Phase 13D verdict issued | engine verdict **FAIL**: 2/3 on HVCS eligibility (CX-LT1-1 and CX-TE1-1 clean, CX-LT3-2 blocked at the kept anchor); control passed; hour level 0/1 | CBR-PROT-013D §7 D-7 |
+| 53 | [x] Owner Phase 13D verdict issued | **FAIL** accepted (D36); PC4 frozen, no PC5 | `docs/governance/d36-phase13-decision-package.md` |
+| 54 | [x] Final source-contradiction review | CX-LT3-2 = **DISCRETIONARY_EXCEPTION**; 20-minute rule = guidance (OQ-53); no HVCS source contradiction; JM-2025-10-16 = hour-open classification limit (OQ-52) | `docs/decisions/cx-lt3-2-source-review.md` |
+| 55 | [ ] Phase 13 completion criterion decided | **Path B recommended** — PC4 sufficient with documented source ambiguity; requires a new owner decision redefining the criterion | D36 §2.7 |
 
 **Current status (2026-09-17): NOT READY.** Mandatory: 20 of 28 checked (A 20/20; C 0/8). Supporting V-1: 1 of 8
 checked. PC3 scored parity **FAILED** (CBR-RUN-013C-1) and the FAIL is accepted (D32); PC3 stays frozen and no PC4
-exists. PC4 scored under CBR-PROT-013D v1.1 (CBR-RUN-013D-1): **FAIL**, but the closest result yet — CX-LT1-1 and
-CX-TE1-1 are clean on all nine dimensions in the STRICT view (the first eligible course signals any candidate has
-produced), CX-LT3-2 is blocked by the HVCS anchor the owner deliberately kept, and the single hour-level case is
-0/1. Next step: the owner's Phase 13D verdict.
+exists. PC4's FAIL is accepted (D36) and the source review is complete: CX-LT3-2 is classified a **discretionary
+exception** on Tom's own words, the 20-minute rule is **guidance** rather than a floor, there is **no HVCS source
+contradiction**, and JM-2025-10-16 fails on the hour-open condition convention (OQ-52). **No PC5 change is
+independently justified.** Next step: the owner's decision on **Path B** — whether Phase 13 completes when a
+candidate reproduces the textbook examples and the negative control, with discretionary examples documented.

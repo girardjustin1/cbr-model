@@ -747,3 +747,25 @@ said to hold ~350 trades (P2G-37). The spoken and slide DXY figures disagree.
 - **Consequence.** JM-2025-10-17 was scored against a context the engine cannot represent (F-5, PARITY_SET_CORRECTION).
 - **Status.** `OPEN`. Extend CBR1H, or specify FS/IFS as a separate candidate model? Also open: what the journal's
   `Condition = Volume` value means, and whether `Setup` or a separate column carries the MTF label.
+
+### OQ-52 · Should the MTF condition be classified once at the hour open? (raised by CBR-RUN-013D-1, D36 §2.5)
+- **Problem.** `classify_pc3` is called with `as_of = h0`, so the condition is fixed at the hour open for the whole
+  hour. On JM-2025-10-16 only **2** swing legs are confirmed at 00:00, giving `UNDEFINED` and blocking every
+  candidate through `M1H-COND-01/-02`; by **00:41** — the journal's recorded time and the minute of the engine's own
+  SELL candidate shift — **4** legs are confirmed, which clears `min_legs = 3`. The two swings formed before the hour
+  and confirmed inside it (H 4216.08 formed 23:00 → confirmed 00:05; L 4204.96 formed 00:00 → confirmed 00:20).
+- **Not** an OQ-01 detection failure (k = 3 finds the legs), **not** a taxonomy issue, **not** thin journal evidence.
+- **Related.** Same evaluation-instant family as OQ-50. `min_legs = 3` is itself an ASSUMPTION (OQ-02).
+- **Status.** `OPEN`. Per D36 §8, `k = 3` is not changed from this case and no rule change is proposed.
+
+### OQ-53 · Is the 20-minute extension minimum a floor or guidance? (raised by D36 §4)
+- **Evidence.** Every Level-1 statement is hedged: "around 20 minutes", "around 20 to 30 minutes", "40 to 50 percent
+  of that candle", "around 2 15-minute intervals" (E1H-018, E1H-002). One L1 instance explicitly calls an extension
+  of **"almost 20 minutes"** a **"really nice overextension"** (V1H-defining_a_good_extension 00:03:10) — an example a
+  hard `≥ 20` floor rejects. The corpus never says "at least", "minimum" or "must".
+- **Engine.** `oe.min_minutes = 20` is implemented as a hard floor and labelled CANON. The number is sourced; the
+  hardness is not.
+- **Measured.** No dated example falls under 20 minutes when measured from the hour open the way E1H-018 describes;
+  sub-20 figures arise only from PC4's decision-instant evaluation and activation anchor.
+- **Status.** `OPEN`. Mechanizing "around 20" needs a tolerance no source states, so nothing is proposed. Recorded so
+  the hardness is not mistaken for canon.
