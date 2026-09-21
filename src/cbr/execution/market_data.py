@@ -16,6 +16,7 @@ from dataclasses import dataclass, field
 import pandas as pd
 
 from cbr.data import dukascopy_fetch as dk
+from cbr.data import market_closures as mc
 from cbr.data.sessions import expected_closed
 from cbr.execution import prices as px
 
@@ -26,6 +27,7 @@ ROLLOVER_EXCLUSION = "ROLLOVER_EXCLUSION"
 DATA_GAP = px.DATA_GAP
 VALID_SPARSE_QUOTES = "VALID_SPARSE_QUOTES"
 NOT_LOADED = "NOT_LOADED"
+VERIFIED_MARKET_DATA_CLOSURE = mc.VERIFIED_MARKET_DATA_CLOSURE
 M1 = pd.Timedelta(minutes=1)
 
 
@@ -127,14 +129,21 @@ def load_quotes(start: pd.Timestamp, end: pd.Timestamp, *, instrument: str = "xa
 
 
 def classify_intervals(start: pd.Timestamp, end: pd.Timestamp, quotes: pd.DataFrame, prov: TickProvenance, *,
-                       rollover_pre_min: int, rollover_post_min: int, rollover_ny_time: str = "17:00"
-                       ) -> tuple[list[px.Gap], dict]:
+                       rollover_pre_min: int, rollover_post_min: int, rollover_ny_time: str = "17:00",
+                       closures: mc.Registry | None = None) -> tuple[list[px.Gap], dict]:
     """Minute-level classification, translating Phase 9's AC-07 criterion (D39 §4).
 
     A minute with quotes is live. A minute without them is a SCHEDULED_CLOSURE, a ROLLOVER_EXCLUSION, a day that was
-    NOT_LOADED, or — exactly Phase 9's "unexpected gap" — a DATA_GAP. Sparse quoting inside a live minute is never a
-    gap, and only DATA_GAP runs are returned to the simulator as `px.Gap`.
+    NOT_LOADED, a VERIFIED_MARKET_DATA_CLOSURE, or — exactly Phase 9's "unexpected gap" — a DATA_GAP. Sparse quoting
+    inside a live minute is never a gap, and only DATA_GAP runs are returned to the simulator as `px.Gap`.
+
+    **Verified closures are not gaps** (D43 §5). During a proven closure there is no executable quote stream at all,
+    so a fill cannot have occurred inside the interval and there is nothing to call unprovable. No quote is
+    fabricated and no price is interpolated: the clock simply holds no executable market event there. An interval
+    the evidence does **not** establish as closed stays a DATA_GAP and keeps its D38/D39 unprovable semantics
+    unchanged (D43 §6).
     """
+    reg = closures if closures is not None else mc.load()
     minutes = pd.date_range(start.floor("1min"), end.ceil("1min"), freq="1min", tz="UTC", inclusive="left")
     have = set(quotes.index.floor("1min")) if len(quotes) else set()
     missing_days = set(prov.missing_days)
@@ -148,6 +157,8 @@ def classify_intervals(start: pd.Timestamp, end: pd.Timestamp, quotes: pd.DataFr
             kinds[m] = SCHEDULED_CLOSURE
         elif px.in_rollover_window(m, pre_min=rollover_pre_min, post_min=rollover_post_min, ny_time=rollover_ny_time):
             kinds[m] = ROLLOVER_EXCLUSION
+        elif mc.closed_at(m, reg):
+            kinds[m] = VERIFIED_MARKET_DATA_CLOSURE
         else:
             kinds[m] = DATA_GAP
     gaps, counts = [], {}

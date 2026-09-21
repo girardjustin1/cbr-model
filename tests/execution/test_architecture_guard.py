@@ -11,6 +11,7 @@ PKG = pathlib.Path(__file__).resolve().parents[2] / "src" / "cbr" / "execution"
 # module appears here, and the forbidden prefixes below are what actually enforce the separation.
 ALLOWED = {"cbr.engine.baseline_v1", "cbr.engine.params",
            "cbr.data.price_series", "cbr.data.dukascopy_fetch", "cbr.data.sessions",
+           "cbr.data.market_closures",
            "cbr.structure.levels"}
 FORBIDDEN_PREFIXES = ("cbr.engine.cbr1h", "cbr.engine.cbr15", "cbr.engine.parity", "cbr.engine.phase13",
                       "cbr.structure.shifts", "cbr.structure.overextension", "cbr.structure.condition",

@@ -168,13 +168,25 @@ def fetch_hour(instrument: str, hour: datetime, *, sleep=time.sleep) -> HourOutc
     return out
 
 
-def run_block(block: str, instrument: str = "xauusd", *, sleep=time.sleep) -> BlockStats:
-    """Acquire one `YYYY-MM` block. Re-running is safe: cached hours are never refetched."""
+def run_block(block: str, instrument: str = "xauusd", *, sleep=time.sleep, progress: bool = False) -> BlockStats:
+    """Acquire one `YYYY-MM` block. Re-running is safe: cached hours are never refetched.
+
+    `progress` emits one line per completed day. A month block is ~500 requests and previously printed nothing until
+    it finished, which made a healthy run indistinguishable from a hung one. Reporting only; no fetch behaviour.
+    """
     request, skipped = block_hours(block, instrument)
     stats = BlockStats(block=block, requested_open_hours=len(request), scheduled_closures=len(skipped))
     queue = _load_queue()
     pending = {h for h in queue["pending"] if h.startswith(block)}
+    started, day = time.monotonic(), None
     for hour in request:
+        if progress and day is not None and hour.date() != day:
+            done = stats.successful_hours + stats.legitimate_empty_files
+            rate = (time.monotonic() - started) / max(done, 1)
+            print(f"  {day}  cum {done}/{len(request)} hours  {rate:.1f}s/file  "
+                  f"retries={stats.retry_count} 429={stats.http_429} 5xx={stats.http_5xx} "
+                  f"unresolved={stats.unresolved_failures}", flush=True)
+        day = hour.date()
         out = fetch_hour(instrument, hour, sleep=sleep)
         stats.hours.append(out)
         stats.retry_count += max(out.attempts - 1, 0)
@@ -247,7 +259,8 @@ def main() -> None:
         last = sys.argv[3] if len(sys.argv) > 3 else first
         months = pd.period_range(first, last, freq="M")
         for m in months:
-            s = run_block(str(m))
+            print(f"{m}: starting ({len(block_hours(str(m))[0])} request hours)", flush=True)
+            s = run_block(str(m), progress=True)
             print(f"{s.block}: {s.successful_hours} data, {s.legitimate_empty_files} empty, "
                   f"{s.scheduled_closures} closed (not requested), {s.unresolved_failures} unresolved, "
                   f"429s={s.http_429}, complete={s.complete()}", flush=True)

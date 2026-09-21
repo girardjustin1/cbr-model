@@ -1,0 +1,478 @@
+// CBR1H PC4 Research Strategy — Phase 14B draft (owner ruling D42 §18-20)
+//
+// NON-AUTHORITATIVE / EXPLORATORY. Frozen PC4 Python is the only authoritative implementation of CBR1H.
+// This script exists for visual human review, Strategy Tester exploration and Python <-> Pine signal parity work.
+// It must never alter the Phase 15A Python pilot, and its Strategy Tester output is not a performance result.
+//
+// Where Pine and Python disagree, the first assumption is a PINE TRANSLATION DIFFERENCE (D42 §20). Investigate this
+// file before touching PC4. PC4 reopens only if a discrepancy reveals an independently supported real
+// strategy-definition defect.
+//
+// Known translation differences, declared up front — none of these is a strategy change:
+//   TD-1  PC4's entry trigger is a 5-second type 3 built from Dukascopy tick-mid bars. TradingView has no Dukascopy
+//         XAUUSD tick feed, and seconds bars need a paid plan. On a 5s chart this script approximates the trigger on
+//         chart bars; on any coarser chart it degrades to a 1-minute type 3 and says so in the status table.
+//   TD-2  STRUCTURE prices here are the broker's chart OHLC, not tick-mid. Extremes will differ slightly, and PC4
+//         rules that compare extremes to levels can therefore differ at the margin (D16).
+//   TD-3  The condition window basis is CLOCK here; PC4 uses TRADABLE (scheduled closures do not consume the window).
+//   TD-4  EXECUTION in PC4 is bid/ask with real spread; Strategy Tester fills on chart prices with no spread.
+//   TD-5  The HVCS scan is bounded to `hvcsScan` bars; PC4's run is unbounded.
+//   TD-6  Prior-setup count (M1H-COND-04) is not implemented: it needs recursive setup evaluation. Shown as N/A.
+//   TD-7  TradingView's feed applies its own session and holiday handling, so a market closure arrives as absent
+//         bars rather than as data to classify. The Python side separates a VERIFIED_MARKET_DATA_CLOSURE from a
+//         true DATA_GAP (D43); this script has no equivalent and cannot tell the two apart.
+//
+// Parameter values below are copied from the frozen config and must not be optimized from Strategy Tester results
+// (D42 §19). They are inputs only so a reviewer can see what a rule is doing, never to search for a better number.
+
+//@version=6
+strategy("CBR1H PC4 Research Strategy", overlay = true, initial_capital = 100000,
+         default_qty_type = strategy.percent_of_equity, default_qty_value = 100,
+         calc_on_every_tick = false, process_orders_on_close = true, max_lines_count = 500,
+         max_labels_count = 500, max_bars_back = 5000, pyramiding = 0)
+
+// ─── Frozen parameters (config/strategy.yaml + config/strategy_pc4.yaml) ──────────────────────────────────────────
+grpP = "Frozen parameters — do not optimize"
+kMTF        = input.float(3.0,  "MTF swing k (5m)",            group = grpP)
+kLTF        = input.float(3.0,  "LTF swing k (1m)",            group = grpP)
+kS5         = input.float(3.0,  "S5 swing k (trigger tier)",   group = grpP)
+atrLen      = input.int(14,     "ATR length",                  group = grpP)
+condWinH    = input.float(8.0,  "Condition window (hours)",    group = grpP)
+condMinLegs = input.int(3,      "Condition min legs",          group = grpP)
+rangeMin    = input.float(0.75, "RANGE c_med >=",              group = grpP)
+trendMax    = input.float(0.50, "TRENDING_RANGE c_med >=",     group = grpP)
+corrCap     = input.float(2.0,  "Correction cap",              group = grpP)
+locExtreme  = input.float(0.75, "Range-extreme pos",           group = grpP)
+proErMin    = input.float(0.50, "Pro-trend ER min",            group = grpP)
+proErMax    = input.float(0.75, "Pro-trend ER max",            group = grpP)
+oeMinMin    = input.int(20,     "OE min duration (minutes)",   group = grpP)
+oeMinSizeA  = input.float(0.5,  "OE min size (x ATR 1h)",      group = grpP)
+oePullFrac  = input.float(0.50, "OE pullback fraction",        group = grpP)
+oeActivA    = input.float(0.5,  "OE activation (x ATR 1m)",    group = grpP)
+oeTwoSided  = input.float(0.5,  "OE two-sided fraction",       group = grpP)
+hvcsMin     = input.int(4,      "HVCS min minutes",            group = grpP)
+hvcsMaxViol = input.int(1,      "HVCS max violations",         group = grpP)
+hvcsLvcsA   = input.float(0.3,  "LVCS body (x ATR 1m)",        group = grpP)
+t3MaxRevS5  = input.int(3,      "Type 3 max reversal (trigger tier, min)", group = grpP)
+startMin    = input.float(22,   "Entry window start (mih)",    group = grpP)
+endMin      = input.float(52,   "Entry window end (mih)",      group = grpP)
+stopBufA    = input.float(0.1,  "Stop buffer (x ATR 1m)",      group = grpP)
+targetFrac  = input.float(0.5,  "Target fraction of extension", group = grpP)
+rollPreMin  = input.int(15,     "Rollover pre (min)",          group = grpP)
+rollPostMin = input.int(60,     "Rollover post (min)",         group = grpP)
+hvcsScan    = input.int(90,     "HVCS scan depth (bars) [TD-5]", group = grpP)
+
+grpV = "Variant and display"
+variant  = input.string("A", "Variant", options = ["A", "B"], group = grpV,
+     tooltip = "A = HVCS_S5_SHIFT, B = FRACTAL_1M_S5_SHIFT")
+showDiag = input.bool(true,  "Show rejection reasons",  group = grpV)
+showLvls = input.bool(true,  "Show stop / target lines", group = grpV)
+
+// ─── Higher-timeframe series (no lookahead anywhere) ──────────────────────────────────────────────────────────────
+atr1m  = request.security(syminfo.tickerid, "1",  ta.atr(atrLen))
+atr1h  = request.security(syminfo.tickerid, "60", ta.atr(atrLen))
+h1Open = request.security(syminfo.tickerid, "60", open)
+h1Time = request.security(syminfo.tickerid, "60", time)
+m5o    = request.security(syminfo.tickerid, "5",  open)
+m5h    = request.security(syminfo.tickerid, "5",  high)
+m5l    = request.security(syminfo.tickerid, "5",  low)
+m5c    = request.security(syminfo.tickerid, "5",  close)
+m5atr  = request.security(syminfo.tickerid, "5",  ta.atr(atrLen))
+m5new  = ta.change(request.security(syminfo.tickerid, "5", time)) != 0
+q15h   = request.security(syminfo.tickerid, "15", high[1])       // Q-1 high, completed candle only
+q15l   = request.security(syminfo.tickerid, "15", low[1])
+q15c   = request.security(syminfo.tickerid, "15", close[1])
+q15o   = request.security(syminfo.tickerid, "15", open[1])
+q15t   = request.security(syminfo.tickerid, "15", time)          // Q open time
+
+// Chart-resolution honesty: what tier is the trigger really being computed on (TD-1)?
+chartSec    = timeframe.in_seconds(timeframe.period)
+triggerTier = chartSec <= 5 ? "S5 (chart)" : chartSec <= 60 ? "1m-APPROX" : "COARSE-APPROX"
+tierOk      = chartSec <= 60
+
+// ─── Primitive: causal ATR zig-zag (primitives §1) ────────────────────────────────────────────────────────────────
+// State is per call site. Emits a confirmed swing when price reverses by k x ATR from the running extreme.
+type Zig
+    float extPrice = na
+    int   extTime  = na
+    bool  up       = true
+    float lastHigh = na          // last confirmed SwingHigh price
+    int   lastHighT = na
+    float lastLow  = na
+    int   lastLowT = na
+    float prevHigh = na          // the one before that (for HH/HL direction)
+    float prevLow  = na
+    int   event    = 0           // 1 = SwingHigh confirmed this bar, -1 = SwingLow, 0 = none
+
+zigStep(z, h, l, t, r) =>
+    z.event := 0
+    if na(z.extPrice)
+        z.extPrice := h
+        z.extTime  := t
+    else if z.up
+        if h > z.extPrice
+            z.extPrice := h
+            z.extTime  := t
+        else if z.extPrice - l >= r
+            z.prevHigh := z.lastHigh
+            z.lastHigh := z.extPrice
+            z.lastHighT := z.extTime
+            z.event    := 1
+            z.up       := false
+            z.extPrice := l
+            z.extTime  := t
+    else
+        if l < z.extPrice
+            z.extPrice := l
+            z.extTime  := t
+        else if h - z.extPrice >= r
+            z.prevLow  := z.lastLow
+            z.lastLow  := z.extPrice
+            z.lastLowT := z.extTime
+            z.event    := -1
+            z.up       := true
+            z.extPrice := h
+            z.extTime  := t
+    z
+
+var Zig mtf = Zig.new()
+var Zig s5  = Zig.new()
+
+// Legs of the MTF zig-zag inside the condition window, for the classifier.
+var array<float> legSize = array.new<float>()
+var array<int>   legTime = array.new<int>()
+var float mtfPrevSwing = na
+
+if m5new and not na(m5atr)
+    zigStep(mtf, m5h, m5l, time, kMTF * m5atr)
+    if mtf.event != 0
+        float p = mtf.event == 1 ? mtf.lastHigh : mtf.lastLow
+        if not na(mtfPrevSwing)
+            array.push(legSize, math.abs(p - mtfPrevSwing))
+            array.push(legTime, time)
+        mtfPrevSwing := p
+    // drop legs older than the window (CLOCK basis — TD-3)
+    while array.size(legTime) > 0 and time - array.get(legTime, 0) > condWinH * 3600000
+        array.shift(legTime)
+        array.shift(legSize)
+
+// The trigger tier runs on chart bars (S5 when the chart is 5s — TD-1).
+if not na(atr1m)
+    zigStep(s5, high, low, time, kS5 * (chartSec <= 5 ? atr1m / 12 : atr1m))
+
+// ─── Condition classifier (primitives §2) ─────────────────────────────────────────────────────────────────────────
+f_median(a) =>
+    int n = array.size(a)
+    float out = na
+    if n > 0
+        array<float> s = array.copy(a)
+        array.sort(s)
+        out := n % 2 == 1 ? array.get(s, n / 2) : (array.get(s, n / 2 - 1) + array.get(s, n / 2)) / 2
+    out
+
+var float cMed = na
+var string condition = "UNDEFINED"
+var string condDir = "NONE"
+
+if m5new
+    int n = array.size(legSize)
+    array<float> corrections = array.new<float>()
+    // Pine's `for a to b` counts DOWN when b < a, so an empty or single-leg window must not enter the loop at all.
+    if n >= 2
+        for i = 0 to n - 2
+            float a = array.get(legSize, i)
+            float b = array.get(legSize, i + 1)
+            if a > 0
+                array.push(corrections, math.min(b / a, corrCap))
+    cMed := f_median(corrections)
+    condition := n < condMinLegs or na(cMed) ? "UNDEFINED" :
+                 cMed >= rangeMin ? "RANGE" :
+                 cMed >= trendMax ? "TRENDING_RANGE" : "TREND"
+    // TR direction: both of the last two highs and the last two lows higher (or both lower).
+    condDir := na(mtf.prevHigh) or na(mtf.prevLow) ? "NONE" :
+               mtf.lastHigh > mtf.prevHigh and mtf.lastLow > mtf.prevLow ? "UP" :
+               mtf.lastHigh < mtf.prevHigh and mtf.lastLow < mtf.prevLow ? "DOWN" : "NONE"
+
+// Range box over the window, from 1m bars (primitives §2: range_high/low from B1m).
+int win1m = math.round(condWinH * 60)
+rangeHigh = request.security(syminfo.tickerid, "1", ta.highest(high, win1m))
+rangeLow  = request.security(syminfo.tickerid, "1", ta.lowest(low,  win1m))
+f_pos(float p) => rangeHigh > rangeLow ? (p - rangeLow) / (rangeHigh - rangeLow) : na
+
+// ─── Overextension, hour-anchored (primitives §3) ─────────────────────────────────────────────────────────────────
+newHour = ta.change(h1Time) != 0
+var float upExt        = 0.0
+var float downExt      = 0.0
+var float oeExtreme    = na
+var int   oeExtremeT   = na
+var string oeDir       = "NONE"
+var bool  oeNoPullback = true
+var bool  oeActivated  = false
+var float runExtreme   = na
+
+if newHour
+    upExt        := 0.0
+    downExt      := 0.0
+    oeExtreme    := na
+    oeExtremeT   := na
+    oeDir        := "NONE"
+    oeNoPullback := true
+    oeActivated  := false
+    runExtreme   := na
+
+if not na(h1Open)
+    upExt   := math.max(upExt,   high - h1Open)
+    downExt := math.max(downExt, h1Open - low)
+    oeDir   := upExt >= downExt ? "UP" : "DOWN"
+    float ext = oeDir == "UP" ? upExt : downExt
+    float newExtreme = oeDir == "UP" ? h1Open + upExt : h1Open - downExt
+    if na(oeExtreme) or newExtreme != oeExtreme
+        oeExtreme  := newExtreme
+        oeExtremeT := time
+    // no-pullback: once the running extension clears the activation floor, a 50% retracement invalidates it
+    if not na(atr1m) and ext >= oeActivA * atr1m
+        oeActivated := true
+    if oeActivated
+        float retrace = oeDir == "UP" ? (oeExtreme - low) : (high - oeExtreme)
+        if ext > 0 and retrace >= oePullFrac * ext
+            oeNoPullback := false
+
+oeSize      = na(oeExtreme) or na(h1Open) ? na : math.abs(oeExtreme - h1Open)
+oeDurMin    = na(oeExtremeT) or na(h1Time) ? na : (oeExtremeT - h1Time) / 60000
+oeTwoSidedB = math.max(upExt, downExt) > 0 and math.min(upExt, downExt) >= oeTwoSided * math.max(upExt, downExt)
+oeSizeOk    = not na(oeSize) and not na(atr1h) and oeSize >= oeMinSizeA * atr1h
+dirTrade    = oeDir == "UP" ? "SELL" : "BUY"          // fade the extension
+
+// ─── HVCS on 1m bars, ending at the extension-extreme bar (primitives §4.3, PC4 F-1) ──────────────────────────────
+// Runs inside a 1m security call so the bar history it walks is genuinely 1-minute.
+f_hvcs(dir, endOffset, maxViol, scan) =>
+    int  runLen = 0
+    int  viol   = 0
+    float bodySum = 0.0
+    int last = math.min(endOffset + scan, 4999)
+    if endOffset >= 0 and last >= endOffset
+        for i = endOffset to last
+            bool respects = dir == "DOWN" ? high[i] <= high[i + 1] : low[i] >= low[i + 1]
+            bool body     = dir == "DOWN" ? close[i] < open[i]     : close[i] > open[i]
+            if not (respects and body)
+                if runLen == 0
+                    break                        // a run may never start on a break
+                viol += 1
+                if viol > maxViol
+                    viol -= 1
+                    break
+            runLen  += 1
+            bodySum += math.abs(close[i] - open[i])
+    [runLen, viol, runLen > 0 ? bodySum / runLen : 0.0]
+
+// Offset of the extension-extreme bar within the 1m series.
+barsSinceExtreme = na(oeExtremeT) ? na : math.max(0, math.round((time - oeExtremeT) / 60000))
+[hvcsLen, hvcsViol, hvcsBody] = request.security(syminfo.tickerid, "1",
+     f_hvcs(oeDir, na(barsSinceExtreme) ? -1 : int(barsSinceExtreme), hvcsMaxViol, hvcsScan))
+hvcsValid = not na(hvcsLen) and hvcsLen >= hvcsMin
+hvcsState = na(hvcsLen) ? "NONE" : hvcsLen < hvcsMin ? "SHORT" :
+            (not na(atr1m) and hvcsBody < hvcsLvcsA * atr1m ? "LVCS" : "HVCS")
+
+// Continuity: every 1m bar after the extreme keeps the respected side of the extreme bar.
+f_continuity(dir, sinceExtreme) =>
+    int n = math.max(1, sinceExtreme)
+    float hh = ta.highest(high, n)
+    float ll = ta.lowest(low, n)
+    sinceExtreme <= 0 ? true : dir == "DOWN" ? hh <= high[n] : ll >= low[n]
+
+contOk = request.security(syminfo.tickerid, "1",
+     f_continuity(oeDir, na(barsSinceExtreme) ? 0 : int(barsSinceExtreme)))
+
+// ─── Previous-15m take, evaluated at the shift instant (PC4 F-9 / F-10) ───────────────────────────────────────────
+var float qHigh = na
+var float qLow  = na
+newQ = ta.change(q15t) != 0
+if newQ
+    qHigh := high
+    qLow  := low
+else
+    qHigh := math.max(nz(qHigh, high), high)
+    qLow  := math.min(nz(qLow, low), low)
+
+prevTaken   = dirTrade == "SELL" ? (not na(q15h) and qHigh > q15h) : (not na(q15l) and qLow < q15l)
+prevClosedD = dirTrade == "SELL" ? (q15c < q15o) : (q15c > q15o)     // E1H-023 exception
+q15Ok       = prevTaken or prevClosedD
+newExtInQ   = not na(oeExtremeT) and not na(q15t) and oeExtremeT >= q15t
+
+// ─── Trigger: type 3 on the trigger tier (primitives §4.1) ────────────────────────────────────────────────────────
+// Bearish: last confirmed SwingHigh SH then SwingLow SL (SL after SH); price takes SH, then breaks SL promptly.
+var bool  t3Armed   = false
+var float t3Level   = na
+var float t3Anchor  = na
+var int   t3SweepT  = na
+var bool  sweptHigh = false
+var bool  sweptLow  = false
+
+maxRevMs = t3MaxRevS5 * 60000
+
+if s5.event != 0
+    sweptHigh := false
+    sweptLow  := false
+
+if dirTrade == "SELL"
+    if not na(s5.lastHigh) and high > s5.lastHigh
+        sweptHigh := true
+        t3SweepT  := time
+        t3Anchor  := math.max(nz(t3Anchor, high), high)
+    if sweptHigh and not na(s5.lastLow) and not na(t3SweepT) and time - t3SweepT <= maxRevMs
+        t3Armed := true
+        t3Level := s5.lastLow - syminfo.mintick
+else
+    if not na(s5.lastLow) and low < s5.lastLow
+        sweptLow  := true
+        t3SweepT  := time
+        t3Anchor  := math.min(nz(t3Anchor, low), low)
+    if sweptLow and not na(s5.lastHigh) and not na(t3SweepT) and time - t3SweepT <= maxRevMs
+        t3Armed := true
+        t3Level := s5.lastHigh + syminfo.mintick
+
+if newHour
+    t3Armed  := false
+    t3Level  := na
+    t3Anchor := na
+    t3SweepT := na
+
+// ─── Variant B parent structure: 1m type 3 then >= 50% pullback ───────────────────────────────────────────────────
+// Approximated with the chart-tier type 3 as parent and a 50% retrace of the impulse since the parent break.
+var float bImpulseFrom = na
+var float bImpulseTo   = na
+var bool  bPullbackOk  = false
+if t3Armed and na(bImpulseFrom)
+    bImpulseFrom := t3Anchor
+if not na(bImpulseFrom)
+    bImpulseTo := dirTrade == "SELL" ? math.min(nz(bImpulseTo, low), low) : math.max(nz(bImpulseTo, high), high)
+    float imp = math.abs(bImpulseFrom - bImpulseTo)
+    float back = dirTrade == "SELL" ? high - bImpulseTo : bImpulseTo - low
+    bPullbackOk := imp > 0 and back >= 0.5 * imp and (dirTrade == "SELL" ? high <= bImpulseFrom : low >= bImpulseFrom)
+if newHour
+    bImpulseFrom := na
+    bImpulseTo   := na
+    bPullbackOk  := false
+
+// ─── Timing and no-trade windows ──────────────────────────────────────────────────────────────────────────────────
+mih        = minute(time) + second(time) / 60.0
+inWindow   = mih >= startMin and mih < endMin
+nyRoll     = timestamp("America/New_York", year(time, "America/New_York"), month(time, "America/New_York"),
+                       dayofmonth(time, "America/New_York"), 17, 0, 0)
+minsToRoll = (nyRoll - time) / 60000
+inRollover = minsToRoll <= rollPreMin and minsToRoll >= -rollPostMin
+inSydney   = hour(time, "UTC") >= 22        // no entries in the Sydney-only session before 00:00 UTC
+
+// ─── Gate evaluation, in PC4's order; first failure is the rejection reason ───────────────────────────────────────
+condOk = condition == "RANGE" or (condition == "TRENDING_RANGE" and condDir != "NONE")
+locOk  = if condition == "RANGE"
+    dirTrade == "SELL" ? nz(f_pos(oeExtreme), 0) >= locExtreme : nz(f_pos(oeExtreme), 1) <= 1 - locExtreme
+else if condition == "TRENDING_RANGE"
+    bool counter = (condDir == "UP" and dirTrade == "SELL") or (condDir == "DOWN" and dirTrade == "BUY")
+    if counter
+        dirTrade == "SELL" ? (not na(mtf.lastHigh) and oeExtreme > mtf.lastHigh)
+                           : (not na(mtf.lastLow)  and oeExtreme < mtf.lastLow)
+    else
+        float legFrom = condDir == "UP" ? mtf.lastLow : mtf.lastHigh
+        float legTo   = condDir == "UP" ? mtf.lastHigh : mtf.lastLow
+        float er = math.abs(legTo - legFrom) > 0 ? math.abs(oeExtreme - legTo) / math.abs(legTo - legFrom) : na
+        not na(er) and er >= proErMin and er <= proErMax
+else
+    false
+
+structOk = variant == "A" ? (hvcsValid and contOk) : bPullbackOk
+
+reason = not tierOk            ? "CHART_TF_TOO_COARSE [TD-1]" :
+         inRollover            ? "BLOCKED_ROLLOVER" :
+         inSydney              ? "BLOCKED_SYDNEY" :
+         condition == "TREND"  ? "COND_TREND" :
+         condition == "UNDEFINED" ? "COND_UNDEFINED" :
+         not condOk            ? "COND_TR_NO_DIR" :
+         na(oeDurMin) or oeDurMin < oeMinMin ? "OE_DURATION" :
+         not oeNoPullback      ? "OE_PULLBACK" :
+         oeTwoSidedB           ? "OE_TWO_SIDED" :
+         not oeSizeOk          ? "OE_SIZE" :
+         not locOk             ? "LOCATION" :
+         not structOk          ? (variant == "A" ? "HVCS_" + hvcsState : "FRACTAL_PULLBACK") :
+         not q15Ok             ? "PREV_15M_NOT_TAKEN" :
+         not newExtInQ         ? "NO_NEW_EXTREME_IN_Q" :
+         not t3Armed           ? "NO_TYPE3_TRIGGER" :
+         not inWindow          ? "OUTSIDE_TIMING_WINDOW" : ""
+
+armed = reason == "" and not na(t3Level)
+
+// ─── Orders: stop entry at the trigger level, fixed stop and 50% target ───────────────────────────────────────────
+stopPrice   = na(t3Anchor) or na(atr1m) ? na :
+              dirTrade == "SELL" ? t3Anchor + stopBufA * atr1m : t3Anchor - stopBufA * atr1m
+targetPrice = na(oeExtreme) or na(h1Open) ? na : oeExtreme - targetFrac * (oeExtreme - h1Open)
+
+var bool tradedThisHour = false
+if newHour
+    tradedThisHour := false
+
+if armed and not tradedThisHour and strategy.position_size == 0
+    if dirTrade == "SELL"
+        strategy.entry("CBR-S", strategy.short, stop = t3Level, comment = "PC4 " + variant)
+        strategy.exit("CBR-S-X", "CBR-S", stop = stopPrice, limit = targetPrice)
+    else
+        strategy.entry("CBR-L", strategy.long, stop = t3Level, comment = "PC4 " + variant)
+        strategy.exit("CBR-L-X", "CBR-L", stop = stopPrice, limit = targetPrice)
+
+if strategy.position_size != 0
+    tradedThisHour := true
+
+// Cancel at the end of the timing window, and go flat for rollover (M1H-TIME-01, M1H-EXIT-01).
+if not inWindow or inRollover
+    strategy.cancel("CBR-S")
+    strategy.cancel("CBR-L")
+if inRollover and strategy.position_size != 0
+    strategy.close_all(comment = "ROLLOVER_EXIT")
+
+// ─── Visuals ──────────────────────────────────────────────────────────────────────────────────────────────────────
+colCond = condition == "RANGE" ? color.new(color.teal, 92) :
+          condition == "TRENDING_RANGE" ? color.new(color.blue, 92) :
+          condition == "TREND" ? color.new(color.orange, 94) : color.new(color.gray, 95)
+bgcolor(colCond, title = "Condition")
+
+plot(showLvls and oeActivated ? oeExtreme : na, "Extension extreme", color.new(color.purple, 0),
+     style = plot.style_linebr, linewidth = 2)
+plot(showLvls and armed ? t3Level : na, "Shift level", color.new(color.yellow, 0), style = plot.style_linebr)
+plot(showLvls and strategy.position_size != 0 ? stopPrice : na, "Stop", color.new(color.red, 0),
+     style = plot.style_linebr)
+plot(showLvls and strategy.position_size != 0 ? targetPrice : na, "50% target", color.new(color.green, 0),
+     style = plot.style_linebr)
+
+barcolor(hvcsState == "HVCS" ? color.new(color.navy, 40) : hvcsState == "LVCS" ? color.new(color.gray, 60) : na)
+plotshape(oeActivated and not oeActivated[1], "Extension activation", shape.triangleup, location.belowbar,
+          color.new(color.purple, 0), size = size.tiny)
+plotshape(prevTaken and not prevTaken[1], "Previous 15m taken", shape.diamond, location.abovebar,
+          color.new(color.aqua, 0), size = size.tiny)
+plotshape(armed and not armed[1], "ARMED", shape.labeldown, location.abovebar, color.new(color.yellow, 0),
+          text = "ARM", textcolor = color.black, size = size.small)
+
+if showDiag and barstate.islast
+    var table t = table.new(position.top_right, 2, 12, border_width = 1)
+    table.cell(t, 0, 0, "CBR1H PC4 (research)", text_color = color.white, bgcolor = color.new(color.black, 0))
+    table.cell(t, 1, 0, "variant " + variant, text_color = color.white, bgcolor = color.new(color.black, 0))
+    table.cell(t, 0, 1, "trigger tier")
+    table.cell(t, 1, 1, triggerTier)
+    table.cell(t, 0, 2, "condition")
+    table.cell(t, 1, 2, condition + " / " + condDir)
+    table.cell(t, 0, 3, "c_med")
+    table.cell(t, 1, 3, str.tostring(cMed, "#.###"))
+    table.cell(t, 0, 4, "oe dir / trade")
+    table.cell(t, 1, 4, oeDir + " -> " + dirTrade)
+    table.cell(t, 0, 5, "oe duration (min)")
+    table.cell(t, 1, 5, str.tostring(oeDurMin, "#"))
+    table.cell(t, 0, 6, "oe no-pullback")
+    table.cell(t, 1, 6, str.tostring(oeNoPullback))
+    table.cell(t, 0, 7, "hvcs")
+    table.cell(t, 1, 7, hvcsState + " " + str.tostring(hvcsLen) + "m viol=" + str.tostring(hvcsViol))
+    table.cell(t, 0, 8, "prev 15m taken")
+    table.cell(t, 1, 8, str.tostring(prevTaken) + (prevClosedD ? " (exc)" : ""))
+    table.cell(t, 0, 9, "mih / window")
+    table.cell(t, 1, 9, str.tostring(mih, "#.#") + (inWindow ? " IN" : " OUT"))
+    table.cell(t, 0, 10, "prior setups")
+    table.cell(t, 1, 10, "N/A [TD-6]")
+    table.cell(t, 0, 11, "state")
+    table.cell(t, 1, 11, armed ? "ARMED" : reason, bgcolor = armed ? color.new(color.green, 60) : color.new(color.maroon, 70))
